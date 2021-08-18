@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFrameworks>net5.0;netstandard2.0;netstandard2.1;</TargetFrameworks>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <LangVersion>9.0</LangVersion>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="System.Text.Json" Version="5.0.2"/>
+    </ItemGroup>
+</Project>
