@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Excel", "Collapsenav.Net.Tool.Excel\Collapsenav.Net.Tool.Excel.csproj", "{1A1F8329-51BE-4869-B47E-232EC1CE2C73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Excel.Test", "Collapsenav.Net.Tool.Excel.Test\Collapsenav.Net.Tool.Excel.Test.csproj", "{8B998BDE-ADD4-41C6-8292-F59C6E544EFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool", "Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj", "{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A1F8329-51BE-4869-B47E-232EC1CE2C73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1F8329-51BE-4869-B47E-232EC1CE2C73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1F8329-51BE-4869-B47E-232EC1CE2C73}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1A1F8329-51BE-4869-B47E-232EC1CE2C73}.Debug|x64.Build.0 = Debug|Any CPU
+		{1A1F8329-51BE-4869-B47E-232EC1CE2C73}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1A1F8329-51BE-4869-B47E-232EC1CE2C73}.Debug|x86.Build.0 = Debug|Any CPU
+		{1A1F8329-51BE-4869-B47E-232EC1CE2C73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1F8329-51BE-4869-B47E-232EC1CE2C73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1F8329-51BE-4869-B47E-232EC1CE2C73}.Release|x64.ActiveCfg = Release|Any CPU
+		{1A1F8329-51BE-4869-B47E-232EC1CE2C73}.Release|x64.Build.0 = Release|Any CPU
+		{1A1F8329-51BE-4869-B47E-232EC1CE2C73}.Release|x86.ActiveCfg = Release|Any CPU
+		{1A1F8329-51BE-4869-B47E-232EC1CE2C73}.Release|x86.Build.0 = Release|Any CPU
+		{8B998BDE-ADD4-41C6-8292-F59C6E544EFD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B998BDE-ADD4-41C6-8292-F59C6E544EFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B998BDE-ADD4-41C6-8292-F59C6E544EFD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8B998BDE-ADD4-41C6-8292-F59C6E544EFD}.Debug|x64.Build.0 = Debug|Any CPU
+		{8B998BDE-ADD4-41C6-8292-F59C6E544EFD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8B998BDE-ADD4-41C6-8292-F59C6E544EFD}.Debug|x86.Build.0 = Debug|Any CPU
+		{8B998BDE-ADD4-41C6-8292-F59C6E544EFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B998BDE-ADD4-41C6-8292-F59C6E544EFD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B998BDE-ADD4-41C6-8292-F59C6E544EFD}.Release|x64.ActiveCfg = Release|Any CPU
+		{8B998BDE-ADD4-41C6-8292-F59C6E544EFD}.Release|x64.Build.0 = Release|Any CPU
+		{8B998BDE-ADD4-41C6-8292-F59C6E544EFD}.Release|x86.ActiveCfg = Release|Any CPU
+		{8B998BDE-ADD4-41C6-8292-F59C6E544EFD}.Release|x86.Build.0 = Release|Any CPU
+		{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}.Debug|x64.Build.0 = Debug|Any CPU
+		{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}.Debug|x86.Build.0 = Debug|Any CPU
+		{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}.Release|x64.ActiveCfg = Release|Any CPU
+		{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}.Release|x64.Build.0 = Release|Any CPU
+		{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}.Release|x86.ActiveCfg = Release|Any CPU
+		{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
