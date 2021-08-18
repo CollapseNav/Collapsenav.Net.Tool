@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
@@ -139,52 +140,69 @@ namespace Collapsenav.Net.Tool.Excel
 
         #endregion
 
-        /// <summary>
-        /// TODO 通过 span 组装表格数据,简化后期的查询操作
-        /// </summary>
-        /// <param name="sheet"></param>
-        /// <param name="options"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        // public static async Dictionary<string, int> GenExcelDataByOptions<T>(ExcelWorksheet sheet, IEnumerable<ReadCellOption<T>> options)
-        // {
-        //     var header = GenExcelHeaderByOptions(sheet, options);
+        public static async Task<string[][]> GenExcelDataByOptionsAsync<T>(Stream excelStream, ReadConfig<T> options)
+        {
+            using ExcelPackage pack = new(excelStream);
+            return await GenExcelDataByOptionsAsync(pack, options);
+        }
+        public static async Task<string[][]> GenExcelDataByOptionsAsync<T>(ExcelPackage pack, ReadConfig<T> options)
+        {
+            // 合并 FieldOption 和 DefaultOption
+            var sheet = pack.Workbook.Worksheets[1];
+            return await GenExcelDataByOptionsAsync(sheet, options);
+        }
+        public async static Task<string[][]> GenExcelDataByOptionsAsync<T>(ExcelWorksheet sheet, ReadConfig<T> options)
+        {
+            // 合并 FieldOption 和 DefaultOption
+            var propOptions = options.FieldOption.Concat(options.DefaultOption);
+            return await GenExcelDataByOptionsAsync(sheet, propOptions);
+        }
+        public static async Task<string[][]> GenExcelDataByOptionsAsync<T>(ExcelWorksheet sheet, IEnumerable<ReadCellOption<T>> options)
+        {
+            var header = GenExcelHeaderByOptions(sheet, options);
+            var resultHeader = header.Select(item => item.Key).ToList();
 
-        // }
-
-
+            int rowCount = sheet.Dimension.Rows;
+            int colCount = sheet.Dimension.Columns;
+            ConcurrentBag<string[]> data = new();
+            await Task.Factory.StartNew(() =>
+            {
+                Parallel.For(2, rowCount + 1, index =>
+                {
+                    data.Add(sheet.Cells[index, 1, index, colCount]
+                    .Where(item => header.Any(col => col.Value == item.End.Column))
+                    .Select(item => item.Text).ToArray());
+                });
+            });
+            data.Add(resultHeader.ToArray());
+            return data.ToArray();
+        }
 
         /// <summary>
         /// 将表格数据转换为指定的数据实体
         /// </summary>
         public static async Task<IEnumerable<T>> ExcelToEntity<T>(Stream excelStream, ReadConfig<T> options)
         {
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             using ExcelPackage pack = new(excelStream);
             var sheet = pack.Workbook.Worksheets[1];
-            int rowCount = sheet.Dimension.Rows;
-            int colCount = sheet.Dimension.Columns;
             // 合并 FieldOption 和 DefaultOption
             var propOptions = options.FieldOption.Concat(options.DefaultOption);
-            var header = GenExcelHeaderByOptions(sheet, propOptions);
-
+            var excelData = await GenExcelDataByOptionsAsync(sheet, propOptions);
             ConcurrentBag<T> data = new();
             await Task.Factory.StartNew(() =>
             {
-                Parallel.For(2, rowCount + 1, index =>
+                var indexMap = excelData[0].Select((key, index) => (key, index)).ToDictionary(item => item.key, item => item.index);
+                Parallel.For(1, excelData.Length, index =>
                 {
-                    // 将单行数据转换为 表头:数据 的键值对
-                    var rowData = sheet.Cells[index, 1, index, colCount]
-                    .Where(item => header.Any(title => title.Value == item.End.Column))
-                    .Select(item => new KeyValuePair<string, string>(header.First(title => title.Value == item.End.Column).Key, item.Value?.ToString().Trim()))
-                    .ToDictionary(item => item.Key, item => item.Value);
-
                     // 根据对应传入的设置 为obj赋值
                     var obj = Activator.CreateInstance<T>();
                     foreach (var option in propOptions)
                     {
                         if (!option.ExcelField.IsNull())
                         {
-                            var value = rowData.ContainsKey(option.ExcelField) ? rowData[option.ExcelField] : string.Empty;
+                            var value = excelData[index][indexMap[option.ExcelField]];
                             option.Prop.SetValue(obj, option.Action == null ? value : option.Action(value));
                         }
                         else
@@ -195,6 +213,8 @@ namespace Collapsenav.Net.Tool.Excel
                     data.Add(obj);
                 });
             });
+            sw.Stop();
+            Console.WriteLine(sw.ElapsedMilliseconds);
             return data;
         }
     }

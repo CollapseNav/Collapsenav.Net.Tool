@@ -17,6 +17,6 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Collapsenav.Net.Tool.Excel\Collapsenav.Net.Tool.Excel.csproj" />
-        <None Include="TestExcel.xlsx" CopyToPublishDirectory="Always" />
+        <None Include="TestExcel.xlsx" CopyToPublishDirectory="Always"  CopyToOutputDirectory="Always"/>
     </ItemGroup>
 </Project>
