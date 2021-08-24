@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Collapsenav.Net.Tool.Excel
 {
-
     public class ReadConfig<T>
     {
         public ReadConfig()

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using OfficeOpenXml;
@@ -157,6 +158,11 @@ namespace Collapsenav.Net.Tool.Excel
             var propOptions = options.FieldOption.Concat(options.DefaultOption);
             return await GenExcelDataByOptionsAsync(sheet, propOptions);
         }
+
+        /// <summary>
+        /// 可能会存在比较耗时的复杂计算,所以使用并行
+        /// data线程安全,但是sheet并不是,所以加锁
+        /// </summary>
         public static async Task<string[][]> GenExcelDataByOptionsAsync<T>(ExcelWorksheet sheet, IEnumerable<ReadCellOption<T>> options)
         {
             var header = GenExcelHeaderByOptions(sheet, options);
@@ -165,13 +171,17 @@ namespace Collapsenav.Net.Tool.Excel
             int rowCount = sheet.Dimension.Rows;
             int colCount = sheet.Dimension.Columns;
             ConcurrentBag<string[]> data = new();
+            object obj = new();
             await Task.Factory.StartNew(() =>
             {
                 Parallel.For(2, rowCount + 1, index =>
                 {
-                    data.Add(sheet.Cells[index, 1, index, colCount]
+                    Monitor.Enter(obj);
+                    var temp = sheet.Cells[index, 1, index, colCount]
                     .Where(item => header.Any(col => col.Value == item.End.Column))
-                    .Select(item => item.Text).ToArray());
+                    .Select(item => item.Text).ToArray();
+                    Monitor.Exit(obj);
+                    data.Add(temp);
                 });
             });
             data.Add(resultHeader.ToArray());

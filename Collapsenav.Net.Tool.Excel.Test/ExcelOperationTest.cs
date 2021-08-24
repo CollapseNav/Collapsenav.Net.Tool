@@ -63,7 +63,6 @@ namespace Collapsenav.Net.Tool.Excel.Test
         public async Task OperationDataTest()
         {
             using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open);
-
             var config = new ReadConfig<ExcelTestDto>()
             .Require("Field0", item => item.Field0)
             .Add("Field1", item => item.Field1)
