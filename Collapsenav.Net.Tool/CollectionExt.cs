@@ -26,5 +26,10 @@ namespace Collapsenav.Net.Tool
                     return true;
             return false;
         }
+        public static IEnumerable<IEnumerable<T>> SpliteCollection<T>(this IEnumerable<T> query, int size)
+        {
+            for (int i = 0; i <= query.Count() / 4; i++)
+                yield return query.Skip(i * size).Take(size);
+        }
     }
 }
