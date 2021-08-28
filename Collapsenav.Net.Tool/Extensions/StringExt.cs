@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace Collapsenav.Net.Tool
@@ -9,12 +9,16 @@ namespace Collapsenav.Net.Tool
     public static class StringExt
     {
         public static bool IsNull(this string str) => string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str);
+
+        #region PadLeft/PadRight
         public static string PadLeft(this int num, int total, char? fill) => fill.HasValue ? num.ToString().PadLeft(total, fill.Value) : num.ToString().PadLeft(total);
         public static string PadLeft(this double num, int total, char? fill) => fill.HasValue ? num.ToString().PadLeft(total, fill.Value) : num.ToString().PadLeft(total);
         public static string PadLeft(this long num, int total, char? fill) => fill.HasValue ? num.ToString().PadLeft(total, fill.Value) : num.ToString().PadLeft(total);
         public static string PadRight(this int num, int total, char? fill) => fill.HasValue ? num.ToString().PadRight(total, fill.Value) : num.ToString().PadRight(total);
         public static string PadRight(this double num, int total, char? fill) => fill.HasValue ? num.ToString().PadRight(total, fill.Value) : num.ToString().PadRight(total);
         public static string PadRight(this long num, int total, char? fill) => fill.HasValue ? num.ToString().PadRight(total, fill.Value) : num.ToString().PadRight(total);
+        #endregion
+
         /// <summary>
         /// 数字转为中文,暂时只支持整数,支持最大的整数长度为16位
         /// </summary>
@@ -41,5 +45,18 @@ namespace Collapsenav.Net.Tool
             result = matchLastZero.Replace(result.Replace("零万", "万零").Replace("零亿", "亿零"), "");
             return result;
         }
+
+        #region Convert
+        public static DateTime? ToDateTime(this string input) => DateTime.TryParse(input, out DateTime result) ? result : null;
+        public static int? ToInt(this string input) => int.TryParse(input, out int result) ? result : null;
+        public static double? ToDouble(this string input) => double.TryParse(input, out double result) ? result : null;
+        public static Guid? ToGuid(this string input) => Guid.TryParse(input, out Guid result) ? result : null;
+        public static long? ToLong(this string input) => long.TryParse(input, out long result) ? result : null;
+        #endregion
+
+        #region  Join
+        public static string Join<T>(this IEnumerable<T> query, string separate, Func<T, object> getStr = null)
+        => string.Join(separate, query.Select(getStr ?? (item => item.ToString())));
+        #endregion
     }
 }
