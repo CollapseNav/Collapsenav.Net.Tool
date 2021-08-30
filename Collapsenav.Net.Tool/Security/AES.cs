@@ -6,6 +6,9 @@ using System.Text;
 
 namespace Collapsenav.Net.Tool
 {
+    /// <summary>
+    /// Aes工具
+    /// </summary>
     public class AESTool
     {
         public const string DefaultKey = "Collapsenav.Net.Tool";

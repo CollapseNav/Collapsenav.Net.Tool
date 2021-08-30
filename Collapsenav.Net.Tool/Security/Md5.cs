@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Collapsenav.Net.Tool
 {
+    /// <summary>
+    /// Md5工具
+    /// </summary>
     public class MD5Tool
     {
         /// <summary>

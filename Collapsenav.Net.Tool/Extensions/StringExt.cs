@@ -58,5 +58,30 @@ namespace Collapsenav.Net.Tool
         public static string Join<T>(this IEnumerable<T> query, string separate, Func<T, object> getStr = null)
         => string.Join(separate, query.Select(getStr ?? (item => item.ToString())));
         #endregion
+
+        /// <summary>
+        /// 检查是否邮箱格式
+        /// </summary>
+        public static bool IsEmail(this string input)
+        {
+            if (input.IsNull())
+                return false;
+            return Regex.IsMatch(input, "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+.[a-zA-Z0-9]+$");
+        }
+
+        /// <summary>
+        /// 检查是否 Url 格式
+        /// </summary>
+        public static bool IsUrl(this string input)
+        {
+            if (input.IsEmail())
+                return false;
+
+            // TODO 日后写正则判断...
+            return input.StartsWith("https://", "http://");
+        }
+
+        public static bool StartsWith(this string input, params string[] filters) => filters.Any(item => input.StartsWith(item));
+        public static bool EndsWith(this string input, params string[] filters) => filters.Any(item => input.EndsWith(item));
     }
 }

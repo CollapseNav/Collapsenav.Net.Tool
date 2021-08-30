@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http.Headers;
 using Xunit;
 
 namespace Collapsenav.Net.Tool.Test
@@ -43,6 +44,33 @@ namespace Collapsenav.Net.Tool.Test
             int[] intJoin = { 1, 2, 3 };
             Assert.True("1@2@3" == intJoin.Join("@"));
             Assert.True("-1@-2@-3" == intJoin.Join("@", item => -item));
+        }
+
+        [Fact]
+        public void EmailTest()
+        {
+            string emailString = "collapsenav@163.com";
+            Assert.True(emailString.IsEmail());
+        }
+
+        [Fact]
+        public void UrlTest()
+        {
+            string url = "https://www.bilibili.com/";
+            Assert.True(url.IsUrl());
+            url = "httttttps://www.bilibili.com/";
+            Assert.False(url.IsUrl());
+        }
+
+        [Fact]
+        public void StartEndWiths()
+        {
+            string exampleString = "23333333333333";
+            Assert.True(StringExt.StartsWith(exampleString, "23"));
+            Assert.True(exampleString.StartsWith("23", "233", "233333"));
+            Assert.False(StringExt.StartsWith(exampleString, "2233"));
+            Assert.True(exampleString.EndsWith("333333", "33", "3"));
+            Assert.False(StringExt.EndsWith(exampleString, "2333333"));
         }
     }
 }

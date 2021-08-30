@@ -1,18 +1,36 @@
+using System.Data;
+
 namespace Collapsenav.Net.Tool
 {
     public static class SecurityExt
     {
-        public static string Md5En(this string msg)
+        /// <summary>
+        /// Md5加密
+        /// </summary>
+        public static string Md5En(this string input)
         {
-            return MD5Tool.Encrypt(msg);
+            return MD5Tool.Encrypt(input);
         }
-        public static string AesEn(this string msg, string key = AESTool.DefaultKey)
+        /// <summary>
+        /// Md5解密
+        /// </summary>
+        public static string Md5De(this string input)
         {
-            return AESTool.Encrypt(msg, key);
+            return MD5Tool.Decrypt(input);
         }
-        public static string AesDe(this string msg, string key = AESTool.DefaultKey)
+        /// <summary>
+        /// Aes加密
+        /// </summary>
+        public static string AesEn(this string input, string key = AESTool.DefaultKey)
         {
-            return AESTool.Decrypt(msg, key);
+            return AESTool.Encrypt(input, key);
+        }
+        /// <summary>
+        /// Aes解密
+        /// </summary>
+        public static string AesDe(this string input, string key = AESTool.DefaultKey)
+        {
+            return AESTool.Decrypt(input, key);
         }
 
     }
