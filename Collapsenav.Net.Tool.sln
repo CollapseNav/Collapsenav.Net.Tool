@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Excel.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool", "Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj", "{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Test", "Collapsenav.Net.Tool.Test\Collapsenav.Net.Tool.Test.csproj", "{EC1C9BF9-838C-4BAF-86A6-EC83C3F35731}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,5 +60,17 @@ Global
 		{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}.Release|x64.Build.0 = Release|Any CPU
 		{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}.Release|x86.ActiveCfg = Release|Any CPU
 		{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}.Release|x86.Build.0 = Release|Any CPU
+		{EC1C9BF9-838C-4BAF-86A6-EC83C3F35731}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC1C9BF9-838C-4BAF-86A6-EC83C3F35731}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC1C9BF9-838C-4BAF-86A6-EC83C3F35731}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EC1C9BF9-838C-4BAF-86A6-EC83C3F35731}.Debug|x64.Build.0 = Debug|Any CPU
+		{EC1C9BF9-838C-4BAF-86A6-EC83C3F35731}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EC1C9BF9-838C-4BAF-86A6-EC83C3F35731}.Debug|x86.Build.0 = Debug|Any CPU
+		{EC1C9BF9-838C-4BAF-86A6-EC83C3F35731}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC1C9BF9-838C-4BAF-86A6-EC83C3F35731}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC1C9BF9-838C-4BAF-86A6-EC83C3F35731}.Release|x64.ActiveCfg = Release|Any CPU
+		{EC1C9BF9-838C-4BAF-86A6-EC83C3F35731}.Release|x64.Build.0 = Release|Any CPU
+		{EC1C9BF9-838C-4BAF-86A6-EC83C3F35731}.Release|x86.ActiveCfg = Release|Any CPU
+		{EC1C9BF9-838C-4BAF-86A6-EC83C3F35731}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
