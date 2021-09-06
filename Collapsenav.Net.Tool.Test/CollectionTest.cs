@@ -27,8 +27,7 @@ namespace Collapsenav.Net.Tool.Test
         {
             int[] intList = { 1, 1, 2, 2, 3, 3, 4 };
             var uniqueIntList = intList.Unique(item => item);
-            Assert.True(new[] { 1, 2, 3, 4 }.ContainAnd(uniqueIntList.ToArray()));
-            Assert.True(uniqueIntList.ContainAnd(new[] { 1, 2, 3, 4 }));
+            Assert.False(new[] { 1, 2, 3, 4 }.Except(uniqueIntList).Any());
             Assert.True(uniqueIntList.Count() == 4);
         }
 
@@ -36,7 +35,10 @@ namespace Collapsenav.Net.Tool.Test
         public void WhereIfTest()
         {
             int[] intList = { 1, 1, 2, 2, 3, 3, 4 };
-            intList = intList.WhereIf(intList.Length == 7, item => item > 1).ToArray();
+            intList = intList.WhereIf(true, item => item > 1)
+            .WhereIf(false, item => item < 3)
+            .ToArray();
+            Assert.False(new[] { 2, 2, 3, 3, 4 }.Except(intList).Any());
             Assert.True(intList.Length == 5);
         }
 
