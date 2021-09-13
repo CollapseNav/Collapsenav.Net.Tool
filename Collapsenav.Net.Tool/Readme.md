@@ -50,11 +50,17 @@
   - [x] `ToJson` 对象转字符串
   - [ ] ...
 - [ ] `StringBuilder`
-  - [ ] `AddIf` 条件拼接
-  - [ ] `AndIf` 提供 Dapper使用
-  - [ ] `OrIf` 提供 Dapper使用
+  - [x] `AddIf` 条件拼接
+  - [x] `AndIf` 提供 Dapper使用
+  - [x] `OrIf` 提供 Dapper使用
 - [ ] 生成假数据
 - [ ] 加密解密
+  - [x] `MD5Tool.Encrypt` MD5 计算
+  - [x] `AESTool.Encrypt` AES 加密
+  - [x] `AESTool.Decrypt` AES 解密
+  - [ ] sha1 sha256 计算
+  - [ ] 文件计算 MD5
+  - [ ] 文件计算 sha1
 
 ## Feature
 
