@@ -9,6 +9,9 @@ namespace Collapsenav.Net.Tool
     public static class StringExt
     {
         public static bool IsNull(this string str) => string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str);
+        public static bool IsEmpty(this string str) => string.IsNullOrEmpty(str) || string.IsNullOrWhiteSpace(str);
+        public static bool NotNull(this string str) => !str.IsNull();
+        public static bool NotEmpty(this string str) => !str.IsEmpty();
 
         #region PadLeft/PadRight
         public static string PadLeft(this int num, int total, char? fill) => fill.HasValue ? num.ToString().PadLeft(total, fill.Value) : num.ToString().PadLeft(total);
@@ -83,5 +86,11 @@ namespace Collapsenav.Net.Tool
 
         public static bool StartsWith(this string input, params string[] filters) => filters.Any(item => input.StartsWith(item));
         public static bool EndsWith(this string input, params string[] filters) => filters.Any(item => input.EndsWith(item));
+
+
+        public static string ToString(this char input, int count)
+        {
+            return new string(input, count);
+        }
     }
 }

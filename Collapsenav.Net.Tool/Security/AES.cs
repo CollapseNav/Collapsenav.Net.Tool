@@ -12,12 +12,13 @@ namespace Collapsenav.Net.Tool
     public class AESTool
     {
         public const string DefaultKey = "Collapsenav.Net.Tool";
+        public const string DefaultIV = "looT.teN.vanespalloC";
         /// <summary>
         /// 解密
         /// </summary>
         public static string Decrypt(string secmsg, string key = DefaultKey)
         {
-            var decryptKey = GetAesKey(key);
+            var decryptKey = GetAesBytes(key);
             var decryptMsg = Convert.FromBase64String(secmsg);
 
             using var aes = Aes.Create();
@@ -31,28 +32,31 @@ namespace Collapsenav.Net.Tool
         /// <summary>
         /// 加密
         /// </summary>
-        public static string Encrypt(string msg, string key = DefaultKey)
+        public static string Encrypt(string msg, string key = DefaultKey, string iv = DefaultIV, int level = 32)
         {
-            var encryptKey = GetAesKey(key);
             var encryptMsg = Encoding.UTF8.GetBytes(msg);
 
             using var aes = Aes.Create();
-            aes.Key = encryptKey;
+            aes.Key = GetAesBytes(key, level);
+            aes.IV = iv.IsNull() ? aes.IV : GetAesBytes(iv, 16);
             aes.Mode = CipherMode.ECB;
             aes.Padding = PaddingMode.PKCS7;
             using var encrypt = aes.CreateEncryptor();
-            var result = encrypt.TransformFinalBlock(encryptMsg, 0, encryptMsg.Length);
+            var result = encrypt.TransformFinalBlock(encryptMsg, 0, msg.Length);
             return Convert.ToBase64String(result);
         }
 
-        public static byte[] GetAesKey(string key)
+        public static byte[] GetAesBytes(string key, int level = 32)
         {
-            return GetAesKey(Encoding.UTF8.GetBytes(key));
+            if (key.Length < level)
+                key = key.PadLeft(level, '#');
+            return Encoding.UTF8.GetBytes(key.Substring(0, level));
         }
-        public static byte[] GetAesKey(byte[] key)
+        public static byte[] GetAesBytes(byte[] key, int level = 32)
         {
-            int size = 16;
-            return key.Length >= size ? key.Take(size).ToArray() : key.Concat(Encoding.UTF8.GetBytes(DefaultKey.Substring(0, size - key.Length))).ToArray();
+            if (key.Length < level)
+                key = key.Concat(Encoding.UTF8.GetBytes('#'.ToString(level - key.Length))).ToArray();
+            return key.Take(level).ToArray();
         }
     }
 }
