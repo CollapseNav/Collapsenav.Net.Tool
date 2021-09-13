@@ -16,7 +16,9 @@ namespace Collapsenav.Net.Tool
         {
             var nameHeader = response.Content.Headers
             .FirstOrDefault(item => item.Key == "Content-Disposition").Value?.FirstOrDefault();
-            Init(response.Content.ReadAsStream(), nameHeader[(nameHeader.LastIndexOf("filename=") + 9)..]);
+            var ms = new MemoryStream();
+            response.Content.CopyToAsync(ms);
+            Init(ms, nameHeader.Substring(nameHeader.LastIndexOf("filename=") + 9));
         }
         public static CntFileInfo Convert(HttpResponseMessage response)
         {
@@ -42,8 +44,8 @@ namespace Collapsenav.Net.Tool
 
         public Stream File { get; set; }
         public string FileName { get; set; }
-        public string Size { get; set; }
-        public string Ext { get; set; }
+        public string Size { get; private set; }
+        public string Ext { get; private set; }
         public string ContentType { get; set; }
     }
 }

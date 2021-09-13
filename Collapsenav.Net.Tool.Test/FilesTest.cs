@@ -10,8 +10,8 @@ namespace Collapsenav.Net.Tool.Test
         [Fact]
         public async Task GetFileTest()
         {
-            var dd = await Files.GetAsync(@"http://202.182.125.80:9090/api/File/download/f63890ab-4b3b-4163-a03b-ad389be50b08");
-            var result = await dd.SaveToAsync("/test.mp3", true);
+            var dd = await FileTool.GetAsync(@"http://202.182.125.80:9090/api/File/download/2bca1ba9-19b3-4691-ba46-385d91aef7d7");
+            var result = await dd.SaveToAsync("/index.mp3", true);
         }
     }
 }
