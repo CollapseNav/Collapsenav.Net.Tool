@@ -6,9 +6,9 @@ using System.Text;
 namespace Collapsenav.Net.Tool
 {
     /// <summary>
-    /// Md5工具
+    /// Sha256工具
     /// </summary>
-    public class MD5Tool
+    public class Sha256Tool
     {
         /// <summary>
         /// 解密
@@ -22,8 +22,8 @@ namespace Collapsenav.Net.Tool
         /// </summary>
         public static string Encrypt(string msg)
         {
-            using var md5 = MD5.Create();
-            var result = md5.ComputeHash(Encoding.UTF8.GetBytes(msg));
+            using var sha256 = SHA256.Create();
+            var result = sha256.ComputeHash(Encoding.UTF8.GetBytes(msg));
             return BitConverter.ToString(result).Replace("-", "");
         }
         /// <summary>
@@ -31,8 +31,8 @@ namespace Collapsenav.Net.Tool
         /// </summary>
         public static string Encrypt(Stream stream)
         {
-            using var md5 = MD5.Create();
-            var result = md5.ComputeHash(stream);
+            using var sha256 = SHA256.Create();
+            var result = sha256.ComputeHash(stream);
             return BitConverter.ToString(result).Replace("-", "");
         }
     }

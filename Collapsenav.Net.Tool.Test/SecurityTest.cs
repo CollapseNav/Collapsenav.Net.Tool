@@ -1,6 +1,4 @@
-using System;
 using Xunit;
-using Collapsenav.Net.Tool;
 
 namespace Collapsenav.Net.Tool.Test
 {
@@ -17,6 +15,16 @@ namespace Collapsenav.Net.Tool.Test
             result = msg.AesEn();
             tresult = result.AesDe();
             Assert.True(tresult == msg);
+        }
+
+        [Fact]
+        public void HashTest()
+        {
+            var msg = "123123123";
+            var msg2 = "233333";
+            Assert.False(msg.Md5En() == msg2.Md5En());
+            Assert.False(msg.Sha1En() == msg2.Sha1En());
+            Assert.False(msg.Sha256En() == msg2.Sha256En());
         }
     }
 }
