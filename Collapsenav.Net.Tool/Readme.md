@@ -12,7 +12,11 @@
 - [x] `DateTime`
   - [x] `ToTimestamp` 时间转为时间戳
   - [x] `ToDateTime` 时间戳转为时间
-  - [x] `ToYear` 等只保留到指定的时间单位
+  - [x] `ToYear` 等只保留时间到指定的单位
+  - [ ] 计算 几月几日 是哪一周的星期几/星期几/一年的第几天......
+  - [ ] 计算 两个日期之间的时间差(各种单位)
+  - [ ] 获取 时间段内的所有日期(返回有序的时间集合)
+  - [ ] 判断是否为闰年
   - [ ] ...
 - [ ] `string`
   - [x] `IsNull` 判空
@@ -29,6 +33,7 @@
     - [ ] 检查域名是否可通
   - [x] `StartWiths` 支持传入集合的 StartsWith
   - [x] `EndWiths` 检查是否 Url 格式
+  - [ ] 去除如 `\n\r` 的转义字符
   - [ ] ...
 - [ ] `Collection`
   - [x] `ContainAnd` 全包含
@@ -37,6 +42,7 @@
   - [x] `WhereIf` 条件查询
   - [ ] `Unique` 去重
   - [ ] `RemoveRepeat` 移除重复
+  - [ ] 打乱顺序
   - [ ] ...
 - [x] `Json`
   - [x] `ToObj` 字符串转对象
@@ -48,6 +54,7 @@
   - [ ] `AndIf` 提供 Dapper使用
   - [ ] `OrIf` 提供 Dapper使用
 - [ ] 生成假数据
+- [ ] 加密解密
 
 ## Feature
 
