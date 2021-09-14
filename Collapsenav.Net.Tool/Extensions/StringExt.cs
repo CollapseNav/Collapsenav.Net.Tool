@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -75,13 +76,39 @@ namespace Collapsenav.Net.Tool
         /// <summary>
         /// 检查是否 Url 格式
         /// </summary>
-        public static bool IsUrl(this string input)
+        public static bool IsUrl(this string input, bool ping = false)
         {
-            if (input.IsEmail())
-                return false;
-
             // TODO 日后写正则判断...
-            return input.StartsWith("https://", "http://");
+            var isHttp = input.StartsWith("https://", "http://");
+            if (!isHttp) return false;
+            // ping测试
+            if (ping && !input.GetDomain().CanPing()) return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// 能ping通
+        /// </summary>
+        public static bool CanPing(this string input, int timeout = 200)
+        {
+            Ping pingObj = new();
+            var reply = pingObj.Send(input, timeout);
+            return reply.Status == IPStatus.Success;
+        }
+
+        /// <summary>
+        /// 获取 Domain 域名
+        /// </summary>
+        public static string GetDomain(this string input)
+        {
+            if (input.IsUrl())
+            {
+                int headerIndex = input.IndexOf("//") + 2;
+                return input.Substring(headerIndex, input.IndexOf('/', headerIndex, input.Length - headerIndex) - headerIndex);
+            }
+            // TODO 还需要添加其他判断
+            return input;
         }
 
         public static bool StartsWith(this string input, params string[] filters) => filters.Any(item => input.StartsWith(item));
