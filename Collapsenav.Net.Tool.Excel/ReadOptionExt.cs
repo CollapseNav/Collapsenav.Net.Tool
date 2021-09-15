@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading.Tasks;
 using AutoMapper.Internal;
 
 namespace Collapsenav.Net.Tool.Excel
@@ -47,12 +48,16 @@ namespace Collapsenav.Net.Tool.Excel
             var member = prop.GetMember();
             if (origin.FieldOption == null) origin.FieldOption = new List<ReadCellOption<T>>();
 
-            origin.FieldOption.Add(GenOption(field, prop, item =>
+            var option = GenOption(field, prop, action);
+            action = option.Action;
+            option.Action = item =>
             {
-                if (string.IsNullOrEmpty(item))
+                if (item.IsEmpty())
                     throw new Exception($@" {field} 不可为空");
-                return action == null ? item : action(item);
-            }));
+                return action(item);
+            };
+
+            origin.FieldOption.Add(option);
             return origin;
         }
         public static ReadConfig<T> Add<T, E>(this ReadConfig<T> origin, string field, Expression<Func<T, E>> prop, Func<string, object> action = null)
@@ -65,6 +70,17 @@ namespace Collapsenav.Net.Tool.Excel
         {
             origin.Init = action;
             return origin;
+        }
+
+
+        public static ExportConfig<T> Add<T>(this ExportConfig<T> orgion, string field, Func<T, object> action)
+        {
+            orgion.FieldOption.Add(new ExportCellOption<T>
+            {
+                ExcelField = field,
+                Action = action
+            });
+            return orgion;
         }
     }
 }
