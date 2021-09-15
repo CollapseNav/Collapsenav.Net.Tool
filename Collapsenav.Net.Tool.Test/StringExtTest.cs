@@ -58,6 +58,7 @@ namespace Collapsenav.Net.Tool.Test
         {
             string url = "https://www.bilibili.com/";
             Assert.True(url.IsUrl());
+            Assert.True(url.IsUrl(true));
             url = "httttttps://www.bilibili.com/";
             Assert.False(url.IsUrl());
         }
