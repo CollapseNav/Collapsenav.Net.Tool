@@ -19,24 +19,25 @@ namespace Collapsenav.Net.Tool.Excel
     /// </summary>
     public static class ExcelSteamExt
     {
-        public static async Task<ExcelOperation> GenExcelOperationAsync(this Stream excelStream)
+        public static async Task<ExcelReadOperation> GenExcelOperationAsync(this Stream excelStream)
         {
-            return new ExcelOperation()
+            return new ExcelReadOperation()
             {
-                Header = ExcelOperation.GetExcelHeader(excelStream),
-                Data = await ExcelOperation.GetExcelDataAsync(excelStream),
+                Header = ExcelReadOperation.GetExcelHeader(excelStream),
+                Data = await ExcelReadOperation.GetExcelDataAsync(excelStream),
             };
         }
     }
+
     /// <summary>
     /// 针对表格的一些操作(基于EPPlus)
     /// </summary>
-    public class ExcelOperation
+    public class ExcelReadOperation
     {
         public IEnumerable<string> Header { get; set; }
         public IEnumerable<IEnumerable<string>> Data { get; set; }
-        public ExcelOperation() { }
-        public ExcelOperation(Stream excelStream)
+        public ExcelReadOperation() { }
+        public ExcelReadOperation(Stream excelStream)
         {
             Header = GetExcelHeader(excelStream);
             Data = GetExcelDataAsync(excelStream).Result;
@@ -45,9 +46,9 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 从流中读取excel
         /// </summary>
-        public static async Task<ExcelOperation> GenExcelOperationAsync(Stream excelStream)
+        public static async Task<ExcelReadOperation> GenExcelOperationAsync(Stream excelStream)
         {
-            return new ExcelOperation()
+            return new ExcelReadOperation()
             {
                 Header = GetExcelHeader(excelStream),
                 Data = await GetExcelDataAsync(excelStream),
@@ -76,6 +77,8 @@ namespace Collapsenav.Net.Tool.Excel
         }
 
         #endregion
+
+
 
 
         #region 获取表格数据
@@ -109,6 +112,9 @@ namespace Collapsenav.Net.Tool.Excel
         }
 
         #endregion
+
+
+
 
         #region 通过表格配置获取表头
 
@@ -193,8 +199,6 @@ namespace Collapsenav.Net.Tool.Excel
         /// </summary>
         public static async Task<IEnumerable<T>> ExcelToEntity<T>(Stream excelStream, ReadConfig<T> options)
         {
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
             using ExcelPackage pack = new(excelStream);
             var sheet = pack.Workbook.Worksheets[1];
             // 合并 FieldOption 和 DefaultOption
@@ -223,8 +227,6 @@ namespace Collapsenav.Net.Tool.Excel
                     data.Add(obj);
                 });
             });
-            sw.Stop();
-            Console.WriteLine(sw.ElapsedMilliseconds);
             return data;
         }
     }
