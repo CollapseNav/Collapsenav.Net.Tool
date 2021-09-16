@@ -1,14 +1,10 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using OfficeOpenXml;
 
 namespace Collapsenav.Net.Tool.Excel
@@ -30,7 +26,7 @@ namespace Collapsenav.Net.Tool.Excel
     }
 
     /// <summary>
-    /// 针对表格的一些操作(基于EPPlus)
+    /// 针对表格导入的一些操作(基于EPPlus)
     /// </summary>
     public class ExcelReadOperation
     {
@@ -46,7 +42,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 从流中读取excel
         /// </summary>
-        public static async Task<ExcelReadOperation> GenExcelOperationAsync(Stream excelStream)
+        public static async Task<ExcelReadOperation> GetExcelOperationAsync(Stream excelStream)
         {
             return new ExcelReadOperation()
             {
@@ -77,8 +73,6 @@ namespace Collapsenav.Net.Tool.Excel
         }
 
         #endregion
-
-
 
 
         #region 获取表格数据
@@ -114,29 +108,47 @@ namespace Collapsenav.Net.Tool.Excel
         #endregion
 
 
-
-
         #region 通过表格配置获取表头
-
-        public static Dictionary<string, int> GenExcelHeaderByOptions<T>(Stream excelStream, ReadConfig<T> options)
+        /// <summary>
+        /// 获取表头及其index
+        /// </summary>
+        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(Stream excelStream, ReadConfig<T> options)
         {
             using ExcelPackage pack = new(excelStream);
-            return GenExcelHeaderByOptions<T>(pack, options);
+            return GetExcelHeaderByOptions(pack, options);
+        }
+        /// <summary>
+        /// 获取表头及其index
+        /// </summary>
+        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(ExcelPackage pack, ReadConfig<T> options)
+        {
+            var sheet = pack.Workbook.Worksheets[1];
+            return GetExcelHeaderByOptions(sheet, options);
+        }
+        /// <summary>
+        /// 获取表头及其index
+        /// </summary>
+        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(ExcelWorksheet sheet, ReadConfig<T> options)
+        {
+            // 合并 FieldOption 和 DefaultOption
+            return GetExcelHeaderByOptions(sheet, options.FieldOption);
         }
 
-        public static Dictionary<string, int> GenExcelHeaderByOptions<T>(ExcelPackage pack, ReadConfig<T> options)
+
+        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(Stream excelStream, IEnumerable<ReadCellOption<T>> options)
         {
-            // 合并 FieldOption 和 DefaultOption
+            using ExcelPackage pack = new(excelStream);
+            return GetExcelHeaderByOptions(pack, options);
+        }
+        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(ExcelPackage pack, IEnumerable<ReadCellOption<T>> options)
+        {
             var sheet = pack.Workbook.Worksheets[1];
-            return GenExcelHeaderByOptions<T>(sheet, options);
+            return GetExcelHeaderByOptions(sheet, options);
         }
-        public static Dictionary<string, int> GenExcelHeaderByOptions<T>(ExcelWorksheet sheet, ReadConfig<T> options)
-        {
-            // 合并 FieldOption 和 DefaultOption
-            var propOptions = options.FieldOption.Concat(options.DefaultOption);
-            return GenExcelHeaderByOptions(sheet, propOptions);
-        }
-        public static Dictionary<string, int> GenExcelHeaderByOptions<T>(ExcelWorksheet sheet, IEnumerable<ReadCellOption<T>> options)
+        /// <summary>
+        /// 获取表头及其index
+        /// </summary>
+        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(ExcelWorksheet sheet, IEnumerable<ReadCellOption<T>> options)
         {
             // 获取对应设置的 表头 以及其 column
             var header = sheet.Cells[1, 1, 1, sheet.Dimension.Columns]
@@ -144,49 +156,56 @@ namespace Collapsenav.Net.Tool.Excel
             .ToDictionary(item => item.Value?.ToString().Trim(), item => item.End.Column);
             return header;
         }
-
         #endregion
 
-        public static async Task<string[][]> GenExcelDataByOptionsAsync<T>(Stream excelStream, ReadConfig<T> options)
+
+
+        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(Stream excelStream, ReadConfig<T> options)
         {
             using ExcelPackage pack = new(excelStream);
-            return await GenExcelDataByOptionsAsync(pack, options);
+            return await GetExcelDataByOptionsAsync(pack, options);
         }
-        public static async Task<string[][]> GenExcelDataByOptionsAsync<T>(ExcelPackage pack, ReadConfig<T> options)
+        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(ExcelPackage pack, ReadConfig<T> options)
         {
-            // 合并 FieldOption 和 DefaultOption
             var sheet = pack.Workbook.Worksheets[1];
-            return await GenExcelDataByOptionsAsync(sheet, options);
+            return await GetExcelDataByOptionsAsync(sheet, options);
         }
-        public async static Task<string[][]> GenExcelDataByOptionsAsync<T>(ExcelWorksheet sheet, ReadConfig<T> options)
+        public async static Task<string[][]> GetExcelDataByOptionsAsync<T>(ExcelWorksheet sheet, ReadConfig<T> options)
         {
-            // 合并 FieldOption 和 DefaultOption
-            var propOptions = options.FieldOption.Concat(options.DefaultOption);
-            return await GenExcelDataByOptionsAsync(sheet, propOptions);
+            return await GetExcelDataByOptionsAsync(sheet, options.FieldOption);
         }
 
+        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(Stream excelStream, IEnumerable<ReadCellOption<T>> options)
+        {
+            using ExcelPackage pack = new(excelStream);
+            return await GetExcelDataByOptionsAsync(pack, options);
+        }
+        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(ExcelPackage pack, IEnumerable<ReadCellOption<T>> options)
+        {
+            var sheet = pack.Workbook.Worksheets[1];
+            return await GetExcelDataByOptionsAsync(sheet, options);
+        }
         /// <summary>
         /// 可能会存在比较耗时的复杂计算,所以使用并行
         /// data线程安全,但是sheet并不是,所以加锁
         /// </summary>
-        public static async Task<string[][]> GenExcelDataByOptionsAsync<T>(ExcelWorksheet sheet, IEnumerable<ReadCellOption<T>> options)
+        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(ExcelWorksheet sheet, IEnumerable<ReadCellOption<T>> options)
         {
-            var header = GenExcelHeaderByOptions(sheet, options);
+            var header = GetExcelHeaderByOptions(sheet, options);
             var resultHeader = header.Select(item => item.Key).ToList();
 
             int rowCount = sheet.Dimension.Rows;
             int colCount = sheet.Dimension.Columns;
             ConcurrentBag<string[]> data = new();
-            object obj = new();
             await Task.Factory.StartNew(() =>
             {
                 Parallel.For(2, rowCount + 1, index =>
                 {
-                    Monitor.Enter(obj);
+                    Monitor.Enter(sheet);
                     var temp = sheet.Cells[index, 1, index, colCount]
                     .Where(item => header.Any(col => col.Value == item.End.Column))
                     .Select(item => item.Text).ToArray();
-                    Monitor.Exit(obj);
+                    Monitor.Exit(sheet);
                     data.Add(temp);
                 });
             });
@@ -194,16 +213,40 @@ namespace Collapsenav.Net.Tool.Excel
             return data.ToArray();
         }
 
+
+
         /// <summary>
         /// 将表格数据转换为指定的数据实体
         /// </summary>
-        public static async Task<IEnumerable<T>> ExcelToEntity<T>(Stream excelStream, ReadConfig<T> options)
+        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(Stream excelStream, ReadConfig<T> options)
         {
             using ExcelPackage pack = new(excelStream);
+            return await ExcelToEntityAsync(pack, options);
+        }
+        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(ExcelPackage pack, ReadConfig<T> options)
+        {
             var sheet = pack.Workbook.Worksheets[1];
+            return await ExcelToEntityAsync(sheet, options);
+        }
+        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(ExcelWorksheet sheet, ReadConfig<T> options)
+        {
+            return await ExcelToEntityAsync(sheet, options.FieldOption, options.Init);
+        }
+
+        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(Stream excelStream, IEnumerable<ReadCellOption<T>> options, Func<T, T> init)
+        {
+            using ExcelPackage pack = new(excelStream);
+            return await ExcelToEntityAsync(pack, options, init);
+        }
+        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(ExcelPackage pack, IEnumerable<ReadCellOption<T>> options, Func<T, T> init)
+        {
+            var sheet = pack.Workbook.Worksheets[1];
+            return await ExcelToEntityAsync(sheet, options, init);
+        }
+        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(ExcelWorksheet sheet, IEnumerable<ReadCellOption<T>> options, Func<T, T> init)
+        {
             // 合并 FieldOption 和 DefaultOption
-            var propOptions = options.FieldOption.Concat(options.DefaultOption);
-            var excelData = await GenExcelDataByOptionsAsync(sheet, propOptions);
+            var excelData = await GetExcelDataByOptionsAsync(sheet, options);
             ConcurrentBag<T> data = new();
             await Task.Factory.StartNew(() =>
             {
@@ -212,7 +255,7 @@ namespace Collapsenav.Net.Tool.Excel
                 {
                     // 根据对应传入的设置 为obj赋值
                     var obj = Activator.CreateInstance<T>();
-                    foreach (var option in propOptions)
+                    foreach (var option in options)
                     {
                         if (!option.ExcelField.IsNull())
                         {
@@ -222,8 +265,8 @@ namespace Collapsenav.Net.Tool.Excel
                         else
                             option.Prop.SetValue(obj, option.Action == null ? null : option.Action(string.Empty));
                     }
-                    if (options.Init != null)
-                        obj = options.Init(obj);
+                    if (init != null)
+                        obj = init(obj);
                     data.Add(obj);
                 });
             });

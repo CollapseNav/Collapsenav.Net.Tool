@@ -19,7 +19,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 依据表头的设置
         /// </summary>
-        public ICollection<ExportCellOption<T>> FieldOption { get; set; }
+        public IEnumerable<ExportCellOption<T>> FieldOption { get; set; }
         public IEnumerable<string> Header { get => FieldOption.Select(item => item.ExcelField); }
         public IEnumerable<object[]> ConvertHeader { get => new List<object[]> { Header.ToArray() }; }
         public IEnumerable<object[]> ConvertData { get => Data.Select(item => FieldOption.Select(option => option.Action(item)).ToArray()); }
