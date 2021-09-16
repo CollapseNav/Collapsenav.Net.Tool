@@ -1,14 +1,5 @@
-using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using OfficeOpenXml;
 
 namespace Collapsenav.Net.Tool.Excel
@@ -20,7 +11,7 @@ namespace Collapsenav.Net.Tool.Excel
         Data
     }
     /// <summary>
-    /// 针对表格的一些操作(基于EPPlus)
+    /// 针对表格导出的一些操作(基于EPPlus)
     /// </summary>
     public class ExcelExportOperation
     {

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Threading.Tasks;
 using AutoMapper.Internal;
 
 namespace Collapsenav.Net.Tool.Excel
@@ -12,12 +12,6 @@ namespace Collapsenav.Net.Tool.Excel
     /// </summary>
     public static class ExcelOptionExt
     {
-        public static ReadConfig<T> Default<T, E>(this ReadConfig<T> origin, Expression<Func<T, E>> prop, E defaultValue = default)
-        {
-            origin.DefaultOption.Add(GenOption(string.Empty, prop, item => defaultValue));
-            return origin;
-        }
-
         public static ReadCellOption<T> GenOption<T, E>(string field, Expression<Func<T, E>> prop, Func<string, object> action = null)
         {
             var member = prop.GetMember();
@@ -42,6 +36,11 @@ namespace Collapsenav.Net.Tool.Excel
                 Action = action
             };
         }
+        public static ReadConfig<T> Default<T, E>(this ReadConfig<T> origin, Expression<Func<T, E>> prop, E defaultValue = default)
+        {
+            origin.FieldOption = origin.FieldOption.Append(GenOption(string.Empty, prop, item => defaultValue));
+            return origin;
+        }
 
         public static ReadConfig<T> Require<T, E>(this ReadConfig<T> origin, string field, Expression<Func<T, E>> prop, Func<string, object> action = null)
         {
@@ -57,13 +56,22 @@ namespace Collapsenav.Net.Tool.Excel
                 return action(item);
             };
 
-            origin.FieldOption.Add(option);
+            origin.FieldOption = origin.FieldOption.Append(option);
             return origin;
         }
         public static ReadConfig<T> Add<T, E>(this ReadConfig<T> origin, string field, Expression<Func<T, E>> prop, Func<string, object> action = null)
         {
             if (origin.FieldOption == null) origin.FieldOption = new List<ReadCellOption<T>>();
-            origin.FieldOption.Add(GenOption(field, prop, action));
+            origin.FieldOption = origin.FieldOption.Append(GenOption(field, prop, action));
+            return origin;
+        }
+        public static ReadConfig<T> Add<T, E>(this ReadConfig<T> origin, string field, bool check, Expression<Func<T, E>> prop, Func<string, object> action = null)
+        {
+            if (check)
+            {
+                if (origin.FieldOption == null) origin.FieldOption = new List<ReadCellOption<T>>();
+                origin.FieldOption = origin.FieldOption.Append(GenOption(field, prop, action));
+            }
             return origin;
         }
         public static ReadConfig<T> AddInit<T>(this ReadConfig<T> origin, Func<T, T> action = null)
@@ -75,11 +83,23 @@ namespace Collapsenav.Net.Tool.Excel
 
         public static ExportConfig<T> Add<T>(this ExportConfig<T> orgion, string field, Func<T, object> action)
         {
-            orgion.FieldOption.Add(new ExportCellOption<T>
+            orgion.FieldOption = orgion.FieldOption.Append(new ExportCellOption<T>
             {
                 ExcelField = field,
                 Action = action
             });
+            return orgion;
+        }
+        public static ExportConfig<T> Add<T>(this ExportConfig<T> orgion, string field, bool check, Func<T, object> action)
+        {
+            if (check)
+            {
+                orgion.FieldOption = orgion.FieldOption.Append(new ExportCellOption<T>
+                {
+                    ExcelField = field,
+                    Action = action
+                });
+            }
             return orgion;
         }
     }

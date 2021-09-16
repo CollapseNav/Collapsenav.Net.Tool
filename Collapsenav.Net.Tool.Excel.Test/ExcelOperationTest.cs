@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -17,8 +16,9 @@ namespace Collapsenav.Net.Tool.Excel.Test
     }
     public class ExcelOperationTest
     {
-
         public ExcelOperationTest() { }
+
+
         [Fact]
         public void HeaderTest()
         {
@@ -27,6 +27,21 @@ namespace Collapsenav.Net.Tool.Excel.Test
             var headers = ExcelReadOperation.GetExcelHeader(fs);
             Assert.NotEmpty(headers);
             Assert.True(realHeader.All(header => headers.Contains(header)));
+            var config = new ReadConfig<ExcelTestDto>()
+            .Require("Field0", item => item.Field0)
+            .Add("Field1", item => item.Field1)
+            .Default(item => item.Field3, 233)
+            .AddInit(item =>
+            {
+                item.Field0 += "23333";
+                item.Field2 = false;
+                return item;
+            })
+            ;
+            var headerDict = ExcelReadOperation.GetExcelHeaderByOptions(fs, config.FieldOption);
+            var configHeader = new[] { "Field0", "Field1" };
+            Assert.NotEmpty(headers);
+            Assert.True(configHeader.All(header => headerDict.ContainsKey(header)));
         }
 
         [Fact]
@@ -39,17 +54,24 @@ namespace Collapsenav.Net.Tool.Excel.Test
         }
 
         [Fact]
-        public async Task ConvertTest()
+        public async Task ConvertExcelTest()
         {
             using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open);
             var config = new ReadConfig<ExcelTestDto>()
-            .Add("Field0", item => item.Field0)
+            .Require("Field0", item => item.Field0)
             .Add("Field1", item => item.Field1)
-            .Add("Field2", item => item.Field2, item => item == "Male")
-            .Add("Field3", item => item.Field3)
+            .Default(item => item.Field3, 233)
+            .AddInit(item =>
+            {
+                item.Field0 += "23333";
+                item.Field2 = false;
+                return item;
+            })
             ;
-            var datas = await ExcelReadOperation.ExcelToEntity(fs, config);
-
+            var datas = await ExcelReadOperation.ExcelToEntityAsync(fs, config);
+            Assert.NotEmpty(datas);
+            Assert.True(datas.Count() == 3000);
+            datas = await ExcelReadOperation.ExcelToEntityAsync(fs, config.FieldOption, config.Init);
             Assert.NotEmpty(datas);
             Assert.True(datas.Count() == 3000);
         }
@@ -69,9 +91,12 @@ namespace Collapsenav.Net.Tool.Excel.Test
                 return item;
             })
             ;
-            var datas = await ExcelReadOperation.GenExcelDataByOptionsAsync(fs, config);
+            var datas = await ExcelReadOperation.GetExcelDataByOptionsAsync(fs, config);
             Assert.NotEmpty(datas);
-            Assert.True(datas.Count() == 3001);
+            Assert.True(datas.Length == 3001);
+            datas = await ExcelReadOperation.GetExcelDataByOptionsAsync(fs, config.FieldOption);
+            Assert.NotEmpty(datas);
+            Assert.True(datas.Length == 3001);
         }
 
         [Fact]
@@ -84,7 +109,7 @@ namespace Collapsenav.Net.Tool.Excel.Test
             .Add("Field2", item => item.Field2, item => item == "Male")
             .Add("Field3", item => item.Field3)
             ;
-            var datas = await ExcelReadOperation.ExcelToEntity(fs, config);
+            var datas = await ExcelReadOperation.ExcelToEntityAsync(fs, config);
 
             var exportConfig = new ExportConfig<ExcelTestDto>(datas)
             .Add("Field0", item => item.Field0)
@@ -107,7 +132,7 @@ namespace Collapsenav.Net.Tool.Excel.Test
             .Add("Field2", item => item.Field2, item => item == "Male")
             .Add("Field3", item => item.Field3)
             ;
-            var datas = await ExcelReadOperation.ExcelToEntity(fs, config);
+            var datas = await ExcelReadOperation.ExcelToEntityAsync(fs, config);
 
             var exportConfig = new ExportConfig<ExcelTestDto>(datas)
             .Add("Field0", item => item.Field0)
@@ -130,7 +155,7 @@ namespace Collapsenav.Net.Tool.Excel.Test
             .Add("Field2", item => item.Field2, item => item == "Male")
             .Add("Field3", item => item.Field3)
             ;
-            var datas = await ExcelReadOperation.ExcelToEntity(fs, config);
+            var datas = await ExcelReadOperation.ExcelToEntityAsync(fs, config);
 
             var exportConfig = new ExportConfig<ExcelTestDto>(datas)
             .Add("Field0", item => item.Field0)
