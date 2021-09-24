@@ -47,7 +47,7 @@ namespace Collapsenav.Net.Tool
         /// </summary>
         public static IEnumerable<T> Unique<T>(this IEnumerable<T> query)
         {
-            return query.GroupBy(item => item).Select(item => item.First()).ToList();
+            return CollectionTool.Unique(query);
         }
 
         public static IEnumerable<T> WhereIf<T>(this IEnumerable<T> query, bool flag, Func<T, bool> filter)
