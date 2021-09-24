@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace Collapsenav.Net.Tool
@@ -113,7 +114,6 @@ namespace Collapsenav.Net.Tool
 
         public static bool StartsWith(this string input, params string[] filters) => filters.Any(item => input.StartsWith(item));
         public static bool EndsWith(this string input, params string[] filters) => filters.Any(item => input.EndsWith(item));
-
 
         public static string ToString(this char input, int count)
         {
