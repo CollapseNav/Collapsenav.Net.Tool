@@ -1,6 +1,5 @@
 using Xunit;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Collapsenav.Net.Tool.Test
@@ -39,6 +38,7 @@ namespace Collapsenav.Net.Tool.Test
             int[] intList = { 1, 1, 2, 2, 3, 3, 4 };
             intList = intList.WhereIf(true, item => item > 1)
             .WhereIf(false, item => item < 3)
+            .WhereIf("", item => item != 2)
             .ToArray();
             Assert.False(new[] { 2, 2, 3, 3, 4 }.Except(intList).Any());
             Assert.True(intList.Length == 5);
@@ -89,6 +89,23 @@ namespace Collapsenav.Net.Tool.Test
             numMergeList = nums.Take(2).Merge(new[] { 7, 8, 9, 10 });
             Assert.True(numMergeList.Count() == 10);
             Assert.True(numMergeList.ContainAnd(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }));
+
+            nums = null;
+            Assert.Null(nums.Merge());
+        }
+
+        [Fact]
+        public void SpliteCollectionTest()
+        {
+            var nums = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            var numSplit = nums.SpliteCollection(2);
+            Assert.True(numSplit.Count() == 5);
+            Assert.True(numSplit.First().ContainAnd(new[] { 1, 2 }));
+
+            numSplit = nums.SpliteCollection(3);
+            Assert.True(numSplit.Count() == 4);
+            Assert.True(numSplit.First().ContainAnd(new[] { 1, 2, 3 }));
+            Assert.True(numSplit.Last().ContainAnd(new[] { 10 }));
         }
     }
 }
