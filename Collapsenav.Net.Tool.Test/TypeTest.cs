@@ -34,7 +34,9 @@ namespace Collapsenav.Net.Tool.Test
             Assert.True(doubleValue.IsBuildInType());
             Assert.True(stringValue.IsBuildInType());
             Assert.True(boolValue.IsBuildInType());
+            Assert.True(boolValue.IsBaseType());
             Assert.False(TypeTool.IsBuildInType<TypeTest>());
+            Assert.False(TypeTool.IsBaseType<TypeTest>());
         }
 
         [Fact]

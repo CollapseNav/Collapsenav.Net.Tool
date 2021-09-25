@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Collapsenav.Net.Tool
 {
@@ -32,7 +30,7 @@ namespace Collapsenav.Net.Tool
 
         public static IEnumerable<IEnumerable<T>> SpliteCollection<T>(this IEnumerable<T> query, int size)
         {
-            for (int i = 0; i <= query.Count() / size; i++)
+            for (int i = 0; i < (query.Count() / size) + (query.Count() % size == 0 ? 0 : 1); i++)
                 yield return query.Skip(i * size).Take(size);
         }
         /// <summary>

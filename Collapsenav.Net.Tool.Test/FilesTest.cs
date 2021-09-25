@@ -1,6 +1,5 @@
 using Xunit;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace Collapsenav.Net.Tool.Test
 {

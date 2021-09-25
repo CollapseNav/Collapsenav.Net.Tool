@@ -13,6 +13,16 @@ namespace Collapsenav.Net.Tool
         {
             return TypeTool.IsBuildInType(obj);
         }
+        public static bool IsBaseType(this Type obj)
+        {
+            return TypeTool.IsBaseType(obj);
+        }
+        public static bool IsBaseType<T>(this T obj)
+        {
+            return TypeTool.IsBaseType<T>();
+        }
+
+
         public static IEnumerable<string> PropNames<T>(this T obj)
         {
             return TypeTool.PropNames<T>();

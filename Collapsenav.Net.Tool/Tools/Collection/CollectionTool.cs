@@ -24,9 +24,9 @@ namespace Collapsenav.Net.Tool
 
         public static IEnumerable<T> Merge<T>(IEnumerable<IEnumerable<T>> querys)
         {
+            if (querys == null)
+                return null;
             var result = querys.FirstOrDefault();
-            if (result == null)
-                return result;
             foreach (var query in querys.Skip(1))
                 result = result.Concat(query);
             return result;
