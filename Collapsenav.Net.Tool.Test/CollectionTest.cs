@@ -1,5 +1,7 @@
 using Xunit;
 using System.Linq;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Collapsenav.Net.Tool.Test
 {
@@ -55,18 +57,38 @@ namespace Collapsenav.Net.Tool.Test
         public void MergeCollectionTest()
         {
             string[] strs = new[] { "CollapseNav", "Net", "Tool" };
-            var mergeList = strs.Select(str => str.Select(s => s)).Merge();
-            Assert.True(mergeList.Count() == 18);
-            Assert.True(mergeList.Join("") == "CollapseNavNetTool");
+            var strMergeList = strs.Merge();
+            Assert.True(strMergeList.Count() == 18);
+            Assert.True(strMergeList.Join("") == "CollapseNavNetTool");
 
-            mergeList = strs.Select(str => str.Select(s => s)).Merge(strs.Select(str => str.Select(s => s)));
-            Assert.True(mergeList.Count() == 36);
-            Assert.True(mergeList.Join("") == "CollapseNavNetToolCollapseNavNetTool");
+            strMergeList = strs.Merge(strs);
+            Assert.True(strMergeList.Count() == 36);
+            Assert.True(strMergeList.Join("") == "CollapseNavNetToolCollapseNavNetTool");
 
             string str = "CollapseNavNetTool";
-            mergeList = strs.Select(str => str.Select(s => s)).Merge(str.Select(item => item));
-            Assert.True(mergeList.Count() == 36);
-            Assert.True(mergeList.Join("") == "CollapseNavNetToolCollapseNavNetTool");
+            strMergeList = strs.Merge(str);
+            Assert.True(strMergeList.Count() == 36);
+            Assert.True(strMergeList.Join("") == "CollapseNavNetToolCollapseNavNetTool");
+
+
+            IEnumerable<int[]> nums = new List<int[]>()
+            {
+                new[] {1,2,3},
+                new[] {4,5,6},
+                new[] {7,8,9},
+                new[] {10},
+            };
+            var numMergeList = nums.Merge();
+            Assert.True(numMergeList.Count() == 10);
+            Assert.True(numMergeList.ContainAnd(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }));
+
+            numMergeList = nums.Take(2).Merge(nums.TakeLast(2));
+            Assert.True(numMergeList.Count() == 10);
+            Assert.True(numMergeList.ContainAnd(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }));
+
+            numMergeList = nums.Take(2).Merge(new[] { 7, 8, 9, 10 });
+            Assert.True(numMergeList.Count() == 10);
+            Assert.True(numMergeList.ContainAnd(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }));
         }
     }
 }
