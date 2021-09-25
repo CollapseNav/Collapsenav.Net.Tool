@@ -76,14 +76,7 @@ namespace Collapsenav.Net.Tool
             var nameProps = props.Where(item => item.PropertyType.IsBuildInType());
             var loopProps = props.Where(item => !item.PropertyType.IsBuildInType());
             if (depth > 0)
-            {
-                IEnumerable<string> loopName = new List<string>();
-                foreach (var loop in loopProps)
-                {
-                    loopName = loopName.Concat(PropNames(loop.PropertyType, depth - 1).Select(item => $@"{loop.Name}.{item}"));
-                }
-                return loopName.Concat(nameProps.Select(item => item.Name));
-            }
+                return loopProps.Select(item => PropNames(item.PropertyType, depth - 1).Select(propName => $@"{item.Name}.{propName}")).Merge(nameProps.Select(item => item.Name));
             return nameProps.Select(item => item.Name).Concat(loopProps.Select(item => item.Name));
         }
         /// <summary>

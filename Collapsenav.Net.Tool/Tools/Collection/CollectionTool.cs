@@ -21,5 +21,15 @@ namespace Collapsenav.Net.Tool
         {
             return query.GroupBy(groupBy).Select(item => item.First());
         }
+
+        public static IEnumerable<T> Merge<T>(IEnumerable<IEnumerable<T>> querys)
+        {
+            var result = querys.FirstOrDefault();
+            if (result == null)
+                return result;
+            foreach (var query in querys.Skip(1))
+                result = result.Concat(query);
+            return result;
+        }
     }
 }

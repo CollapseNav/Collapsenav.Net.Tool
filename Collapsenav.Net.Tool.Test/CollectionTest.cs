@@ -50,5 +50,23 @@ namespace Collapsenav.Net.Tool.Test
             Assert.True(intList.Length == 1);
             Assert.True(intList.First() == 1);
         }
+
+        [Fact]
+        public void MergeCollectionTest()
+        {
+            string[] strs = new[] { "CollapseNav", "Net", "Tool" };
+            var mergeList = strs.Select(str => str.Select(s => s)).Merge();
+            Assert.True(mergeList.Count() == 18);
+            Assert.True(mergeList.Join("") == "CollapseNavNetTool");
+
+            mergeList = strs.Select(str => str.Select(s => s)).Merge(strs.Select(str => str.Select(s => s)));
+            Assert.True(mergeList.Count() == 36);
+            Assert.True(mergeList.Join("") == "CollapseNavNetToolCollapseNavNetTool");
+
+            string str = "CollapseNavNetTool";
+            mergeList = strs.Select(str => str.Select(s => s)).Merge(str.Select(item => item));
+            Assert.True(mergeList.Count() == 36);
+            Assert.True(mergeList.Join("") == "CollapseNavNetToolCollapseNavNetTool");
+        }
     }
 }
