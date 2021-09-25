@@ -16,3 +16,11 @@
 * [StringBuilder](./StringBuilder.md)
 * [Type](./Type.md)
 
+## Feature
+
+### [CollectionTool](./Tools/Collection/CollectionTool.cs)
+
+[CollectionExt](./Extensions/CollectionExt.cs)
+
+
+
