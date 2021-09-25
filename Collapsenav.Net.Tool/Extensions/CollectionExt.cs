@@ -73,5 +73,29 @@ namespace Collapsenav.Net.Tool
             }
             return result;
         }
+
+        /// <summary>
+        /// 合并集合
+        /// </summary>
+        public static IEnumerable<T> Merge<T>(this IEnumerable<IEnumerable<T>> querys)
+        {
+            return CollectionTool.Merge(querys);
+        }
+        /// <summary>
+        /// 合并集合
+        /// </summary>
+        public static IEnumerable<T> Merge<T>(this IEnumerable<IEnumerable<T>> querys, IEnumerable<T> query)
+        {
+            querys = querys.Append(query);
+            return CollectionTool.Merge(querys);
+        }
+        /// <summary>
+        /// 合并集合
+        /// </summary>
+        public static IEnumerable<T> Merge<T>(this IEnumerable<IEnumerable<T>> querys, IEnumerable<IEnumerable<T>> concatQuerys)
+        {
+            querys = querys.Concat(concatQuerys);
+            return CollectionTool.Merge(querys);
+        }
     }
 }
