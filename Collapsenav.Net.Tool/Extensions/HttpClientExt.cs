@@ -7,7 +7,7 @@ namespace Collapsenav.Net.Tool
     public static class HttpClientExt
     {
         /// <summary>
-        ///  发送文件s
+        ///  发送文件
         /// </summary>
         public static async Task<bool> SendFileAsync(this HttpClient client, string url, IEnumerable<CntFileInfo> files)
         {

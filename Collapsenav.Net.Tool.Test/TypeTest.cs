@@ -33,6 +33,7 @@ namespace Collapsenav.Net.Tool.Test
             Assert.True(boolValue.IsBaseType());
             Assert.False(TypeTool.IsBuildInType<TypeTest>());
             Assert.False(TypeTool.IsBaseType<TypeTest>());
+            Assert.False(typeof(TypeTool).IsBaseType());
         }
 
         [Fact]
