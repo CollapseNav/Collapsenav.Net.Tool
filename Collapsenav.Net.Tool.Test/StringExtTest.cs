@@ -1,5 +1,6 @@
 using System;
-using System.Net.Http.Headers;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Collapsenav.Net.Tool.Test
@@ -44,6 +45,17 @@ namespace Collapsenav.Net.Tool.Test
             int[] intJoin = { 1, 2, 3 };
             Assert.True("1@2@3" == intJoin.Join("@"));
             Assert.True("-1@-2@-3" == intJoin.Join("@", item => -item));
+
+            int[] ints = new[] { 1, 3, 5, 6, 8, 13, 457, };
+            Assert.True(ints.Join("@") == "1@3@5@6@8@13@457");
+            Dictionary<int, string> dicts = new()
+            {
+                { 1, "11" },
+                { 2, "22" },
+                { 4, "44" },
+                { 6, "66" },
+            };
+            Assert.True(dicts.Where(item => item.Key % 2 == 0).Select(item => item.Value).Join("@") == "22@44@66");
         }
 
         [Fact]
@@ -51,6 +63,13 @@ namespace Collapsenav.Net.Tool.Test
         {
             string emailString = "collapsenav@163.com";
             Assert.True(emailString.IsEmail());
+        }
+
+        [Fact]
+        public void PingTest()
+        {
+            string url = "https://www.bilibili.com/";
+            Assert.True(url.CanPing());
         }
 
         [Fact]
@@ -72,6 +91,60 @@ namespace Collapsenav.Net.Tool.Test
             Assert.False(StringExt.StartsWith(exampleString, "2233"));
             Assert.True(exampleString.EndsWith("333333", "33", "3"));
             Assert.False(StringExt.EndsWith(exampleString, "2333333"));
+        }
+
+        [Fact]
+        public void NullOrEmptyTest()
+        {
+            string empty = "";
+            string notEmpty = "NotEmpty";
+            string whiteSpace = "   ";
+            Assert.True(empty.IsNull() && empty.IsEmpty());
+            Assert.True(notEmpty.NotEmpty() && notEmpty.NotNull());
+            Assert.True(whiteSpace.IsEmpty());
+            Assert.False(empty.NotEmpty());
+            Assert.False(whiteSpace.NotNull());
+        }
+
+        [Fact]
+        public void PadLeftAndRightTest()
+        {
+            int iValue = 233;
+            double dValue = 2.33;
+            long lValue = 23333;
+
+            Assert.True(iValue.PadLeft(6) == "   233");
+            Assert.True(dValue.PadLeft(6) == "  2.33");
+            Assert.True(lValue.PadLeft(6) == " 23333");
+
+            Assert.True(iValue.PadLeft(6, '-') == "---233");
+            Assert.True(dValue.PadLeft(6, '-') == "--2.33");
+            Assert.True(lValue.PadLeft(6, '-') == "-23333");
+
+            Assert.True(iValue.PadRight(6) == "233   ");
+            Assert.True(dValue.PadRight(6) == "2.33  ");
+            Assert.True(lValue.PadRight(6) == "23333 ");
+
+            Assert.True(iValue.PadRight(6, '-') == "233---");
+            Assert.True(dValue.PadRight(6, '-') == "2.33--");
+            Assert.True(lValue.PadRight(6, '-') == "23333-");
+
+            Assert.True(iValue.PadLeft(6, item => item + 1, '-') == "---234");
+            Assert.True(dValue.PadLeft(6, item => item + 1, '-') == "--3.33");
+            Assert.True(lValue.PadLeft(6, item => item + 1, '-') == "-23334");
+
+            Assert.True(iValue.PadRight(6, item => item + 1, '-') == "234---");
+            Assert.True(dValue.PadRight(6, item => item + 1, '-') == "3.33--");
+            Assert.True(lValue.PadRight(6, item => item + 1, '-') == "23334-");
+        }
+
+        [Fact]
+        public void GetDomainTest()
+        {
+            string domain = "https://www.github.com";
+            Assert.True(domain.GetDomain() == "www.github.com");
+            string notDomain = "htasdafsgzzcvnxfxttps://www.github.com";
+            Assert.False(notDomain.GetDomain() == "www.github.com");
         }
     }
 }

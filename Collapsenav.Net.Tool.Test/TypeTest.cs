@@ -8,10 +8,6 @@ namespace Collapsenav.Net.Tool.Test
         public string Prop1 { get; set; }
         public string Prop2 { get; set; }
         public string Prop3 { get; set; }
-        public string Function1()
-        {
-            return "";
-        }
     }
     public class PropTest0
     {
@@ -34,7 +30,10 @@ namespace Collapsenav.Net.Tool.Test
             Assert.True(doubleValue.IsBuildInType());
             Assert.True(stringValue.IsBuildInType());
             Assert.True(boolValue.IsBuildInType());
+            Assert.True(boolValue.IsBaseType());
             Assert.False(TypeTool.IsBuildInType<TypeTest>());
+            Assert.False(TypeTool.IsBaseType<TypeTest>());
+            Assert.False(typeof(TypeTool).IsBaseType());
         }
 
         [Fact]
