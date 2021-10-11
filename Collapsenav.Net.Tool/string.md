@@ -21,6 +21,22 @@
 
 ## How To Use
 
+### Null/Empty
+
+`string`里用到过的最多的判空操作
+
+```csharp
+string empty = "";
+string notEmpty = "NotEmpty";
+string whiteSpace = "   ";
+empty.IsNull() && empty.IsEmpty(); //True
+notEmpty.NotEmpty() && notEmpty.NotNull(); //True
+notEmpty.IsNull(); //False
+whiteSpace.IsEmpty(); //True
+empty.NotEmpty(); //False
+whiteSpace.NotNull(); //False
+```
+
 ### ToChinese
 
 将数字字符串转为中文

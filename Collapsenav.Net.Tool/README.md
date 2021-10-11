@@ -8,10 +8,10 @@
 
 ## TL;DR
 
-* [string](./string.md)
-* [Collection](./Collection.md)
-* [DateTime](./DateTime.md)
-* [Json](./Json.md)
-* [Security](./Security.md)
-* [StringBuilder](./StringBuilder.md)
-* [Type](./Type.md)
+* [string](./string.md#string)
+* [Collection](./Collection.md#collection)
+* [DateTime](./DateTime.md#datetime)
+* [Type](./Type.md#type)
+* [Security](./Security.md#security)
+* [StringBuilder](./StringBuilder.md#strignbuilder)
+* [Json](./Json.md#json)
