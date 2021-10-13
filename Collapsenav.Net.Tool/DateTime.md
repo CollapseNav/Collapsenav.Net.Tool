@@ -11,3 +11,34 @@
 - [ ] 判断是否为闰年
 - [ ] ...
 
+## How To Use
+
+### ToTimestamp
+
+```csharp
+DateTime.Now.ToUniversalTime();
+```
+
+### ToDateTime
+
+~~会碰到精度问题,不知道现在的处理方式是否合理~~
+
+```csharp
+now.ToTimestamp().ToDateTime();
+```
+
+### ToYear,ToMonthXXX
+
+有时候会有 只保留到年/月/日 之类的需求
+
+```csharp
+DateTime now = new DateTime(2010, 10, 10, 10, 10, 10, 10);
+now.ToMillisecond();
+now.ToSecond();
+now.ToMinute();
+now.ToHour();
+now.ToDay();
+now.ToMonth();
+now.To(DateLevel.Year);
+```
+

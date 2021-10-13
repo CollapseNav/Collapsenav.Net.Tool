@@ -8,6 +8,7 @@
 - [x] [`ToChinese` 长度16以下的整数字符串转为中文](#tochinese)
 - [x] [`ToXXX` 字符串转为基础数据类型](#toxxx)
 - [x] [`Join` Join](#join)
+- [x] `CanPing` 检测域名可通
 - [ ] `IsEmail` 检查是否邮箱格式
   - [x] 仅仅只是检查邮箱格式
   - [ ] 检查邮箱是否存在
@@ -89,4 +90,42 @@ intJoin.Join("@"); // "1@2@3"
 intJoin.Join("@", item => -item); // "-1@-2@-3"
 ```
 
+### CanPing
+
+```csharp
+string url = "https://www.bilibili.com/";
+url.CanPing(); // 如果联网了,应该为 True
+```
+
+### PadLeftAndRight
+
+```csharp
+int iValue = 233;
+double dValue = 2.33;
+long lValue = 23333;
+
+iValue.PadLeft(6); // "   233"
+dValue.PadLeft(6); // "  2.33"
+lValue.PadLeft(6); // " 23333"
+
+iValue.PadLeft(6, '-'); // "---233"
+dValue.PadLeft(6, '-'); // "--2.33"
+lValue.PadLeft(6, '-'); // "-23333"
+
+iValue.PadRight(6); // "233   "
+dValue.PadRight(6); // "2.33  "
+lValue.PadRight(6); // "23333 "
+
+iValue.PadRight(6, '-'); // "233---"
+dValue.PadRight(6, '-'); // "2.33--"
+lValue.PadRight(6, '-'); // "23333-"
+
+iValue.PadLeft(6, item => item + 1, '-'); // "---234"
+dValue.PadLeft(6, item => item + 1, '-'); // "--3.33"
+lValue.PadLeft(6, item => item + 1, '-'); // "-23334"
+
+iValue.PadRight(6, item => item + 1, '-'); // "234---"
+dValue.PadRight(6, item => item + 1, '-'); // "3.33--"
+lValue.PadRight(6, item => item + 1, '-'); // "23334-"
+```
 
