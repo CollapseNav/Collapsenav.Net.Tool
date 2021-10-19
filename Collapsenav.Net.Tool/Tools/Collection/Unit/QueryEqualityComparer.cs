@@ -9,10 +9,14 @@ namespace Collapsenav.Net.Tool
         {
             HashCodeFunc = hashcodeFunc;
         }
-        public QueryEqualityComparer(Func<T, T, bool> equalFunc, Func<T, int> hashcodeFunc = null)
+        public QueryEqualityComparer(Func<T, T, bool> equalFunc, Func<T, int> hashcodeFunc)
         {
             EqualFunc = equalFunc;
             HashCodeFunc = hashcodeFunc;
+        }
+        public QueryEqualityComparer(Func<T, T, bool> equalFunc)
+        {
+            EqualFunc = equalFunc;
         }
         private readonly Func<T, T, bool> EqualFunc;
         private readonly Func<T, int> HashCodeFunc;
