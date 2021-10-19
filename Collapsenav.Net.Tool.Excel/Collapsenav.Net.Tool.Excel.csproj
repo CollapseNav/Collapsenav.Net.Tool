@@ -4,6 +4,17 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <LangVersion>9.0</LangVersion>
         <NoWarn>$(NoWarn);1591</NoWarn>
+        <Version>0.0.0.3</Version>
+        <Authors>CollapseNav</Authors>
+        <PackageTags>Excel,EPPlus</PackageTags>
+        <Description>
+基于EPPlus提供了导出导出功能
+        </Description>
+        <Copyright>CollapseNav</Copyright>
+        <RepositoryType>Github</RepositoryType>
+        <RepositoryUrl>https://github.com/CollapseNav/Collapsenav.Net.Tool</RepositoryUrl>
+        <Product>Collapsenav.Net.Tool.Excel</Product>
+        <PackageId>Collapsenav.Net.Tool.Excel</PackageId>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="EPPlus.Core" Version="1.5.4" />
