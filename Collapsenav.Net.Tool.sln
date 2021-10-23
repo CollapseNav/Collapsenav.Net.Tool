@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool", "Col
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Test", "Collapsenav.Net.Tool.Test\Collapsenav.Net.Tool.Test.csproj", "{47AB6AD9-7E52-44B5-B9C8-D2CC68A67E95}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Data", "Collapsenav.Net.Tool.Data\Collapsenav.Net.Tool.Data.csproj", "{6D05862E-E320-4658-9A6A-B376F7922031}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Data.Test", "Collapsenav.Net.Tool.Data.Test\Collapsenav.Net.Tool.Data.Test.csproj", "{5CA96B88-CCEA-49CC-9019-71AB291346F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,5 +48,29 @@ Global
 		{47AB6AD9-7E52-44B5-B9C8-D2CC68A67E95}.Release|x64.Build.0 = Release|Any CPU
 		{47AB6AD9-7E52-44B5-B9C8-D2CC68A67E95}.Release|x86.ActiveCfg = Release|Any CPU
 		{47AB6AD9-7E52-44B5-B9C8-D2CC68A67E95}.Release|x86.Build.0 = Release|Any CPU
+		{6D05862E-E320-4658-9A6A-B376F7922031}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D05862E-E320-4658-9A6A-B376F7922031}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D05862E-E320-4658-9A6A-B376F7922031}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6D05862E-E320-4658-9A6A-B376F7922031}.Debug|x64.Build.0 = Debug|Any CPU
+		{6D05862E-E320-4658-9A6A-B376F7922031}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6D05862E-E320-4658-9A6A-B376F7922031}.Debug|x86.Build.0 = Debug|Any CPU
+		{6D05862E-E320-4658-9A6A-B376F7922031}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D05862E-E320-4658-9A6A-B376F7922031}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D05862E-E320-4658-9A6A-B376F7922031}.Release|x64.ActiveCfg = Release|Any CPU
+		{6D05862E-E320-4658-9A6A-B376F7922031}.Release|x64.Build.0 = Release|Any CPU
+		{6D05862E-E320-4658-9A6A-B376F7922031}.Release|x86.ActiveCfg = Release|Any CPU
+		{6D05862E-E320-4658-9A6A-B376F7922031}.Release|x86.Build.0 = Release|Any CPU
+		{5CA96B88-CCEA-49CC-9019-71AB291346F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CA96B88-CCEA-49CC-9019-71AB291346F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CA96B88-CCEA-49CC-9019-71AB291346F0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5CA96B88-CCEA-49CC-9019-71AB291346F0}.Debug|x64.Build.0 = Debug|Any CPU
+		{5CA96B88-CCEA-49CC-9019-71AB291346F0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5CA96B88-CCEA-49CC-9019-71AB291346F0}.Debug|x86.Build.0 = Debug|Any CPU
+		{5CA96B88-CCEA-49CC-9019-71AB291346F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CA96B88-CCEA-49CC-9019-71AB291346F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CA96B88-CCEA-49CC-9019-71AB291346F0}.Release|x64.ActiveCfg = Release|Any CPU
+		{5CA96B88-CCEA-49CC-9019-71AB291346F0}.Release|x64.Build.0 = Release|Any CPU
+		{5CA96B88-CCEA-49CC-9019-71AB291346F0}.Release|x86.ActiveCfg = Release|Any CPU
+		{5CA96B88-CCEA-49CC-9019-71AB291346F0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
