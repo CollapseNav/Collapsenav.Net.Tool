@@ -1,4 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="../version.props" />
+    <PropertyGroup>
+        <PackageTags>Tools,EF,Freesql,Data</PackageTags>
+        <Description>
+提供基于EF Freesql之类orm的仓储类，工具类
+        </Description>
+        <Product>Collapsenav.Net.Tool.Data</Product>
+        <PackageId>Collapsenav.Net.Tool.Data</PackageId>
+    </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj"/>
     </ItemGroup>
@@ -22,21 +31,4 @@
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.2"/>
         <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="5.2.15"/>
     </ItemGroup>
-    <PropertyGroup>
-        <TargetFrameworks>net5.0;netstandard2.0;netstandard2.1;</TargetFrameworks>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <LangVersion>9.0</LangVersion>
-        <NoWarn>$(NoWarn);1591</NoWarn>
-        <Version>0.0.0.4</Version>
-        <Authors>CollapseNav</Authors>
-        <PackageTags>Tools,EF,Freesql,Data</PackageTags>
-        <Description>
-提供基于EF Freesql之类orm的仓储类，工具类
-        </Description>
-        <Copyright>CollapseNav</Copyright>
-        <RepositoryType>Github</RepositoryType>
-        <RepositoryUrl>https://github.com/CollapseNav/Collapsenav.Net.Tool</RepositoryUrl>
-        <Product>Collapsenav.Net.Tool.Data</Product>
-        <PackageId>Collapsenav.Net.Tool.Data</PackageId>
-    </PropertyGroup>
 </Project>
