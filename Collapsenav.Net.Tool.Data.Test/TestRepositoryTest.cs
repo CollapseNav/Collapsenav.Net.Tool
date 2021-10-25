@@ -11,8 +11,8 @@ namespace Collapsenav.Net.Tool.Data.Test
         protected readonly IServiceProvider Provider;
         private readonly IRepository<int, TestEntity> Repository;
         private readonly IRepository<int, TestEntity> TestRepository;
-        private readonly IQueryRepository<int, TestEntity> TestQueryRepository;
-        private readonly IModifyRepository<int, TestEntity> TestModifyRepository;
+        private readonly IQueryRepository<TestEntity> TestQueryRepository;
+        private readonly IModifyRepository<TestEntity> TestModifyRepository;
         public TestRepositoryTest()
         {
             Provider = DIConfig.GetTestRepositoryProvider();

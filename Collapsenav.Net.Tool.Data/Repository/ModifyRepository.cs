@@ -8,10 +8,13 @@ using Z.EntityFramework.Plus;
 
 namespace Collapsenav.Net.Tool.Data
 {
-    public partial class ModifyRepository<TKey, T> : QueryRepository<TKey, T>, IModifyRepository<TKey, T>
-    where T : class, IBaseEntity<TKey>, new()
+    public partial class ModifyRepository<T> : QueryRepository<T>, IModifyRepository<T>
+    where T : class, IBaseEntity, new()
     {
-        public ModifyRepository(DbContext db) : base(db) { }
+        public ModifyRepository(DbContext db) : base(db)
+        {
+        }
+
         /// <summary>
         /// 添加数据(集合)
         /// </summary>
@@ -35,16 +38,6 @@ namespace Collapsenav.Net.Tool.Data
                 return await dbSet.Where(exp).DeleteAsync();
             }
             return await UpdateAsync(exp, entity => new T { IsDeleted = true, LastModificationTime = DateTime.Now });
-        }
-        /// <summary>
-        /// 根据id删除数据
-        /// </summary>
-        /// <param name="id">主键ID</param>
-        /// <param name="isTrue">是否真删</param>
-        public virtual async Task<int> DeleteAsync(IEnumerable<TKey> id, bool isTrue = false)
-        {
-            Expression<Func<T, bool>> exp = item => id.Contains(item.Id);
-            return await DeleteAsync(exp, isTrue);
         }
         /// <summary>
         /// 实现按需要只更新部分更新
