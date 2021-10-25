@@ -11,11 +11,11 @@ namespace Collapsenav.Net.Tool.Data.Test
     public class ModifyRepositoryTest
     {
         protected readonly IServiceProvider Provider;
-        protected readonly IModifyRepository<int, TestTwoEntity> Repository;
+        protected readonly IModifyRepository<TestTwoEntity> Repository;
         public ModifyRepositoryTest()
         {
             Provider = DIConfig.GetProvider();
-            Repository = GetService<IModifyRepository<int, TestTwoEntity>>();
+            Repository = GetService<IModifyRepository<TestTwoEntity>>();
         }
         protected T GetService<T>()
         {
@@ -63,22 +63,12 @@ namespace Collapsenav.Net.Tool.Data.Test
             Assert.True(leftData.Count() == 8);
         }
         [Fact, Order(24)]
-        public async Task ModifyRepositoryDeleteByIdTest()
-        {
-            var ids = new[] { 14, 16, 18 };
-            var delCount = await Repository.DeleteAsync(ids, true);
-            await Repository.SaveAsync();
-            var leftData = await Repository.FindAsync(item => true);
-            Assert.True(delCount == ids.Length);
-            Assert.True(leftData.Count() == 5);
-        }
-        [Fact, Order(25)]
         public async Task ModifyRepositoryDeleteAllTest()
         {
             var delCount = await Repository.DeleteAsync(item => true, true);
             await Repository.SaveAsync();
             var leftData = await Repository.FindAsync(item => true);
-            Assert.True(delCount == 5);
+            Assert.True(delCount == 8);
             Assert.True(leftData.IsEmpty());
         }
     }

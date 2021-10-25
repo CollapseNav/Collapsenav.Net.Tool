@@ -11,11 +11,13 @@ namespace Collapsenav.Net.Tool.Data.Test
     public class QueryRepositoryTest
     {
         protected readonly IServiceProvider Provider;
-        protected readonly IQueryRepository<int, TestEntity> Repository;
+        protected readonly IQueryRepository<TestEntity> Repository;
+        protected readonly IQueryRepository<TestEntity> TestRepository;
         public QueryRepositoryTest()
         {
             Provider = DIConfig.GetProvider();
-            Repository = GetService<IQueryRepository<int, TestEntity>>();
+            Repository = GetService<IQueryRepository<TestEntity>>();
+            TestRepository = GetService<IQueryRepository<TestEntity>>();
         }
         protected T GetService<T>()
         {
@@ -42,6 +44,7 @@ namespace Collapsenav.Net.Tool.Data.Test
             await Repository.SaveAsync();
             var data = await Repository.FindAsync(item => item.Id < 5);
             Assert.True(data.Count() == 4);
+            data = await TestRepository.FindAsync(item => true);
         }
 
         [Fact, Order(12)]
@@ -58,7 +61,6 @@ namespace Collapsenav.Net.Tool.Data.Test
         [Fact, Order(13)]
         public async Task QueryRepositoryCountTest()
         {
-            var Repository = GetService<IQueryRepository<int, TestEntity>>();
             Assert.True((await Repository.CountAsync(item => item.Id > 4 && item.Id < 9)) == 4);
             Assert.False((await Repository.CountAsync(item => item.Id < 4)) == 4);
         }
@@ -67,9 +69,10 @@ namespace Collapsenav.Net.Tool.Data.Test
         public async Task QueryRepositoryQueryByIdTest()
         {
             var ids = new[] { 1, 3, 5, 7, 9 };
-            var data = await Repository.FindAsync(ids);
+            var data = await Repository.FindAsync(item => ids.Contains(item.Id));
             Assert.True(data.Count() == 5);
-            ids = new[] { 2, 6, 8 }; data = await Repository.FindAsync(ids);
+            ids = new[] { 2, 6, 8 };
+            data = await Repository.FindAsync(item => ids.Contains(item.Id));
             Assert.True(data.Count() == 3);
         }
 
@@ -84,7 +87,6 @@ namespace Collapsenav.Net.Tool.Data.Test
         [Fact, Order(16)]
         public async Task QueryRepositoryQueryPageOrderTest()
         {
-            var Repository = GetService<IQueryRepository<int, TestEntity>>();
             var data = await Repository.FindPageAsync(item => true, null, item => item.Id, false);
             Assert.True(data.Data.First().Id == 10);
         }

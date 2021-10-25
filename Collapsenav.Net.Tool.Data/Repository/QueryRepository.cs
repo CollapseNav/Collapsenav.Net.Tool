@@ -8,10 +8,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Collapsenav.Net.Tool.Data
 {
-    public partial class QueryRepository<TKey, T> : Repository<TKey, T>, IQueryRepository<TKey, T>
-    where T : class, IBaseEntity<TKey>, new()
+    public partial class QueryRepository<T> : Repository<T>, IQueryRepository<T>
+    where T : class, IBaseEntity, new()
     {
-        public QueryRepository(DbContext db) : base(db) { }
+        public QueryRepository(DbContext db) : base(db)
+        {
+        }
 
         /// <summary>
         /// 查询所有符合条件的数据
@@ -47,29 +49,13 @@ namespace Collapsenav.Net.Tool.Data
         {
             return await Query(exp).ToListAsync();
         }
-        public virtual async Task<IEnumerable<T>> FindAsync(IEnumerable<TKey> ids)
-        {
-            return await FindAsync(item => ids.Contains(item.Id));
-        }
 
         /// <summary>
         /// 分页查找所有符合条件的数据
         /// </summary>
         public virtual async Task<PageData<T>> FindPageAsync<E>(Expression<Func<T, bool>> exp = null, PageRequest page = null, Expression<Func<T, E>> orderBy = null, bool isAsc = true)
         {
-            if (page == null)
-                page = new PageRequest();
-            var query = Query(exp);
-            int total = await query.CountAsync();
-
-            if (orderBy != null)
-                query = isAsc ? query.OrderBy(orderBy) : query.OrderByDescending(orderBy);
-
-            return new PageData<T>
-            {
-                Total = total,
-                Data = await query.Skip(page.Skip).Take(page.Max).ToListAsync()
-            };
+            return await FindPageAsync(Query(exp), page, orderBy, isAsc);
         }
 
         /// <summary>
@@ -77,16 +63,33 @@ namespace Collapsenav.Net.Tool.Data
         /// </summary>
         public virtual async Task<PageData<T>> FindPageAsync(Expression<Func<T, bool>> exp = null, PageRequest page = null, bool isAsc = true)
         {
+            return await FindPageAsync(Query(exp), page, isAsc);
+        }
+
+        public virtual async Task<PageData<T>> FindPageAsync<E>(IQueryable<T> query, PageRequest page = null, Expression<Func<T, E>> orderBy = null, bool isAsc = true)
+        {
             if (page == null)
                 page = new PageRequest();
-            var query = Query(exp);
-            int total = await query.CountAsync();
+            if (orderBy != null)
+                query = isAsc ? query.OrderBy(orderBy) : query.OrderByDescending(orderBy);
 
             return new PageData<T>
             {
-                Total = total,
+                Total = await query.CountAsync(),
                 Data = await query.Skip(page.Skip).Take(page.Max).ToListAsync()
             };
         }
+        public virtual async Task<PageData<T>> FindPageAsync(IQueryable<T> query, PageRequest page = null, bool isAsc = true)
+        {
+            if (page == null)
+                page = new PageRequest();
+
+            return new PageData<T>
+            {
+                Total = await query.CountAsync(),
+                Data = await query.Skip(page.Skip).Take(page.Max).ToListAsync()
+            };
+        }
+
     }
 }
