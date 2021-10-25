@@ -1,0 +1,13 @@
+<Project>
+    <PropertyGroup>
+        <TargetFrameworks>net5.0;netstandard2.0;netstandard2.1;</TargetFrameworks>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <LangVersion>9.0</LangVersion>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+        <Version>0.0.0.4</Version>
+        <Authors>CollapseNav</Authors>
+        <Copyright>CollapseNav</Copyright>
+        <RepositoryType>Github</RepositoryType>
+        <RepositoryUrl>https://github.com/CollapseNav/Collapsenav.Net.Tool</RepositoryUrl>
+    </PropertyGroup>
+</Project>

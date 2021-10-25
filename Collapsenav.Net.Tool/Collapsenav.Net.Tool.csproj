@@ -1,11 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="../version.props" />
     <PropertyGroup>
-        <TargetFrameworks>net5.0;netstandard2.0;netstandard2.1;</TargetFrameworks>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <LangVersion>9.0</LangVersion>
-        <NoWarn>$(NoWarn);1591</NoWarn>
-        <Version>0.0.0.3</Version>
-        <Authors>CollapseNav</Authors>
         <PackageTags>Tools,Utility,Extensions,ClassLibrary</PackageTags>
         <Description>
 .net core ext tools.
@@ -13,9 +8,6 @@
 大多都提供了扩展方法
 也可以使用对应的Tool进行操作
         </Description>
-        <Copyright>CollapseNav</Copyright>
-        <RepositoryType>Github</RepositoryType>
-        <RepositoryUrl>https://github.com/CollapseNav/Collapsenav.Net.Tool</RepositoryUrl>
         <Product>Collapsenav.Net.Tool</Product>
         <PackageId>Collapsenav.Net.Tool</PackageId>
     </PropertyGroup>
