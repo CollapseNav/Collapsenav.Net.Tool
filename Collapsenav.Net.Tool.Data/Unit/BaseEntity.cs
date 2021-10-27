@@ -12,6 +12,7 @@ namespace Collapsenav.Net.Tool.Data
         public T CreatorId { get; set; }
         public DateTime? LastModificationTime { get; set; }
         public T LastModifierId { get; set; }
+        object IBaseEntity.Id { get => Id; set => Console.WriteLine(""); }
         public virtual void Init()
         {
             CreationTime = DateTime.Now;
