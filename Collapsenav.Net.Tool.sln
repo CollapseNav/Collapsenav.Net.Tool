@@ -28,9 +28,6 @@ Global
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1A1F8329-51BE-4869-B47E-232EC1CE2C73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1A1F8329-51BE-4869-B47E-232EC1CE2C73}.Debug|Any CPU.Build.0 = Debug|Any CPU
