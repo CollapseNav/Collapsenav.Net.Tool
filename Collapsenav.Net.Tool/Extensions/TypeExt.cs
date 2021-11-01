@@ -39,5 +39,17 @@ namespace Collapsenav.Net.Tool
         {
             return TypeTool.PropNames(obj, depth);
         }
+        public static object GetValue<T>(this T obj, string field)
+        {
+            return TypeTool.GetValue<T>(obj, field);
+        }
+        public static IEnumerable<string> BuildInTypePropNames<T>(this T obj)
+        {
+            return TypeTool.BuildInTypePropNames<T>();
+        }
+        public static IEnumerable<string> BuildInTypePropNames(this Type type)
+        {
+            return TypeTool.BuildInTypePropNames(type);
+        }
     }
 }
