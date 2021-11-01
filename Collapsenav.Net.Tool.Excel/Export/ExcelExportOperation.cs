@@ -61,7 +61,7 @@ namespace Collapsenav.Net.Tool.Excel
         public static async Task<Stream> ExportDataAsync<T>(string filePath, ExportConfig<T> option, bool append = false)
         {
             using var fs = new FileStream(filePath, append ? FileMode.OpenOrCreate : FileMode.Create);
-            return await ExportHeaderAsync(fs, option);
+            return await ExportDataAsync(fs, option);
         }
         public static async Task<Stream> ExportDataAsync<T>(Stream stream, ExportConfig<T> option)
         {
