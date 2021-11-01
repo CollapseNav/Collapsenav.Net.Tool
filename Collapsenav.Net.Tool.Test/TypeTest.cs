@@ -1,4 +1,5 @@
 using System.Linq;
+using Microsoft.VisualStudio.TestPlatform.Common.Utilities;
 using Xunit;
 
 namespace Collapsenav.Net.Tool.Test
@@ -54,6 +55,30 @@ namespace Collapsenav.Net.Tool.Test
             Assert.True(props.Count() == 4 && props.ContainAnd("Prop0", "Prop.Prop1", "Prop.Prop2", "Prop.Prop3"));
             props = typeof(PropTest0).PropNames(0);
             Assert.True(props.Count() == 2 && props.ContainAnd("Prop0", "Prop"));
+        }
+        [Fact]
+        public void GetBuildInTypePropNames()
+        {
+            var props = new PropTest0().BuildInTypePropNames();
+            Assert.True(props.Count() == 1);
+            props = new PropTest1().BuildInTypePropNames();
+            Assert.True(props.Count() == 3);
+        }
+        [Fact]
+        public void GetValueTest()
+        {
+            var obj = new PropTest1
+            {
+                Prop1 = "1",
+                Prop2 = "2",
+                Prop3 = "3",
+            };
+            var data = obj.GetValue("Prop1");
+            Assert.True(data.ToString() == "1");
+            data = obj.GetValue("Prop2");
+            Assert.True(data.ToString() == "2");
+            data = obj.GetValue("Prop3");
+            Assert.True(data.ToString() == "3");
         }
     }
 }
