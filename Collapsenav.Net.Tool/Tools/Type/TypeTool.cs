@@ -53,6 +53,7 @@ namespace Collapsenav.Net.Tool
         {
             return IsBuildInType(type);
         }
+
         /// <summary>
         /// 获取属性名称
         /// </summary>
@@ -70,7 +71,7 @@ namespace Collapsenav.Net.Tool
         /// <summary>
         /// 获取属性名称
         /// </summary>
-        public static IEnumerable<string> PropNames(Type type, int depth = 0)
+        public static IEnumerable<string> PropNames(Type type, int depth)
         {
             var props = type.GetProperties();
             var nameProps = props.Where(item => item.PropertyType.IsBuildInType());
@@ -85,6 +86,32 @@ namespace Collapsenav.Net.Tool
         public static IEnumerable<string> PropNames<T>(int? depth)
         {
             return PropNames(typeof(T), depth ?? 0);
+        }
+
+        /// <summary>
+        /// 获取内建类型的属性名
+        /// </summary>
+        public static IEnumerable<string> BuildInTypePropNames<T>()
+        {
+            return BuildInTypePropNames(typeof(T));
+        }
+
+        /// <summary>
+        /// 获取内建类型的属性名
+        /// </summary>
+        public static IEnumerable<string> BuildInTypePropNames(Type type)
+        {
+            var props = type.GetProperties();
+            var nameProps = props.Where(item => item.PropertyType.IsBuildInType());
+            return nameProps.Select(item => item.Name);
+        }
+
+        public static object GetValue<T>(object obj, string field)
+        {
+            var prop = typeof(T).GetProperties().Where(item => item.Name == field && item.PropertyType.IsBuildInType()).FirstOrDefault();
+            if (prop == null)
+                return "";
+            return prop.GetValue(obj);
         }
     }
 }
