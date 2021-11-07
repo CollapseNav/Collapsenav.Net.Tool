@@ -2,7 +2,7 @@
 
 namespace Collapsenav.Net.Tool
 {
-    public static class StringBuilderExt
+    public static partial class StringBuilderExt
     {
         public static StringBuilder AddIf(this StringBuilder self, bool flag, string data)
         {

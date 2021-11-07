@@ -2,7 +2,7 @@ using System.IO;
 
 namespace Collapsenav.Net.Tool
 {
-    public static class SecurityExt
+    public static partial class SecurityExt
     {
         /// <summary>
         /// Md5加密
