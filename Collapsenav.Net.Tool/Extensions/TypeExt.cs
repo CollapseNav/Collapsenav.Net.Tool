@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Collapsenav.Net.Tool
 {
-    public static class TypeExt
+    public static partial class TypeExt
     {
         public static bool IsBuildInType<T>(this T obj)
         {

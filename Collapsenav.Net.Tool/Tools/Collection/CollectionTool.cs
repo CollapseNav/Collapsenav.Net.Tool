@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Collapsenav.Net.Tool
 {
-    public class CollectionTool
+    public partial class CollectionTool
     {
         public static IEnumerable<T> Unique<T, E>(IEnumerable<T> query, Func<T, E> groupBy)
         {

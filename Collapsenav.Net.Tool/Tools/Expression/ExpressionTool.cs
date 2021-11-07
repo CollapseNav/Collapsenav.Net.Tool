@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Collapsenav.Net.Tool
 {
-    public class ExpressionTool
+    public partial class ExpressionTool
     {
         public static Expression<Func<T, bool>> AndAlso<T>(Expression<Func<T, bool>> origin, Expression<Func<T, bool>> exp)
         {
