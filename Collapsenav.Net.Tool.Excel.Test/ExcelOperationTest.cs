@@ -18,13 +18,12 @@ namespace Collapsenav.Net.Tool.Excel.Test
     {
         public ExcelOperationTest() { }
 
-
         [Fact]
-        public void HeaderTest()
+        public async Task HeaderTest()
         {
             var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
             using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open);
-            var headers = ExcelReadOperation.GetExcelHeader(fs);
+            var headers = EPPlusExcelReadTool.GetExcelHeader(fs);
             Assert.NotEmpty(headers);
             Assert.True(realHeader.All(header => headers.Contains(header)));
             var config = new ReadConfig<ExcelTestDto>()
@@ -38,17 +37,18 @@ namespace Collapsenav.Net.Tool.Excel.Test
                 return item;
             })
             ;
-            var headerDict = ExcelReadOperation.GetExcelHeaderByOptions(fs, config.FieldOption);
+            var headerDict = EPPlusExcelReadTool.GetExcelHeaderByOptions<ExcelTestDto>(fs, config.ReadOption);
             var configHeader = new[] { "Field0", "Field1" };
             Assert.NotEmpty(headers);
             Assert.True(configHeader.All(header => headerDict.ContainsKey(header)));
+            fs.Close();
         }
 
         [Fact]
         public async Task DataTest()
         {
             using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open);
-            var datas = await ExcelReadOperation.GetExcelDataAsync(fs);
+            var datas = await EPPlusExcelReadTool.GetExcelDataAsync(fs);
             Assert.NotEmpty(datas);
             Assert.True(datas.Count() == 3000);
         }
@@ -68,10 +68,10 @@ namespace Collapsenav.Net.Tool.Excel.Test
                 return item;
             })
             ;
-            var datas = await ExcelReadOperation.ExcelToEntityAsync(fs, config);
+            var datas = await EPPlusExcelReadTool.ExcelToEntityAsync(fs, config);
             Assert.NotEmpty(datas);
             Assert.True(datas.Count() == 3000);
-            datas = await ExcelReadOperation.ExcelToEntityAsync(fs, config.FieldOption, config.Init);
+            datas = await EPPlusExcelReadTool.ExcelToEntityAsync(fs, config.ReadOption, config.Init);
             Assert.NotEmpty(datas);
             Assert.True(datas.Count() == 3000);
         }
@@ -91,12 +91,12 @@ namespace Collapsenav.Net.Tool.Excel.Test
                 return item;
             })
             ;
-            var datas = await ExcelReadOperation.GetExcelDataByOptionsAsync(fs, config);
+            var datas = await EPPlusExcelReadTool.GetExcelDataByOptionsAsync(fs, config);
             Assert.NotEmpty(datas);
-            Assert.True(datas.Length == 3001);
-            datas = await ExcelReadOperation.GetExcelDataByOptionsAsync(fs, config.FieldOption);
+            Assert.True(datas.Length == 3000);
+            datas = await EPPlusExcelReadTool.GetExcelDataByOptionsAsync<ExcelTestDto>(fs, config.ReadOption);
             Assert.NotEmpty(datas);
-            Assert.True(datas.Length == 3001);
+            Assert.True(datas.Length == 3000);
         }
 
         [Fact]
@@ -109,7 +109,7 @@ namespace Collapsenav.Net.Tool.Excel.Test
             .Add("Field2", item => item.Field2, item => item == "Male")
             .Add("Field3", item => item.Field3)
             ;
-            var datas = await ExcelReadOperation.ExcelToEntityAsync(fs, config);
+            var datas = await config.EPPlusExcelToEntityAsync(fs);
 
             var exportConfig = new ExportConfig<ExcelTestDto>(datas)
             .Add("Field0", item => item.Field0)
@@ -118,7 +118,7 @@ namespace Collapsenav.Net.Tool.Excel.Test
             .Add("Field3", item => item.Field3)
             ;
 
-            var stream = await ExcelExportOperation.ExportHeaderAsync("./fs_header.xlsx", exportConfig);
+            var stream = await exportConfig.EPPlusExportHeaderAsync("./fs_header.xlsx");
             Assert.True(File.Exists("./fs_header.xlsx"));
         }
 
@@ -132,7 +132,7 @@ namespace Collapsenav.Net.Tool.Excel.Test
             .Add("Field2", item => item.Field2, item => item == "Male")
             .Add("Field3", item => item.Field3)
             ;
-            var datas = await ExcelReadOperation.ExcelToEntityAsync(fs, config);
+            var datas = await config.EPPlusExcelToEntityAsync(fs);
 
             var exportConfig = new ExportConfig<ExcelTestDto>(datas)
             .Add("Field0", item => item.Field0)
@@ -140,8 +140,7 @@ namespace Collapsenav.Net.Tool.Excel.Test
             .Add("Field2", item => item.Field2 ? "Male" : "Female")
             .Add("Field3", item => item.Field3)
             ;
-
-            var stream = await ExcelExportOperation.ExportDataAsync("./fs_data.xlsx", exportConfig);
+            var stream = await exportConfig.EPPlusExportDataAsync("./fs_data.xlsx");
             Assert.True(File.Exists("./fs_data.xlsx"));
         }
 
@@ -155,7 +154,7 @@ namespace Collapsenav.Net.Tool.Excel.Test
             .Add("Field2", item => item.Field2, item => item == "Male")
             .Add("Field3", item => item.Field3)
             ;
-            var datas = await ExcelReadOperation.ExcelToEntityAsync(fs, config);
+            var datas = await config.EPPlusExcelToEntityAsync(fs);
 
             var exportConfig = new ExportConfig<ExcelTestDto>(datas)
             .Add("Field0", item => item.Field0)
@@ -164,7 +163,7 @@ namespace Collapsenav.Net.Tool.Excel.Test
             .Add("Field3", item => item.Field3)
             ;
 
-            var stream = await ExcelExportOperation.ExportAsync("./fs.xlsx", exportConfig);
+            var stream = await exportConfig.EPPlusExportAsync("./fs.xlsx");
             Assert.True(File.Exists("./fs.xlsx"));
         }
     }

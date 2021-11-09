@@ -17,4 +17,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// </summary>
         public Func<T, object> Action { get; set; }
     }
+
+    public class ExportCellOption : ExportCellOption<object>
+    { }
 }
