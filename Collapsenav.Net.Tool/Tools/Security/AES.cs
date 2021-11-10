@@ -9,7 +9,7 @@ namespace Collapsenav.Net.Tool
     /// <summary>
     /// Aes工具
     /// </summary>
-    public class AESTool
+    public partial class AESTool
     {
         public const string DefaultKey = "Collapsenav.Net.Tool";
         public const string DefaultIV = "looT.teN.vanespalloC";
