@@ -32,6 +32,7 @@ namespace Collapsenav.Net.Tool.Excel
         {
             var workbook = new SXSSFWorkbook();
             var sheet = workbook.CreateSheet("Sheet1");
+            var notCloseStream = new NPOINotCloseStream(stream);
             await Task.Run(() =>
             {
                 // 加表头
@@ -50,10 +51,10 @@ namespace Collapsenav.Net.Tool.Excel
                         cell.SetCellValue(option.Action(cellData)?.ToString());
                     }
                 }
-                workbook.Write(stream);
-                stream.Seek(0, SeekOrigin.Begin);
+                workbook.Write(notCloseStream);
             });
-            return stream;
+            notCloseStream.Seek(0, SeekOrigin.Begin);
+            return notCloseStream;
         }
 
         /// <summary>
@@ -75,6 +76,7 @@ namespace Collapsenav.Net.Tool.Excel
         {
             var workbook = new SXSSFWorkbook();
             var sheet = workbook.CreateSheet("Sheet1");
+            var notCloseStream = new NPOINotCloseStream(stream);
             await Task.Run(() =>
             {
                 // 加表头
@@ -83,10 +85,10 @@ namespace Collapsenav.Net.Tool.Excel
                     var cell = sheet.CreateRow(0).CreateCell(index);
                     cell.SetCellValue(head);
                 }
-                workbook.Write(stream);
-                stream.Seek(0, SeekOrigin.Begin);
+                workbook.Write(notCloseStream);
             });
-            return stream;
+            notCloseStream.Seek(0, SeekOrigin.Begin);
+            return notCloseStream;
         }
 
         /// <summary>
@@ -110,6 +112,7 @@ namespace Collapsenav.Net.Tool.Excel
         {
             var workbook = new SXSSFWorkbook();
             var sheet = workbook.CreateSheet("Sheet1");
+            var notCloseStream = new NPOINotCloseStream(stream);
             await Task.Run(() =>
             {
                 // 加数据
@@ -121,10 +124,10 @@ namespace Collapsenav.Net.Tool.Excel
                         cell.SetCellValue(option.Action(cellData)?.ToString());
                     }
                 }
-                workbook.Write(stream);
-                stream.Seek(0, SeekOrigin.Begin);
+                workbook.Write(notCloseStream);
             });
-            return stream;
+            notCloseStream.Seek(0, SeekOrigin.Begin);
+            return notCloseStream;
         }
 
     }

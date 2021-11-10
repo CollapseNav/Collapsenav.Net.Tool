@@ -96,11 +96,11 @@ namespace Collapsenav.Net.Tool.Excel
         public static async Task<IEnumerable<IEnumerable<string>>> GetExcelDataAsync(ISheet sheet)
         {
             var rowCount = sheet.LastRowNum;
-            var colCount = sheet.GetRow(0).Cells.Count;
+            var colCount = sheet.GetRow(Zero).Cells.Count;
             ConcurrentBag<IEnumerable<string>> data = new();
             await Task.Factory.StartNew(() =>
             {
-                Parallel.For(1, rowCount, index =>
+                Parallel.For(Zero, rowCount, index =>
                 {
                     data.Add(sheet.GetRow(index).Cells
                     .Select(item => item.ToString()?.Trim()).ToList());
@@ -287,7 +287,7 @@ namespace Collapsenav.Net.Tool.Excel
             ConcurrentBag<string[]> data = new();
             await Task.Factory.StartNew(() =>
             {
-                Parallel.For(1, rowCount, index =>
+                Parallel.For(Zero + 1, rowCount, index =>
                 {
                     Monitor.Enter(sheet);
                     var temp = sheet.GetRow(index).Cells

@@ -73,8 +73,8 @@ namespace Collapsenav.Net.Tool.Excel
             {
                 sheet.Cells[1, 1].LoadFromArrays(option.ConvertHeader);
                 pack.SaveAs(stream);
-                stream.Seek(0, SeekOrigin.Begin);
             });
+            stream.Seek(0, SeekOrigin.Begin);
             return stream;
         }
 
@@ -103,8 +103,8 @@ namespace Collapsenav.Net.Tool.Excel
             {
                 sheet.Cells[1, 1].LoadFromArrays(data == null ? option.ConvertData : option.GetConvertData(data));
                 pack.SaveAs(stream);
-                stream.Seek(0, SeekOrigin.Begin);
             });
+            stream.Seek(0, SeekOrigin.Begin);
             return stream;
         }
 
