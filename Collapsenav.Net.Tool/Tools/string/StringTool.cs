@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace Collapsenav.Net.Tool
 {
-    public class StringTool
+    public partial class StringTool
     {
         public static string ToChinese(string num)
         {

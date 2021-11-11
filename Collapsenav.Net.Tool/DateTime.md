@@ -1,0 +1,44 @@
+# DateTime
+
+## TODO
+
+- [x] `ToTimestamp` 时间转为时间戳
+- [x] `ToDateTime` 时间戳转为时间
+- [x] `ToYear` 等只保留时间到指定的单位
+- [ ] 计算 几月几日 是哪一周的星期几/星期几/一年的第几天......
+- [ ] 计算 两个日期之间的时间差(各种单位)
+- [ ] 获取 时间段内的所有日期(返回有序的时间集合)
+- [ ] 判断是否为闰年
+- [ ] ...
+
+## How To Use
+
+### ToTimestamp
+
+```csharp
+DateTime.Now.ToUniversalTime();
+```
+
+### ToDateTime
+
+~~会碰到精度问题,不知道现在的处理方式是否合理~~
+
+```csharp
+now.ToTimestamp().ToDateTime();
+```
+
+### ToYear,ToMonthXXX
+
+有时候会有 只保留到年/月/日 之类的需求
+
+```csharp
+DateTime now = new DateTime(2010, 10, 10, 10, 10, 10, 10);
+now.ToMillisecond();
+now.ToSecond();
+now.ToMinute();
+now.ToHour();
+now.ToDay();
+now.ToMonth();
+now.To(DateLevel.Year);
+```
+

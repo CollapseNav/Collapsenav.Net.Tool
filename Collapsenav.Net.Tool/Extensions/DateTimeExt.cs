@@ -2,7 +2,7 @@
 
 namespace Collapsenav.Net.Tool
 {
-    public static class DateTimeExt
+    public static partial class DateTimeExt
     {
         public static long ToTimestamp(this DateTime time)
         {

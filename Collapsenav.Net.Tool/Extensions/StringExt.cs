@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Collapsenav.Net.Tool
 {
-    public static class StringExt
+    public static partial class StringExt
     {
         public static bool IsNull(this string str) => string.IsNullOrWhiteSpace(str);
         public static bool IsEmpty(this string str) => string.IsNullOrWhiteSpace(str);

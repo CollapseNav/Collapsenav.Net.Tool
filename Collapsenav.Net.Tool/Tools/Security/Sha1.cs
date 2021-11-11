@@ -8,7 +8,7 @@ namespace Collapsenav.Net.Tool
     /// <summary>
     /// Sha1工具
     /// </summary>
-    public class Sha1Tool
+    public partial class Sha1Tool
     {
         /// <summary>
         /// 解密

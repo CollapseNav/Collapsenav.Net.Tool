@@ -8,7 +8,7 @@ namespace Collapsenav.Net.Tool
     /// <summary>
     /// Md5工具
     /// </summary>
-    public class MD5Tool
+    public partial class MD5Tool
     {
         /// <summary>
         /// 解密

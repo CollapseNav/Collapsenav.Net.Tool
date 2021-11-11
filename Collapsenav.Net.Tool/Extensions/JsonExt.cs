@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace Collapsenav.Net.Tool
 {
-    public static class JsonExt
+    public static partial class JsonExt
     {
         public static JsonSerializerOptions DefaultJsonSerializerOption = new()
         {

@@ -2,7 +2,7 @@ using System;
 
 namespace Collapsenav.Net.Tool
 {
-    public class DateTools
+    public partial class DateTools
     {
         /// <summary>
         /// DateTime 转时间戳
