@@ -10,7 +10,10 @@ namespace Collapsenav.Net.Tool.Excel
     /// </summary>
     public partial class ExportConfig<T>
     {
-        public IEnumerable<T> Data { get; set; }
+        /// <summary>
+        /// 表格数据
+        /// </summary>
+        public IEnumerable<T> Data { get; protected set; }
         public ExportConfig()
         {
             FieldOption = new List<ExportCellOption<T>>();
@@ -19,6 +22,24 @@ namespace Collapsenav.Net.Tool.Excel
         {
             if (data.IsEmpty())
                 throw new NoNullAllowedException();
+            Data = data;
+        }
+        /// <summary>
+        /// 根据 T 生成默认的 Config
+        /// </summary>
+        public static ExportConfig<T> GenDefaultConfig(IEnumerable<T> data = null)
+        {
+            data ??= new List<T>();
+            var config = new ExportConfig<T>(data);
+            foreach (var propName in typeof(T).BuildInTypePropNames())
+                config.Add(propName, item => item.GetValue(propName));
+            return config;
+        }
+        /// <summary>
+        /// 设置需要导出的表格数据
+        /// </summary>
+        public virtual void SetExcelData(IEnumerable<T> data)
+        {
             Data = data;
         }
         /// <summary>
