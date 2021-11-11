@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="../version.props"/>
+    <Import Project="../version.props" />
     <PropertyGroup>
         <PackageTags>Tools,WebApi</PackageTags>
         <Description>
@@ -9,10 +9,11 @@
         <PackageId>Collapsenav.Net.Tool.WebApi</PackageId>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5"/>
-        <PackageReference Include="AutoMapper" Version="10.1.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+        <PackageReference Include="AutoMapper" Version="10.1.1" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Collapsenav.Net.Tool.Data\Collapsenav.Net.Tool.Data.csproj"/>
+        <ProjectReference Include="..\Collapsenav.Net.Tool.Data\Collapsenav.Net.Tool.Data.csproj" />
+        <ProjectReference Include="..\Collapsenav.Net.Tool.Excel\Collapsenav.Net.Tool.Excel.csproj" />
     </ItemGroup>
 </Project>

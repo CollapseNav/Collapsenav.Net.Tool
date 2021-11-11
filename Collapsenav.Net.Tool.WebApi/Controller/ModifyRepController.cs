@@ -27,7 +27,7 @@ namespace Collapsenav.Net.Tool.WebApi
         /// 添加(单个)
         /// </summary>
         [HttpPost]
-        public virtual async Task<T> AddAsync(CreateT entity)
+        public virtual async Task<T> AddAsync([FromBody] CreateT entity)
         {
             var data = Mapper.Map<T>(entity);
             var result = await Repository.AddAsync(data);

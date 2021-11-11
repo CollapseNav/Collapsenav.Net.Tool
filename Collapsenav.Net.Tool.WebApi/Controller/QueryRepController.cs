@@ -1,14 +1,17 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Collapsenav.Net.Tool.Data;
+using Collapsenav.Net.Tool.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Collapsenav.Net.Tool.WebApi
 {
     [Route("api/[controller]")]
-    public class QueryRepController<TKey, T, GetT> : ControllerBase, IQueryRepController<TKey, T, GetT>
+    public class QueryRepController<TKey, T, GetT> : ControllerBase, IQueryRepController<TKey, T, GetT>, IExcelExportController<T, GetT>
     where T : class, IBaseEntity<TKey>
     where GetT : IBaseGet<T>
     {
@@ -44,6 +47,17 @@ namespace Collapsenav.Net.Tool.WebApi
         public virtual async Task<IEnumerable<T>> FindByIdsPostAsync(IEnumerable<TKey> ids) => await Repository.FindAsync(item => ids.Contains(item.Id));
         [NonAction]
         public virtual IQueryable<T> GetQuery(GetT input) => input.GetQuery(Repository.Query(item => true));
+
+        /// <summary>
+        /// 导出为Excel
+        /// </summary>
+        [HttpGet("Export")]
+        public async Task<FileStreamResult> ExportExcelAsync([FromQuery] GetT input)
+        {
+            var data = await FindQueryAsync(input);
+            var defaultConfig = ExportConfig<T>.GenDefaultConfig(data);
+            return File(await defaultConfig.EPPlusExportAsync(new MemoryStream()), "application/octet-stream", $@"{DateTime.Now:yyyyMMddHHmmssfff}.xlsx");
+        }
     }
 }
 

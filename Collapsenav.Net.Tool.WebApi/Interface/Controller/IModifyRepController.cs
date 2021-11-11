@@ -15,7 +15,7 @@ namespace Collapsenav.Net.Tool.WebApi
         /// 添加(单个)
         /// </summary>
         [HttpPost]
-        Task<T> AddAsync(CreateT entity);
+        Task<T> AddAsync([FromBody] CreateT entity);
         /// <summary>
         /// 删除(单个 id)
         /// </summary>
