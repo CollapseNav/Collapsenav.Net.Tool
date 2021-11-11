@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Collapsenav.Net.Tool
 {
-    public static class CollectionExt
+    public static partial class CollectionExt
     {
 
         /// <summary>

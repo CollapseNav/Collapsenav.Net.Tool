@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Collapsenav.Net.Tool
 {
-    public class TypeTool
+    public partial class TypeTool
     {
         /// <summary>
         /// 是否内建(基本)类型
@@ -29,6 +29,7 @@ namespace Collapsenav.Net.Tool
                 nameof(Int16) => true,
                 nameof(UInt16) => true,
                 nameof(String) => true,
+                nameof(DateTime) => true,
                 _ => false,
             };
         }
@@ -105,7 +106,9 @@ namespace Collapsenav.Net.Tool
             var nameProps = props.Where(item => item.PropertyType.IsBuildInType());
             return nameProps.Select(item => item.Name);
         }
-
+        /// <summary>
+        /// 就……GetValue
+        /// </summary>
         public static object GetValue<T>(object obj, string field)
         {
             var prop = typeof(T).GetProperties().Where(item => item.Name == field && item.PropertyType.IsBuildInType()).FirstOrDefault();
