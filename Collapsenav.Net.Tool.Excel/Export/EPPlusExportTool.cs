@@ -45,8 +45,8 @@ namespace Collapsenav.Net.Tool.Excel
                     }
                 );
                 pack.SaveAs(stream);
-                stream.Seek(0, SeekOrigin.Begin);
             });
+            stream.Seek(0, SeekOrigin.Begin);
             return stream;
         }
 
