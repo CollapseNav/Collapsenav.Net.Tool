@@ -2,7 +2,7 @@
 
 适用于 **net5.0;netstandard2.0;netstandard2.1;**
 
-~~敲碗等 .net6~~
+过段时间可能会添加 **.net6** (虽然不加也没啥影响)
 
 [项目地址\(GitHub\)](https://github.com/CollapseNav/Collapsenav.Net.Tool)
 
@@ -12,6 +12,6 @@
 
 * [Collapsenav.Net.Tool](./Collapsenav.Net.Tool/README.md)
   * 一些基础类型的扩展和工具,`string,DateTime,Collection,File,Security....`
-* Collapsenav.Net.Tool.Excel
+* [Collapsenav.Net.Tool.Excel](./Collapsenav.Net.Tool.Excel/Excel.md)
   * 简单的Excel操作(基于EPPlus实现)
 

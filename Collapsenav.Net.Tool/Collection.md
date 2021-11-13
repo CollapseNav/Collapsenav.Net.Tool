@@ -2,6 +2,7 @@
 
 ## TODO
 
+- [x] [`Empty` 集合判空](#empty)
 - [x] [`ContainAnd` 全包含](#containand)
   - [x] 为复杂类型添加自定义Equal条件
 - [x] [`ContainOr` 部分包含](#containor)
@@ -13,7 +14,6 @@
 - [x] [`WhereIf` 条件查询](#whereif)
 - [x] `Unique` 去重
 - [x] `SequenceEqual` 判断集合相等
-- [x] `Empty` 集合判空
 - [ ] `RemoveRepeat` 移除重复
 - [ ] 打乱顺序
 - [ ] ...
@@ -21,6 +21,8 @@
 ## How To Use
 
 ### Empty
+
+集合 `null` 或空 都为 `True`
 
 ```csharp
 string[] nullArray = null;
@@ -64,7 +66,7 @@ strList.ContainOr((x, y) => x == y, new[] { "7", "8" }); // False
 
 ### Merge
 
-合并 **多个集合**
+合并 **多个集合**, 比如二维数组什么的
 
 ```csharp
 IEnumerable<int[]> nums = new List<int[]>()

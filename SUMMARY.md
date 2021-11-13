@@ -9,3 +9,4 @@
   * [Security](./Collapsenav.Net.Tool/Security.md)
   * [StringBuilder](./Collapsenav.Net.Tool/StringBuilder.md)
   * [Json](./Collapsenav.Net.Tool/Json.md)
+* [CollapseNav.Net.Tool.Excel](./Collapsenav.Net.Tool.Excel/Excel.md)
