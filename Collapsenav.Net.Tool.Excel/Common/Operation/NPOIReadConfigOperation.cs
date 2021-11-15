@@ -11,39 +11,39 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 获取表格header(仅限简单的单行表头)-NPOI
         /// </summary>
-        public IEnumerable<string> GetNPOIExcelHeader()
+        public IEnumerable<string> NPOIExcelHeader()
         {
             if (ExcelStream == null)
                 throw new Exception();
-            return NPOIExcelReadTool.GetExcelHeader(ExcelStream);
+            return NPOIExcelReadTool.ExcelHeader(ExcelStream);
         }
         /// <summary>
         /// 获取表格header(仅限简单的单行表头)-NPOI
         /// </summary>x
-        public IEnumerable<string> GetNPOIExcelHeader(string filepath)
+        public IEnumerable<string> NPOIExcelHeader(string filepath)
         {
-            return NPOIExcelReadTool.GetExcelHeader(filepath);
+            return NPOIExcelReadTool.ExcelHeader(filepath);
         }
         /// <summary>
         /// 获取表格header(仅限简单的单行表头)-NPOI
         /// </summary>
-        public IEnumerable<string> GetNPOIExcelHeader(Stream stream)
+        public IEnumerable<string> NPOIExcelHeader(Stream stream)
         {
-            return NPOIExcelReadTool.GetExcelHeader(stream);
+            return NPOIExcelReadTool.ExcelHeader(stream);
         }
         /// <summary>
         /// 获取表格header(仅限简单的单行表头)-NPOI
         /// </summary>
-        public IEnumerable<string> GetNPOIExcelHeader(IWorkbook workbook)
+        public IEnumerable<string> NPOIExcelHeader(IWorkbook workbook)
         {
-            return NPOIExcelReadTool.GetExcelHeader(workbook);
+            return NPOIExcelReadTool.ExcelHeader(workbook);
         }
         /// <summary>
         /// 获取表格header(仅限简单的单行表头)-NPOI
         /// </summary>
-        public IEnumerable<string> GetNPOIExcelHeader(ISheet sheet)
+        public IEnumerable<string> NPOIExcelHeader(ISheet sheet)
         {
-            return NPOIExcelReadTool.GetExcelHeader(sheet);
+            return NPOIExcelReadTool.ExcelHeader(sheet);
         }
 
 
@@ -51,78 +51,78 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 获取表格的数据(仅限简单的单行表头)-NPOI
         /// </summary>
-        public async Task<IEnumerable<IEnumerable<string>>> GetNPOIExcelDataAsync()
+        public async Task<IEnumerable<IEnumerable<string>>> NPOIExcelDataAsync()
         {
             if (ExcelStream == null)
                 throw new Exception();
-            return await NPOIExcelReadTool.GetExcelDataAsync(new NPOINotCloseStream(ExcelStream).GetWorkBook());
+            return await NPOIExcelReadTool.ExcelDataAsync(new NPOINotCloseStream(ExcelStream).GetWorkBook());
         }
         /// <summary>
         /// 获取表格的数据(仅限简单的单行表头)-NPOI
         /// </summary>
-        public async Task<IEnumerable<IEnumerable<string>>> GetNPOIExcelDataAsync(string filepath)
+        public async Task<IEnumerable<IEnumerable<string>>> NPOIExcelDataAsync(string filepath)
         {
-            return await NPOIExcelReadTool.GetExcelDataAsync(filepath);
+            return await NPOIExcelReadTool.ExcelDataAsync(filepath);
         }
         /// <summary>
         /// 获取表格的数据(仅限简单的单行表头)-NPOI
         /// </summary>
-        public async Task<IEnumerable<IEnumerable<string>>> GetNPOIExcelDataAsync(Stream stream)
+        public async Task<IEnumerable<IEnumerable<string>>> NPOIExcelDataAsync(Stream stream)
         {
-            return await NPOIExcelReadTool.GetExcelDataAsync(stream);
+            return await NPOIExcelReadTool.ExcelDataAsync(stream);
         }
         /// <summary>
         /// 获取表格的数据(仅限简单的单行表头)-NPOI
         /// </summary>
-        public async Task<IEnumerable<IEnumerable<string>>> GetNPOIExcelDataAsync(IWorkbook workbook)
+        public async Task<IEnumerable<IEnumerable<string>>> NPOIExcelDataAsync(IWorkbook workbook)
         {
-            return await NPOIExcelReadTool.GetExcelDataAsync(workbook);
+            return await NPOIExcelReadTool.ExcelDataAsync(workbook);
         }
         /// <summary>
         /// 获取表格的数据(仅限简单的单行表头)-NPOI
         /// </summary>
-        public async Task<IEnumerable<IEnumerable<string>>> GetNPOIExcelDataAsync(ISheet sheet)
+        public async Task<IEnumerable<IEnumerable<string>>> NPOIExcelDataAsync(ISheet sheet)
         {
-            return await NPOIExcelReadTool.GetExcelDataAsync(sheet);
+            return await NPOIExcelReadTool.ExcelDataAsync(sheet);
         }
 
 
         /// <summary>
         /// 根据传入配置 获取表头及其index-NPOI
         /// </summary>
-        public Dictionary<string, int> GetNPOIExcelHeaderByOptions()
+        public Dictionary<string, int> NPOIExcelHeaderByOptions()
         {
             if (ExcelStream == null)
                 throw new Exception();
-            return NPOIExcelReadTool.GetExcelHeaderByOptions(new NPOINotCloseStream(ExcelStream).GetWorkBook(), this);
+            return NPOIExcelReadTool.ExcelHeaderByOptions(new NPOINotCloseStream(ExcelStream).GetWorkBook(), this);
         }
         /// <summary>
         /// 根据传入配置 获取表头及其index-NPOI
         /// </summary>
-        public Dictionary<string, int> GetNPOIExcelHeaderByOptions(string filepath)
+        public Dictionary<string, int> NPOIExcelHeaderByOptions(string filepath)
         {
-            return NPOIExcelReadTool.GetExcelHeaderByOptions(filepath, this);
+            return NPOIExcelReadTool.ExcelHeaderByOptions(filepath, this);
         }
         /// <summary>
         /// 根据传入配置 获取表头及其index-NPOI
         /// </summary>
-        public Dictionary<string, int> GetNPOIExcelHeaderByOptions(Stream stream)
+        public Dictionary<string, int> NPOIExcelHeaderByOptions(Stream stream)
         {
-            return NPOIExcelReadTool.GetExcelHeaderByOptions(stream, this);
+            return NPOIExcelReadTool.ExcelHeaderByOptions(stream, this);
         }
         /// <summary>
         /// 根据传入配置 获取表头及其index-NPOI
         /// </summary>
-        public Dictionary<string, int> GetNPOIExcelHeaderByOptions(IWorkbook workbook)
+        public Dictionary<string, int> NPOIExcelHeaderByOptions(IWorkbook workbook)
         {
-            return NPOIExcelReadTool.GetExcelHeaderByOptions(workbook, this);
+            return NPOIExcelReadTool.ExcelHeaderByOptions(workbook, this);
         }
         /// <summary>
         /// 根据传入配置 获取表头及其index-NPOI
         /// </summary>
-        public Dictionary<string, int> GetNPOIExcelHeaderByOptions(ISheet sheet)
+        public Dictionary<string, int> NPOIExcelHeaderByOptions(ISheet sheet)
         {
-            return NPOIExcelReadTool.GetExcelHeaderByOptions(sheet, this);
+            return NPOIExcelReadTool.ExcelHeaderByOptions(sheet, this);
         }
 
 
@@ -130,39 +130,39 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 根据配置 获取表格数据-NPOI
         /// </summary>
-        public async Task<string[][]> GetNPOIExcelDataByOptionsAsync()
+        public async Task<string[][]> NPOIExcelDataByOptionsAsync()
         {
             if (ExcelStream == null)
                 throw new Exception();
-            return await NPOIExcelReadTool.GetExcelDataByOptionsAsync(new NPOINotCloseStream(ExcelStream).GetWorkBook(), this);
+            return await NPOIExcelReadTool.ExcelDataByOptionsAsync(new NPOINotCloseStream(ExcelStream).GetWorkBook(), this);
         }
         /// <summary>
         /// 根据配置 获取表格数据-NPOI
         /// </summary>
-        public async Task<string[][]> GetNPOIExcelDataByOptionsAsync(string filepath)
+        public async Task<string[][]> NPOIExcelDataByOptionsAsync(string filepath)
         {
-            return await NPOIExcelReadTool.GetExcelDataByOptionsAsync(filepath, this);
+            return await NPOIExcelReadTool.ExcelDataByOptionsAsync(filepath, this);
         }
         /// <summary>
         /// 根据配置 获取表格数据-NPOI
         /// </summary>
-        public async Task<string[][]> GetNPOIExcelDataByOptionsAsync(Stream stream)
+        public async Task<string[][]> NPOIExcelDataByOptionsAsync(Stream stream)
         {
-            return await NPOIExcelReadTool.GetExcelDataByOptionsAsync(stream, this);
+            return await NPOIExcelReadTool.ExcelDataByOptionsAsync(stream, this);
         }
         /// <summary>
         /// 根据配置 获取表格数据-NPOI
         /// </summary>
-        public async Task<string[][]> GetNPOIExcelDataByOptionsAsync(IWorkbook workbook)
+        public async Task<string[][]> NPOIExcelDataByOptionsAsync(IWorkbook workbook)
         {
-            return await NPOIExcelReadTool.GetExcelDataByOptionsAsync(workbook, this);
+            return await NPOIExcelReadTool.ExcelDataByOptionsAsync(workbook, this);
         }
         /// <summary>
         /// 根据配置 获取表格数据-NPOI
         /// </summary>
-        public async Task<string[][]> GetNPOIExcelDataByOptionsAsync(ISheet sheet)
+        public async Task<string[][]> NPOIExcelDataByOptionsAsync(ISheet sheet)
         {
-            return await NPOIExcelReadTool.GetExcelDataByOptionsAsync(sheet, this);
+            return await NPOIExcelReadTool.ExcelDataByOptionsAsync(sheet, this);
         }
 
 
