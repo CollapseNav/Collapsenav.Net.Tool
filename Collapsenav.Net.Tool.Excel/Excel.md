@@ -51,21 +51,21 @@ public class ExcelTestDto
 }
 ```
 
-#### BuildReadConfig
+#### 1.BuildReadConfig
 
-第一步需要创建对应的读取配置, 这个配置决定了以什么方式读取哪些列
-
-先创建一个 `ReadConfig`
+第一步先创建一个 `ReadConfig` 作为excel的读取配置
 
 ```csharp
 var config = new ReadConfig<ExcelTestDto>();
 ```
 
-#### AddCellOptions
+这个配置决定了之后将以什么方式读取哪些列
+
+#### 2.AddCellOptions
 
 有了 `ReadConfig` 之后就需要添加具体的配置了
 
-提供了 `Default` `Require` `Add` 添加对 **单个实体字段** 的读取设置
+暂时提供了 `Default` `Require` `Add` 添加对 **单个实体字段** 的读取设置
 
 * `Default`
   * 不依赖表格数据,对 `ExcelTestDto` 中的属性统一添加默认值
@@ -83,9 +83,11 @@ var config = new ReadConfig<ExcelTestDto>();
     config.Add("Field3", item => item.Field3)
     ```
 
+所有的excel单元格都会被读成 `string`
+
 `Require` `Add` 都可以使用 `Func<string, object>` 委托自定义对读取单元格的处理
 
-~~由于是委托, 你可以做很多操作, 但比较容易影响性能~~
+由于是委托, 你可以做很多操作, 但比较容易影响性能, 最好不要写复杂的耗时的委托
 
 ```csharp
 config.Add("Field1", item => item.Field1, item =>
@@ -96,7 +98,7 @@ config.Add("Field1", item => item.Field1, item =>
 });
 ```
 
-以上操作都会返回 `ReadConfig` , 所以推荐写成以下的调用
+以上操作都会返回 `ReadConfig` , 所以 **强烈推荐** 写成以下的调用
 
 ```csharp
 var config = new ReadConfig<ExcelTestDto>()
@@ -108,23 +110,23 @@ var config = new ReadConfig<ExcelTestDto>()
 
 同时提供了对应的 `DefaultIf` `RequireIf` `AddIf` 方法, 用来根据不同的条件添加不同的配置
 
-#### AddInit
+#### 3.AddInit
 
-偶尔会有需要在一行数据读取完之后计算点什么的需求, 所以提供一个  `AddInit` 方法, 通过传入一个 `Func<T, T>` 来搞点事情
+偶尔会有在一行数据读取完之后计算点什么的需求, **比如**综合学生的各科成绩打个等第, 所以提供一个  `AddInit` 方法, 通过传入一个 `Func<T, T>` 来搞点事情
 
 ```csharp
 config.AddInit(item =>
 {
     item.Field0 += "23333";
-    // 一些属性的初始化也可以在这边做
+    // 一些属性的初始化也可以在这边做,代替 Default 也是可以的
     item.Field2 = false;
     return item;
 });
 ```
 
-#### ConvertExcel
+#### 4.ConvertExcel
 
-有了配置之后就可以使用 `EPPlusExcelToEntityAsync` 将配套的excel转为实体集合
+配置完成之后就可以使用 `EPPlusExcelToEntityAsync` 将对应的excel转为实体集合
 
 ```csharp
 // 如果excel是个文件流
@@ -134,34 +136,40 @@ IEnumerable<ExcelTestDto> data = await config.EPPlusExcelToEntityAsync(excelStre
 除了流, 也支持其他的参数
 
 * `string filepath`
-  * 简单质朴的物理文件路径
+  * 简单质朴的物理文件路径, 将直接读取物理路径上的excel文件
 * `ExcelPackage pack`
-  * `EPPlus` 的 `ExcelPackage`
+  * `EPPlus` 的 `ExcelPackage`, 一般需要手动创建
 * `ExcelWorksheet sheet`
-  * `EPPlus` 的 `ExcelWorksheet`
+  * `EPPlus` 的 `ExcelWorksheet`, 一般需要手动创建
 
 #### Other
 
-还有一些获取 表头 数据 之类的方法, 不是很关键 就不细说了
+还有一些有关表头, 数据 之类的方法
+
+虽然也花了我不少时间做出来, 但应该不会有多少人有机会用到
+
+所以在这儿就不花时间讲了, 以后可能会再写文档细讲...
 
 ### 导出(Export/...)
 
-有的时候总是会有人需要把列表数据导出成 Excel
+有的时候总是会有人需要把系统里面的列表数据导出成 Excel
 
-~~然后像个傻逼一样再导回来~~
+~~然后像个傻逼一样再导回到系统里面去~~
 
-所以相对导入功能做了个导出功能, 两者相似度比较高
+所以相对导入又做了个导出功能, 两者相似度比较高
 
-#### BuildExportConfig
+#### 1.BuildExportConfig
+
+建个导出配置 `ExportConfig`
 
 ```csharp
 // datas 为 ExcelTestDto集合
 var config = new ExportConfig<ExcelTestDto>(datas);
 ```
 
-由于导出比较简单粗暴, 所以提供了一个 `GenDefaultConfig` 可以直接 **根据泛型生成 Config**
+由于导出比较简单粗暴, 所以提供了一个 `GenDefaultConfig` 可以直接 **根据泛型生成 Config** (大概不算好用)
 
-#### AddCellOption
+#### 2.AddCellOption
 
 由于导出比较简单粗暴, 所以就只有一个 `Add` 和 `AddIf` 方法添加单元格设置(~~虽然是两个~~)
 
@@ -173,28 +181,28 @@ config
 .Add("Field3", item => item.Field3);
 ```
 
-#### GenerateExcel
+#### 3.GenerateExcel
 
 使用 `EPPlusExportAsync` 生成 Excel
 
 ```csharp
-// someStream 是个流, 本来也可以做成不需要传流的, 但我忘了, 暂时还不想改, 等下个版本
+// 新版本应该已经支持无参导出为流
+// Stream stream = await exportConfig.EPPlusExportAsync();
 Stream stream = await exportConfig.EPPlusExportAsync(someStream);
 ```
 
 方法会返回一个流, 拿到流之后可以去做你们想做的事情...
 
-也可以传入一个物理路径(string 类型), 这样就会在指定的位置生成excel
-
-
+也可以传入一个物理路径(`string` 类型), 这样就会在指定的位置生成excel
 
 ## TODO
 
-- [ ] 无参导出
+- [x] 无参导出
 - [ ] 合并相同的导入配置
-- [ ] 根据泛型生成默认的导入配置
 - [ ] 考虑添加错误处理
 - [ ] 测试性能问题
 - [ ] 根据配置生成导入导出配置
-  * 可以将对应导入导出配置存入数据库
+  * 根据泛型的属性生成配置
+  * 根据attribute生成配置
+  * 可以可存入一般关系型数据库的数据生成配置
 
