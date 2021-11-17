@@ -3,18 +3,18 @@ using System.Collections.Generic;
 
 namespace Collapsenav.Net.Tool
 {
-    public class QueryEqualityComparer<T> : IEqualityComparer<T>
+    public class CollapseNavEqualityComparer<T> : IEqualityComparer<T>
     {
-        public QueryEqualityComparer(Func<T, int> hashcodeFunc)
+        public CollapseNavEqualityComparer(Func<T, int> hashcodeFunc)
         {
             HashCodeFunc = hashcodeFunc;
         }
-        public QueryEqualityComparer(Func<T, T, bool> equalFunc, Func<T, int> hashcodeFunc)
+        public CollapseNavEqualityComparer(Func<T, T, bool> equalFunc, Func<T, int> hashcodeFunc)
         {
             EqualFunc = equalFunc;
             HashCodeFunc = hashcodeFunc;
         }
-        public QueryEqualityComparer(Func<T, T, bool> equalFunc)
+        public CollapseNavEqualityComparer(Func<T, T, bool> equalFunc)
         {
             EqualFunc = equalFunc;
         }
