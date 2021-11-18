@@ -28,7 +28,7 @@ namespace Collapsenav.Net.Tool
 
         public int GetHashCode(T obj)
         {
-            return HashCodeFunc == null ? obj.GetHashCode() : HashCodeFunc(obj);
+            return HashCodeFunc == null ? 0 : HashCodeFunc(obj);
         }
     }
 }

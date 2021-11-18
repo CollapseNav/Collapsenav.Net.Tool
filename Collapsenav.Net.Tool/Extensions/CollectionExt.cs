@@ -80,16 +80,39 @@ namespace Collapsenav.Net.Tool
         /// 去重
         /// </summary>
         /// <param name="query">源集合</param>
+        /// <param name="hashCodeFunc">hash去重</param>
+        public static IEnumerable<T> Unique<T>(this IEnumerable<T> query, Func<T, int> hashCodeFunc)
+        {
+            return CollectionTool.Unique(query, hashCodeFunc);
+        }
+
+        /// <summary>
+        /// 去重
+        /// </summary>
+        /// <param name="query">源集合</param>
         public static IEnumerable<T> Unique<T>(this IEnumerable<T> query)
         {
             return CollectionTool.Unique(query);
         }
 
+        /// <summary>
+        /// 判断两个集合是否相等
+        /// </summary>
+        /// <param name="left">集合1</param>
+        /// <param name="right">集合2</param>
+        /// <param name="comparer">怎么比啊</param>
+        /// <param name="hashCodeFunc">hash</param>
         public static bool SequenceEqual<T>(this IEnumerable<T> left, IEnumerable<T> right, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc = null)
         {
             return CollectionTool.SequenceEqual(left, right, comparer, hashCodeFunc);
         }
 
+        /// <summary>
+        /// 判断两个集合是否相等
+        /// </summary>
+        /// <param name="left">集合1</param>
+        /// <param name="right">集合2</param>
+        /// <param name="hashCodeFunc">hash</param>
         public static bool SequenceEqual<T>(this IEnumerable<T> left, IEnumerable<T> right, Func<T, int> hashCodeFunc)
         {
             return CollectionTool.SequenceEqual(left, right, hashCodeFunc);

@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 namespace Collapsenav.Net.Tool.Test
 {
+    public class UniqueTestModel
+    {
+        public int Index { get; set; } = 1;
+    }
     public class CollectionTest
     {
 
@@ -19,6 +23,23 @@ namespace Collapsenav.Net.Tool.Test
 
             uniqueIntList = intList.Unique();
             Assert.True(uniqueIntList.SequenceEqual(new[] { 1, 2, 3, 4 }));
+
+            var data = new List<UniqueTestModel>{
+                new UniqueTestModel(),
+                new UniqueTestModel(),
+                new UniqueTestModel(),
+                new UniqueTestModel(),
+                new UniqueTestModel(),
+                new UniqueTestModel(),
+            };
+
+            var uniqueData = data.Unique();
+            Assert.True(uniqueData.Count() == 6);
+            uniqueData = data.Unique((x, y) => x.Index == y.Index);
+            Assert.True(uniqueData.Count() == 1);
+            uniqueData = data.Unique(item => item.Index.GetHashCode());
+            Assert.True(uniqueData.Count() == 1);
+
 
         }
 
