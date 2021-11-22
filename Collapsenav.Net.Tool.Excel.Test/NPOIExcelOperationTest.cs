@@ -97,7 +97,7 @@ namespace Collapsenav.Net.Tool.Excel.Test
         }
 
         [Fact]
-        public async Task ExportHeaderTest()
+        public async Task ExportTest()
         {
             using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open);
             var config = new ReadConfig<ExcelTestDto>()
@@ -133,7 +133,7 @@ namespace Collapsenav.Net.Tool.Excel.Test
             using var entityMs = new MemoryStream();
             var entityStream = await exportConfig.NPOIExportAsync(entityMs);
             using var exportEntityFs = new FileStream("./Export-Entity.xlsx", FileMode.OpenOrCreate);
-            entityMs.CopyTo(exportEntityFs);
+            entityStream.CopyTo(exportEntityFs);
             exportEntityFs.Dispose();
             Assert.True(File.Exists("./Export-Entity.xlsx"));
             Assert.True(new FileInfo("./Export-Entity.xlsx").Length > 0);

@@ -51,6 +51,23 @@ namespace Collapsenav.Net.Tool.Excel
         }
 
         /// <summary>
+        /// 根据 T 生成默认的 Config
+        /// </summary>
+        public static ReadConfig<T> GenDefaultConfig()
+        {
+            var config = new ReadConfig<T>();
+            // 根据 T 中设置的 ExcelReadAttribute 创建导入配置
+            var attrData = TypeTool.AttrValues<T, ExcelReadAttribute>();
+            if (attrData != null)
+            {
+                foreach (var prop in attrData)
+                    config.GenOption(prop.Value.ExcelField, prop.Key);
+                return config;
+            }
+            return config;
+        }
+
+        /// <summary>
         /// 添加默认单元格读取设置(其实就是不读取Excel直接给T的某个字段赋值)
         /// </summary>
         /// <param name="prop">T的属性</param>
@@ -139,10 +156,13 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="action"></param>
         public virtual ReadCellOption GenOption<E>(string field, Expression<Func<T, E>> prop, Func<string, object> action = null)
         {
-            var member = prop.GetMember();
+            return GenOption(field, (PropertyInfo)prop.GetMember(), action);
+        }
+        public virtual ReadCellOption GenOption(string field, PropertyInfo prop, Func<string, object> action = null)
+        {
             // 暂时还想不到其他简单的高效的方法
             // TODO 考虑提到 Tool 的 TypeTool 中 ?
-            action ??= typeof(E).Name switch
+            action ??= prop.PropertyType.Name switch
             {
                 nameof(String) => (item) => item,
                 nameof(Int16) => (item) => short.Parse(item),
@@ -156,8 +176,8 @@ namespace Collapsenav.Net.Tool.Excel
             };
             return new ReadCellOption
             {
-                PropName = member.Name,
-                Prop = (PropertyInfo)member,
+                PropName = prop.Name,
+                Prop = prop,
                 ExcelField = field,
                 Action = action
             };
