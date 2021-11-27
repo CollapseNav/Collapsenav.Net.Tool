@@ -86,11 +86,11 @@ namespace Collapsenav.Net.Tool.Test
         public void StartEndWiths()
         {
             string exampleString = "23333333333333";
-            Assert.True(StringExt.StartsWith(exampleString, "23"));
-            Assert.True(exampleString.StartsWith("23", "233", "233333"));
-            Assert.False(StringExt.StartsWith(exampleString, "2233"));
-            Assert.True(exampleString.EndsWith("333333", "33", "3"));
-            Assert.False(StringExt.EndsWith(exampleString, "2333333"));
+            Assert.True(StringExt.HasStartsWith(exampleString, "23"));
+            Assert.True(exampleString.AllStartsWith("23", "233", "233333"));
+            Assert.False(StringExt.HasStartsWith(exampleString, "2233"));
+            Assert.True(exampleString.AllEndsWith("333333", "33", "3"));
+            Assert.False(StringExt.HasEndsWith(exampleString, "2333333"));
         }
 
         [Fact]

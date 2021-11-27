@@ -60,7 +60,7 @@ namespace Collapsenav.Net.Tool
         public static bool IsUrl(string url, bool check = false)
         {
             // TODO 日后写正则判断...
-            var isHttp = url.StartsWith("https://", "http://");
+            var isHttp = url.HasStartsWith("https://", "http://");
             if (!isHttp) return false;
             // ping测试
             if (check && !url.GetDomain().CanPing()) return false;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Collapsenav.Net.Tool
 {
@@ -118,12 +119,46 @@ namespace Collapsenav.Net.Tool
             return CollectionTool.SequenceEqual(left, right, hashCodeFunc);
         }
 
+        /// <summary>
+        /// WhereIf
+        /// </summary>
+        /// <param name="query">query</param>
+        /// <param name="flag">bool 作为标记，true则应用 filter</param>
+        /// <param name="filter">筛选条件</param>
         public static IEnumerable<T> WhereIf<T>(this IEnumerable<T> query, bool flag, Func<T, bool> filter)
         {
             return flag ? query.Where(filter) : query;
         }
 
+        /// <summary>
+        /// WhereIf
+        /// </summary>
+        /// <param name="query">query</param>
+        /// <param name="input">非空字符串则应用筛选条件</param>
+        /// <param name="filter">筛选条件</param>
         public static IEnumerable<T> WhereIf<T>(this IEnumerable<T> query, string input, Func<T, bool> filter)
+        {
+            return input.IsNull() ? query : query.Where(filter);
+        }
+
+        /// <summary>
+        /// WhereIf
+        /// </summary>
+        /// <param name="query">query</param>
+        /// <param name="flag">bool 作为标记，true则应用 filter</param>
+        /// <param name="filter">筛选条件</param>
+        public static IQueryable<T> WhereIf<T>(this IQueryable<T> query, bool flag, Expression<Func<T, bool>> filter)
+        {
+            return flag ? query.Where(filter) : query;
+        }
+
+        /// <summary>
+        /// WhereIf
+        /// </summary>
+        /// <param name="query">query</param>
+        /// <param name="input">非空字符串则应用筛选条件</param>
+        /// <param name="filter">筛选条件</param>
+        public static IQueryable<T> WhereIf<T>(this IQueryable<T> query, string input, Expression<Func<T, bool>> filter)
         {
             return input.IsNull() ? query : query.Where(filter);
         }
@@ -229,6 +264,104 @@ namespace Collapsenav.Net.Tool
         public static bool NotEmpty<T>(this IEnumerable<T> query)
         {
             return CollectionTool.NotEmpty(query);
+        }
+        /// <summary>
+        /// 打乱顺序
+        /// </summary>
+        public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> query)
+        {
+            return CollectionTool.Shuffle(query);
+        }
+
+
+        /// <summary>
+        /// 向一个集合中添加多个对象
+        /// </summary>
+        /// <param name="query">源</param>
+        /// <param name="values">添加的对象</param>
+        public static IEnumerable<T> AddRange<T>(this IEnumerable<T> query, params T[] values)
+        {
+            return CollectionTool.AddRange(query, values);
+        }
+        /// <summary>
+        /// 向一个集合中添加多个对象(带去重)
+        /// </summary>
+        /// <param name="query">源</param>
+        /// <param name="comparer">去重依据</param>
+        /// <param name="values">添加的对象</param>
+        public static IEnumerable<T> AddRange<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, params T[] values)
+        {
+            return CollectionTool.AddRange(query, comparer, values);
+        }
+        /// <summary>
+        /// 向一个集合中添加多个对象(带去重)
+        /// </summary>
+        /// <param name="query">源</param>
+        /// <param name="hashCodeFunc">去重依据(hash)</param>
+        /// <param name="values">添加的对象</param>
+        public static IEnumerable<T> AddRange<T>(this IEnumerable<T> query, Func<T, int> hashCodeFunc, params T[] values)
+        {
+            return CollectionTool.AddRange(query, hashCodeFunc, values);
+        }
+        /// <summary>
+        /// 向一个集合中添加多个对象(带去重)
+        /// </summary>
+        /// <param name="query">源</param>
+        /// <param name="comparer">去重依据</param>
+        /// <param name="hashCodeFunc">去重依据(hash)</param>
+        /// <param name="values">添加的对象</param>
+        public static IEnumerable<T> AddRange<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc, params T[] values)
+        {
+            return CollectionTool.AddRange(query, comparer, hashCodeFunc, values);
+        }
+
+        /// <summary>
+        /// 向一个集合中添加多个对象
+        /// </summary>
+        /// <param name="query">源</param>
+        /// <param name="values">添加的对象</param>
+        public static IEnumerable<T> AddRange<T>(this IEnumerable<T> query, IEnumerable<T> values)
+        {
+            return CollectionTool.AddRange(query, values);
+        }
+        /// <summary>
+        /// 向一个集合中添加多个对象(带去重)
+        /// </summary>
+        /// <param name="query">源</param>
+        /// <param name="comparer">去重依据</param>
+        /// <param name="values">添加的对象</param>
+        public static IEnumerable<T> AddRange<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, IEnumerable<T> values)
+        {
+            return CollectionTool.AddRange(query, comparer, values);
+        }
+        /// <summary>
+        /// 向一个集合中添加多个对象(带去重)
+        /// </summary>
+        /// <param name="query">源</param>
+        /// <param name="hashCodeFunc">去重依据(hash)</param>
+        /// <param name="values">添加的对象</param>
+        public static IEnumerable<T> AddRange<T>(this IEnumerable<T> query, Func<T, int> hashCodeFunc, IEnumerable<T> values)
+        {
+            return CollectionTool.AddRange(query, hashCodeFunc, values);
+        }
+        /// <summary>
+        /// 向一个集合中添加多个对象(带去重)
+        /// </summary>
+        /// <param name="query">源</param>
+        /// <param name="comparer">去重依据</param>
+        /// <param name="hashCodeFunc">去重依据(hash)</param>
+        /// <param name="values">添加的对象</param>
+        public static IEnumerable<T> AddRange<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc, IEnumerable<T> values)
+        {
+            return CollectionTool.AddRange(query, comparer, hashCodeFunc, values);
+        }
+
+        /// <summary>
+        /// 遍历执行(不知道为啥原来的IEnumerable不提供这功能)
+        /// </summary>
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> query, Action<T> action)
+        {
+            return CollectionTool.ForEach(query, action);
         }
     }
 }

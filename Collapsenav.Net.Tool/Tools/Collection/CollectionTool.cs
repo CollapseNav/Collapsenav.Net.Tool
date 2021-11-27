@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Collapsenav.Net.Tool
 {
@@ -172,6 +174,111 @@ namespace Collapsenav.Net.Tool
         public static bool NotEmpty<T>(IEnumerable<T> query)
         {
             return query != null && query.Any();
+        }
+        /// <summary>
+        /// 打乱顺序
+        /// </summary>
+        public static IEnumerable<T> Shuffle<T>(IEnumerable<T> query)
+        {
+            // TODO 应该也可以改成使用 Guid.NewGuid() 然后 OrderBy 的方式做,但孰优孰劣就不清楚了
+            var random = new Random();
+            var resultList = new List<T>();
+            foreach (var item in query)
+                resultList.Insert(random.Next(resultList.Count), item);
+            return resultList;
+        }
+
+        /// <summary>
+        /// 向一个集合中添加多个对象
+        /// </summary>
+        /// <param name="query">源</param>
+        /// <param name="values">添加的对象</param>
+        public static IEnumerable<T> AddRange<T>(IEnumerable<T> query, params T[] values)
+        {
+            return query.Concat(values);
+        }
+        /// <summary>
+        /// 向一个集合中添加多个对象(带去重)
+        /// </summary>
+        /// <param name="query">源</param>
+        /// <param name="comparer">去重依据</param>
+        /// <param name="values">添加的对象</param>
+        public static IEnumerable<T> AddRange<T>(IEnumerable<T> query, Func<T, T, bool> comparer, params T[] values)
+        {
+            return query.Union(values, new CollapseNavEqualityComparer<T>(comparer));
+        }
+        /// <summary>
+        /// 向一个集合中添加多个对象(带去重)
+        /// </summary>
+        /// <param name="query">源</param>
+        /// <param name="hashCodeFunc">去重依据(hash)</param>
+        /// <param name="values">添加的对象</param>
+        public static IEnumerable<T> AddRange<T>(IEnumerable<T> query, Func<T, int> hashCodeFunc, params T[] values)
+        {
+            return query.Union(values, new CollapseNavEqualityComparer<T>(hashCodeFunc));
+        }
+        /// <summary>
+        /// 向一个集合中添加多个对象(带去重)
+        /// </summary>
+        /// <param name="query">源</param>
+        /// <param name="comparer">去重依据</param>
+        /// <param name="hashCodeFunc">去重依据(hash)</param>
+        /// <param name="values">添加的对象</param>
+        public static IEnumerable<T> AddRange<T>(IEnumerable<T> query, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc, params T[] values)
+        {
+            return query.Union(values, new CollapseNavEqualityComparer<T>(comparer, hashCodeFunc));
+        }
+
+
+        /// <summary>
+        /// 向一个集合中添加多个对象
+        /// </summary>
+        /// <param name="query">源</param>
+        /// <param name="values">添加的对象</param>
+        public static IEnumerable<T> AddRange<T>(IEnumerable<T> query, IEnumerable<T> values)
+        {
+            return query.Concat(values);
+        }
+        /// <summary>
+        /// 向一个集合中添加多个对象(带去重)
+        /// </summary>
+        /// <param name="query">源</param>
+        /// <param name="comparer">去重依据</param>
+        /// <param name="values">添加的对象</param>
+        public static IEnumerable<T> AddRange<T>(IEnumerable<T> query, Func<T, T, bool> comparer, IEnumerable<T> values)
+        {
+            return query.Union(values, new CollapseNavEqualityComparer<T>(comparer));
+        }
+        /// <summary>
+        /// 向一个集合中添加多个对象(带去重)
+        /// </summary>
+        /// <param name="query">源</param>
+        /// <param name="hashCodeFunc">去重依据(hash)</param>
+        /// <param name="values">添加的对象</param>
+        public static IEnumerable<T> AddRange<T>(IEnumerable<T> query, Func<T, int> hashCodeFunc, IEnumerable<T> values)
+        {
+            return query.Union(values, new CollapseNavEqualityComparer<T>(hashCodeFunc));
+        }
+        /// <summary>
+        /// 向一个集合中添加多个对象(带去重)
+        /// </summary>
+        /// <param name="query">源</param>
+        /// <param name="comparer">去重依据</param>
+        /// <param name="hashCodeFunc">去重依据(hash)</param>
+        /// <param name="values">添加的对象</param>
+        public static IEnumerable<T> AddRange<T>(IEnumerable<T> query, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc, IEnumerable<T> values)
+        {
+            return query.Union(values, new CollapseNavEqualityComparer<T>(comparer, hashCodeFunc));
+        }
+
+        /// <summary>
+        /// 遍历执行(不知道为啥原来的IEnumerable不提供这功能)
+        /// </summary>
+        public static IEnumerable<T> ForEach<T>(IEnumerable<T> query, Action<T> action)
+        {
+            foreach (var item in query)
+                action(item);
+            return query;
         }
     }
 }
