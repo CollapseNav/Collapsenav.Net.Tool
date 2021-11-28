@@ -11,39 +11,39 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 获取表格header(仅限简单的单行表头)-EPPlus
         /// </summary>
-        public IEnumerable<string> GetEPPlusExcelHeader()
+        public IEnumerable<string> EPPlusExcelHeader()
         {
             if (ExcelStream == null)
                 throw new Exception();
-            return EPPlusExcelReadTool.GetExcelHeader(ExcelStream);
+            return EPPlusExcelReadTool.ExcelHeader(ExcelStream);
         }
         /// <summary>
         /// 获取表格header(仅限简单的单行表头)-EPPlus
         /// </summary>
-        public IEnumerable<string> GetEPPlusExcelHeader(string filepath)
+        public IEnumerable<string> EPPlusExcelHeader(string filepath)
         {
-            return EPPlusExcelReadTool.GetExcelHeader(filepath);
+            return EPPlusExcelReadTool.ExcelHeader(filepath);
         }
         /// <summary>
         /// 获取表格header(仅限简单的单行表头)-EPPlus
         /// </summary>
-        public IEnumerable<string> GetEPPlusExcelHeader(Stream stream)
+        public IEnumerable<string> EPPlusExcelHeader(Stream stream)
         {
-            return EPPlusExcelReadTool.GetExcelHeader(stream);
+            return EPPlusExcelReadTool.ExcelHeader(stream);
         }
         /// <summary>
         /// 获取表格header(仅限简单的单行表头)-EPPlus
         /// </summary>
-        public IEnumerable<string> GetEPPlusExcelHeader(ExcelPackage pack)
+        public IEnumerable<string> EPPlusExcelHeader(ExcelPackage pack)
         {
-            return EPPlusExcelReadTool.GetExcelHeader(pack);
+            return EPPlusExcelReadTool.ExcelHeader(pack);
         }
         /// <summary>
         /// 获取表格header(仅限简单的单行表头)-EPPlus
         /// </summary>
-        public IEnumerable<string> GetEPPlusExcelHeader(ExcelWorksheet sheet)
+        public IEnumerable<string> EPPlusExcelHeader(ExcelWorksheet sheet)
         {
-            return EPPlusExcelReadTool.GetExcelHeader(sheet);
+            return EPPlusExcelReadTool.ExcelHeader(sheet);
         }
 
 
@@ -51,39 +51,39 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 获取表格的数据(仅限简单的单行表头)-EPPlus
         /// </summary>
-        public async Task<IEnumerable<IEnumerable<string>>> GetEPPlusExcelDataAsync()
+        public async Task<IEnumerable<IEnumerable<string>>> EPPlusExcelDataAsync()
         {
             if (ExcelStream == null)
                 throw new Exception();
-            return await EPPlusExcelReadTool.GetExcelDataAsync(ExcelStream);
+            return await EPPlusExcelReadTool.ExcelDataAsync(ExcelStream);
         }
         /// <summary>
         /// 获取表格的数据(仅限简单的单行表头)-EPPlus
         /// </summary>
-        public async Task<IEnumerable<IEnumerable<string>>> GetEPPlusExcelDataAsync(string filepath)
+        public async Task<IEnumerable<IEnumerable<string>>> EPPlusExcelDataAsync(string filepath)
         {
-            return await EPPlusExcelReadTool.GetExcelDataAsync(filepath);
+            return await EPPlusExcelReadTool.ExcelDataAsync(filepath);
         }
         /// <summary>
         /// 获取表格的数据(仅限简单的单行表头)-EPPlus
         /// </summary>
-        public async Task<IEnumerable<IEnumerable<string>>> GetEPPlusExcelDataAsync(Stream stream)
+        public async Task<IEnumerable<IEnumerable<string>>> EPPlusExcelDataAsync(Stream stream)
         {
-            return await EPPlusExcelReadTool.GetExcelDataAsync(stream);
+            return await EPPlusExcelReadTool.ExcelDataAsync(stream);
         }
         /// <summary>
         /// 获取表格的数据(仅限简单的单行表头)-EPPlus
         /// </summary>
-        public async Task<IEnumerable<IEnumerable<string>>> GetEPPlusExcelDataAsync(ExcelPackage pack)
+        public async Task<IEnumerable<IEnumerable<string>>> EPPlusExcelDataAsync(ExcelPackage pack)
         {
-            return await EPPlusExcelReadTool.GetExcelDataAsync(pack);
+            return await EPPlusExcelReadTool.ExcelDataAsync(pack);
         }
         /// <summary>
         /// 获取表格的数据(仅限简单的单行表头)-EPPlus
         /// </summary>
-        public async Task<IEnumerable<IEnumerable<string>>> GetEPPlusExcelDataAsync(ExcelWorksheet sheet)
+        public async Task<IEnumerable<IEnumerable<string>>> EPPlusExcelDataAsync(ExcelWorksheet sheet)
         {
-            return await EPPlusExcelReadTool.GetExcelDataAsync(sheet);
+            return await EPPlusExcelReadTool.ExcelDataAsync(sheet);
         }
 
 
@@ -91,39 +91,39 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 获取表头及其index-EPPlus
         /// </summary>
-        public Dictionary<string, int> GetEPPlusExcelHeaderByOptions()
+        public Dictionary<string, int> EPPlusExcelHeaderByOptions()
         {
             if (ExcelStream == null)
                 throw new Exception();
-            return EPPlusExcelReadTool.GetExcelHeaderByOptions(ExcelStream, this);
+            return EPPlusExcelReadTool.ExcelHeaderByOptions(ExcelStream, this);
         }
         /// <summary>
         /// 获取表头及其index-EPPlus
         /// </summary>
-        public Dictionary<string, int> GetEPPlusExcelHeaderByOptions(string filepath)
+        public Dictionary<string, int> EPPlusExcelHeaderByOptions(string filepath)
         {
-            return EPPlusExcelReadTool.GetExcelHeaderByOptions(filepath, this);
+            return EPPlusExcelReadTool.ExcelHeaderByOptions(filepath, this);
         }
         /// <summary>
         /// 获取表头及其index-EPPlus
         /// </summary>
-        public Dictionary<string, int> GetEPPlusExcelHeaderByOptions(Stream stream)
+        public Dictionary<string, int> EPPlusExcelHeaderByOptions(Stream stream)
         {
-            return EPPlusExcelReadTool.GetExcelHeaderByOptions(stream, this);
+            return EPPlusExcelReadTool.ExcelHeaderByOptions(stream, this);
         }
         /// <summary>
         /// 获取表头及其index-EPPlus
         /// </summary>
-        public Dictionary<string, int> GetEPPlusExcelHeaderByOptions(ExcelPackage pack)
+        public Dictionary<string, int> EPPlusExcelHeaderByOptions(ExcelPackage pack)
         {
-            return EPPlusExcelReadTool.GetExcelHeaderByOptions(pack, this);
+            return EPPlusExcelReadTool.ExcelHeaderByOptions(pack, this);
         }
         /// <summary>
         /// 获取表头及其index-EPPlus
         /// </summary>
-        public Dictionary<string, int> GetEPPlusExcelHeaderByOptions(ExcelWorksheet sheet)
+        public Dictionary<string, int> EPPlusExcelHeaderByOptions(ExcelWorksheet sheet)
         {
-            return EPPlusExcelReadTool.GetExcelHeaderByOptions(sheet, this);
+            return EPPlusExcelReadTool.ExcelHeaderByOptions(sheet, this);
         }
 
 
@@ -131,39 +131,39 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 根据配置 获取表格数据-EPPlus
         /// </summary>
-        public async Task<string[][]> GetEPPlusExcelDataByOptionsAsync()
+        public async Task<string[][]> EPPlusExcelDataByOptionsAsync()
         {
             if (ExcelStream == null)
                 throw new Exception();
-            return await EPPlusExcelReadTool.GetExcelDataByOptionsAsync(ExcelStream, this);
+            return await EPPlusExcelReadTool.ExcelDataByOptionsAsync(ExcelStream, this);
         }
         /// <summary>
         /// 根据配置 获取表格数据-EPPlus
         /// </summary>
-        public async Task<string[][]> GetEPPlusExcelDataByOptionsAsync(string filepath)
+        public async Task<string[][]> EPPlusExcelDataByOptionsAsync(string filepath)
         {
-            return await EPPlusExcelReadTool.GetExcelDataByOptionsAsync(filepath, this);
+            return await EPPlusExcelReadTool.ExcelDataByOptionsAsync(filepath, this);
         }
         /// <summary>
         /// 根据配置 获取表格数据-EPPlus
         /// </summary>
-        public async Task<string[][]> GetEPPlusExcelDataByOptionsAsync(Stream stream)
+        public async Task<string[][]> EPPlusExcelDataByOptionsAsync(Stream stream)
         {
-            return await EPPlusExcelReadTool.GetExcelDataByOptionsAsync(stream, this);
+            return await EPPlusExcelReadTool.ExcelDataByOptionsAsync(stream, this);
         }
         /// <summary>
         /// 根据配置 获取表格数据-EPPlus
         /// </summary>
-        public async Task<string[][]> GetEPPlusExcelDataByOptionsAsync(ExcelPackage pack)
+        public async Task<string[][]> EPPlusExcelDataByOptionsAsync(ExcelPackage pack)
         {
-            return await EPPlusExcelReadTool.GetExcelDataByOptionsAsync(pack, this);
+            return await EPPlusExcelReadTool.ExcelDataByOptionsAsync(pack, this);
         }
         /// <summary>
         /// 根据配置 获取表格数据-EPPlus
         /// </summary>
-        public async Task<string[][]> GetEPPlusExcelDataByOptionsAsync(ExcelWorksheet sheet)
+        public async Task<string[][]> EPPlusExcelDataByOptionsAsync(ExcelWorksheet sheet)
         {
-            return await EPPlusExcelReadTool.GetExcelDataByOptionsAsync(sheet, this);
+            return await EPPlusExcelReadTool.ExcelDataByOptionsAsync(sheet, this);
         }
 
 

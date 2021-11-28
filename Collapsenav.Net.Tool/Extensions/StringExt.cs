@@ -6,16 +6,53 @@ namespace Collapsenav.Net.Tool
 {
     public static partial class StringExt
     {
+        /// <summary>
+        /// 是空的
+        /// </summary>
         public static bool IsNull(this string str) => string.IsNullOrWhiteSpace(str);
+        /// <summary>
+        /// 是空的
+        /// </summary>
         public static bool IsEmpty(this string str) => string.IsNullOrWhiteSpace(str);
+        /// <summary>
+        /// 没空
+        /// </summary>
         public static bool NotNull(this string str) => !str.IsNull();
+        /// <summary>
+        /// 没空
+        /// </summary>
         public static bool NotEmpty(this string str) => !str.IsEmpty();
 
 
-
+        /// <summary>
+        /// 左填充
+        /// </summary>
+        /// <param name="obj">源</param>
+        /// <param name="total">总长度</param>
+        /// <param name="fill">填充字符</param>
         public static string PadLeft(this object obj, int total, char? fill = ' ') => obj.ToString().PadLeft(total, fill ?? ' ');
+        /// <summary>
+        /// 右填充
+        /// </summary>
+        /// <param name="obj">源</param>
+        /// <param name="total">总长度</param>
+        /// <param name="fill">填充字符</param>
         public static string PadRight(this object obj, int total, char? fill = ' ') => obj.ToString().PadRight(total, fill ?? ' ');
+        /// <summary>
+        /// 左填充
+        /// </summary>
+        /// <param name="obj">源</param>
+        /// <param name="total">总长度</param>
+        /// <param name="act">一个委托</param>
+        /// <param name="fill">填充字符</param>
         public static string PadLeft<T>(this T obj, int total, Func<T, object> act, char? fill = ' ') => act(obj).ToString().PadLeft(total, fill ?? ' ');
+        /// <summary>
+        /// 右填充
+        /// </summary>
+        /// <param name="obj">源</param>
+        /// <param name="total">总长度</param>
+        /// <param name="act">一个委托</param>
+        /// <param name="fill">填充字符</param>
         public static string PadRight<T>(this T obj, int total, Func<T, object> act, char? fill = ' ') => act(obj).ToString().PadRight(total, fill ?? ' ');
 
 
@@ -75,8 +112,23 @@ namespace Collapsenav.Net.Tool
             return StringTool.GetDomain(input);
         }
 
-        public static bool StartsWith(this string input, params string[] filters) => filters.Any(item => input.StartsWith(item));
-        public static bool EndsWith(this string input, params string[] filters) => filters.Any(item => input.EndsWith(item));
+        /// <summary>
+        /// 存在以啥啥啥开头
+        /// </summary>
+        public static bool HasStartsWith(this string input, params string[] filters) => filters.Any(item => input.StartsWith(item));
+        /// <summary>
+        /// 存在以啥啥啥结尾
+        /// </summary>
+        public static bool HasEndsWith(this string input, params string[] filters) => filters.Any(item => input.EndsWith(item));
+
+        /// <summary>
+        /// 全部以啥啥啥开头
+        /// </summary>
+        public static bool AllStartsWith(this string input, params string[] filters) => filters.All(item => input.StartsWith(item));
+        /// <summary>
+        /// 全部以啥啥啥结尾
+        /// </summary>
+        public static bool AllEndsWith(this string input, params string[] filters) => filters.All(item => input.EndsWith(item));
 
         public static string ToString(this char input, int count)
         {

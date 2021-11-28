@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 namespace Collapsenav.Net.Tool.Test
 {
+    public class UniqueTestModel
+    {
+        public int Index { get; set; } = 1;
+    }
     public class CollectionTest
     {
 
@@ -19,6 +23,23 @@ namespace Collapsenav.Net.Tool.Test
 
             uniqueIntList = intList.Unique();
             Assert.True(uniqueIntList.SequenceEqual(new[] { 1, 2, 3, 4 }));
+
+            var data = new List<UniqueTestModel>{
+                new UniqueTestModel(),
+                new UniqueTestModel(),
+                new UniqueTestModel(),
+                new UniqueTestModel(),
+                new UniqueTestModel(),
+                new UniqueTestModel(),
+            };
+
+            var uniqueData = data.Unique();
+            Assert.True(uniqueData.Count() == 6);
+            uniqueData = data.Unique((x, y) => x.Index == y.Index);
+            Assert.True(uniqueData.Count() == 1);
+            uniqueData = data.Unique(item => item.Index.GetHashCode());
+            Assert.True(uniqueData.Count() == 1);
+
 
         }
 
@@ -60,7 +81,7 @@ namespace Collapsenav.Net.Tool.Test
         }
 
         [Fact]
-        public void ContainerAndTest()
+        public void ContainAndTest()
         {
             string[] strList = { "1", "2", "3", "4", "5", "6" };
             Assert.True(strList.ContainAnd(new[] { "2", "6" }));
@@ -70,7 +91,7 @@ namespace Collapsenav.Net.Tool.Test
         }
 
         [Fact]
-        public void ContainerOrTest()
+        public void ContainOrTest()
         {
             string[] strList = { "1", "2", "3", "4", "5", "6" };
             Assert.True(strList.ContainOr(new[] { "2", "6" }));
@@ -181,6 +202,15 @@ namespace Collapsenav.Net.Tool.Test
             int[] notEmptyArray = new[] { 1, 2, 3, 4 };
             Assert.True(notEmptyArray.NotEmpty());
             Assert.False(notEmptyArray.IsEmpty());
+        }
+
+        [Fact]
+        public void ShuffleTest()
+        {
+            var nums = new[] { 1, 2, 3, 4, 5 };
+            var oNums = new[] { 1, 2, 3, 4, 5 };
+            Assert.True(nums.SequenceEqual(oNums));
+            Assert.False(nums.Shuffle().SequenceEqual(oNums));
         }
     }
 }

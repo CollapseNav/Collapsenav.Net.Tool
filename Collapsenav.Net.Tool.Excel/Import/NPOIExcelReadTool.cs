@@ -24,35 +24,35 @@ namespace Collapsenav.Net.Tool.Excel
         /// 获取表格header(仅限简单的单行表头)
         /// </summary>
         /// <param name="filepath">文件路径</param>
-        public static IEnumerable<string> GetExcelHeader(string filepath)
+        public static IEnumerable<string> ExcelHeader(string filepath)
         {
             filepath.IsXls();
             using var fs = new FileStream(filepath, FileMode.Open);
-            return GetExcelHeader(fs);
+            return ExcelHeader(fs);
         }
         /// <summary>
         /// 获取表格header(仅限简单的单行表头)
         /// </summary>
         /// <param name="stream">文件流</param>
-        public static IEnumerable<string> GetExcelHeader(Stream stream)
+        public static IEnumerable<string> ExcelHeader(Stream stream)
         {
             using var notCloseStream = new NPOINotCloseStream(stream);
-            return GetExcelHeader(notCloseStream.GetWorkBook());
+            return ExcelHeader(notCloseStream.GetWorkBook());
         }
         /// <summary>
         /// 获取表格header(仅限简单的单行表头)
         /// </summary>
         /// <param name="workbook">excel workbook</param>
-        public static IEnumerable<string> GetExcelHeader(IWorkbook workbook)
+        public static IEnumerable<string> ExcelHeader(IWorkbook workbook)
         {
             var sheet = workbook.GetSheetAt(Zero);
-            return GetExcelHeader(sheet);
+            return ExcelHeader(sheet);
         }
         /// <summary>
         /// 获取表格header(仅限简单的单行表头)
         /// </summary>
         /// <param name="sheet">工作簿</param>
-        public static IEnumerable<string> GetExcelHeader(ISheet sheet)
+        public static IEnumerable<string> ExcelHeader(ISheet sheet)
         {
             var header = sheet.GetRow(Zero).Cells.Select(item => item.ToString()?.Trim());
             return header;
@@ -65,35 +65,35 @@ namespace Collapsenav.Net.Tool.Excel
         /// 获取表格的数据(仅限简单的单行表头)
         /// </summary>
         /// <param name="filepath">文件路径</param>
-        public static async Task<IEnumerable<IEnumerable<string>>> GetExcelDataAsync(string filepath)
+        public static async Task<IEnumerable<IEnumerable<string>>> ExcelDataAsync(string filepath)
         {
             filepath.IsXls();
             using var fs = new FileStream(filepath, FileMode.Open);
-            return await GetExcelDataAsync(fs);
+            return await ExcelDataAsync(fs);
         }
         /// <summary>
         /// 获取表格的数据(仅限简单的单行表头)
         /// </summary>
         /// <param name="stream">文件流</param>
-        public static async Task<IEnumerable<IEnumerable<string>>> GetExcelDataAsync(Stream stream)
+        public static async Task<IEnumerable<IEnumerable<string>>> ExcelDataAsync(Stream stream)
         {
             using var notCloseStream = new NPOINotCloseStream(stream);
-            return await GetExcelDataAsync(notCloseStream.GetWorkBook());
+            return await ExcelDataAsync(notCloseStream.GetWorkBook());
         }
         /// <summary>
         /// 获取表格的数据(仅限简单的单行表头)
         /// </summary>
         /// <param name="workbook">excel workbook</param>
-        public static async Task<IEnumerable<IEnumerable<string>>> GetExcelDataAsync(IWorkbook workbook)
+        public static async Task<IEnumerable<IEnumerable<string>>> ExcelDataAsync(IWorkbook workbook)
         {
             var sheet = workbook.GetSheetAt(Zero);
-            return await GetExcelDataAsync(sheet);
+            return await ExcelDataAsync(sheet);
         }
         /// <summary>
         /// 获取表格的数据(仅限简单的单行表头)
         /// </summary>
         /// <param name="sheet">工作簿</param>
-        public static async Task<IEnumerable<IEnumerable<string>>> GetExcelDataAsync(ISheet sheet)
+        public static async Task<IEnumerable<IEnumerable<string>>> ExcelDataAsync(ISheet sheet)
         {
             var rowCount = sheet.LastRowNum;
             var colCount = sheet.GetRow(Zero).Cells.Count;
@@ -117,78 +117,78 @@ namespace Collapsenav.Net.Tool.Excel
         /// </summary>
         /// <param name="filepath">文件路径</param>
         /// <param name="options">导出配置</param>
-        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(string filepath, ReadConfig<T> options)
+        public static Dictionary<string, int> ExcelHeaderByOptions<T>(string filepath, ReadConfig<T> options)
         {
             filepath.IsXls();
             using var fs = new FileStream(filepath, FileMode.Open);
-            return GetExcelHeaderByOptions(fs, options);
+            return ExcelHeaderByOptions(fs, options);
         }
         /// <summary>
         /// 根据传入配置 获取表头及其index
         /// </summary>
         /// <param name="filepath">文件路径</param>
         /// <param name="options">导出配置</param>
-        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(string filepath, IEnumerable<ReadCellOption> options)
+        public static Dictionary<string, int> ExcelHeaderByOptions<T>(string filepath, IEnumerable<ReadCellOption> options)
         {
             filepath.IsXls();
             using var fs = new FileStream(filepath, FileMode.Open);
-            return GetExcelHeaderByOptions<T>(fs, options);
+            return ExcelHeaderByOptions<T>(fs, options);
         }
         /// <summary>
         /// 根据传入配置 获取表头及其index
         /// </summary>
         /// <param name="stream">文件流</param>
         /// <param name="options">导出配置</param>
-        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(Stream stream, ReadConfig<T> options)
+        public static Dictionary<string, int> ExcelHeaderByOptions<T>(Stream stream, ReadConfig<T> options)
         {
             using var notCloseStream = new NPOINotCloseStream(stream);
-            return GetExcelHeaderByOptions(notCloseStream.GetWorkBook(), options);
+            return ExcelHeaderByOptions(notCloseStream.GetWorkBook(), options);
         }
         /// <summary>
         /// 根据传入配置 获取表头及其index
         /// </summary>
         /// <param name="stream">文件流</param>
         /// <param name="options">导出配置</param>
-        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(Stream stream, IEnumerable<ReadCellOption> options)
+        public static Dictionary<string, int> ExcelHeaderByOptions<T>(Stream stream, IEnumerable<ReadCellOption> options)
         {
             using var notCloseStream = new NPOINotCloseStream(stream);
-            return GetExcelHeaderByOptions<T>(notCloseStream.GetWorkBook(), options);
+            return ExcelHeaderByOptions<T>(notCloseStream.GetWorkBook(), options);
         }
         /// <summary>
         /// 根据传入配置 获取表头及其index
         /// </summary>
         /// <param name="workbook">excel workbook</param>
         /// <param name="options">导出配置</param>
-        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(IWorkbook workbook, ReadConfig<T> options)
+        public static Dictionary<string, int> ExcelHeaderByOptions<T>(IWorkbook workbook, ReadConfig<T> options)
         {
             var sheet = workbook.GetSheetAt(Zero);
-            return GetExcelHeaderByOptions(sheet, options);
+            return ExcelHeaderByOptions(sheet, options);
         }
         /// <summary>
         /// 根据传入配置 获取表头及其index
         /// </summary>
         /// <param name="workbook">excel workbook</param>
         /// <param name="options">导出配置</param>
-        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(IWorkbook workbook, IEnumerable<ReadCellOption> options)
+        public static Dictionary<string, int> ExcelHeaderByOptions<T>(IWorkbook workbook, IEnumerable<ReadCellOption> options)
         {
             var sheet = workbook.GetSheetAt(Zero);
-            return GetExcelHeaderByOptions<T>(sheet, options);
+            return ExcelHeaderByOptions<T>(sheet, options);
         }
         /// <summary>
         /// 根据传入配置 获取表头及其index
         /// </summary>
         /// <param name="sheet">工作簿</param>
         /// <param name="options">导出配置</param>
-        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(ISheet sheet, ReadConfig<T> options)
+        public static Dictionary<string, int> ExcelHeaderByOptions<T>(ISheet sheet, ReadConfig<T> options)
         {
-            return GetExcelHeaderByOptions<T>(sheet, options.ReadOption);
+            return ExcelHeaderByOptions<T>(sheet, options.ReadOption);
         }
         /// <summary>
         /// 根据传入配置 获取表头及其index
         /// </summary>
         /// <param name="sheet">工作簿</param>
         /// <param name="options">导出配置</param>
-        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(ISheet sheet, IEnumerable<ReadCellOption> options)
+        public static Dictionary<string, int> ExcelHeaderByOptions<T>(ISheet sheet, IEnumerable<ReadCellOption> options)
         {
             // 获取对应设置的 表头 以及其 column
             var header = sheet.GetRow(Zero).Cells
@@ -206,80 +206,80 @@ namespace Collapsenav.Net.Tool.Excel
         /// </summary>
         /// <param name="filepath">文件路径</param>
         /// <param name="options">导出配置</param>
-        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(string filepath, ReadConfig<T> options)
+        public static async Task<string[][]> ExcelDataByOptionsAsync<T>(string filepath, ReadConfig<T> options)
         {
             filepath.IsXls();
             using var fs = new FileStream(filepath, FileMode.Open);
-            return await GetExcelDataByOptionsAsync(fs, options);
+            return await ExcelDataByOptionsAsync(fs, options);
         }
         /// <summary>
         /// 根据配置 获取表格数据
         /// </summary>
         /// <param name="filepath">文件路径</param>
         /// <param name="options">导出配置</param>
-        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(string filepath, IEnumerable<ReadCellOption> options)
+        public static async Task<string[][]> ExcelDataByOptionsAsync<T>(string filepath, IEnumerable<ReadCellOption> options)
         {
             filepath.IsXls();
             using var fs = new FileStream(filepath, FileMode.Open);
-            return await GetExcelDataByOptionsAsync<T>(fs, options);
+            return await ExcelDataByOptionsAsync<T>(fs, options);
         }
         /// <summary>
         /// 根据配置 获取表格数据
         /// </summary>
         /// <param name="stream">文件流</param>
         /// <param name="options">导出配置</param>
-        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(Stream stream, ReadConfig<T> options)
+        public static async Task<string[][]> ExcelDataByOptionsAsync<T>(Stream stream, ReadConfig<T> options)
         {
             using var notCloseStream = new NPOINotCloseStream(stream);
-            return await GetExcelDataByOptionsAsync(notCloseStream.GetWorkBook(), options);
+            return await ExcelDataByOptionsAsync(notCloseStream.GetWorkBook(), options);
         }
         /// <summary>
         /// 根据配置 获取表格数据
         /// </summary>
         /// <param name="stream">文件流</param>
         /// <param name="options">导出配置</param>
-        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(Stream stream, IEnumerable<ReadCellOption> options)
+        public static async Task<string[][]> ExcelDataByOptionsAsync<T>(Stream stream, IEnumerable<ReadCellOption> options)
         {
             using var notCloseStream = new NPOINotCloseStream(stream);
-            return await GetExcelDataByOptionsAsync<T>(notCloseStream.GetWorkBook(), options);
+            return await ExcelDataByOptionsAsync<T>(notCloseStream.GetWorkBook(), options);
         }
         /// <summary>
         /// 根据配置 获取表格数据
         /// </summary>
         /// <param name="workbook">excel workbook</param>
         /// <param name="options">导出配置</param>
-        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(IWorkbook workbook, ReadConfig<T> options)
+        public static async Task<string[][]> ExcelDataByOptionsAsync<T>(IWorkbook workbook, ReadConfig<T> options)
         {
             var sheet = workbook.GetSheetAt(Zero);
-            return await GetExcelDataByOptionsAsync(sheet, options);
+            return await ExcelDataByOptionsAsync(sheet, options);
         }
         /// <summary>
         /// 根据配置 获取表格数据
         /// </summary>
         /// <param name="workbook">excel workbook</param>
         /// <param name="options">导出配置</param>
-        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(IWorkbook workbook, IEnumerable<ReadCellOption> options)
+        public static async Task<string[][]> ExcelDataByOptionsAsync<T>(IWorkbook workbook, IEnumerable<ReadCellOption> options)
         {
             var sheet = workbook.GetSheetAt(Zero);
-            return await GetExcelDataByOptionsAsync<T>(sheet, options);
+            return await ExcelDataByOptionsAsync<T>(sheet, options);
         }
         /// <summary>
         /// 根据配置 获取表格数据
         /// </summary>
         /// <param name="sheet">工作簿</param>
         /// <param name="options">导出配置</param>
-        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(ISheet sheet, ReadConfig<T> options)
+        public static async Task<string[][]> ExcelDataByOptionsAsync<T>(ISheet sheet, ReadConfig<T> options)
         {
-            return await GetExcelDataByOptionsAsync<T>(sheet, options.ReadOption);
+            return await ExcelDataByOptionsAsync<T>(sheet, options.ReadOption);
         }
         /// <summary>
         /// 根据配置 获取表格数据
         /// </summary>
         /// <param name="sheet">工作簿</param>
         /// <param name="options">导出配置</param>
-        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(ISheet sheet, IEnumerable<ReadCellOption> options)
+        public static async Task<string[][]> ExcelDataByOptionsAsync<T>(ISheet sheet, IEnumerable<ReadCellOption> options)
         {
-            var header = GetExcelHeaderByOptions<T>(sheet, options);
+            var header = ExcelHeaderByOptions<T>(sheet, options);
             // var resultHeader = header.Select(item => item.Key).ToList();
 
             int rowCount = sheet.LastRowNum + 1;
@@ -387,8 +387,8 @@ namespace Collapsenav.Net.Tool.Excel
         public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(ISheet sheet, IEnumerable<ReadCellOption> options, Func<T, T> init)
         {
             // 合并 FieldOption 和 DefaultOption
-            var header = GetExcelHeaderByOptions<T>(sheet, options);
-            var excelData = await GetExcelDataByOptionsAsync<T>(sheet, options);
+            var header = ExcelHeaderByOptions<T>(sheet, options);
+            var excelData = await ExcelDataByOptionsAsync<T>(sheet, options);
             return await ExcelReadTool.ExcelToEntityAsync(header, excelData, options, init);
         }
         #endregion

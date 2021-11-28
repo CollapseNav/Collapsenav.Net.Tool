@@ -13,6 +13,17 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 导出excel
         /// </summary>
+        /// <param name="option">导出配置</param>
+        /// <param name="data">指定数据</param>
+        /// <param name="exportType">导出类型</param>
+        public static async Task<Stream> ExportAsync<T>(ExportConfig<T> option, IEnumerable<T> data = null, ExportType exportType = ExportType.All)
+        {
+            var stream = new MemoryStream();
+            return await ExportAsync(stream, option, data, exportType);
+        }
+        /// <summary>
+        /// 导出excel
+        /// </summary>
         /// <param name="filePath">文件路径</param>
         /// <param name="option">导出配置</param>
         /// <param name="data">指定数据</param>
@@ -53,6 +64,15 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 导出表头
         /// </summary>
+        /// <param name="option">导出配置</param>
+        public static async Task<Stream> ExportHeaderAsync<T>(ExportConfig<T> option)
+        {
+            var stream = new MemoryStream();
+            return await ExportHeaderAsync(stream, option);
+        }
+        /// <summary>
+        /// 导出表头
+        /// </summary>
         /// <param name="filePath">文件路径</param>
         /// <param name="option">导出配置</param>
         public static async Task<Stream> ExportHeaderAsync<T>(string filePath, ExportConfig<T> option)
@@ -78,6 +98,16 @@ namespace Collapsenav.Net.Tool.Excel
             return stream;
         }
 
+        /// <summary>
+        /// 导出数据
+        /// </summary>
+        /// <param name="data">指定数据</param>
+        /// <param name="option">导出配置</param>
+        public static async Task<Stream> ExportDataAsync<T>(ExportConfig<T> option, IEnumerable<T> data = null)
+        {
+            var stream = new MemoryStream();
+            return await ExportDataAsync(stream, option, data);
+        }
         /// <summary>
         /// 导出数据
         /// </summary>

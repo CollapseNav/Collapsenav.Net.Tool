@@ -14,6 +14,16 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 导出excel
         /// </summary>
+        /// <param name="option">导出配置</param>
+        /// <param name="data">指定数据</param>
+        public static async Task<Stream> ExportAsync<T>(ExportConfig<T> option, IEnumerable<T> data = null)
+        {
+            var stream = new MemoryStream();
+            return await ExportAsync(stream, option, data);
+        }
+        /// <summary>
+        /// 导出excel
+        /// </summary>
         /// <param name="filePath">文件路径</param>
         /// <param name="option">导出配置</param>
         /// <param name="data">指定数据</param>
@@ -35,20 +45,22 @@ namespace Collapsenav.Net.Tool.Excel
             var notCloseStream = new NPOINotCloseStream(stream);
             await Task.Run(() =>
             {
+                var row = sheet.CreateRow(0);
                 // 加表头
                 foreach (var (head, index) in option.Header.Select((item, i) => (item, i)))
                 {
-                    var cell = sheet.CreateRow(0).CreateCell(index);
+                    var cell = row.CreateCell(index);
                     cell.SetCellValue(head);
                 }
 
                 // 加数据
                 foreach (var cellData in data ?? option.Data)
                 {
-                    foreach (var (option, index) in option.FieldOption.Select((item, i) => (item, i)))
+                    row = sheet.CreateRow(sheet.LastRowNum + 1);
+                    foreach (var (item, index) in option.FieldOption.Select((item, i) => (item, i)))
                     {
-                        var cell = sheet.CreateRow(sheet.LastRowNum + 1).CreateCell(index);
-                        cell.SetCellValue(option.Action(cellData)?.ToString());
+                        var cell = row.CreateCell(index);
+                        cell.SetCellValue(item.Action(cellData)?.ToString());
                     }
                 }
                 workbook.Write(notCloseStream);
@@ -57,6 +69,15 @@ namespace Collapsenav.Net.Tool.Excel
             return notCloseStream;
         }
 
+        /// <summary>
+        /// 导出表头
+        /// </summary>
+        /// <param name="option">导出配置</param>
+        public static async Task<Stream> ExportHeaderAsync<T>(ExportConfig<T> option)
+        {
+            var stream = new MemoryStream();
+            return await ExportHeaderAsync(stream, option);
+        }
         /// <summary>
         /// 导出表头
         /// </summary>
@@ -79,10 +100,11 @@ namespace Collapsenav.Net.Tool.Excel
             var notCloseStream = new NPOINotCloseStream(stream);
             await Task.Run(() =>
             {
+                var row = sheet.CreateRow(0);
                 // 加表头
                 foreach (var (head, index) in option.Header.Select((item, i) => (item, i)))
                 {
-                    var cell = sheet.CreateRow(0).CreateCell(index);
+                    var cell = row.CreateCell(index);
                     cell.SetCellValue(head);
                 }
                 workbook.Write(notCloseStream);
@@ -91,6 +113,16 @@ namespace Collapsenav.Net.Tool.Excel
             return notCloseStream;
         }
 
+        /// <summary>
+        /// 导出数据
+        /// </summary>
+        /// <param name="option">导出配置</param>
+        /// <param name="data">指定数据</param>
+        public static async Task<Stream> ExportDataAsync<T>(ExportConfig<T> option, IEnumerable<T> data = null)
+        {
+            var stream = new MemoryStream();
+            return await ExportDataAsync(stream, option, data);
+        }
         /// <summary>
         /// 导出数据
         /// </summary>
@@ -118,10 +150,11 @@ namespace Collapsenav.Net.Tool.Excel
                 // 加数据
                 foreach (var cellData in data ?? option.Data)
                 {
-                    foreach (var (option, index) in option.FieldOption.Select((item, i) => (item, i)))
+                    var row = sheet.CreateRow(sheet.LastRowNum == 0 ? sheet.LastRowNum : sheet.LastRowNum + 1);
+                    foreach (var (item, index) in option.FieldOption.Select((item, i) => (item, i)))
                     {
-                        var cell = sheet.CreateRow(sheet.LastRowNum + 1).CreateCell(index);
-                        cell.SetCellValue(option.Action(cellData)?.ToString());
+                        var cell = row.CreateCell(index);
+                        cell.SetCellValue(item.Action(cellData)?.ToString());
                     }
                 }
                 workbook.Write(notCloseStream);

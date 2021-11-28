@@ -13,22 +13,22 @@ namespace Collapsenav.Net.Tool.Excel.Test
         {
             var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
 
-            var headers = EPPlusExcelReadTool.GetExcelHeader($@"./TestExcel.xlsx");
+            var headers = EPPlusExcelReadTool.ExcelHeader($@"./TestExcel.xlsx");
             Assert.True(headers.SequenceEqual(realHeader));
 
             using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open);
-            headers = EPPlusExcelReadTool.GetExcelHeader(fs);
+            headers = EPPlusExcelReadTool.ExcelHeader(fs);
             Assert.True(headers.SequenceEqual(realHeader));
         }
 
         [Fact]
         public async Task DataTest()
         {
-            var datas = await EPPlusExcelReadTool.GetExcelDataAsync($@"./TestExcel.xlsx");
+            var datas = await EPPlusExcelReadTool.ExcelDataAsync($@"./TestExcel.xlsx");
             Assert.True(datas?.Count() == 3000);
 
             using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open);
-            datas = await EPPlusExcelReadTool.GetExcelDataAsync(fs);
+            datas = await EPPlusExcelReadTool.ExcelDataAsync(fs);
             Assert.True(datas?.Count() == 3000);
         }
 
@@ -41,11 +41,11 @@ namespace Collapsenav.Net.Tool.Excel.Test
             .Require("Field0", item => item.Field0)
             .Add("Field1", item => item.Field1)
             ;
-            var headers = config.GetEPPlusExcelHeaderByOptions($@"./TestExcel.xlsx");
+            var headers = config.EPPlusExcelHeaderByOptions($@"./TestExcel.xlsx");
             Assert.True(headers.Select(item => item.Key).SequenceEqual(realHeader));
 
             using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open);
-            headers = config.GetEPPlusExcelHeaderByOptions(fs);
+            headers = config.EPPlusExcelHeaderByOptions(fs);
             Assert.True(headers.Select(item => item.Key).SequenceEqual(realHeader));
         }
 
@@ -64,12 +64,12 @@ namespace Collapsenav.Net.Tool.Excel.Test
             })
             ;
 
-            var datas = await config.GetEPPlusExcelDataByOptionsAsync($@"./TestExcel.xlsx");
+            var datas = await config.EPPlusExcelDataByOptionsAsync($@"./TestExcel.xlsx");
             Assert.True(datas?.Length == 3000);
 
 
             using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open);
-            datas = await config.GetEPPlusExcelDataByOptionsAsync(fs);
+            datas = await config.EPPlusExcelDataByOptionsAsync(fs);
             Assert.True(datas?.Length == 3000);
         }
 
@@ -97,7 +97,7 @@ namespace Collapsenav.Net.Tool.Excel.Test
         }
 
         [Fact]
-        public async Task ExportHeaderTest()
+        public async Task ExportTest()
         {
             using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open);
             var config = new ReadConfig<ExcelTestDto>()
