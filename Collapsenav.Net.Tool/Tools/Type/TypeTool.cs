@@ -104,8 +104,7 @@ namespace Collapsenav.Net.Tool
         /// </summary>
         public static IEnumerable<string> BuildInTypePropNames(Type type)
         {
-            var props = type.GetProperties();
-            var nameProps = props.Where(item => IsBuildInType(item.PropertyType));
+            var nameProps = BuildInTypeProps(type);
             return nameProps.Select(item => item.Name);
         }
         /// <summary>
@@ -149,7 +148,7 @@ namespace Collapsenav.Net.Tool
         /// </summary>
         public static IEnumerable<PropertyInfo> BuildInTypeProps<T>()
         {
-            return typeof(T).GetProperties().Where(item => IsBuildInType(item.PropertyType));
+            return BuildInTypeProps(typeof(T));
         }
 
         /// <summary>
@@ -171,6 +170,17 @@ namespace Collapsenav.Net.Tool
         public static Dictionary<PropertyInfo, E> AttrValues<T, E>() where E : Attribute
         {
             var props = BuildInTypeProps<T>().Where(item => item.CustomAttributes.Any(attr => attr.AttributeType == typeof(E)));
+            var propData = props.Select(item => new KeyValuePair<PropertyInfo, E>(item, item.GetCustomAttribute<E>()))
+            .ToDictionary(item => item.Key, item => item.Value);
+            return propData;
+        }
+
+        /// <summary>
+        /// 获取T中存在E的attribute的属性及attribute值
+        /// </summary>
+        public static Dictionary<PropertyInfo, E> AttrValues<E>(Type T) where E : Attribute
+        {
+            var props = BuildInTypeProps(T).Where(item => item.CustomAttributes.Any(attr => attr.AttributeType == typeof(E)));
             var propData = props.Select(item => new KeyValuePair<PropertyInfo, E>(item, item.GetCustomAttribute<E>()))
             .ToDictionary(item => item.Key, item => item.Value);
             return propData;
