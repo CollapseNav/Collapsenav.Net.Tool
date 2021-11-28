@@ -9,6 +9,16 @@ namespace Collapsenav.Net.Tool
 {
     public partial class StringTool
     {
+        /// <summary>
+        /// 数字转中文
+        /// </summary>
+        public static string ToChinese(int num)
+        {
+            return ToChinese(num.ToString());
+        }
+        /// <summary>
+        /// 数字转中文
+        /// </summary>
         public static string ToChinese(string num)
         {
             string[] nums = { "零", "一", "二", "三", "四", "五", "六", "七", "八", "九" };
@@ -19,7 +29,6 @@ namespace Collapsenav.Net.Tool
             foreach (var (ch, index) in numChar.Select((nchar, i) => (nchar - 48, i)))
             {
                 sb.Append(nums[ch]);
-                // Console.WriteLine(curUnits[index]);
                 if (ch == 0 && !"亿万".Contains(curUnits[index]))
                     continue;
                 sb.Append(curUnits[index]);
@@ -34,22 +43,24 @@ namespace Collapsenav.Net.Tool
         /// <summary>
         /// 检查是否邮箱格式
         /// </summary>
-        public static bool IsEmail(string email, bool check = false)
+        /// <param name="email">邮箱</param>
+        public static bool IsEmail(string email)
         {
             if (email.IsNull())
                 return false;
-            if (!check)
-                return Regex.IsMatch(email, "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+.[a-zA-Z0-9]+$");
-            return false;
+            return Regex.IsMatch(email, "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+.[a-zA-Z0-9]+$");
         }
 
         /// <summary>
         /// 检查是否 Url 格式
         /// </summary>
+        /// <param name="url">url</param>
+        /// <param name="check">检查能否ping通</param>
+        /// <returns></returns>
         public static bool IsUrl(string url, bool check = false)
         {
             // TODO 日后写正则判断...
-            var isHttp = url.StartsWith("https://", "http://");
+            var isHttp = url.HasStartsWith("https://", "http://");
             if (!isHttp) return false;
             // ping测试
             if (check && !url.GetDomain().CanPing()) return false;
@@ -57,7 +68,7 @@ namespace Collapsenav.Net.Tool
         }
 
         /// <summary>
-        /// 能ping通
+        /// 能否ping通
         /// </summary>
         public static bool CanPing(string domain, int timeout = 200)
         {
@@ -81,7 +92,12 @@ namespace Collapsenav.Net.Tool
             // TODO 还需要添加其他判断
             return string.Empty;
         }
-
+        /// <summary>
+        /// 拼了
+        /// </summary>
+        /// <param name="query">源集合</param>
+        /// <param name="separate">分隔符</param>
+        /// <param name="getStr">针对复杂类型的委托</param>
         public static string Join<T>(IEnumerable<T> query, string separate, Func<T, object> getStr = null)
         {
             return string.Join(separate, query.Select(getStr ?? (item => item.ToString())));

@@ -6,6 +6,9 @@ namespace Collapsenav.Net.Tool.Excel
 {
     public class ExcelTool
     {
+        /// <summary>
+        /// 是否 xls 文件
+        /// </summary>
         public static bool IsXls(string filepath)
         {
             if (!File.Exists(filepath))

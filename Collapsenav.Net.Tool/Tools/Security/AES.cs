@@ -16,6 +16,8 @@ namespace Collapsenav.Net.Tool
         /// <summary>
         /// 解密
         /// </summary>
+        /// <param name="secmsg">密文</param>
+        /// <param name="key">key</param>
         public static string Decrypt(string secmsg, string key = DefaultKey)
         {
             var decryptKey = GetAesBytes(key);
@@ -32,6 +34,10 @@ namespace Collapsenav.Net.Tool
         /// <summary>
         /// 加密
         /// </summary>
+        /// <param name="msg">原文</param>
+        /// <param name="key">key</param>
+        /// <param name="iv">向量</param>
+        /// <param name="level">加密级别</param>
         public static string Encrypt(string msg, string key = DefaultKey, string iv = DefaultIV, int level = 32)
         {
             var encryptMsg = Encoding.UTF8.GetBytes(msg);

@@ -31,6 +31,14 @@ namespace Collapsenav.Net.Tool.Excel
         {
             data ??= new List<T>();
             var config = new ExportConfig<T>(data);
+            // 根据 T 中设置的 ExcelExportAttribute 创建导出配置
+            var attrData = TypeTool.AttrValues<T, ExcelExportAttribute>();
+            if (attrData != null)
+            {
+                foreach (var prop in attrData)
+                    config.Add(prop.Value.ExcelField, item => item.GetValue(prop.Key.Name));
+                return config;
+            }
             foreach (var propName in typeof(T).BuildInTypePropNames())
                 config.Add(propName, item => item.GetValue(propName));
             return config;
