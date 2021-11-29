@@ -12,10 +12,9 @@
   - [x] 为复杂类型添加自定义Equal条件
 - [x] [`SpliteCollection` 分割为指定大小的集合](#splitecollection)
 - [x] [`WhereIf` 条件查询](#whereif)
-- [x] `Unique` 去重
-- [x] `SequenceEqual` 判断集合相等
-- [ ] `RemoveRepeat` 移除重复
-- [ ] 打乱顺序
+- [x] [`Unique` 去重](#unique)
+- [x] [`SequenceEqual` 判断集合相等](#sequenceequal)
+- [ ] `Shuffle` 打乱顺序
 - [ ] ...
 
 ## How To Use
@@ -161,6 +160,23 @@ userInfos.SequenceEqual(userInfosNotCopy); // false
 userInfos.SequenceEqual(userInfosNotCopy, (x, y) => x.UserName == y.UserName); // true
 userInfos.SequenceEqual(userInfosNotCopy, item => item.Age.GetHashCode()); // false
 ```
+
+### Shuffle
+
+打乱顺序, 暂时基于 `Random` 实现
+
+后期可能会考虑更换实现方式
+
+```csharp
+var nums = new[] { 1, 2, 3, 4, 5 };
+nums = nums.Shuffle();
+// 可能变成了 2,4,5,1,3 或者其他顺序
+```
+
+
+
+
+
 
 
 

@@ -42,3 +42,22 @@ now.ToMonth();
 now.To(DateLevel.Year);
 ```
 
+### DefaultString
+
+返回常用的时间格式字符串
+
+后面可能会尝试添加更多的格式
+
+```csharp
+DateTime date = new(2021, 11, 11, 11, 11, 11);
+date.ToDefaultDateString(); // 2021-11-11
+date.ToDefaultTimeString(); // 2021-11-11 11:11:11
+date.ToDefaultDateString("WTF"); // 2021WTF11WTF11
+date.ToDefaultTimeString("WTF"); // 2021WTF11WTF11 11:11:11
+```
+
+
+
+
+
+
