@@ -146,5 +146,16 @@ namespace Collapsenav.Net.Tool.Test
             string notDomain = "htasdafsgzzcvnxfxttps://www.github.com";
             Assert.False(notDomain.GetDomain() == "www.github.com");
         }
+
+        [Fact]
+        public void AutoMaskTest()
+        {
+            string origin = "1";
+            var data = origin.AutoMask();
+            Assert.True(data == "#*1");
+            origin = "CollapseNav.Net.Tool";
+            data = origin.AutoMask();
+            Assert.True(data == "Col*ool");
+        }
     }
 }
