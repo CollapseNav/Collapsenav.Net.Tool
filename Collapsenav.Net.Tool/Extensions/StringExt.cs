@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Collapsenav.Net.Tool
 {
@@ -133,6 +134,23 @@ namespace Collapsenav.Net.Tool
         public static string ToString(this char input, int count)
         {
             return new string(input, count);
+        }
+
+        /// <summary>
+        /// 自动遮罩(偷懒)
+        /// </summary>
+        public static string AutoMask(this string origin, string mask = "*")
+        {
+            return StringTool.AutoMask(origin, mask);
+        }
+
+        /// <summary>
+        /// 字符串转为byte[] 默认 utf8
+        /// </summary>
+        public static byte[] ToBytes(this string origin, Encoding encode = null)
+        {
+            encode ??= Encoding.UTF8;
+            return encode.GetBytes(origin);
         }
     }
 }
