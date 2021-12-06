@@ -71,14 +71,14 @@ namespace Collapsenav.Net.Tool.Test
             Assert.True(File.Exists(toFile));
             using var toFs1 = new FileStream(toFile, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read);
             Assert.True(fs.Length == toFs1.Length);
-            Assert.True(toFs1.Md5En() == fs.Md5En());
+            Assert.True(toFs1.Sha256En() == fs.Sha256En());
             toFs1.Dispose();
             File.Delete(toFile);
 
             await fs.SaveToAsync(toFile);
             using var toFs2 = new FileStream(toFile, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read);
             Assert.True(fs.Length == toFs2.Length);
-            Assert.True(toFs2.Md5En() == fs.Md5En());
+            Assert.True(toFs2.Sha1En() == fs.Sha1En());
             toFs2.Dispose();
             File.Delete(toFile);
 
@@ -91,9 +91,8 @@ namespace Collapsenav.Net.Tool.Test
             toFs3.Dispose();
             File.Delete(toFile);
 
-
             strBytes = originStr.ToBytes();
-            strBytes.SaveTo(toFile);
+            await strBytes.SaveToAsync(toFile);
             Assert.True(File.Exists(toFile));
             using var toFs4 = new FileStream(toFile, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read);
             Assert.True(strBytes.Length == toFs4.Length);

@@ -98,6 +98,15 @@ namespace Collapsenav.Net.Tool.Test
         }
 
         [Fact]
+        public void BuildInPropsTest()
+        {
+            var props = typeof(PropTest1).BuildInTypePropNames();
+            Assert.True(props.Count() == 3);
+            props = typeof(PropTest0).BuildInTypePropNames();
+            Assert.True(props.Count() == 1);
+        }
+
+        [Fact]
         public void GetAttrTest()
         {
             var attrValues = typeof(PropTest1).AttrValues<UnitTestAttribute>();
