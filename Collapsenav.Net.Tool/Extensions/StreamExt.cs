@@ -63,6 +63,7 @@ namespace Collapsenav.Net.Tool
         /// </summary>
         public static byte[] ToBytes(this Stream stream)
         {
+            stream.SeekToOrigin();
             byte[] bytes = new byte[stream.Length];
             stream.Read(bytes, 0, bytes.Length);
             stream.SeekToOrigin();
@@ -73,6 +74,7 @@ namespace Collapsenav.Net.Tool
         /// </summary>
         public static async Task<byte[]> ToBytesAsync(this Stream stream)
         {
+            stream.SeekToOrigin();
             byte[] bytes = new byte[stream.Length];
             await stream.ReadAsync(bytes, 0, bytes.Length);
             stream.SeekToOrigin();
@@ -101,6 +103,7 @@ namespace Collapsenav.Net.Tool
         /// </summary>
         public static void SaveTo(this Stream stream, string path)
         {
+            stream.SeekToOrigin();
             using var fs = new FileStream(path, FileMode.CreateNew);
             stream.CopyTo(fs);
             stream.SeekToOrigin();
@@ -118,6 +121,7 @@ namespace Collapsenav.Net.Tool
         /// </summary>
         public static async Task SaveToAsync(this Stream stream, string path)
         {
+            stream.SeekToOrigin();
             using var fs = new FileStream(path, FileMode.CreateNew);
             await stream.CopyToAsync(fs);
             stream.SeekToOrigin();

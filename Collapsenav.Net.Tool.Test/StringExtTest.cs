@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Xunit;
 
@@ -91,6 +92,20 @@ namespace Collapsenav.Net.Tool.Test
             Assert.False(StringExt.HasStartsWith(exampleString, "2233"));
             Assert.True(exampleString.AllEndsWith("333333", "33", "3"));
             Assert.False(StringExt.HasEndsWith(exampleString, "2333333"));
+
+            string[] strs = new[] { "2333", "233333333333333", "2332" };
+            Assert.True(strs.HasStartsWith("233"));
+            Assert.True(strs.HasEndsWith("33"));
+            Assert.False(strs.AllStartsWith("2333"));
+            Assert.False(strs.AllEndsWith("33"));
+
+            strs = new[] { "ABCD", "AbcD", "abcd" };
+            Assert.True(strs.HasStartsWith("aBcd", true));
+            Assert.False(strs.HasStartsWith("aBcd"));
+            Assert.True(strs.AllStartsWith("aBcd", true));
+            Assert.True(strs.HasEndsWith("aBcd", true));
+            Assert.False(strs.HasEndsWith("aBcd"));
+            Assert.True(strs.AllEndsWith("aBcd", true));
         }
 
         [Fact]
@@ -104,6 +119,10 @@ namespace Collapsenav.Net.Tool.Test
             Assert.True(whiteSpace.IsEmpty());
             Assert.False(empty.NotEmpty());
             Assert.False(whiteSpace.NotNull());
+
+            Assert.True(empty.IsNull("233") == "233");
+            Assert.False(notEmpty.IsEmpty("233") == "233");
+            Assert.True(notEmpty.IsEmpty("233") == "NotEmpty");
         }
 
         [Fact]
@@ -156,6 +175,25 @@ namespace Collapsenav.Net.Tool.Test
             origin = "CollapseNav.Net.Tool";
             data = origin.AutoMask();
             Assert.True(data == "Col*ool");
+        }
+
+        [Fact]
+        public void Base64ImageTest()
+        {
+            var imagePath = "./vscode.png";
+            using var fs = new FileStream(imagePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var base64String = fs.ImageToBase64();
+            var stream = base64String.Base64ImageToStream();
+            Assert.True(stream.Sha1En() == fs.Sha1En());
+            Assert.True(imagePath.ImageToBase64() == base64String);
+        }
+
+        [Fact]
+        public void TakeFirstLastTest()
+        {
+            string str = "12345678987654321";
+            Assert.True(str.First(5) == "12345");
+            Assert.True(str.Last(5) == "54321");
         }
     }
 }

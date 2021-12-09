@@ -148,9 +148,6 @@ namespace Collapsenav.Net.Tool.Test
             strMergeList = strs.Merge(str, true);
             Assert.True(strMergeList.Join("") == uniqueString);
 
-
-
-
             IEnumerable<int[]> nums = new List<int[]>()
             {
                 new[] {1,2,3},
@@ -163,7 +160,6 @@ namespace Collapsenav.Net.Tool.Test
             Assert.True(numMergeList.SequenceEqual(mergeInts));
             numMergeList = nums.Merge((x, y) => x == y);
             Assert.True(numMergeList.SequenceEqual(mergeInts));
-
 
             numMergeList = nums.Take(2).Merge(nums.TakeLast(2));
             Assert.True(numMergeList.SequenceEqual(mergeInts));
@@ -211,6 +207,62 @@ namespace Collapsenav.Net.Tool.Test
             var oNums = new[] { 1, 2, 3, 4, 5 };
             Assert.True(nums.SequenceEqual(oNums));
             Assert.False(nums.Shuffle().SequenceEqual(oNums));
+        }
+
+        [Fact]
+        public void IEnumerableAddRangeTest()
+        {
+            IEnumerable<int> nums = new[] { 1, 2, 3 };
+            var enums = nums.AddRange(4, 5);
+            Assert.True(enums.Count() == 5);
+            enums = nums.AddRange(new[] { 4, 5, 6 });
+            Assert.True(enums.Count() == 6);
+            enums = nums.AddRange((x, y) => x == y, 3, 4, 5);
+            Assert.True(enums.Count() == 5);
+            enums = nums.AddRange(x => x.GetHashCode(), 2, 3, 4);
+            Assert.True(enums.Count() == 4);
+
+            enums = nums.AddRange(new[] { 4, 5 }.AsEnumerable());
+            Assert.True(enums.Count() == 5);
+            enums = nums.AddRange(new[] { 4, 5, 6 }.AsEnumerable());
+            Assert.True(enums.Count() == 6);
+            enums = nums.AddRange((x, y) => x == y, new[] { 3, 4, 5 }.AsEnumerable());
+            Assert.True(enums.Count() == 5);
+            enums = nums.AddRange(x => x.GetHashCode(), new[] { 2, 3, 4 }.AsEnumerable());
+            Assert.True(enums.Count() == 4);
+        }
+
+        [Fact]
+        public void ICollectionAddRangeTest()
+        {
+            ICollection<int> nums = new List<int> { 1, 2, 3 };
+            nums.AddRange(4, 5, 6);
+            Assert.True(nums.Count == 6);
+            nums.AddRange(new[] { 4, 5, 6 });
+            Assert.True(nums.Count == 9);
+            nums.AddRange((x, y) => x == y, 6, 7, 8);
+            Assert.True(nums.Count == 11);
+            nums.AddRange(x => x.GetHashCode(), 8, 9, 10);
+            Assert.True(nums.Count == 13);
+
+            nums.AddRange(new[] { 4, 5, 6 }.AsEnumerable());
+            Assert.True(nums.Count == 16);
+            nums.AddRange((x, y) => x == y, new[] { 6, 7, 8 }.AsEnumerable());
+            Assert.True(nums.Count == 16);
+            nums.AddRange(x => x.GetHashCode(), new[] { 8, 9, 10 }.AsEnumerable());
+            Assert.True(nums.Count == 16);
+        }
+
+        [Fact]
+        public void ForEachTest()
+        {
+            var sum = 0;
+            int[] nums = new[] { 1, 2, 3 };
+            nums.ForEach(item => sum += item);
+            Assert.True(sum == 6);
+            sum = 0;
+            nums.ForEach(item => sum += item * item);
+            Assert.True(sum == 14);
         }
     }
 }
