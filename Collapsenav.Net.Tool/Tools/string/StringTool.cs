@@ -93,7 +93,7 @@ namespace Collapsenav.Net.Tool
             return string.Empty;
         }
         /// <summary>
-        /// 拼了
+        /// 拼!
         /// </summary>
         /// <param name="query">源集合</param>
         /// <param name="separate">分隔符</param>

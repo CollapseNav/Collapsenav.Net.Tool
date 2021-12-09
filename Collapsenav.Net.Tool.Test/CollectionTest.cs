@@ -148,9 +148,6 @@ namespace Collapsenav.Net.Tool.Test
             strMergeList = strs.Merge(str, true);
             Assert.True(strMergeList.Join("") == uniqueString);
 
-
-
-
             IEnumerable<int[]> nums = new List<int[]>()
             {
                 new[] {1,2,3},
@@ -163,7 +160,6 @@ namespace Collapsenav.Net.Tool.Test
             Assert.True(numMergeList.SequenceEqual(mergeInts));
             numMergeList = nums.Merge((x, y) => x == y);
             Assert.True(numMergeList.SequenceEqual(mergeInts));
-
 
             numMergeList = nums.Take(2).Merge(nums.TakeLast(2));
             Assert.True(numMergeList.SequenceEqual(mergeInts));
@@ -226,7 +222,6 @@ namespace Collapsenav.Net.Tool.Test
             enums = nums.AddRange(x => x.GetHashCode(), 2, 3, 4);
             Assert.True(enums.Count() == 4);
 
-
             enums = nums.AddRange(new[] { 4, 5 }.AsEnumerable());
             Assert.True(enums.Count() == 5);
             enums = nums.AddRange(new[] { 4, 5, 6 }.AsEnumerable());
@@ -249,7 +244,6 @@ namespace Collapsenav.Net.Tool.Test
             Assert.True(nums.Count == 11);
             nums.AddRange(x => x.GetHashCode(), 8, 9, 10);
             Assert.True(nums.Count == 13);
-
 
             nums.AddRange(new[] { 4, 5, 6 }.AsEnumerable());
             Assert.True(nums.Count == 16);

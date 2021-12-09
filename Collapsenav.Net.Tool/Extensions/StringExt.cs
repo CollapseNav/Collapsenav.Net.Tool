@@ -12,9 +12,17 @@ namespace Collapsenav.Net.Tool
         /// </summary>
         public static bool IsNull(this string str) => string.IsNullOrWhiteSpace(str);
         /// <summary>
+        /// 若空则返回value
+        /// </summary>
+        public static string IsNull(this string str, string value) => string.IsNullOrWhiteSpace(str) ? value : str;
+        /// <summary>
         /// 是空的
         /// </summary>
         public static bool IsEmpty(this string str) => string.IsNullOrWhiteSpace(str);
+        /// <summary>
+        /// 若空则返回value
+        /// </summary>
+        public static string IsEmpty(this string str, string value) => string.IsNullOrWhiteSpace(str) ? value : str;
         /// <summary>
         /// 没空
         /// </summary>
@@ -74,8 +82,12 @@ namespace Collapsenav.Net.Tool
         public static Guid? ToGuid(this string input) => Guid.TryParse(input, out Guid result) ? result : null;
         public static long? ToLong(this string input) => long.TryParse(input, out long result) ? result : null;
 
-
-
+        /// <summary>
+        /// 拼!
+        /// </summary>
+        /// <param name="query">源集合</param>
+        /// <param name="separate">分隔符</param>
+        /// <param name="getStr">针对复杂类型的委托</param>
         public static string Join<T>(this IEnumerable<T> query, string separate, Func<T, object> getStr = null)
         {
             return StringTool.Join(query, separate, getStr);
@@ -113,24 +125,6 @@ namespace Collapsenav.Net.Tool
             return StringTool.GetDomain(input);
         }
 
-        /// <summary>
-        /// 存在以啥啥啥开头
-        /// </summary>
-        public static bool HasStartsWith(this string input, params string[] filters) => filters.Any(item => input.StartsWith(item));
-        /// <summary>
-        /// 存在以啥啥啥结尾
-        /// </summary>
-        public static bool HasEndsWith(this string input, params string[] filters) => filters.Any(item => input.EndsWith(item));
-
-        /// <summary>
-        /// 全部以啥啥啥开头
-        /// </summary>
-        public static bool AllStartsWith(this string input, params string[] filters) => filters.All(item => input.StartsWith(item));
-        /// <summary>
-        /// 全部以啥啥啥结尾
-        /// </summary>
-        public static bool AllEndsWith(this string input, params string[] filters) => filters.All(item => input.EndsWith(item));
-
         public static string ToString(this char input, int count)
         {
             return new string(input, count);
@@ -151,6 +145,20 @@ namespace Collapsenav.Net.Tool
         {
             encode ??= Encoding.UTF8;
             return encode.GetBytes(origin);
+        }
+        /// <summary>
+        /// 从前取
+        /// </summary>
+        public static string First(this string origin, int len = 1)
+        {
+            return len > origin.Length ? origin : origin.Substring(0, len);
+        }
+        /// <summary>
+        /// 从后取
+        /// </summary>
+        public static string Last(this string origin, int len = 1)
+        {
+            return len > origin.Length ? origin : origin.Substring(origin.Length - len , len);
         }
     }
 }

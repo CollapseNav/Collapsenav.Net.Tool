@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Collapsenav.Net.Tool
 {
     public partial class CollectionTool
     {
-
         /// <summary>
         /// 向一个集合中添加多个对象
         /// </summary>
