@@ -20,6 +20,11 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Collapsenav.Net.Tool.Excel\Collapsenav.Net.Tool.Excel.csproj" />
-        <None Include="TestExcel.xlsx" CopyToPublishDirectory="Always"  CopyToOutputDirectory="Always"/>
+        <None Include="EPPlus-TestExcel.xlsx" CopyToPublishDirectory="Always"  CopyToOutputDirectory="Always"/>
+        <None Include="NPOI-TestExcel.xlsx" CopyToPublishDirectory="Always"  CopyToOutputDirectory="Always"/>
+        <None Include="EPPlus-DefaultExcel.xlsx" CopyToPublishDirectory="Always"  CopyToOutputDirectory="Always"/>
+        <None Include="NPOI-DefaultExcel.xlsx" CopyToPublishDirectory="Always"  CopyToOutputDirectory="Always"/>
+        <None Include="EPPlus-AttributeExcel.xlsx" CopyToPublishDirectory="Always"  CopyToOutputDirectory="Always"/>
+        <None Include="NPOI-AttributeExcel.xlsx" CopyToPublishDirectory="Always"  CopyToOutputDirectory="Always"/>
     </ItemGroup>
 </Project>

@@ -65,7 +65,10 @@ namespace Collapsenav.Net.Tool.Excel
                 }
                 workbook.Write(notCloseStream);
             });
-            notCloseStream.Seek(0, SeekOrigin.Begin);
+            // notCloseStream.Seek(0, SeekOrigin.Begin);
+            // notCloseStream.CopyTo(stream);
+            // notCloseStream.Seek(0, SeekOrigin.Begin);
+            await notCloseStream.SeekAndCopyToAsync(stream);
             return notCloseStream;
         }
 
@@ -109,7 +112,10 @@ namespace Collapsenav.Net.Tool.Excel
                 }
                 workbook.Write(notCloseStream);
             });
-            notCloseStream.Seek(0, SeekOrigin.Begin);
+            // notCloseStream.Seek(0, SeekOrigin.Begin);
+            // notCloseStream.CopyTo(stream);
+            // notCloseStream.Seek(0, SeekOrigin.Begin);
+            await notCloseStream.SeekAndCopyToAsync(stream);
             return notCloseStream;
         }
 
@@ -159,7 +165,10 @@ namespace Collapsenav.Net.Tool.Excel
                 }
                 workbook.Write(notCloseStream);
             });
-            notCloseStream.Seek(0, SeekOrigin.Begin);
+            // notCloseStream.Seek(0, SeekOrigin.Begin);
+            // notCloseStream.CopyTo(stream);
+            // notCloseStream.Seek(0, SeekOrigin.Begin);
+            await notCloseStream.SeekAndCopyToAsync(stream);
             return notCloseStream;
         }
 

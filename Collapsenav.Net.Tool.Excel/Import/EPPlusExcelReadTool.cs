@@ -176,7 +176,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="options">导出配置</param>
         public static Dictionary<string, int> ExcelHeaderByOptions<T>(ExcelWorksheet sheet, ReadConfig<T> options)
         {
-            return GetExcelHeaderByOptions<T>(sheet, options.ReadOption);
+            return GetExcelHeaderByOptions<T>(sheet, options.FieldOption);
         }
         /// <summary>
         /// 获取表头及其index
@@ -262,7 +262,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="options">导出配置</param>
         public async static Task<string[][]> ExcelDataByOptionsAsync<T>(ExcelWorksheet sheet, ReadConfig<T> options)
         {
-            return await GetExcelDataByOptionsAsync<T>(sheet, options.ReadOption);
+            return await GetExcelDataByOptionsAsync<T>(sheet, options.FieldOption);
         }
         /// <summary>
         /// 根据配置 获取表格数据
@@ -365,7 +365,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="options">导出配置</param>
         public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(ExcelWorksheet sheet, ReadConfig<T> options)
         {
-            return await ExcelToEntityAsync(sheet, options.ReadOption, options.Init);
+            return await ExcelToEntityAsync(sheet, options.FieldOption, options.Init);
         }
         /// <summary>
         /// 将表格数据转换为指定的数据实体

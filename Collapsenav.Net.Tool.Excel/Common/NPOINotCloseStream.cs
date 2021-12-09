@@ -13,6 +13,8 @@ namespace Collapsenav.Net.Tool.Excel
         public NPOINotCloseStream(Stream stream)
         {
             stream.CopyTo(this);
+            stream.Seek(0, SeekOrigin.Begin);
+            this.Seek(0, SeekOrigin.Begin);
         }
         public override void Close() { }
         public IWorkbook GetWorkBook()
