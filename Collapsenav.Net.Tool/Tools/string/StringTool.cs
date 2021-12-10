@@ -93,7 +93,7 @@ namespace Collapsenav.Net.Tool
             return string.Empty;
         }
         /// <summary>
-        /// 拼了
+        /// 拼!
         /// </summary>
         /// <param name="query">源集合</param>
         /// <param name="separate">分隔符</param>
@@ -101,6 +101,25 @@ namespace Collapsenav.Net.Tool
         public static string Join<T>(IEnumerable<T> query, string separate, Func<T, object> getStr = null)
         {
             return string.Join(separate, query.Select(getStr ?? (item => item.ToString())));
+        }
+
+        /// <summary>
+        /// 自动遮罩(偷懒)
+        /// </summary>
+        public static string AutoMask(string origin, string mask = "*")
+        {
+            // TODO 邮箱,手机,地址,网址,账号等可能需要特定的遮罩
+            if (origin.Trim().IsEmpty())
+                return "***";
+            if (origin.Length <= 6)
+            {
+                origin = origin.PadLeft(6, '#');
+                return Regex.Replace(origin, "(.{1}).*(.{1})", $"$1{mask}$2");
+            }
+            else
+            {
+                return Regex.Replace(origin, "(.{3}).*(.{3})", $"$1{mask}$2");
+            }
         }
     }
 }

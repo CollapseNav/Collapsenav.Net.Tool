@@ -4,9 +4,25 @@ using Xunit;
 
 namespace Collapsenav.Net.Tool.Test
 {
+    [System.AttributeUsage(System.AttributeTargets.All, Inherited = false, AllowMultiple = false)]
+    sealed class UnitTestAttribute : System.Attribute
+    {
+        readonly string _field;
+
+        public UnitTestAttribute(string field)
+        {
+            _field = field;
+        }
+        public string Field
+        {
+            get { return _field; }
+        }
+    }
     public class PropTest1
     {
+        [UnitTest("123")]
         public string Prop1 { get; set; }
+        [UnitTest("233")]
         public string Prop2 { get; set; }
         public string Prop3 { get; set; }
     }
@@ -79,6 +95,24 @@ namespace Collapsenav.Net.Tool.Test
             Assert.True(data.ToString() == "2");
             data = obj.GetValue("Prop3");
             Assert.True(data.ToString() == "3");
+        }
+
+        [Fact]
+        public void BuildInPropsTest()
+        {
+            var props = typeof(PropTest1).BuildInTypePropNames();
+            Assert.True(props.Count() == 3);
+            props = typeof(PropTest0).BuildInTypePropNames();
+            Assert.True(props.Count() == 1);
+        }
+
+        [Fact]
+        public void GetAttrTest()
+        {
+            var attrValues = typeof(PropTest1).AttrValues<UnitTestAttribute>();
+            Assert.True(attrValues.Count == 2);
+            Assert.True(attrValues.First().Value.Field == "123");
+            Assert.True(attrValues.Last().Value.Field == "233");
         }
     }
 }

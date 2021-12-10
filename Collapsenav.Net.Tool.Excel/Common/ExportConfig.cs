@@ -24,25 +24,24 @@ namespace Collapsenav.Net.Tool.Excel
                 throw new NoNullAllowedException();
             Data = data;
         }
+
+
         /// <summary>
-        /// 根据 T 生成默认的 Config
+        /// 根据给出的表头筛选options
         /// </summary>
-        public static ExportConfig<T> GenDefaultConfig(IEnumerable<T> data = null)
+        public void FilterOptionByHeaders(IEnumerable<string> headers)
         {
-            data ??= new List<T>();
-            var config = new ExportConfig<T>(data);
-            // 根据 T 中设置的 ExcelExportAttribute 创建导出配置
-            var attrData = TypeTool.AttrValues<T, ExcelExportAttribute>();
-            if (attrData != null)
-            {
-                foreach (var prop in attrData)
-                    config.Add(prop.Value.ExcelField, item => item.GetValue(prop.Key.Name));
-                return config;
-            }
-            foreach (var propName in typeof(T).BuildInTypePropNames())
-                config.Add(propName, item => item.GetValue(propName));
-            return config;
+            FieldOption = FilterOptionByHeaders(FieldOption, headers);
         }
+
+        /// <summary>
+        /// 根据给出的表头筛选options
+        /// </summary>
+        public static IEnumerable<ExportCellOption<T>> FilterOptionByHeaders(IEnumerable<ExportCellOption<T>> options, IEnumerable<string> headers)
+        {
+            return options.Where(item => headers.Any(head => head == item.ExcelField));
+        }
+
         /// <summary>
         /// 设置需要导出的表格数据
         /// </summary>
@@ -86,6 +85,23 @@ namespace Collapsenav.Net.Tool.Excel
             return ConvertHeader.Concat(GetConvertData(data));
         }
 
+        /// <summary>
+        /// 添加普通单元格设置
+        /// </summary>
+        public virtual ExportConfig<T> Add(ExportCellOption<T> option)
+        {
+            FieldOption = FieldOption.Append(option);
+            return this;
+        }
+        /// <summary>
+        /// check条件为True时添加普通单元格设置
+        /// </summary>
+        public virtual ExportConfig<T> AddIf(bool check, ExportCellOption<T> option)
+        {
+            if (check)
+                return Add(option);
+            return this;
+        }
         public ExportConfig<T> Add(string field, Func<T, object> action)
         {
             FieldOption = FieldOption.Append(new ExportCellOption<T>

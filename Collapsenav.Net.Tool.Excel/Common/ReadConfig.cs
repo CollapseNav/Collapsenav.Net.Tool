@@ -18,14 +18,14 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 一行数据的读取设置
         /// </summary>
-        public virtual IEnumerable<ReadCellOption> ReadOption { get; protected set; }
+        public virtual IEnumerable<ReadCellOption> FieldOption { get; protected set; }
         /// <summary>
         /// 读取成功之后调用的针对T的委托
         /// </summary>
-        public Func<T, T> Init { get; set; }
+        public Func<T, T> Init { get; protected set; }
         public ReadConfig()
         {
-            ReadOption = new List<ReadCellOption>();
+            FieldOption = new List<ReadCellOption>();
             Init = null;
             ExcelStream = new MemoryStream();
         }
@@ -50,22 +50,23 @@ namespace Collapsenav.Net.Tool.Excel
             stream.CopyTo(ExcelStream);
         }
 
+
         /// <summary>
-        /// 根据 T 生成默认的 Config
+        /// 根据给出的表头筛选options
         /// </summary>
-        public static ReadConfig<T> GenDefaultConfig()
+        public void FilterOptionByHeaders(IEnumerable<string> headers)
         {
-            var config = new ReadConfig<T>();
-            // 根据 T 中设置的 ExcelReadAttribute 创建导入配置
-            var attrData = TypeTool.AttrValues<T, ExcelReadAttribute>();
-            if (attrData != null)
-            {
-                foreach (var prop in attrData)
-                    config.GenOption(prop.Value.ExcelField, prop.Key);
-                return config;
-            }
-            return config;
+            FieldOption = FilterOptionByHeaders(FieldOption, headers);
         }
+
+        /// <summary>
+        /// 根据给出的表头筛选options
+        /// </summary>
+        public static IEnumerable<ReadCellOption> FilterOptionByHeaders(IEnumerable<ReadCellOption> options, IEnumerable<string> headers)
+        {
+            return options.Where(item => headers.Any(head => head == item.ExcelField));
+        }
+
 
         /// <summary>
         /// 添加默认单元格读取设置(其实就是不读取Excel直接给T的某个字段赋值)
@@ -74,7 +75,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="defaultValue">默认值</param>
         public virtual ReadConfig<T> Default<E>(Expression<Func<T, E>> prop, E defaultValue)
         {
-            ReadOption = ReadOption.Append(GenOption(string.Empty, prop, item => defaultValue));
+            FieldOption = FieldOption.Append(GenOption(string.Empty, prop, item => defaultValue));
             return this;
         }
         /// <summary>
@@ -103,7 +104,7 @@ namespace Collapsenav.Net.Tool.Excel
                     throw new NoNullAllowedException($@" {field} 不可为空");
                 return action(item);
             };
-            ReadOption = ReadOption.Append(option);
+            FieldOption = FieldOption.Append(option);
             return this;
         }
         /// <summary>
@@ -120,12 +121,29 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 添加普通单元格设置
         /// </summary>
+        public virtual ReadConfig<T> Add(ReadCellOption option)
+        {
+            FieldOption = FieldOption.Append(option);
+            return this;
+        }
+        /// <summary>
+        /// check条件为True时添加普通单元格设置
+        /// </summary>
+        public virtual ReadConfig<T> AddIf(bool check, ReadCellOption option)
+        {
+            if (check)
+                return Add(option);
+            return this;
+        }
+        /// <summary>
+        /// 添加普通单元格设置
+        /// </summary>
         /// <param name="field">表头列</param>
         /// <param name="prop">T的属性</param>
         /// <param name="action">对单元格字符串的操作</param>
         public virtual ReadConfig<T> Add<E>(string field, Expression<Func<T, E>> prop, Func<string, object> action = null)
         {
-            ReadOption = ReadOption.Append(GenOption(field, prop, action));
+            FieldOption = FieldOption.Append(GenOption(field, prop, action));
             return this;
         }
         /// <summary>

@@ -31,8 +31,10 @@ namespace Collapsenav.Net.Tool
         /// </summary>
         public static string Encrypt(Stream stream)
         {
+            stream.SeekToOrigin();
             using var sha256 = SHA256.Create();
             var result = sha256.ComputeHash(stream);
+            stream.SeekToOrigin();
             return BitConverter.ToString(result).Replace("-", "");
         }
     }
