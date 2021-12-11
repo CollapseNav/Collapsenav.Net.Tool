@@ -14,7 +14,9 @@
 - [x] [`WhereIf` 条件查询](#whereif)
 - [x] [`Unique` 去重](#unique)
 - [x] [`SequenceEqual` 判断集合相等](#sequenceequal)
-- [ ] `Shuffle` 打乱顺序
+- [x] [`Shuffle` 打乱顺序](#shuffle)
+- [x] [`ForEach` 遍历操作](#foreach)
+- [x] [`AddRange` 批量添加](#addrange)
 - [ ] ...
 
 ## How To Use
@@ -173,9 +175,40 @@ nums = nums.Shuffle();
 // 可能变成了 2,4,5,1,3 或者其他顺序
 ```
 
+### ForEach
 
+`IEnumerable` 本身不能使用 `ForEach`, 为了方便做个扩展
 
+```csharp
+var sum = 0;
+int[] nums = new[] { 1, 2, 3 };
+nums.ForEach(item => sum += item);
+// sum == 6
+```
 
+### AddRange
+
+为 `IEnumerable` 和 `ICollection` 提供了两种不同的 `AddRange` 实现
+
+```csharp
+IEnumerable<int> nums = new[] { 1, 2, 3 };
+// IEnumerable 会产生一个新的集合
+var enums = nums.AddRange(4, 5);
+
+ICollection<int> nums = new List<int> { 1, 2, 3 };
+// ICollection 将直接在原集合上进行修改
+nums.AddRange(4, 5, 6);
+```
+
+如果继承了 `ICollection` 则会使用第二种 `AddRange`, 不然就是第一种
+
+同时提供了在 `AddRange` 时去重的重载, 但是只会对参数去重, 如果需要对原集合进行去重, 最好使用上面的 [`Unique`](#unique)
+
+```csharp
+var nums = new[] { 1, 2, 3 };
+var enums = nums.AddRange((x, y) => x == y, 3, 4, 5);
+// enums { 1, 2, 3, 4, 5 }
+```
 
 
 

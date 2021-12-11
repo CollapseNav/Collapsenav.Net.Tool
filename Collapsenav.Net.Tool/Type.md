@@ -4,6 +4,7 @@
 
 - [x] [`IsBuildInType/IsBaseType` 判断是否基本数据类型](#isbuildintypeisbasetype)
 - [x] [`PropNames` 获取属性名称](#propnames)
+- [x] [`GetValue` 通过属性名称取值](#getvalue)
 - [ ] 反射赋值
 
 ```csharp
@@ -63,3 +64,44 @@ props = typeof(PropTest0).PropNames(0);
 // {Prop0", "Prop"}
 ```
 
+### GetValue
+
+```csharp
+var obj = new PropTest1
+{
+    Prop1 = "1",
+    Prop2 = "2",
+    Prop3 = "3",
+};
+obj.GetValue("Prop1"); // "1"
+```
+
+### AttrValues
+
+```csharp
+...
+sealed class UnitTestAttribute : System.Attribute
+{
+    readonly string _field;
+
+    public UnitTestAttribute(string field)
+    {
+        _field = field;
+    }
+    public string Field
+    {
+        get { return _field; }
+    }
+}
+public class AttrTest
+{
+    [UnitTest("123")]
+    public string Prop1 { get; set; }
+    [UnitTest("233")]
+    public string Prop2 { get; set; }
+}
+var attrValues = typeof(AttrTest).AttrValues<UnitTestAttribute>();
+attrValues.Count; // 2
+attrValues.First().Value.Field; // "123"
+attrValues.Last().Value.Field; // "233"
+```
