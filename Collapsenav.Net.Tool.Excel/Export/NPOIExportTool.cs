@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using NPOI.SS.Formula.Functions;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.Streaming;
 
 namespace Collapsenav.Net.Tool.Excel
@@ -65,9 +67,6 @@ namespace Collapsenav.Net.Tool.Excel
                 }
                 workbook.Write(notCloseStream);
             });
-            // notCloseStream.Seek(0, SeekOrigin.Begin);
-            // notCloseStream.CopyTo(stream);
-            // notCloseStream.Seek(0, SeekOrigin.Begin);
             await notCloseStream.SeekAndCopyToAsync(stream);
             return notCloseStream;
         }
@@ -112,9 +111,6 @@ namespace Collapsenav.Net.Tool.Excel
                 }
                 workbook.Write(notCloseStream);
             });
-            // notCloseStream.Seek(0, SeekOrigin.Begin);
-            // notCloseStream.CopyTo(stream);
-            // notCloseStream.Seek(0, SeekOrigin.Begin);
             await notCloseStream.SeekAndCopyToAsync(stream);
             return notCloseStream;
         }
@@ -153,10 +149,14 @@ namespace Collapsenav.Net.Tool.Excel
             var notCloseStream = new NPOINotCloseStream(stream);
             await Task.Run(() =>
             {
+                bool checkLastRowNum = true;
+                var row = sheet.CreateRow(0);
                 // 加数据
                 foreach (var cellData in data ?? option.Data)
                 {
-                    var row = sheet.CreateRow(sheet.LastRowNum == 0 ? sheet.LastRowNum : sheet.LastRowNum + 1);
+                    if (!(checkLastRowNum && sheet.LastRowNum == 0))
+                        row = sheet.CreateRow(sheet.LastRowNum + 1);
+                    else checkLastRowNum = false;
                     foreach (var (item, index) in option.FieldOption.Select((item, i) => (item, i)))
                     {
                         var cell = row.CreateCell(index);
@@ -165,12 +165,8 @@ namespace Collapsenav.Net.Tool.Excel
                 }
                 workbook.Write(notCloseStream);
             });
-            // notCloseStream.Seek(0, SeekOrigin.Begin);
-            // notCloseStream.CopyTo(stream);
-            // notCloseStream.Seek(0, SeekOrigin.Begin);
             await notCloseStream.SeekAndCopyToAsync(stream);
             return notCloseStream;
         }
-
     }
 }

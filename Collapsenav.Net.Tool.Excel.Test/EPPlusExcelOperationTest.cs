@@ -67,7 +67,6 @@ namespace Collapsenav.Net.Tool.Excel.Test
             var datas = await config.EPPlusExcelDataByOptionsAsync($@"./EPPlus-TestExcel.xlsx");
             Assert.True(datas?.Length == 3000);
 
-
             using FileStream fs = new($@"./EPPlus-TestExcel.xlsx", FileMode.Open);
             datas = await config.EPPlusExcelDataByOptionsAsync(fs);
             Assert.True(datas?.Length == 3000);

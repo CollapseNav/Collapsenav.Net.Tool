@@ -25,7 +25,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="filepath">文件路径</param>
         public static IEnumerable<string> ExcelHeader(string filepath)
         {
-            using var fs = new FileStream(filepath, FileMode.Open);
+            using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return ExcelHeader(fs);
         }
         /// <summary>
@@ -65,7 +65,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="filepath">文件路径</param>
         public static async Task<IEnumerable<IEnumerable<string>>> ExcelDataAsync(string filepath)
         {
-            using var fs = new FileStream(filepath, FileMode.Open);
+            using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return await ExcelDataAsync(fs);
         }
         /// <summary>
@@ -116,7 +116,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="options">导出配置</param>
         public static Dictionary<string, int> ExcelHeaderByOptions<T>(string filepath, ReadConfig<T> options)
         {
-            using var fs = new FileStream(filepath, FileMode.Open);
+            using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return ExcelHeaderByOptions(fs, options);
         }
         /// <summary>
@@ -126,7 +126,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="options">导出配置</param>
         public static Dictionary<string, int> GetExcelHeaderByOptions<T>(string filepath, IEnumerable<ReadCellOption> options)
         {
-            using var fs = new FileStream(filepath, FileMode.Open);
+            using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return GetExcelHeaderByOptions<T>(fs, options);
         }
         /// <summary>
@@ -202,7 +202,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="options">导出配置</param>
         public static async Task<string[][]> ExcelDataByOptionsAsync<T>(string filepath, ReadConfig<T> options)
         {
-            using var fs = new FileStream(filepath, FileMode.Open);
+            using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return await ExcelDataByOptionsAsync(fs, options);
         }
         /// <summary>
@@ -212,7 +212,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="options">导出配置</param>
         public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(string filepath, IEnumerable<ReadCellOption> options)
         {
-            using var fs = new FileStream(filepath, FileMode.Open);
+            using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return await GetExcelDataByOptionsAsync<T>(fs, options);
         }
         /// <summary>
@@ -302,7 +302,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="options">导出配置</param>
         public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(string filepath, ReadConfig<T> options)
         {
-            using var fs = new FileStream(filepath, FileMode.Open);
+            using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return await ExcelToEntityAsync(fs, options);
         }
         /// <summary>
@@ -313,7 +313,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="init">读取成功之后调用的针对T的委托</param>
         public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(string filepath, IEnumerable<ReadCellOption> options, Func<T, T> init)
         {
-            using var fs = new FileStream(filepath, FileMode.Open);
+            using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return await ExcelToEntityAsync(fs, options, init);
         }
         /// <summary>

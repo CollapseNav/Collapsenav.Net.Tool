@@ -67,7 +67,6 @@ namespace Collapsenav.Net.Tool.Excel.Test
             var datas = await config.NPOIExcelDataByOptionsAsync($@"./NPOI-TestExcel.xlsx");
             Assert.True(datas?.Length == 3000);
 
-
             using FileStream fs = new($@"./NPOI-TestExcel.xlsx", FileMode.Open);
             datas = await config.NPOIExcelDataByOptionsAsync(fs);
             Assert.True(datas?.Length == 3000);
