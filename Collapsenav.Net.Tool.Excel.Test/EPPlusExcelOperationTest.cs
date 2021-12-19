@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -66,7 +67,6 @@ namespace Collapsenav.Net.Tool.Excel.Test
 
             var datas = await config.EPPlusExcelDataByOptionsAsync($@"./EPPlus-TestExcel.xlsx");
             Assert.True(datas?.Length == 3000);
-
 
             using FileStream fs = new($@"./EPPlus-TestExcel.xlsx", FileMode.Open);
             datas = await config.EPPlusExcelDataByOptionsAsync(fs);
@@ -166,6 +166,40 @@ namespace Collapsenav.Net.Tool.Excel.Test
             Assert.True(File.Exists("./EPPlus-AttributeExportExcel.xlsx"));
             Assert.True(new FileInfo("./EPPlus-AttributeExportExcel.xlsx").Length > 0);
             File.Delete("./EPPlus-AttributeExportExcel.xlsx");
+        }
+
+        [Fact]
+        public async Task ExportByConfig()
+        {
+            IEnumerable<ExcelConfigDto> data = new[] {
+                new ExcelConfigDto{Num=1,Name="Name-1",Flag=true,Time = DateTime.Now.AddDays(1)},
+                new ExcelConfigDto{Num=2,Name="Name-2",Flag=true,Time = DateTime.Now.AddDays(2)},
+                new ExcelConfigDto{Num=3,Name="Name-3",Flag=true,Time = DateTime.Now.AddDays(3)},
+                new ExcelConfigDto{Num=4,Name="Name-4",Flag=true,Time = DateTime.Now.AddDays(4)},
+                new ExcelConfigDto{Num=5,Name="Name-5",Flag=true,Time = DateTime.Now.AddDays(5)},
+                new ExcelConfigDto{Num=6,Name="Name-6",Flag=true,Time = DateTime.Now.AddDays(6)},
+                new ExcelConfigDto{Num=7,Name="Name-7",Flag=true,Time = DateTime.Now.AddDays(7)},
+                new ExcelConfigDto{Num=8,Name="Name-8",Flag=true,Time = DateTime.Now.AddDays(8)},
+                new ExcelConfigDto{Num=9,Name="Name-9",Flag=true,Time = DateTime.Now.AddDays(9)},
+                new ExcelConfigDto{Num=10,Name="Name-10",Flag=true,Time = DateTime.Now.AddDays(10)},
+            };
+            var exportConfig = new ExportConfig<ExcelConfigDto>(data)
+            .Add("Num", "Num")
+            .Add("Name", "Name")
+            .Add("Flag", "Flag")
+            .Add("Time", "Time")
+            ;
+            await exportConfig.EPPlusExportAsync("./EPPlus-Config-Export.xlsx");
+
+            var readConfig = new ReadConfig<ExcelConfigDto>()
+            .Add("Num", "Num")
+            .Add("Name", "Name")
+            .Add("Flag", "Flag")
+            .Add("Time", "Time")
+            ;
+            var readData = await readConfig.EPPlusExcelToEntityAsync("./EPPlus-Config-Export.xlsx");
+            Assert.True(readData.Count() == 10);
+            Assert.True(readData.OrderBy(item => item.Num).SequenceEqual(data, (x, y) => x.Name == y.Name && x.Num == y.Num && x.Flag == y.Flag && x.Time.ToString() == y.Time.ToString()));
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Collapsenav.Net.Tool.Excel
         public static IEnumerable<string> ExcelHeader(string filepath)
         {
             filepath.IsXls();
-            using var fs = new FileStream(filepath, FileMode.Open);
+            using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return ExcelHeader(fs);
         }
         /// <summary>
@@ -68,7 +68,7 @@ namespace Collapsenav.Net.Tool.Excel
         public static async Task<IEnumerable<IEnumerable<string>>> ExcelDataAsync(string filepath)
         {
             filepath.IsXls();
-            using var fs = new FileStream(filepath, FileMode.Open);
+            using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return await ExcelDataAsync(fs);
         }
         /// <summary>
@@ -120,7 +120,7 @@ namespace Collapsenav.Net.Tool.Excel
         public static Dictionary<string, int> ExcelHeaderByOptions<T>(string filepath, ReadConfig<T> options)
         {
             filepath.IsXls();
-            using var fs = new FileStream(filepath, FileMode.Open);
+            using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return ExcelHeaderByOptions(fs, options);
         }
         /// <summary>
@@ -131,7 +131,7 @@ namespace Collapsenav.Net.Tool.Excel
         public static Dictionary<string, int> ExcelHeaderByOptions<T>(string filepath, IEnumerable<ReadCellOption> options)
         {
             filepath.IsXls();
-            using var fs = new FileStream(filepath, FileMode.Open);
+            using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return ExcelHeaderByOptions<T>(fs, options);
         }
         /// <summary>
@@ -209,7 +209,7 @@ namespace Collapsenav.Net.Tool.Excel
         public static async Task<string[][]> ExcelDataByOptionsAsync<T>(string filepath, ReadConfig<T> options)
         {
             filepath.IsXls();
-            using var fs = new FileStream(filepath, FileMode.Open);
+            using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return await ExcelDataByOptionsAsync(fs, options);
         }
         /// <summary>
@@ -220,7 +220,7 @@ namespace Collapsenav.Net.Tool.Excel
         public static async Task<string[][]> ExcelDataByOptionsAsync<T>(string filepath, IEnumerable<ReadCellOption> options)
         {
             filepath.IsXls();
-            using var fs = new FileStream(filepath, FileMode.Open);
+            using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return await ExcelDataByOptionsAsync<T>(fs, options);
         }
         /// <summary>
@@ -280,7 +280,6 @@ namespace Collapsenav.Net.Tool.Excel
         public static async Task<string[][]> ExcelDataByOptionsAsync<T>(ISheet sheet, IEnumerable<ReadCellOption> options)
         {
             var header = ExcelHeaderByOptions<T>(sheet, options);
-            // var resultHeader = header.Select(item => item.Key).ToList();
 
             int rowCount = sheet.LastRowNum + 1;
             int colCount = sheet.GetRow(Zero).Cells.Count;
@@ -312,7 +311,7 @@ namespace Collapsenav.Net.Tool.Excel
         public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(string filepath, ReadConfig<T> options)
         {
             filepath.IsXls();
-            using var fs = new FileStream(filepath, FileMode.Open);
+            using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return await ExcelToEntityAsync(fs, options);
         }
         /// <summary>
@@ -324,7 +323,7 @@ namespace Collapsenav.Net.Tool.Excel
         public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(string filepath, IEnumerable<ReadCellOption> options, Func<T, T> init)
         {
             filepath.IsXls();
-            using var fs = new FileStream(filepath, FileMode.Open);
+            using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return await ExcelToEntityAsync(fs, options, init);
         }
         /// <summary>
