@@ -14,7 +14,7 @@ namespace Collapsenav.Net.Tool.Excel
         {
             stream.CopyTo(this);
             stream.Seek(0, SeekOrigin.Begin);
-            this.Seek(0, SeekOrigin.Begin);
+            Seek(0, SeekOrigin.Begin);
         }
         public override void Close() { }
         public IWorkbook GetWorkBook()

@@ -1,3 +1,5 @@
+using System;
+
 namespace Collapsenav.Net.Tool.Excel.Test
 {
     public class ExcelTestDto
@@ -24,5 +26,13 @@ namespace Collapsenav.Net.Tool.Excel.Test
         public int Field1 { get; set; }
         [ExcelExport("字段3"), ExcelRead("字段3")]
         public double Field3 { get; set; }
+    }
+
+    public class ExcelConfigDto
+    {
+        public int Num { get; set; }
+        public string Name { get; set; }
+        public bool Flag { get; set; }
+        public DateTime Time { get; set; }
     }
 }
