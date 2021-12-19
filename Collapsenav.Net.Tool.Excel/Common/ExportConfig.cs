@@ -102,6 +102,25 @@ namespace Collapsenav.Net.Tool.Excel
                 return Add(option);
             return this;
         }
+        public virtual ExportConfig<T> Add(string field, string propName)
+        {
+            return Add(field, item => item.GetValue(propName).ToString());
+        }
+        public virtual ExportConfig<T> AddIf(bool check, string field, string propName)
+        {
+            return check ? Add(field, field) : this;
+        }
+        public virtual ExportConfig<T> Add(string field, string propName, string format)
+        {
+            var prop = typeof(T).GetProperty(propName);
+            if (prop.PropertyType.Name == nameof(DateTime))
+                return Add(field, item => ((DateTime)item.GetValue(propName)).ToString(format));
+            return Add(field, propName);
+        }
+        public virtual ExportConfig<T> AddIf(bool check, string field, string propName, string format)
+        {
+            return check ? Add(field, field, format) : this;
+        }
         public ExportConfig<T> Add(string field, Func<T, object> action)
         {
             FieldOption = FieldOption.Append(new ExportCellOption<T>

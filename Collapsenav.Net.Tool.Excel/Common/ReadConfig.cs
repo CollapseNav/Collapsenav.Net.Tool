@@ -81,7 +81,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// check条件为True时添加默认单元格读取设置(其实就是不读取Excel直接给T的某个字段赋值)
         /// </summary>
-        /// <param name="check">判断条件</param>
+        /// <param name="check">判断结果</param>
         /// <param name="prop">T的属性</param>
         /// <param name="defaultValue">默认值</param>
         public virtual ReadConfig<T> DefaultIf<E>(bool check, Expression<Func<T, E>> prop, E defaultValue)
@@ -110,7 +110,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// check条件为True时添加必填的不能为空的读取设置
         /// </summary>
-        /// <param name="check">判断条件</param>
+        /// <param name="check">判断结果</param>
         /// <param name="field">表头列</param>
         /// <param name="prop">T的属性</param>
         /// <param name="action">对单元格字符串的操作</param>
@@ -149,13 +149,32 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// check条件为True时添加单元格设置
         /// </summary>
-        /// <param name="check">判断条件</param>
+        /// <param name="check">判断结果</param>
         /// <param name="field">表头列</param>
         /// <param name="prop">T的属性</param>
         /// <param name="action">对单元格字符串的操作</param>
         public virtual ReadConfig<T> AddIf<E>(bool check, string field, Expression<Func<T, E>> prop, Func<string, object> action = null)
         {
             return check ? Add(field, prop, action) : this;
+        }
+        /// <summary>
+        /// 添加普通单元格设置
+        /// </summary>
+        /// <param name="field">表头列</param>
+        /// <param name="propName">属性名称</param>
+        public virtual ReadConfig<T> Add(string field, string propName)
+        {
+            return Add(field, item => typeof(T).GetProperty(propName));
+        }
+        /// <summary>
+        /// 添加普通单元格设置
+        /// </summary>
+        /// <param name="check">判断结果</param>
+        /// <param name="field">表头列</param>
+        /// <param name="propName">属性名称</param>
+        public virtual ReadConfig<T> AddIf(bool check, string field, string propName)
+        {
+            return check ? Add(field, item => typeof(T).GetProperty(propName)) : this;
         }
         public virtual ReadConfig<T> AddInit(Func<T, T> action)
         {
