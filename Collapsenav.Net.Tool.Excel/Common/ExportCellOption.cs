@@ -20,11 +20,31 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 就是一个看起来比较方便的标识
         /// </summary>
-        public string PropName { get; set; }
+        public string PropName
+        {
+            get
+            {
+                if (propName.IsEmpty() && Prop != null)
+                    propName = prop.Name;
+                return propName;
+            }
+            set => propName = value;
+        }
+        private string propName { get; set; }
         /// <summary>
         /// 对应字段的属性(实际上包含PropName)
         /// </summary>
-        public PropertyInfo Prop { get; set; }
+        public PropertyInfo Prop
+        {
+            get
+            {
+                if (prop == null && PropName.NotEmpty())
+                    prop = typeof(T).GetProperty(PropName);
+                return prop;
+            }
+            set => prop = value;
+        }
+        private PropertyInfo prop;
     }
 
     public class ExportCellOption : ExportCellOption<object>
