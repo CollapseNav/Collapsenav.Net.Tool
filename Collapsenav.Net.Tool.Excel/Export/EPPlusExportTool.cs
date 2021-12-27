@@ -10,6 +10,7 @@ namespace Collapsenav.Net.Tool.Excel
     /// </summary>
     public class EPPlusExportTool
     {
+        private const int Zero = 1;
         /// <summary>
         /// 导出excel
         /// </summary>
@@ -46,7 +47,7 @@ namespace Collapsenav.Net.Tool.Excel
             ExcelWorksheet sheet = pack.Workbook.Worksheets.Add($@"sheet{pack.Workbook.Worksheets.Count}");
             await Task.Run(() =>
             {
-                sheet.Cells[1, 1].LoadFromArrays(
+                sheet.Cells[Zero, Zero].LoadFromArrays(
                     exportType switch
                     {
                         ExportType.All => data == null ? option.ExportData : option.GetExportData(data),
@@ -91,7 +92,7 @@ namespace Collapsenav.Net.Tool.Excel
             ExcelWorksheet sheet = pack.Workbook.Worksheets.Add($@"sheet{pack.Workbook.Worksheets.Count}");
             await Task.Run(() =>
             {
-                sheet.Cells[1, 1].LoadFromArrays(option.ConvertHeader);
+                sheet.Cells[Zero, Zero].LoadFromArrays(option.ConvertHeader);
                 pack.SaveAs(stream);
             });
             stream.SeekToOrigin();
@@ -131,7 +132,7 @@ namespace Collapsenav.Net.Tool.Excel
             ExcelWorksheet sheet = pack.Workbook.Worksheets.Add($@"sheet{pack.Workbook.Worksheets.Count}");
             await Task.Run(() =>
             {
-                sheet.Cells[1, 1].LoadFromArrays(data == null ? option.ConvertData : option.GetConvertData(data));
+                sheet.Cells[Zero, Zero].LoadFromArrays(data == null ? option.ConvertData : option.GetConvertData(data));
                 pack.SaveAs(stream);
             });
             stream.SeekToOrigin();

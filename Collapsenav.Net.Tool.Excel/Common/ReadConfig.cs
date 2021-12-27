@@ -18,14 +18,14 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 一行数据的读取设置
         /// </summary>
-        public virtual IEnumerable<ReadCellOption> FieldOption { get; protected set; }
+        public virtual IEnumerable<ReadCellOption<T>> FieldOption { get; protected set; }
         /// <summary>
         /// 读取成功之后调用的针对T的委托
         /// </summary>
         public Func<T, T> Init { get; protected set; }
         public ReadConfig()
         {
-            FieldOption = new List<ReadCellOption>();
+            FieldOption = new List<ReadCellOption<T>>();
             Init = null;
             ExcelStream = new MemoryStream();
         }
@@ -62,7 +62,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// 根据给出的表头筛选options
         /// </summary>
-        public static IEnumerable<ReadCellOption> FilterOptionByHeaders(IEnumerable<ReadCellOption> options, IEnumerable<string> headers)
+        public static IEnumerable<ReadCellOption<T>> FilterOptionByHeaders(IEnumerable<ReadCellOption<T>> options, IEnumerable<string> headers)
         {
             return options.Where(item => headers.Any(head => head == item.ExcelField));
         }
@@ -94,15 +94,16 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="field">表头列</param>
         /// <param name="prop">T的属性</param>
         /// <param name="action">对单元格字符串的操作</param>
-        public virtual ReadConfig<T> Require<E>(string field, Expression<Func<T, E>> prop, Func<string, object> action = null)
+        public virtual ReadConfig<T> Require<E>(string field, Expression<Func<T, E>> prop, Func<string, E> action = null)
         {
             var option = GenOption(field, prop, action);
-            action = option.Action;
+            // action = option.Action;
+            var func = option.Action;
             option.Action = item =>
             {
                 if (item.IsEmpty())
                     throw new NoNullAllowedException($@" {field} 不可为空");
-                return action(item);
+                return func(item);
             };
             FieldOption = FieldOption.Append(option);
             return this;
@@ -114,14 +115,14 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="field">表头列</param>
         /// <param name="prop">T的属性</param>
         /// <param name="action">对单元格字符串的操作</param>
-        public virtual ReadConfig<T> RequireIf<E>(bool check, string field, Expression<Func<T, E>> prop, Func<string, object> action = null)
+        public virtual ReadConfig<T> RequireIf<E>(bool check, string field, Expression<Func<T, E>> prop, Func<string, E> action = null)
         {
             return check ? Require(field, prop, action) : this;
         }
         /// <summary>
         /// 添加普通单元格设置
         /// </summary>
-        public virtual ReadConfig<T> Add(ReadCellOption option)
+        public virtual ReadConfig<T> Add(ReadCellOption<T> option)
         {
             FieldOption = FieldOption.Append(option);
             return this;
@@ -129,7 +130,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <summary>
         /// check条件为True时添加普通单元格设置
         /// </summary>
-        public virtual ReadConfig<T> AddIf(bool check, ReadCellOption option)
+        public virtual ReadConfig<T> AddIf(bool check, ReadCellOption<T> option)
         {
             if (check)
                 return Add(option);
@@ -141,7 +142,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="field">表头列</param>
         /// <param name="prop">T的属性</param>
         /// <param name="action">对单元格字符串的操作</param>
-        public virtual ReadConfig<T> Add<E>(string field, Expression<Func<T, E>> prop, Func<string, object> action = null)
+        public virtual ReadConfig<T> Add<E>(string field, Expression<Func<T, E>> prop, Func<string, E> action = null)
         {
             FieldOption = FieldOption.Append(GenOption(field, prop, action));
             return this;
@@ -153,7 +154,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="field">表头列</param>
         /// <param name="prop">T的属性</param>
         /// <param name="action">对单元格字符串的操作</param>
-        public virtual ReadConfig<T> AddIf<E>(bool check, string field, Expression<Func<T, E>> prop, Func<string, object> action = null)
+        public virtual ReadConfig<T> AddIf<E>(bool check, string field, Expression<Func<T, E>> prop, Func<string, E> action = null)
         {
             return check ? Add(field, prop, action) : this;
         }
@@ -216,14 +217,13 @@ namespace Collapsenav.Net.Tool.Excel
         {
             return check ? AddInit(action) : this;
         }
-
         /// <summary>
         /// 生成单元格设置
         /// </summary>
         /// <param name="field"></param>
         /// <param name="prop"></param>
         /// <param name="action"></param>
-        public virtual ReadCellOption GenOption<E>(string field, Expression<Func<T, E>> prop, Func<string, object> action = null)
+        public virtual ReadCellOption<T> GenOption<E>(string field, Expression<Func<T, E>> prop, Func<string, E> action)
         {
             return GenOption(field, (PropertyInfo)prop.GetMember(), action);
         }
@@ -232,12 +232,11 @@ namespace Collapsenav.Net.Tool.Excel
         /// </summary>
         /// <param name="field"></param>
         /// <param name="prop"></param>
-        /// <param name="action"></param>
-        public virtual ReadCellOption GenOption(string field, PropertyInfo prop, Func<string, object> action = null)
+        public virtual ReadCellOption<T> GenOption(string field, PropertyInfo prop)
         {
             // 暂时还想不到其他简单的高效的方法
             // TODO 考虑提到 Tool 的 TypeTool 中 ?
-            action ??= prop.PropertyType.Name switch
+            Func<string, object> defaultConvertFunc = prop.PropertyType.Name switch
             {
                 nameof(String) => (item) => item,
                 nameof(Int16) => (item) => short.Parse(item),
@@ -250,12 +249,28 @@ namespace Collapsenav.Net.Tool.Excel
                 nameof(DateTime) => (item) => DateTime.Parse(item),
                 _ => (item) => item,
             };
-            return new ReadCellOption
+            return new ReadCellOption<T>
             {
                 PropName = prop.Name,
                 Prop = prop,
                 ExcelField = field,
-                Action = action
+                Action = defaultConvertFunc
+            };
+        }
+        /// <summary>
+        /// 生成单元格设置
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="prop"></param>
+        /// <param name="action"></param>
+        public virtual ReadCellOption<T> GenOption<E>(string field, PropertyInfo prop, Func<string, E> action)
+        {
+            return action == null ? GenOption(field, prop) : new ReadCellOption<T>
+            {
+                PropName = prop.Name,
+                Prop = prop,
+                ExcelField = field,
+                Action = item => action(item)
             };
         }
     }

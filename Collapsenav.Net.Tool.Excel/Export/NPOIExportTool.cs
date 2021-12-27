@@ -13,6 +13,7 @@ namespace Collapsenav.Net.Tool.Excel
     /// </summary>
     public class NPOIExportTool
     {
+        private const int Zero = 0;
         /// <summary>
         /// 导出excel
         /// </summary>
@@ -47,7 +48,7 @@ namespace Collapsenav.Net.Tool.Excel
             var notCloseStream = new NPOINotCloseStream(stream);
             await Task.Run(() =>
             {
-                var row = sheet.CreateRow(0);
+                var row = sheet.CreateRow(Zero);
                 // 加表头
                 foreach (var (head, index) in option.Header.Select((item, i) => (item, i)))
                 {
@@ -102,7 +103,7 @@ namespace Collapsenav.Net.Tool.Excel
             var notCloseStream = new NPOINotCloseStream(stream);
             await Task.Run(() =>
             {
-                var row = sheet.CreateRow(0);
+                var row = sheet.CreateRow(Zero);
                 // 加表头
                 foreach (var (head, index) in option.Header.Select((item, i) => (item, i)))
                 {
@@ -150,7 +151,7 @@ namespace Collapsenav.Net.Tool.Excel
             await Task.Run(() =>
             {
                 bool checkLastRowNum = true;
-                var row = sheet.CreateRow(0);
+                var row = sheet.CreateRow(Zero);
                 // 加数据
                 foreach (var cellData in data ?? option.Data)
                 {

@@ -14,7 +14,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="excelData">表格数据(需要包含表头且在第一行)</param>
         /// <param name="options">转换配置</param>
         /// <param name="init">读取成功之后调用的针对T的委托</param>
-        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(string[][] excelData, IEnumerable<ReadCellOption> options, Func<T, T> init)
+        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(string[][] excelData, IEnumerable<ReadCellOption<T>> options, Func<T, T> init)
         {
             var header = excelData[0].Select((key, index) => (key, index)).ToDictionary(item => item.key, item => item.index);
             excelData = excelData.Skip(1).ToArray();
@@ -28,7 +28,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="excelData">表格数据</param>
         /// <param name="options">转换配置</param>
         /// <param name="init">读取成功之后调用的针对T的委托</param>
-        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(Dictionary<string, int> header, string[][] excelData, IEnumerable<ReadCellOption> options, Func<T, T> init)
+        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(Dictionary<string, int> header, string[][] excelData, IEnumerable<ReadCellOption<T>> options, Func<T, T> init)
         {
             ConcurrentBag<T> data = new();
             await Task.Factory.StartNew(() =>

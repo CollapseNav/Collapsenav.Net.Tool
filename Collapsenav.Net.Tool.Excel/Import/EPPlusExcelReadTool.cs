@@ -124,7 +124,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// </summary>
         /// <param name="filepath">文件路径</param>
         /// <param name="options">导出配置</param>
-        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(string filepath, IEnumerable<ReadCellOption> options)
+        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(string filepath, IEnumerable<ReadCellOption<T>> options)
         {
             using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return GetExcelHeaderByOptions<T>(fs, options);
@@ -144,7 +144,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// </summary>
         /// <param name="stream">文件流</param>
         /// <param name="options">导出配置</param>
-        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(Stream stream, IEnumerable<ReadCellOption> options)
+        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(Stream stream, IEnumerable<ReadCellOption<T>> options)
         {
             using ExcelPackage pack = new(stream);
             return GetExcelHeaderByOptions<T>(pack, options);
@@ -164,7 +164,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// </summary>
         /// <param name="pack">excel workbook</param>
         /// <param name="options">导出配置</param>
-        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(ExcelPackage pack, IEnumerable<ReadCellOption> options)
+        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(ExcelPackage pack, IEnumerable<ReadCellOption<T>> options)
         {
             var sheet = pack.Workbook.Worksheets[Zero];
             return GetExcelHeaderByOptions<T>(sheet, options);
@@ -183,7 +183,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// </summary>
         /// <param name="sheet">工作簿</param>
         /// <param name="options">导出配置</param>
-        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(ExcelWorksheet sheet, IEnumerable<ReadCellOption> options)
+        public static Dictionary<string, int> GetExcelHeaderByOptions<T>(ExcelWorksheet sheet, IEnumerable<ReadCellOption<T>> options)
         {
             // 获取对应设置的 表头 以及其 column
             var header = sheet.Cells[Zero, Zero, Zero, sheet.Dimension.Columns]
@@ -210,7 +210,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// </summary>
         /// <param name="filepath">文件路径</param>
         /// <param name="options">导出配置</param>
-        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(string filepath, IEnumerable<ReadCellOption> options)
+        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(string filepath, IEnumerable<ReadCellOption<T>> options)
         {
             using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return await GetExcelDataByOptionsAsync<T>(fs, options);
@@ -230,7 +230,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// </summary>
         /// <param name="stream">文件流</param>
         /// <param name="options">导出配置</param>
-        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(Stream stream, IEnumerable<ReadCellOption> options)
+        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(Stream stream, IEnumerable<ReadCellOption<T>> options)
         {
             using ExcelPackage pack = new(stream);
             return await GetExcelDataByOptionsAsync<T>(pack, options);
@@ -250,7 +250,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// </summary>
         /// <param name="pack">excel workbook</param>
         /// <param name="options">导出配置</param>
-        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(ExcelPackage pack, IEnumerable<ReadCellOption> options)
+        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(ExcelPackage pack, IEnumerable<ReadCellOption<T>> options)
         {
             var sheet = pack.Workbook.Worksheets[1];
             return await GetExcelDataByOptionsAsync<T>(sheet, options);
@@ -269,7 +269,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// </summary>
         /// <param name="sheet">工作簿</param>
         /// <param name="options">导出配置</param>
-        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(ExcelWorksheet sheet, IEnumerable<ReadCellOption> options)
+        public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(ExcelWorksheet sheet, IEnumerable<ReadCellOption<T>> options)
         {
             var header = GetExcelHeaderByOptions<T>(sheet, options);
             var resultHeader = header.Select(item => item.Key).ToList();
@@ -311,7 +311,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="filepath">文件路径</param>
         /// <param name="options">导出配置</param>
         /// <param name="init">读取成功之后调用的针对T的委托</param>
-        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(string filepath, IEnumerable<ReadCellOption> options, Func<T, T> init)
+        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(string filepath, IEnumerable<ReadCellOption<T>> options, Func<T, T> init)
         {
             using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
             return await ExcelToEntityAsync(fs, options, init);
@@ -332,7 +332,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="stream">文件流</param>
         /// <param name="options">导出配置</param>
         /// <param name="init">读取成功之后调用的针对T的委托</param>
-        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(Stream stream, IEnumerable<ReadCellOption> options, Func<T, T> init)
+        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(Stream stream, IEnumerable<ReadCellOption<T>> options, Func<T, T> init)
         {
             using ExcelPackage pack = new(stream);
             return await ExcelToEntityAsync(pack, options, init);
@@ -353,7 +353,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="pack">excel workbook</param>
         /// <param name="options">导出配置</param>
         /// <param name="init">读取成功之后调用的针对T的委托</param>
-        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(ExcelPackage pack, IEnumerable<ReadCellOption> options, Func<T, T> init)
+        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(ExcelPackage pack, IEnumerable<ReadCellOption<T>> options, Func<T, T> init)
         {
             var sheet = pack.Workbook.Worksheets[1];
             return await ExcelToEntityAsync(sheet, options, init);
@@ -373,7 +373,7 @@ namespace Collapsenav.Net.Tool.Excel
         /// <param name="sheet">工作簿</param>
         /// <param name="options">导出配置</param>
         /// <param name="init">读取成功之后调用的针对T的委托</param>
-        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(ExcelWorksheet sheet, IEnumerable<ReadCellOption> options, Func<T, T> init)
+        public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(ExcelWorksheet sheet, IEnumerable<ReadCellOption<T>> options, Func<T, T> init)
         {
             // 合并 FieldOption 和 DefaultOption
             var header = GetExcelHeaderByOptions<T>(sheet, options);
