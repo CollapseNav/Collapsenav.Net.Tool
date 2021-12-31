@@ -14,6 +14,7 @@ namespace Collapsenav.Net.Tool
         /// Json字符串转为对象
         /// </summary>
         public static T ToObj<T>(this string str, JsonSerializerOptions options = null) => JsonSerializer.Deserialize<T>(str, options ?? DefaultJsonSerializerOption);
+        public static object ToObj(this string str, Type type, JsonSerializerOptions options = null) => JsonSerializer.Deserialize(str, type, options ?? DefaultJsonSerializerOption);
         /// <summary>
         /// Json字符串转为对象集合
         /// </summary>
@@ -25,5 +26,10 @@ namespace Collapsenav.Net.Tool
         /// <param name="options"></param>
         /// <returns></returns>
         public static string ToJson(this object obj, JsonSerializerOptions options = null) => JsonSerializer.Serialize(obj, options ?? DefaultJsonSerializerOption);
+
+        /// <summary>
+        /// 通过json的序列化反序列化map对象
+        /// </summary>
+        public static T JsonMap<T>(this object obj) => obj.ToJson().ToObj<T>();
     }
 }

@@ -195,5 +195,18 @@ namespace Collapsenav.Net.Tool.Test
             Assert.True(str.First(5) == "12345");
             Assert.True(str.Last(5) == "54321");
         }
+
+        [Fact]
+        public void ContainTest()
+        {
+            string temp = "123456789";
+            Assert.True(temp.ContainAnd(new[] { "123", "345" }));
+            Assert.True(temp.ContainAnd("789", "567"));
+            Assert.True(temp.ContainOr(new[] { "234", "444" }));
+            Assert.True(temp.ContainOr("456", "898"));
+
+            Assert.False(temp.ContainAnd("789", "5679"));
+            Assert.False(temp.ContainOr("7899", "5679"));
+        }
     }
 }

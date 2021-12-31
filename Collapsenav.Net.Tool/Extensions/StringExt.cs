@@ -180,5 +180,23 @@ namespace Collapsenav.Net.Tool
         {
             return keys.Any(key => origin.Contains(key, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal));
         }
+        /// <summary>
+        /// 全包含(不忽略大小写)
+        /// </summary>
+        /// <param name="origin">源字符串</param>
+        /// <param name="keys"></param>
+        public static bool ContainAnd(this string origin, params string[] keys)
+        {
+            return keys.All(key => origin.Contains(key));
+        }
+        /// <summary>
+        /// 部分包含(不忽略大小写)
+        /// </summary>
+        /// <param name="origin">源字符串</param>
+        /// <param name="keys"></param>
+        public static bool ContainOr(this string origin, params string[] keys)
+        {
+            return keys.Any(key => origin.Contains(key));
+        }
     }
 }
