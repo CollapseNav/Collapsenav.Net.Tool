@@ -95,5 +95,10 @@ namespace Collapsenav.Net.Tool
         {
             return TypeTool.AttrValues<E>(type);
         }
+
+        public static void SetValue<T>(this T obj, string field, object value)
+        {
+            typeof(T).GetProperty(field)?.SetValue(obj, value);
+        }
     }
 }

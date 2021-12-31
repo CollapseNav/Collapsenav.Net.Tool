@@ -114,5 +114,17 @@ namespace Collapsenav.Net.Tool.Test
             Assert.True(attrValues.First().Value.Field == "123");
             Assert.True(attrValues.Last().Value.Field == "233");
         }
+
+        [Fact]
+        public void SetValueTest()
+        {
+            var data = new PropTest1
+            {
+                Prop1 = "1"
+            };
+            Assert.True(data.Prop1 == "1");
+            data.SetValue("Prop1", "233");
+            Assert.True(data.Prop1 == "233");
+        }
     }
 }
