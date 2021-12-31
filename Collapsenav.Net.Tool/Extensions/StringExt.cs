@@ -158,7 +158,27 @@ namespace Collapsenav.Net.Tool
         /// </summary>
         public static string Last(this string origin, int len = 1)
         {
-            return len > origin.Length ? origin : origin.Substring(origin.Length - len , len);
+            return len > origin.Length ? origin : origin.Substring(origin.Length - len, len);
+        }
+        /// <summary>
+        /// 全包含
+        /// </summary>
+        /// <param name="origin">源字符串</param>
+        /// <param name="keys"></param>
+        /// <param name="ignoreCase">是否忽略大小写(默认不忽略)</param>
+        public static bool ContainAnd(this string origin, IEnumerable<string> keys, bool ignoreCase = false)
+        {
+            return keys.All(key => origin.Contains(key, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal));
+        }
+        /// <summary>
+        /// 部分包含
+        /// </summary>
+        /// <param name="origin">源字符串</param>
+        /// <param name="keys"></param>
+        /// <param name="ignoreCase">是否忽略大小写(默认不忽略)</param>
+        public static bool ContainOr(this string origin, IEnumerable<string> keys, bool ignoreCase = false)
+        {
+            return keys.Any(key => origin.Contains(key, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal));
         }
     }
 }
