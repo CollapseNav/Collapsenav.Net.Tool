@@ -3,8 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Xunit;
 
-namespace Collapsenav.Net.Tool.Test
-{
+namespace Collapsenav.Net.Tool.Test;
     public class ExpressionTest
     {
         [Fact]
@@ -60,5 +59,4 @@ namespace Collapsenav.Net.Tool.Test
             ;
             Assert.True(ints.AsQueryable().Where(exp).ToList().SequenceEqual(new[] { 3, 5, 6 }));
         }
-    }
 }

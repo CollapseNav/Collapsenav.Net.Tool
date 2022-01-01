@@ -4,8 +4,7 @@ using System.Linq;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace Collapsenav.Net.Tool.Data.Test
-{
+namespace Collapsenav.Net.Tool.Data.Test;
     [AttributeUsage(AttributeTargets.Method)]
     public class OrderAttribute : Attribute
     {
@@ -39,5 +38,4 @@ namespace Collapsenav.Net.Tool.Data.Test
             });
             return result;
         }
-    }
 }

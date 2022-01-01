@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace Collapsenav.Net.Tool.Data.Test
-{
+namespace Collapsenav.Net.Tool.Data.Test;
     [TestCaseOrderer("Collapsenav.Net.Tool.Data.Test.TestOrders", "Collapsenav.Net.Tool.Data.Test")]
     public class RepositoryTest
     {
@@ -71,5 +70,4 @@ namespace Collapsenav.Net.Tool.Data.Test
             data = await Repository.FindAsync(2333);
             Assert.Null(data);
         }
-    }
 }

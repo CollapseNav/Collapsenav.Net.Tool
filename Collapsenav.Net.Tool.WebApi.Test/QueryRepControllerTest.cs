@@ -5,8 +5,7 @@ using Collapsenav.Net.Tool.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace Collapsenav.Net.Tool.WebApi.Test
-{
+namespace Collapsenav.Net.Tool.WebApi.Test;
     public class QueryControllerTest
     {
 
@@ -83,5 +82,4 @@ namespace Collapsenav.Net.Tool.WebApi.Test
         }
     }
 
-}
 

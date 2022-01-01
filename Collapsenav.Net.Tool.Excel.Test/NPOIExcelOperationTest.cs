@@ -5,8 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Collapsenav.Net.Tool.Excel.Test
-{
+namespace Collapsenav.Net.Tool.Excel.Test;
     public class NPOIExcelOperationTest
     {
         [Fact]
@@ -200,5 +199,4 @@ namespace Collapsenav.Net.Tool.Excel.Test
             Assert.True(readData.Count() == 10);
             Assert.True(readData.OrderBy(item => item.Num).SequenceEqual(data, (x, y) => x.Name == y.Name && x.Num == y.Num && x.Flag == y.Flag && x.Time.ToString() == y.Time.ToString()));
         }
-    }
 }

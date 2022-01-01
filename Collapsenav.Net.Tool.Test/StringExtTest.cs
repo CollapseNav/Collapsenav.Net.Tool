@@ -4,8 +4,7 @@ using System.IO;
 using System.Linq;
 using Xunit;
 
-namespace Collapsenav.Net.Tool.Test
-{
+namespace Collapsenav.Net.Tool.Test;
     public class StringExtTest
     {
         [Fact]
@@ -208,5 +207,4 @@ namespace Collapsenav.Net.Tool.Test
             Assert.False(temp.ContainAnd("789", "5679"));
             Assert.False(temp.ContainOr("7899", "5679"));
         }
-    }
 }

@@ -2,8 +2,7 @@ using Collapsenav.Net.Tool.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Collapsenav.Net.Tool.WebApi.Test
-{
+namespace Collapsenav.Net.Tool.WebApi.Test;
     public class DIConfig
     {
         public static ServiceProvider GetProvider()
@@ -32,5 +31,4 @@ namespace Collapsenav.Net.Tool.WebApi.Test
             .AddController()
             .BuildServiceProvider();
         }
-    }
 }

@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Collapsenav.Net.Tool.WebApi.Test
-{
+namespace Collapsenav.Net.Tool.WebApi.Test;
     public class TestDbContext : DbContext
     {
         public DbSet<TestEntity> Tests { get; set; }
@@ -9,5 +8,4 @@ namespace Collapsenav.Net.Tool.WebApi.Test
         public TestDbContext(DbContextOptions<TestDbContext> options) : base(options)
         {
         }
-    }
 }

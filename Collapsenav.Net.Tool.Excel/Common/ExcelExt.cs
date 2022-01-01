@@ -1,13 +1,11 @@
-namespace Collapsenav.Net.Tool.Excel
+namespace Collapsenav.Net.Tool.Excel;
+public static class ExcelExt
 {
-    public static class ExcelExt
+    /// <summary>
+    /// 是否 xls 文件
+    /// </summary>
+    public static bool IsXls(this string filepath)
     {
-        /// <summary>
-        /// 是否 xls 文件
-        /// </summary>
-        public static bool IsXls(this string filepath)
-        {
-            return ExcelTool.IsXls(filepath);
-        }
+        return ExcelTool.IsXls(filepath);
     }
 }

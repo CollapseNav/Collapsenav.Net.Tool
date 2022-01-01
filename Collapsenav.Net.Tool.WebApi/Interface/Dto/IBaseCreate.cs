@@ -1,12 +1,8 @@
-using System.Linq;
-
-namespace Collapsenav.Net.Tool.WebApi
+namespace Collapsenav.Net.Tool.WebApi;
+public interface IBaseCreate
 {
-    public interface IBaseCreate
-    {
-    }
-    public interface IBaseCreate<T> : IBaseCreate
-    {
-        bool IsExist(IQueryable<T> rep);
-    }
+}
+public interface IBaseCreate<T> : IBaseCreate
+{
+    bool IsExist(IQueryable<T> rep);
 }

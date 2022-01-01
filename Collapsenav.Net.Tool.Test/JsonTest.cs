@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Collapsenav.Net.Tool.Test
-{
+namespace Collapsenav.Net.Tool.Test;
     public class UserInfo
     {
         public string UserName { get; set; }
@@ -75,6 +74,5 @@ namespace Collapsenav.Net.Tool.Test
             var users2 = users.JsonMap<IEnumerable<UserInfoTwo>>();
             Assert.True(users.First().UserName == users2.First().UserName && users.First().Age == users2.First().Age);
         }
-    }
 }
 

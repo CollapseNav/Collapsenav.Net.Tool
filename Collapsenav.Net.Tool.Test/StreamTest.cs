@@ -1,12 +1,11 @@
-using Xunit;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Xunit;
 
-namespace Collapsenav.Net.Tool.Test
-{
+namespace Collapsenav.Net.Tool.Test;
     public class StreamTest
     {
         [Fact]
@@ -99,6 +98,5 @@ namespace Collapsenav.Net.Tool.Test
             toFs4.Dispose();
             File.Delete(toFile);
         }
-    }
 }
 

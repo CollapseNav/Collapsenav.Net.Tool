@@ -1,9 +1,8 @@
-using Xunit;
 using System.Collections.Generic;
 using System.Linq;
+using Xunit;
 
-namespace Collapsenav.Net.Tool.Test
-{
+namespace Collapsenav.Net.Tool.Test;
     public class DictionaryTest
     {
         [Fact]
@@ -72,6 +71,5 @@ namespace Collapsenav.Net.Tool.Test
             Assert.True(value == "1");
             Assert.True(dict.Count == 2);
         }
-    }
 }
 

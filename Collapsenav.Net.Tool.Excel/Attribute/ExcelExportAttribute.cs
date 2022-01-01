@@ -1,14 +1,12 @@
-namespace Collapsenav.Net.Tool.Excel
+namespace Collapsenav.Net.Tool.Excel;
+[AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+public sealed class ExcelExportAttribute : Attribute
 {
-    [System.AttributeUsage(System.AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-    public sealed class ExcelExportAttribute : System.Attribute
+    readonly string excelField;
+    public ExcelExportAttribute() { }
+    public ExcelExportAttribute(string excelField)
     {
-        readonly string excelField;
-        public ExcelExportAttribute() { }
-        public ExcelExportAttribute(string excelField)
-        {
-            this.excelField = excelField;
-        }
-        public string ExcelField { get => excelField; }
+        this.excelField = excelField;
     }
+    public string ExcelField { get => excelField; }
 }

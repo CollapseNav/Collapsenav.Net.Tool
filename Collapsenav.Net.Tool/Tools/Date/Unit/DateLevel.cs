@@ -1,13 +1,11 @@
-namespace Collapsenav.Net.Tool
+namespace Collapsenav.Net.Tool;
+public enum DateLevel
 {
-    public enum DateLevel
-    {
-        Year,
-        Month,
-        Day,
-        Hour,
-        Minute,
-        Second,
-        Millisecond,
-    }
+    Year,
+    Month,
+    Day,
+    Hour,
+    Minute,
+    Second,
+    Millisecond,
 }

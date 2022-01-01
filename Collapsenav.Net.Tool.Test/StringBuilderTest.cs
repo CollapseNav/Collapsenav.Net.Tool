@@ -1,8 +1,7 @@
-using Xunit;
 using System.Text;
+using Xunit;
 
-namespace Collapsenav.Net.Tool.Test
-{
+namespace Collapsenav.Net.Tool.Test;
     public class StringBuilderTest
     {
         [Fact]
@@ -43,5 +42,4 @@ namespace Collapsenav.Net.Tool.Test
             ;
             Assert.True(" OR 1 OR 3 OR 6" == sb.ToString());
         }
-    }
 }

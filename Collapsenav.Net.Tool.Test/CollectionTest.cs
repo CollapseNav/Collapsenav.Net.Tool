@@ -1,9 +1,8 @@
-using Xunit;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using Xunit;
 
-namespace Collapsenav.Net.Tool.Test
-{
+namespace Collapsenav.Net.Tool.Test;
     public class UniqueTestModel
     {
         public int Index { get; set; } = 1;
@@ -264,5 +263,4 @@ namespace Collapsenav.Net.Tool.Test
             nums.ForEach(item => sum += item * item);
             Assert.True(sum == 14);
         }
-    }
 }

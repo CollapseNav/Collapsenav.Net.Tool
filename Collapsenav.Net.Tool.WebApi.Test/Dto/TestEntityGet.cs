@@ -1,8 +1,7 @@
 using System;
 using System.Linq.Expressions;
 
-namespace Collapsenav.Net.Tool.WebApi.Test
-{
+namespace Collapsenav.Net.Tool.WebApi.Test;
     public class TestEntityGet : BaseGet<TestEntity>
     {
         public int? Id { get; set; }
@@ -19,5 +18,4 @@ namespace Collapsenav.Net.Tool.WebApi.Test
             .AndIf(IsTest.HasValue, item => item.IsTest == IsTest)
             ;
         }
-    }
 }

@@ -1,7 +1,6 @@
 using System;
 
-namespace Collapsenav.Net.Tool.Excel.Test
-{
+namespace Collapsenav.Net.Tool.Excel.Test;
     public class ExcelTestDto
     {
         public string Field0 { get; set; }
@@ -34,5 +33,4 @@ namespace Collapsenav.Net.Tool.Excel.Test
         public string Name { get; set; }
         public bool Flag { get; set; }
         public DateTime Time { get; set; }
-    }
 }

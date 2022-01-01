@@ -1,7 +1,6 @@
 using Collapsenav.Net.Tool.Data;
 
-namespace Collapsenav.Net.Tool.WebApi.Test
-{
+namespace Collapsenav.Net.Tool.WebApi.Test;
     public class TestTwoEntity : BaseEntity<int>
     {
         public TestTwoEntity() { }
@@ -15,5 +14,4 @@ namespace Collapsenav.Net.Tool.WebApi.Test
         public string Code { get; set; }
         public int? Number { get; set; }
         public bool? IsTest { get; set; }
-    }
 }

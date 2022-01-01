@@ -1,5 +1,4 @@
-namespace Collapsenav.Net.Tool.Data.Test
-{
+namespace Collapsenav.Net.Tool.Data.Test;
     public class TestTwoEntity : BaseEntity<int>
     {
         public TestTwoEntity() { }
@@ -13,5 +12,4 @@ namespace Collapsenav.Net.Tool.Data.Test
         public string Code { get; set; }
         public int? Number { get; set; }
         public bool? IsTest { get; set; }
-    }
 }

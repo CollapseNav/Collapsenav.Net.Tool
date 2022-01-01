@@ -4,8 +4,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace Collapsenav.Net.Tool.Data.Test
-{
+namespace Collapsenav.Net.Tool.Data.Test;
     public class TestRepository : Repository<int, TestEntity>
     {
         public TestRepository(DbContext db) : base(db)
@@ -41,5 +40,4 @@ namespace Collapsenav.Net.Tool.Data.Test
             data.Number += 300;
             return data;
         }
-    }
 }

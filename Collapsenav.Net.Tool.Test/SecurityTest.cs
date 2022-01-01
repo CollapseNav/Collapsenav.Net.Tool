@@ -1,7 +1,6 @@
 using Xunit;
 
-namespace Collapsenav.Net.Tool.Test
-{
+namespace Collapsenav.Net.Tool.Test;
     public class SecurityTest
     {
         [Fact]
@@ -26,5 +25,4 @@ namespace Collapsenav.Net.Tool.Test
             Assert.False(msg.Sha1En() == msg2.Sha1En());
             Assert.False(msg.Sha256En() == msg2.Sha256En());
         }
-    }
 }

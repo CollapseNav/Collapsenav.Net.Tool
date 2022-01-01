@@ -2,8 +2,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestPlatform.Common.Utilities;
 using Xunit;
 
-namespace Collapsenav.Net.Tool.Test
-{
+namespace Collapsenav.Net.Tool.Test;
     [System.AttributeUsage(System.AttributeTargets.All, Inherited = false, AllowMultiple = false)]
     sealed class UnitTestAttribute : System.Attribute
     {
@@ -126,5 +125,4 @@ namespace Collapsenav.Net.Tool.Test
             data.SetValue("Prop1", "233");
             Assert.True(data.Prop1 == "233");
         }
-    }
 }

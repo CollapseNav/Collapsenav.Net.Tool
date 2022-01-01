@@ -2,8 +2,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace Collapsenav.Net.Tool.Test
-{
+namespace Collapsenav.Net.Tool.Test;
     public class DateTimeTest
     {
         [Fact]
@@ -43,5 +42,4 @@ namespace Collapsenav.Net.Tool.Test
             Assert.True(date.ToDefaultDateString("WTF") == "2021WTF11WTF11");
             Assert.True(date.ToDefaultTimeString("WTF") == "2021WTF11WTF11 11:11:11");
         }
-    }
 }

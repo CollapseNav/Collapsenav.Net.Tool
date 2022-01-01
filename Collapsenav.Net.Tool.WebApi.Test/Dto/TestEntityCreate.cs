@@ -1,5 +1,4 @@
-namespace Collapsenav.Net.Tool.WebApi.Test
-{
+namespace Collapsenav.Net.Tool.WebApi.Test;
     public class TestEntityCreate : BaseCreate<TestEntity>
     {
         public string Code { get; set; }
@@ -11,5 +10,4 @@ namespace Collapsenav.Net.Tool.WebApi.Test
             Number = number;
             IsTest = isTest;
         }
-    }
 }

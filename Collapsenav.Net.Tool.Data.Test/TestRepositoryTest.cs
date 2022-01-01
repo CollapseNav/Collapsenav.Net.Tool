@@ -3,8 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace Collapsenav.Net.Tool.Data.Test
-{
+namespace Collapsenav.Net.Tool.Data.Test;
     [TestCaseOrderer("Collapsenav.Net.Tool.Data.Test.TestOrders", "Collapsenav.Net.Tool.Data.Test")]
     public class TestRepositoryTest
     {
@@ -47,5 +46,4 @@ namespace Collapsenav.Net.Tool.Data.Test
             await Repository.DeleteAsync(23333);
             Repository.Save();
         }
-    }
 }

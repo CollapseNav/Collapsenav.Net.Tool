@@ -6,8 +6,7 @@ using Collapsenav.Net.Tool.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace Collapsenav.Net.Tool.WebApi.Test
-{
+namespace Collapsenav.Net.Tool.WebApi.Test;
     [TestCaseOrderer("Collapsenav.Net.Tool.WebApi.Test.TestOrders", "Collapsenav.Net.Tool.WebApi.Test")]
     public class ModifyRepControllerTest
     {
@@ -73,5 +72,4 @@ namespace Collapsenav.Net.Tool.WebApi.Test
             var data = await RepController.FindQueryAsync(new() { Code = "wait-to-delete" });
             await RepController.DeleteAsync(data.First().Id, true);
         }
-    }
 }
