@@ -5,7 +5,7 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <LangVersion>preview</LangVersion>
         <NoWarn>$(NoWarn);1591</NoWarn>
-        <Version>1.0.0</Version>
+        <Version>1.0.0.1</Version>
         <Authors>CollapseNav</Authors>
         <Copyright>CollapseNav</Copyright>
         <RepositoryType>Github</RepositoryType>

@@ -21,7 +21,7 @@ public class QueryControllerTest
         return Provider.GetService<T>();
     }
 
-    [Fact, Order(2)]
+    [Fact]
     public async Task QueryTest()
     {
         var data = await RepController.FindQueryAsync(new TestQueryEntityGet { });
@@ -43,7 +43,7 @@ public class QueryControllerTest
         Assert.True(data.Count() == 1);
     }
 
-    [Fact, Order(3)]
+    [Fact]
     public async Task PageTest()
     {
         var data = await RepController.FindPageAsync(new TestQueryEntityGet { });
@@ -66,7 +66,7 @@ public class QueryControllerTest
         Assert.True(data.Length == 2);
     }
 
-    [Fact, Order(4)]
+    [Fact]
     public async Task FindByIdTest()
     {
         var data = await RepController.FindAsync(5);

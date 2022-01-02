@@ -1,17 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="../version.props" />
-    <PropertyGroup>
-        <PackageTags>Tools,Utility,Extensions,ClassLibrary</PackageTags>
-        <Description>
+	<Import Project="../version.props"/>
+	<PropertyGroup>
+		<PackageTags>Tools,Utility,Extensions,ClassLibrary</PackageTags>
+		<Description>
 .net core ext tools.
 封装了了Collection,string,DateTime,Hash等常用操作
 大多都提供了扩展方法
 也可以使用对应的Tool进行操作
         </Description>
-        <Product>Collapsenav.Net.Tool</Product>
-        <PackageId>Collapsenav.Net.Tool</PackageId>
-    </PropertyGroup>
-    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
-        <PackageReference Include="System.Text.Json" Version="5.0.2"/>
-    </ItemGroup>
+		<Product>Collapsenav.Net.Tool</Product>
+		<PackageId>Collapsenav.Net.Tool</PackageId>
+	</PropertyGroup>
+	<ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
+		<PackageReference Include="System.Text.Json" Version="6.0.1"/>
+	</ItemGroup>
 </Project>
