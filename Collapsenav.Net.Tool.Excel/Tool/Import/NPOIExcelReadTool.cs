@@ -5,10 +5,9 @@ namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
 /// 针对表格导入的一些操作(基于 NPOI)
 /// </summary>
-public class NPOIExcelReadTool
+public partial class NPOIExcelReadTool
 {
     private const int Zero = 0;
-
 
     #region 获取表头
     /// <summary>

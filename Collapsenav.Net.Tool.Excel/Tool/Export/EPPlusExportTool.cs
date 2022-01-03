@@ -4,7 +4,7 @@ namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
 /// 针对表格导出的一些操作(基于EPPlus)
 /// </summary>
-public class EPPlusExportTool
+public partial class EPPlusExportTool
 {
     private const int Zero = 1;
     /// <summary>

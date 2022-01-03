@@ -4,7 +4,7 @@ namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
 /// 针对表格导出的一些操作(基于NPOI)
 /// </summary>
-public class NPOIExportTool
+public partial class NPOIExportTool
 {
     private const int Zero = 0;
     /// <summary>
@@ -42,15 +42,15 @@ public class NPOIExportTool
         await Task.Run(() =>
         {
             var row = sheet.CreateRow(Zero);
-                // 加表头
-                foreach (var (head, index) in option.Header.Select((item, i) => (item, i)))
+            // 加表头
+            foreach (var (head, index) in option.Header.Select((item, i) => (item, i)))
             {
                 var cell = row.CreateCell(index);
                 cell.SetCellValue(head);
             }
 
-                // 加数据
-                foreach (var cellData in data ?? option.Data)
+            // 加数据
+            foreach (var cellData in data ?? option.Data)
             {
                 row = sheet.CreateRow(sheet.LastRowNum + 1);
                 foreach (var (item, index) in option.FieldOption.Select((item, i) => (item, i)))
@@ -97,8 +97,8 @@ public class NPOIExportTool
         await Task.Run(() =>
         {
             var row = sheet.CreateRow(Zero);
-                // 加表头
-                foreach (var (head, index) in option.Header.Select((item, i) => (item, i)))
+            // 加表头
+            foreach (var (head, index) in option.Header.Select((item, i) => (item, i)))
             {
                 var cell = row.CreateCell(index);
                 cell.SetCellValue(head);
@@ -145,8 +145,8 @@ public class NPOIExportTool
         {
             bool checkLastRowNum = true;
             var row = sheet.CreateRow(Zero);
-                // 加数据
-                foreach (var cellData in data ?? option.Data)
+            // 加数据
+            foreach (var cellData in data ?? option.Data)
             {
                 if (!(checkLastRowNum && sheet.LastRowNum == 0))
                     row = sheet.CreateRow(sheet.LastRowNum + 1);

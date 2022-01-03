@@ -11,8 +11,14 @@ public class NPOINotCloseStream : MemoryStream
     public NPOINotCloseStream(Stream stream)
     {
         stream.CopyTo(this);
-        stream.Seek(0, SeekOrigin.Begin);
-        Seek(0, SeekOrigin.Begin);
+        stream.SeekToOrigin();
+        this.SeekToOrigin();
+    }
+    public NPOINotCloseStream(string path)
+    {
+        using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+        fs.CopyTo(this);
+        this.SeekToOrigin();
     }
     public override void Close() { }
     public IWorkbook GetWorkBook()

@@ -5,10 +5,9 @@ namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
 /// 针对表格导入的一些操作(基于 EPPlus)
 /// </summary>
-public class EPPlusExcelReadTool
+public partial class EPPlusExcelReadTool
 {
     private const int Zero = 1;
-
 
     #region 获取表头
     /// <summary>
@@ -35,7 +34,7 @@ public class EPPlusExcelReadTool
     /// <param name="pack">excel workbook</param>
     public static IEnumerable<string> ExcelHeader(ExcelPackage pack)
     {
-        var sheet = pack.Workbook.Worksheets[1];
+        var sheet = pack.Workbook.Worksheets[Zero];
         return ExcelHeader(sheet);
     }
     /// <summary>
@@ -75,7 +74,7 @@ public class EPPlusExcelReadTool
     /// <param name="pack">excel workbook</param>
     public static async Task<IEnumerable<IEnumerable<string>>> ExcelDataAsync(ExcelPackage pack)
     {
-        var sheet = pack.Workbook.Worksheets[1];
+        var sheet = pack.Workbook.Worksheets[Zero];
         return await ExcelDataAsync(sheet);
     }
     /// <summary>
@@ -89,13 +88,24 @@ public class EPPlusExcelReadTool
         ConcurrentBag<IEnumerable<string>> data = new();
         await Task.Factory.StartNew(() =>
         {
-            Parallel.For(Zero + 1, rowCount + Zero, index =>
+            Parallel.For(Zero + Zero, rowCount + Zero, index =>
             {
                 data.Add(sheet.Cells[index, Zero, index, colCount]
                 .Select(item => item.Value?.ToString().Trim()).ToList());
             });
         });
         return data;
+    }
+    /// <summary>
+    /// 获取表格的数据(仅限简单的单行表头)
+    /// </summary>
+    /// <param name="sheet">工作簿</param>
+    public static IEnumerable<IEnumerable<string>> ExcelData(ExcelWorksheet sheet)
+    {
+        int rowCount = sheet.Dimension.Rows;
+        int colCount = sheet.Dimension.Columns;
+        for (var index = 0; index < rowCount; index++)
+            yield return sheet.Cells[index, Zero, index, colCount].Select(item => item.Value?.ToString().Trim()).ToList();
     }
     #endregion
 
@@ -234,7 +244,7 @@ public class EPPlusExcelReadTool
     /// <param name="options">导出配置</param>
     public static async Task<string[][]> ExcelDataByOptionsAsync<T>(ExcelPackage pack, ReadConfig<T> options)
     {
-        var sheet = pack.Workbook.Worksheets[1];
+        var sheet = pack.Workbook.Worksheets[Zero];
         return await ExcelDataByOptionsAsync(sheet, options);
     }
     /// <summary>
@@ -244,7 +254,7 @@ public class EPPlusExcelReadTool
     /// <param name="options">导出配置</param>
     public static async Task<string[][]> GetExcelDataByOptionsAsync<T>(ExcelPackage pack, IEnumerable<ReadCellOption<T>> options)
     {
-        var sheet = pack.Workbook.Worksheets[1];
+        var sheet = pack.Workbook.Worksheets[Zero];
         return await GetExcelDataByOptionsAsync<T>(sheet, options);
     }
     /// <summary>
@@ -271,7 +281,7 @@ public class EPPlusExcelReadTool
         ConcurrentBag<string[]> data = new();
         await Task.Factory.StartNew(() =>
         {
-            Parallel.For(Zero + 1, rowCount + Zero, index =>
+            Parallel.For(Zero + Zero, rowCount + Zero, index =>
             {
                 Monitor.Enter(sheet);
                 var temp = sheet.Cells[index, Zero, index, colCount]
@@ -336,7 +346,7 @@ public class EPPlusExcelReadTool
     /// <param name="options">导出配置</param>
     public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(ExcelPackage pack, ReadConfig<T> options)
     {
-        var sheet = pack.Workbook.Worksheets[1];
+        var sheet = pack.Workbook.Worksheets[Zero];
         return await ExcelToEntityAsync(sheet, options);
     }
     /// <summary>
@@ -347,7 +357,7 @@ public class EPPlusExcelReadTool
     /// <param name="init">读取成功之后调用的针对T的委托</param>
     public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(ExcelPackage pack, IEnumerable<ReadCellOption<T>> options, Func<T, T> init)
     {
-        var sheet = pack.Workbook.Worksheets[1];
+        var sheet = pack.Workbook.Worksheets[Zero];
         return await ExcelToEntityAsync(sheet, options, init);
     }
     /// <summary>
