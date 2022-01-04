@@ -1,12 +1,9 @@
-using NPOI.XSSF.Streaming;
-
 namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
 /// 针对表格导出的一些操作(基于NPOI)
 /// </summary>
 public partial class NPOIExportTool
 {
-    private const int Zero = 0;
     /// <summary>
     /// 导出excel
     /// </summary>
@@ -36,33 +33,7 @@ public partial class NPOIExportTool
     /// <param name="data">指定数据</param>
     public static async Task<Stream> ExportAsync<T>(Stream stream, ExportConfig<T> option, IEnumerable<T> data = null)
     {
-        var workbook = new SXSSFWorkbook();
-        var sheet = workbook.CreateSheet("Sheet1");
-        var notCloseStream = new NPOINotCloseStream(stream);
-        await Task.Run(() =>
-        {
-            var row = sheet.CreateRow(Zero);
-            // 加表头
-            foreach (var (head, index) in option.Header.Select((item, i) => (item, i)))
-            {
-                var cell = row.CreateCell(index);
-                cell.SetCellValue(head);
-            }
-
-            // 加数据
-            foreach (var cellData in data ?? option.Data)
-            {
-                row = sheet.CreateRow(sheet.LastRowNum + 1);
-                foreach (var (item, index) in option.FieldOption.Select((item, i) => (item, i)))
-                {
-                    var cell = row.CreateCell(index);
-                    cell.SetCellValue(item.Action(cellData)?.ToString());
-                }
-            }
-            workbook.Write(notCloseStream);
-        });
-        await notCloseStream.SeekAndCopyToAsync(stream);
-        return notCloseStream;
+        return await ExcelExportTool.NPOIExportAsync(stream, option, data);
     }
 
     /// <summary>
@@ -91,22 +62,7 @@ public partial class NPOIExportTool
     /// <param name="option">导出配置</param>
     public static async Task<Stream> ExportHeaderAsync<T>(Stream stream, ExportConfig<T> option)
     {
-        var workbook = new SXSSFWorkbook();
-        var sheet = workbook.CreateSheet("Sheet1");
-        var notCloseStream = new NPOINotCloseStream(stream);
-        await Task.Run(() =>
-        {
-            var row = sheet.CreateRow(Zero);
-            // 加表头
-            foreach (var (head, index) in option.Header.Select((item, i) => (item, i)))
-            {
-                var cell = row.CreateCell(index);
-                cell.SetCellValue(head);
-            }
-            workbook.Write(notCloseStream);
-        });
-        await notCloseStream.SeekAndCopyToAsync(stream);
-        return notCloseStream;
+        return await ExcelExportTool.NPOIExportHeaderAsync(stream, option);
     }
 
     /// <summary>
@@ -138,28 +94,6 @@ public partial class NPOIExportTool
     /// <param name="data">指定数据</param>
     public static async Task<Stream> ExportDataAsync<T>(Stream stream, ExportConfig<T> option, IEnumerable<T> data = null)
     {
-        var workbook = new SXSSFWorkbook();
-        var sheet = workbook.CreateSheet("Sheet1");
-        var notCloseStream = new NPOINotCloseStream(stream);
-        await Task.Run(() =>
-        {
-            bool checkLastRowNum = true;
-            var row = sheet.CreateRow(Zero);
-            // 加数据
-            foreach (var cellData in data ?? option.Data)
-            {
-                if (!(checkLastRowNum && sheet.LastRowNum == 0))
-                    row = sheet.CreateRow(sheet.LastRowNum + 1);
-                else checkLastRowNum = false;
-                foreach (var (item, index) in option.FieldOption.Select((item, i) => (item, i)))
-                {
-                    var cell = row.CreateCell(index);
-                    cell.SetCellValue(item.Action(cellData)?.ToString());
-                }
-            }
-            workbook.Write(notCloseStream);
-        });
-        await notCloseStream.SeekAndCopyToAsync(stream);
-        return notCloseStream;
+        return await ExcelExportTool.NPOIExportDataAsync(stream, option, data);
     }
 }

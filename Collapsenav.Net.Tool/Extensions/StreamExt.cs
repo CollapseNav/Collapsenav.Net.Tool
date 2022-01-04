@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Collapsenav.Net.Tool;
+﻿namespace Collapsenav.Net.Tool;
 public static partial class StreamExt
 {
     /// <summary>

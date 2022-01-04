@@ -9,7 +9,6 @@ namespace Collapsenav.Net.Tool.Test;
     }
     public class CollectionTest
     {
-
         [Fact]
         public void UniqueTest()
         {

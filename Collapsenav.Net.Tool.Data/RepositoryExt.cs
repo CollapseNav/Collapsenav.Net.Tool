@@ -7,7 +7,7 @@ public static class RepositoryExt
     {
         services
         .AddTransient(typeof(IRepository<,>), typeof(Repository<,>))
-        .AddTransient(typeof(IRepository<>), typeof(Repository<,>))
+        .AddTransient(typeof(IRepository<>), typeof(Repository<>))
         .AddTransient(typeof(IQueryRepository<>), typeof(QueryRepository<>))
         .AddTransient(typeof(IModifyRepository<>), typeof(ModifyRepository<>));
         return services;

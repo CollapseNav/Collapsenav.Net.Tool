@@ -1,12 +1,9 @@
-using OfficeOpenXml;
-
 namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
 /// 针对表格导出的一些操作(基于EPPlus)
 /// </summary>
 public partial class EPPlusExportTool
 {
-    private const int Zero = 1;
     /// <summary>
     /// 导出excel
     /// </summary>
@@ -39,23 +36,7 @@ public partial class EPPlusExportTool
     /// <param name="exportType">导出类型</param>
     public static async Task<Stream> ExportAsync<T>(Stream stream, ExportConfig<T> option, IEnumerable<T> data = null, ExportType exportType = ExportType.All)
     {
-        using var pack = new ExcelPackage();
-        ExcelWorksheet sheet = pack.Workbook.Worksheets.Add($@"sheet{pack.Workbook.Worksheets.Count}");
-        await Task.Run(() =>
-        {
-            sheet.Cells[Zero, Zero].LoadFromArrays(
-                exportType switch
-                {
-                    ExportType.All => data == null ? option.ExportData : option.GetExportData(data),
-                    ExportType.Header => option.ConvertHeader,
-                    ExportType.Data => data == null ? option.ConvertData : option.GetConvertData(data),
-                    _ => data == null ? option.ExportData : option.GetExportData(data)
-                }
-            );
-            pack.SaveAs(stream);
-        });
-        stream.SeekToOrigin();
-        return stream;
+        return await ExcelExportTool.EPPlusExportAsync(stream, option, data, exportType);
     }
 
     /// <summary>
@@ -84,15 +65,7 @@ public partial class EPPlusExportTool
     /// <param name="option">导出配置</param>
     public static async Task<Stream> ExportHeaderAsync<T>(Stream stream, ExportConfig<T> option)
     {
-        using var pack = new ExcelPackage();
-        ExcelWorksheet sheet = pack.Workbook.Worksheets.Add($@"sheet{pack.Workbook.Worksheets.Count}");
-        await Task.Run(() =>
-        {
-            sheet.Cells[Zero, Zero].LoadFromArrays(option.ConvertHeader);
-            pack.SaveAs(stream);
-        });
-        stream.SeekToOrigin();
-        return stream;
+        return await ExcelExportTool.NPOIExportHeaderAsync(stream, option);
     }
 
     /// <summary>
@@ -124,15 +97,7 @@ public partial class EPPlusExportTool
     /// <param name="option">导出配置</param>
     public static async Task<Stream> ExportDataAsync<T>(Stream stream, ExportConfig<T> option, IEnumerable<T> data = null)
     {
-        using var pack = new ExcelPackage();
-        ExcelWorksheet sheet = pack.Workbook.Worksheets.Add($@"sheet{pack.Workbook.Worksheets.Count}");
-        await Task.Run(() =>
-        {
-            sheet.Cells[Zero, Zero].LoadFromArrays(data == null ? option.ConvertData : option.GetConvertData(data));
-            pack.SaveAs(stream);
-        });
-        stream.SeekToOrigin();
-        return stream;
+        return await ExcelExportTool.EPPlusExportDataAsync(stream, option, data);
     }
 
 }
