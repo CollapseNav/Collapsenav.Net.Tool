@@ -10,7 +10,7 @@ public class BaseCellOption<T>
     /// <summary>
     /// 对应字段的属性(实际上包含PropName)
     /// </summary>
-    public PropertyInfo Prop
+    public virtual PropertyInfo Prop
     {
         get
         {
@@ -20,11 +20,11 @@ public class BaseCellOption<T>
         }
         set => prop = value;
     }
-    protected PropertyInfo prop;
+    private PropertyInfo prop;
     /// <summary>
     /// 就是一个看起来比较方便的标识
     /// </summary>
-    public string PropName
+    public virtual string PropName
     {
         get
         {
@@ -34,5 +34,5 @@ public class BaseCellOption<T>
         }
         set => propName = value;
     }
-    protected string propName { get; set; }
+    private string propName { get; set; }
 }

@@ -44,8 +44,7 @@ public class ExcelReadTool
                     else
                         option.Prop.SetValue(obj, option.Action == null ? null : option.Action(string.Empty));
                 }
-                if (options.Init != null)
-                    obj = options.Init(obj);
+                options.Init?.Invoke(obj);
                 data.Add(obj);
             });
         });

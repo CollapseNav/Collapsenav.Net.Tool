@@ -10,30 +10,13 @@ namespace Collapsenav.Net.Tool.Excel;
 public partial class ReadConfig<T>
 {
     /// <summary>
-    /// 根据给出的表头筛选options
-    /// </summary>
-    public void FilterOptionByHeaders(IEnumerable<string> headers)
-    {
-        FieldOption = FilterOptionByHeaders(FieldOption, headers);
-    }
-
-    /// <summary>
-    /// 根据给出的表头筛选options
-    /// </summary>
-    public static IEnumerable<ReadCellOption<T>> FilterOptionByHeaders(IEnumerable<ReadCellOption<T>> options, IEnumerable<string> headers)
-    {
-        return options.Where(item => headers.Any(head => head == item.ExcelField));
-    }
-
-
-    /// <summary>
     /// 添加默认单元格读取设置(其实就是不读取Excel直接给T的某个字段赋值)
     /// </summary>
     /// <param name="prop">T的属性</param>
     /// <param name="defaultValue">默认值</param>
     public virtual ReadConfig<T> Default<E>(Expression<Func<T, E>> prop, E defaultValue)
     {
-        FieldOption = FieldOption.Append(GenOption(string.Empty, prop, item => defaultValue));
+        Add(GenOption(string.Empty, prop, item => defaultValue));
         return this;
     }
     /// <summary>
@@ -55,7 +38,6 @@ public partial class ReadConfig<T>
     public virtual ReadConfig<T> Require<E>(string field, Expression<Func<T, E>> prop, Func<string, E> action = null)
     {
         var option = GenOption(field, prop, action);
-        // action = option.Action;
         var func = option.Action;
         option.Action = item =>
         {
@@ -63,7 +45,7 @@ public partial class ReadConfig<T>
                 throw new NoNullAllowedException($@" {field} 不可为空");
             return func(item);
         };
-        FieldOption = FieldOption.Append(option);
+        Add(option);
         return this;
     }
     /// <summary>
@@ -80,29 +62,12 @@ public partial class ReadConfig<T>
     /// <summary>
     /// 添加普通单元格设置
     /// </summary>
-    public virtual ReadConfig<T> Add(ReadCellOption<T> option)
-    {
-        FieldOption = FieldOption.Append(option);
-        return this;
-    }
-    /// <summary>
-    /// check条件为True时添加普通单元格设置
-    /// </summary>
-    public virtual ReadConfig<T> AddIf(bool check, ReadCellOption<T> option)
-    {
-        if (check)
-            return Add(option);
-        return this;
-    }
-    /// <summary>
-    /// 添加普通单元格设置
-    /// </summary>
     /// <param name="field">表头列</param>
     /// <param name="prop">T的属性</param>
     /// <param name="action">对单元格字符串的操作</param>
     public virtual ReadConfig<T> Add<E>(string field, Expression<Func<T, E>> prop, Func<string, E> action = null)
     {
-        FieldOption = FieldOption.Append(GenOption(field, prop, action));
+        Add(GenOption(field, prop, action));
         return this;
     }
     /// <summary>
@@ -124,7 +89,7 @@ public partial class ReadConfig<T>
     /// <param name="action">对单元格字符串的操作</param>
     public virtual ReadConfig<T> Add(string field, PropertyInfo prop, Func<string, object> action = null)
     {
-        FieldOption = FieldOption.Append(GenOption(field, prop, action));
+        Add(GenOption(field, prop, action));
         return this;
     }
     /// <summary>
@@ -192,27 +157,10 @@ public partial class ReadConfig<T>
     /// <param name="prop"></param>
     public virtual ReadCellOption<T> GenOption(string field, PropertyInfo prop)
     {
-        // 暂时还想不到其他简单的高效的方法
-        // TODO 考虑提到 Tool 的 TypeTool 中 ?
-        Func<string, object> defaultConvertFunc = prop.PropertyType.Name switch
-        {
-            nameof(String) => (item) => item,
-            nameof(Int16) => (item) => short.Parse(item),
-            nameof(Int32) => (item) => int.Parse(item),
-            nameof(Int64) => (item) => long.Parse(item),
-            nameof(Double) => (item) => double.Parse(item),
-            nameof(Single) => (item) => float.Parse(item),
-            nameof(Decimal) => (item) => decimal.Parse(item),
-            nameof(Boolean) => (item) => bool.Parse(item),
-            nameof(DateTime) => (item) => DateTime.Parse(item),
-            _ => (item) => item,
-        };
         return new ReadCellOption<T>
         {
-            PropName = prop.Name,
-            Prop = prop,
             ExcelField = field,
-            Action = defaultConvertFunc
+            Prop = prop,
         };
     }
     /// <summary>
@@ -225,9 +173,8 @@ public partial class ReadConfig<T>
     {
         return action == null ? GenOption(field, prop) : new ReadCellOption<T>
         {
-            PropName = prop.Name,
-            Prop = prop,
             ExcelField = field,
+            Prop = prop,
             Action = item => action(item)
         };
     }
