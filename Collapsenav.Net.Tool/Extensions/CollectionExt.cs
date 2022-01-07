@@ -277,4 +277,9 @@ public static partial class CollectionExt
     {
         return CollectionTool.ForEach(query, action);
     }
+
+    public static IEnumerable<(T value, int index)> SelectWithIndex<T>(this IEnumerable<T> origin, int zero = 0)
+    {
+        return origin.Select((value, index) => (value, index + zero));
+    }
 }
