@@ -20,7 +20,7 @@ public partial class ExportConfig<T>
         var config = data.IsEmpty() ? new ExportConfig<T>() : new ExportConfig<T>(data);
         var attrData = typeof(T).AttrValues<ExcelExportAttribute>();
         foreach (var prop in attrData)
-            config.Add(prop.Value.ExcelField, item => item.GetValue(prop.Key.Name));
+            config.Add(prop.Value.ExcelField, prop.Key.Name);
         return config;
     }
     /// <summary>
@@ -30,7 +30,7 @@ public partial class ExportConfig<T>
     {
         var config = data.IsEmpty() ? new ExportConfig<T>() : new ExportConfig<T>(data);
         foreach (var propName in typeof(T).BuildInTypePropNames())
-            config.Add(propName, item => item.GetValue(propName));
+            config.Add(propName, propName);
         return config;
     }
 }

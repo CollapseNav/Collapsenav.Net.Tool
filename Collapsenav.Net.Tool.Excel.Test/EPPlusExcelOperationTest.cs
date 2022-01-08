@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,17 +23,6 @@ public class EPPlusExcelOperationTest
     }
 
     [Fact]
-    public async Task DataTest()
-    {
-        var datas = await EPPlusExcelReadTool.ExcelDataAsync($@"./EPPlus-TestExcel.xlsx");
-        Assert.True(datas?.Count() == 3000);
-
-        using FileStream fs = new($@"./EPPlus-TestExcel.xlsx", FileMode.Open);
-        datas = await EPPlusExcelReadTool.ExcelDataAsync(fs);
-        Assert.True(datas?.Count() == 3000);
-    }
-
-    [Fact]
     public void OptionHeaderTest()
     {
         var realHeader = new[] { "Field0", "Field1" };
@@ -48,53 +38,6 @@ public class EPPlusExcelOperationTest
         headers = config.EPPlusExcelHeaderByOptions(fs);
         Assert.True(headers.Select(item => item.Key).SequenceEqual(realHeader));
     }
-
-    [Fact]
-    public async Task OptionDataTest()
-    {
-        var config = new ReadConfig<ExcelTestDto>()
-        .Require("Field0", item => item.Field0)
-        .Add("Field1", item => item.Field1)
-        .Default(item => item.Field3, 233)
-        .AddInit(item =>
-        {
-            item.Field0 += "23333";
-            item.Field2 = false;
-            return item;
-        })
-        ;
-
-        var datas = await config.EPPlusExcelDataByOptionsAsync($@"./EPPlus-TestExcel.xlsx");
-        Assert.True(datas?.Length == 3000);
-
-        using FileStream fs = new($@"./EPPlus-TestExcel.xlsx", FileMode.Open);
-        datas = await config.EPPlusExcelDataByOptionsAsync(fs);
-        Assert.True(datas?.Length == 3000);
-    }
-
-    // [Fact]
-    // public async Task OptionEntityTest()
-    // {
-    //     var config = new ReadConfig<ExcelTestDto>()
-    //     .Require("Field0", item => item.Field0)
-    //     .Add("Field1", item => item.Field1)
-    //     .Default(item => item.Field3, 233)
-    //     .Require("Field3", (value, entity) => entity.Field3 = double.Parse(value))
-    //     .AddInit(item =>
-    //     {
-    //         item.Field0 += "23333";
-    //         item.Field2 = false;
-    //         return item;
-    //     })
-    //     ;
-    //     var entitys = await config.EPPlusExcelToEntityAsync($@"./EPPlus-TestExcel.xlsx");
-    //     Assert.True(entitys.Count() == 3000);
-    //     Assert.True(entitys.All(item => item.Field2 == false));
-
-    //     using FileStream fs = new($@"./EPPlus-TestExcel.xlsx", FileMode.Open);
-    //     Assert.True(entitys.Count() == 3000);
-    //     Assert.True(entitys.All(item => item.Field2 == false));
-    // }
 
     [Fact]
     public async Task ExportTest()

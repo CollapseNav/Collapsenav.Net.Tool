@@ -20,15 +20,16 @@ public class ExcelExportTool
         ExcelWorksheet sheet = pack.Workbook.Worksheets.Add($@"sheet{pack.Workbook.Worksheets.Count}");
         await Task.Run(() =>
         {
-            sheet.Cells[EPPlusZero, EPPlusZero].LoadFromArrays(
-                exportType switch
-                {
-                    ExportType.All => data == null ? option.ExportData : option.GetExportData(data),
-                    ExportType.Header => option.ConvertHeader,
-                    ExportType.Data => data == null ? option.ConvertData : option.GetConvertData(data),
-                    _ => data == null ? option.ExportData : option.GetExportData(data)
-                }
-            );
+            var excelData = exportType switch
+            {
+                ExportType.All => data == null ? option.ExportData : option.GetExportData(data),
+                ExportType.Header => option.ConvertHeader,
+                ExportType.Data => data == null ? option.ConvertData : option.GetConvertData(data),
+                _ => data == null ? option.ExportData : option.GetExportData(data)
+            };
+            foreach (var (dataRow, indexRow) in excelData.SelectWithIndex(EPPlusZero))
+                foreach (var (dataCell, indexCell) in dataRow.SelectWithIndex(EPPlusZero))
+                    sheet.Cells[indexRow, indexCell].Value = dataCell;
             pack.SaveAs(stream);
         });
         stream.SeekToOrigin();
@@ -45,7 +46,8 @@ public class ExcelExportTool
         ExcelWorksheet sheet = pack.Workbook.Worksheets.Add($@"sheet{pack.Workbook.Worksheets.Count}");
         await Task.Run(() =>
         {
-            sheet.Cells[EPPlusZero, EPPlusZero].LoadFromArrays(option.ConvertHeader);
+            foreach (var (item, index) in option.Header.SelectWithIndex(EPPlusZero))
+                sheet.Cells[EPPlusZero, index].Value = item;
             pack.SaveAs(stream);
         });
         stream.SeekToOrigin();
@@ -63,7 +65,10 @@ public class ExcelExportTool
         ExcelWorksheet sheet = pack.Workbook.Worksheets.Add($@"sheet{pack.Workbook.Worksheets.Count}");
         await Task.Run(() =>
         {
-            sheet.Cells[EPPlusZero, EPPlusZero].LoadFromArrays(data == null ? option.ConvertData : option.GetConvertData(data));
+            var excelData = data == null ? option.ConvertData : option.GetConvertData(data);
+            foreach (var (dataRow, indexRow) in excelData.SelectWithIndex(EPPlusZero))
+                foreach (var (dataCell, indexCell) in dataRow.SelectWithIndex(EPPlusZero))
+                    sheet.Cells[indexRow, indexCell].Value = dataCell;
             pack.SaveAs(stream);
         });
         stream.SeekToOrigin();

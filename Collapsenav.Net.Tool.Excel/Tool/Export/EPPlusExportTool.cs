@@ -65,7 +65,7 @@ public partial class EPPlusExportTool
     /// <param name="option">导出配置</param>
     public static async Task<Stream> ExportHeaderAsync<T>(Stream stream, ExportConfig<T> option)
     {
-        return await ExcelExportTool.NPOIExportHeaderAsync(stream, option);
+        return await ExcelExportTool.EPPlusExportHeaderAsync(stream, option);
     }
 
     /// <summary>

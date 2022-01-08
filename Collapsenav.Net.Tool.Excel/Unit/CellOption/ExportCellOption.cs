@@ -1,4 +1,6 @@
-﻿namespace Collapsenav.Net.Tool.Excel;
+﻿using OfficeOpenXml;
+
+namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
 ///  导出单元格设置
 /// </summary>
@@ -19,6 +21,10 @@ public class ExportCellOption<T> : BaseCellOption<T>
         set => action = value;
     }
     private Func<T, object> action;
+    public void InitExcelCell(ExcelRangeBase cell, string value)
+    {
+        cell.Value = value;
+    }
 }
 
 public class ExportCellOption : ExportCellOption<object>

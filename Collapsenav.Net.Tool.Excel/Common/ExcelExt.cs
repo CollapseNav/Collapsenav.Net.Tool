@@ -6,6 +6,6 @@ public static class ExcelExt
     /// </summary>
     public static bool IsXls(this string filepath)
     {
-        return ExcelTool.IsXls(filepath);
+        return ExcelReadTool.IsXls(filepath);
     }
 }
