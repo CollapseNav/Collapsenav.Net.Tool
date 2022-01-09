@@ -11,10 +11,10 @@ public class EPPlusExcelRead : IExcelRead
     protected IEnumerable<string> Headers;
     protected int rowCount;
 
-    int IExcelRead.Zero => EPPlusZero;
-    long IExcelRead.RowCount { get => rowCount; }
-    IEnumerable<string> IExcelRead.Headers { get => Headers; }
-    IDictionary<string, int> IExcelRead.HeadersWithIndex { get => HeaderIndex; }
+    int IExcelRead<string>.Zero => EPPlusZero;
+    long IExcelRead<string>.RowCount { get => rowCount; }
+    IEnumerable<string> IExcelRead<string>.Headers { get => Headers; }
+    IDictionary<string, int> IExcelRead<string>.HeadersWithIndex { get => HeaderIndex; }
 
     public EPPlusExcelRead(ExcelWorksheet sheet, int headerCount = EPPlusZero)
     {
@@ -26,7 +26,7 @@ public class EPPlusExcelRead : IExcelRead
         Headers = HeaderIndex.Select(item => item.Key).ToList();
 
     }
-    IEnumerable<string> IExcelRead.this[string field]
+    IEnumerable<string> IExcelRead<string>.this[string field]
     {
         get
         {
@@ -35,18 +35,18 @@ public class EPPlusExcelRead : IExcelRead
         }
     }
 
-    IEnumerable<string> IExcelRead.this[long col]
+    IEnumerable<string> IExcelRead<string>.this[long row]
     {
         get
         {
-            for (var i = headerRowCount; i < rowCount; i++)
-                yield return sheet.Cells[i, (int)col + EPPlusZero].Value.ToString();
+            row += EPPlusZero;
+            return sheet.Cells[(int)row, EPPlusZero, (int)row, EPPlusZero + Headers.Count()].Select(item => item.Value.ToString());
         }
     }
 
-    string IExcelRead.this[long row, long col] => sheet.Cells[(int)row + EPPlusZero, (int)col + EPPlusZero].Value.ToString();
+    string IExcelRead<string>.this[long row, long col] => sheet.Cells[(int)row + EPPlusZero, (int)col + EPPlusZero].Value.ToString();
 
-    string IExcelRead.this[string field, long row] => sheet.Cells[(int)row + EPPlusZero, HeaderIndex[field] + EPPlusZero].Value.ToString();
+    string IExcelRead<string>.this[string field, long row] => sheet.Cells[(int)row + EPPlusZero, HeaderIndex[field] + EPPlusZero].Value.ToString();
 
     public void Dispose()
     {

@@ -5,14 +5,18 @@ namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
 /// 尝试使用 IColumnRead 统一 NPOI 和 EPPlus 的调用
 /// </summary>
-public interface IExcelRead : IDisposable
+public interface IExcelRead : IExcelRead<string>
 {
-    IEnumerable<string> this[string field] { get; }
-    IEnumerable<string> this[long col] { get; }
-    string this[long row, long col] { get; }
-    string this[string field, long row] { get; }
-    int Zero { get; }
-    long RowCount { get; }
+}
+
+public interface IExcelRead<T> : IDisposable
+{
+    IEnumerable<T> this[T field] { get; }
+    IEnumerable<T> this[long row] { get; }
+    T this[long row, long col] { get; }
+    T this[T field, long row] { get; }
+    IEnumerable<T> Headers { get; }
+    IDictionary<T, int> HeadersWithIndex { get; }
     public static IExcelRead GetExcelRead(object sheet)
     {
         if (sheet is ISheet)
@@ -25,6 +29,23 @@ public interface IExcelRead : IDisposable
         }
         return null;
     }
-    IEnumerable<string> Headers { get; }
-    IDictionary<string, int> HeadersWithIndex { get; }
+
+    public static IExcelRead GetExcelRead(Stream stream)
+    {
+        var type = stream.Length switch
+        {
+            _ => ExcelType.MiniExcel
+        };
+        return null;
+    }
+    int Zero { get; }
+    long RowCount { get; }
+}
+
+public enum ExcelType
+
+{
+    NPOI,
+    EPPlus,
+    MiniExcel
 }

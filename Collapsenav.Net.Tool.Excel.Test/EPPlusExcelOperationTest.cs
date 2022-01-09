@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,10 +13,10 @@ public class EPPlusExcelOperationTest
     {
         var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
 
-        var headers = EPPlusExcelReadTool.ExcelHeader($@"./EPPlus-TestExcel.xlsx");
+        var headers = EPPlusExcelReadTool.ExcelHeader($@"./TestExcel.xlsx");
         Assert.True(headers.SequenceEqual(realHeader));
 
-        using FileStream fs = new($@"./EPPlus-TestExcel.xlsx", FileMode.Open);
+        using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open, FileAccess.Read, FileShare.Read);
         headers = EPPlusExcelReadTool.ExcelHeader(fs);
         Assert.True(headers.SequenceEqual(realHeader));
     }
@@ -31,10 +30,10 @@ public class EPPlusExcelOperationTest
         .Require("Field0", item => item.Field0)
         .Add("Field1", item => item.Field1)
         ;
-        var headers = config.EPPlusExcelHeaderByOptions($@"./EPPlus-TestExcel.xlsx");
+        var headers = config.EPPlusExcelHeaderByOptions($@"./TestExcel.xlsx");
         Assert.True(headers.Select(item => item.Key).SequenceEqual(realHeader));
 
-        using FileStream fs = new($@"./EPPlus-TestExcel.xlsx", FileMode.Open);
+        using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open, FileAccess.Read, FileShare.Read);
         headers = config.EPPlusExcelHeaderByOptions(fs);
         Assert.True(headers.Select(item => item.Key).SequenceEqual(realHeader));
     }
@@ -42,7 +41,7 @@ public class EPPlusExcelOperationTest
     [Fact]
     public async Task ExportTest()
     {
-        using FileStream fs = new($@"./EPPlus-TestExcel.xlsx", FileMode.Open);
+        using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open, FileAccess.Read, FileShare.Read);
         var config = new ReadConfig<ExcelTestDto>()
         .Add("Field0", item => item.Field0)
         .Add("Field1", item => item.Field1)
@@ -86,7 +85,7 @@ public class EPPlusExcelOperationTest
     {
         var read = ReadConfig<ExcelDefaultDto>.GenDefaultConfig();
         Assert.True(read.FieldOption.Count() == 3);
-        var data = await read.EPPlusExcelToEntityAsync("./EPPlus-DefaultExcel.xlsx");
+        var data = await read.EPPlusExcelToEntityAsync("./DefaultExcel.xlsx");
         Assert.True(data.Count() == 20);
 
         var export = ExportConfig<ExcelDefaultDto>.GenDefaultConfig(data);
@@ -101,7 +100,7 @@ public class EPPlusExcelOperationTest
     {
         var read = ReadConfig<ExcelAttrDto>.GenDefaultConfig();
         Assert.True(read.FieldOption.Count() == 3);
-        var data = await read.EPPlusExcelToEntityAsync("./EPPlus-AttributeExcel.xlsx");
+        var data = await read.EPPlusExcelToEntityAsync("./AttributeExcel.xlsx");
         Assert.True(data.Count() == 20);
 
         var export = ExportConfig<ExcelAttrDto>.GenDefaultConfig(data);

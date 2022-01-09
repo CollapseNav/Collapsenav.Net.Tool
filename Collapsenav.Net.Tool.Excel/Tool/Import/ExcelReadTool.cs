@@ -20,6 +20,7 @@ public class ExcelReadTool
         {
             Parallel.For(1, rowCount, index =>
             {
+                var dataRow = sheet[index];
                 // 根据对应传入的设置 为obj赋值
                 var obj = Activator.CreateInstance<T>();
                 foreach (var option in options.FieldOption)
@@ -27,7 +28,7 @@ public class ExcelReadTool
                     if (!option.ExcelField.IsNull())
                     {
                         Monitor.Enter(sheet);
-                        var value = sheet[option.ExcelField, index];
+                        var value = dataRow.ElementAt(header[option.ExcelField]);
                         Monitor.Exit(sheet);
                         option.Prop.SetValue(obj, option.Action == null ? value : option.Action(value));
                     }

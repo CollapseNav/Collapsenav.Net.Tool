@@ -14,10 +14,10 @@ public class NPOIExcelOperationTest
     {
         var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
 
-        var headers = NPOIExcelReadTool.ExcelHeader($@"./NPOI-TestExcel.xlsx");
+        var headers = NPOIExcelReadTool.ExcelHeader($@"./TestExcel.xlsx");
         Assert.True(headers.SequenceEqual(realHeader));
 
-        using FileStream fs = new($@"./NPOI-TestExcel.xlsx", FileMode.Open);
+        using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open, FileAccess.Read, FileShare.Read);
         headers = NPOIExcelReadTool.ExcelHeader(fs);
         Assert.True(headers.SequenceEqual(realHeader));
     }
@@ -31,10 +31,10 @@ public class NPOIExcelOperationTest
         .Require("Field0", item => item.Field0)
         .Add("Field1", item => item.Field1)
         ;
-        var headers = config.NPOIExcelHeaderByOptions($@"./NPOI-TestExcel.xlsx");
+        var headers = config.NPOIExcelHeaderByOptions($@"./TestExcel.xlsx");
         Assert.True(headers.Select(item => item.Key).SequenceEqual(realHeader));
 
-        using FileStream fs = new($@"./NPOI-TestExcel.xlsx", FileMode.Open);
+        using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open, FileAccess.Read, FileShare.Read);
         headers = config.NPOIExcelHeaderByOptions(fs);
         Assert.True(headers.Select(item => item.Key).SequenceEqual(realHeader));
     }
@@ -42,7 +42,7 @@ public class NPOIExcelOperationTest
     [Fact]
     public async Task ExportTest()
     {
-        using FileStream fs = new($@"./NPOI-TestExcel.xlsx", FileMode.Open);
+        using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open, FileAccess.Read, FileShare.Read);
         var config = new ReadConfig<ExcelTestDto>()
         .Add("Field0", item => item.Field0)
         .Add("Field1", item => item.Field1)
@@ -86,7 +86,7 @@ public class NPOIExcelOperationTest
     {
         var read = ReadConfig<ExcelDefaultDto>.GenDefaultConfig();
         Assert.True(read.FieldOption.Count() == 3);
-        var data = await read.NPOIExcelToEntityAsync("./NPOI-DefaultExcel.xlsx");
+        var data = await read.NPOIExcelToEntityAsync("./DefaultExcel.xlsx");
         Assert.True(data.Count() == 20);
 
         var export = ExportConfig<ExcelDefaultDto>.GenDefaultConfig(data);
@@ -101,7 +101,7 @@ public class NPOIExcelOperationTest
     {
         var read = ReadConfig<ExcelAttrDto>.GenDefaultConfig();
         Assert.True(read.FieldOption.Count() == 3);
-        var data = await read.NPOIExcelToEntityAsync("./NPOI-AttributeExcel.xlsx");
+        var data = await read.NPOIExcelToEntityAsync("./AttributeExcel.xlsx");
         Assert.True(data.Count() == 20);
 
         var export = ExportConfig<ExcelAttrDto>.GenDefaultConfig(data);
