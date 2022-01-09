@@ -33,7 +33,7 @@ public class MiniExcelRead : IExcelRead
         HeaderIndex = sheetFirst.Select((item, index) => (item.Value, index)).ToDictionary(item => item.Value.ToString(), item => item.index);
     }
     private IDictionary<string, object> DynamicToDict(object dy) => dy.JsonMap<IDictionary<string, object>>();
-    private IEnumerable<string> DynamicToStringList(object dy) => DynamicToDict(dy).Select(item => item.Value.ToString());
+    private IEnumerable<string> DynamicToStringList(object dy) => DynamicToDict(dy).Select(item => item.Value?.ToString() ?? string.Empty);
     IEnumerable<string> IExcelRead<string>.this[string field]
     {
         get
