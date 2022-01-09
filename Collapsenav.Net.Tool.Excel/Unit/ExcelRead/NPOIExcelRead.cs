@@ -42,4 +42,9 @@ public class NPOIExcelRead : IExcelRead
     }
     string IExcelRead.this[long row, long col] => sheet.GetRow((int)row).GetCell((int)col).ToString();
     string IExcelRead.this[string field, long row] => sheet.GetRow((int)row).GetCell(HeaderIndex[field]).ToString();
+
+    public void Dispose()
+    {
+        sheet.Workbook.Close();
+    }
 }

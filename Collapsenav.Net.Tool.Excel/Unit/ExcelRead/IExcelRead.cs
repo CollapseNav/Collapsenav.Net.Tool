@@ -5,7 +5,7 @@ namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
 /// 尝试使用 IColumnRead 统一 NPOI 和 EPPlus 的调用
 /// </summary>
-public interface IExcelRead
+public interface IExcelRead : IDisposable
 {
     IEnumerable<string> this[string field] { get; }
     IEnumerable<string> this[long col] { get; }

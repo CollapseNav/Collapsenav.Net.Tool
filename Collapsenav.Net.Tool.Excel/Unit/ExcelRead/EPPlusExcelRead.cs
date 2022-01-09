@@ -47,4 +47,9 @@ public class EPPlusExcelRead : IExcelRead
     string IExcelRead.this[long row, long col] => sheet.Cells[(int)row + EPPlusZero, (int)col + EPPlusZero].Value.ToString();
 
     string IExcelRead.this[string field, long row] => sheet.Cells[(int)row + EPPlusZero, HeaderIndex[field] + EPPlusZero].Value.ToString();
+
+    public void Dispose()
+    {
+        sheet.Workbook.Dispose();
+    }
 }
