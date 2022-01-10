@@ -15,6 +15,8 @@ public class NPOIExcelRead : IExcelRead
     IEnumerable<string> IExcelRead<string>.Headers { get => Headers; }
     IDictionary<string, int> IExcelRead<string>.HeadersWithIndex { get => HeaderIndex; }
 
+    public NPOIExcelRead(Stream stream, int headerCount = NPOIZero) : this(ExcelReadTool.GetNPOISheet(stream), headerCount)
+    { }
     public NPOIExcelRead(ISheet sheet, int headerCount = NPOIZero)
     {
         this.sheet = sheet;

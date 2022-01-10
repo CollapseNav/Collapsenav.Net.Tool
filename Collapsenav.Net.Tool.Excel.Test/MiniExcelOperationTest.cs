@@ -20,21 +20,4 @@ public class MiniExcelOperationTest
         headers = MiniExcelReadTool.ExcelHeader(fs);
         Assert.True(headers.SequenceEqual(realHeader));
     }
-
-    [Fact]
-    public void OptionHeaderTest()
-    {
-        var realHeader = new[] { "Field0", "Field1" };
-
-        var config = new ReadConfig<ExcelTestDto>()
-        .Require("Field0", item => item.Field0)
-        .Add("Field1", item => item.Field1)
-        ;
-        var headers = config.MiniExcelHeaderByOptions($@"./TestExcel.xlsx");
-        Assert.True(headers.Select(item => item.Key).SequenceEqual(realHeader));
-
-        using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open, FileAccess.Read, FileShare.Read);
-        headers = config.MiniExcelHeaderByOptions(fs);
-        Assert.True(headers.Select(item => item.Key).SequenceEqual(realHeader));
-    }
 }

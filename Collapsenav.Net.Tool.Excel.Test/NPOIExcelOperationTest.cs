@@ -23,23 +23,6 @@ public class NPOIExcelOperationTest
     }
 
     [Fact]
-    public void OptionHeaderTest()
-    {
-        var realHeader = new[] { "Field0", "Field1" };
-
-        var config = new ReadConfig<ExcelTestDto>()
-        .Require("Field0", item => item.Field0)
-        .Add("Field1", item => item.Field1)
-        ;
-        var headers = config.NPOIExcelHeaderByOptions($@"./TestExcel.xlsx");
-        Assert.True(headers.Select(item => item.Key).SequenceEqual(realHeader));
-
-        using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open, FileAccess.Read, FileShare.Read);
-        headers = config.NPOIExcelHeaderByOptions(fs);
-        Assert.True(headers.Select(item => item.Key).SequenceEqual(realHeader));
-    }
-
-    [Fact]
     public async Task ExportTest()
     {
         using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open, FileAccess.Read, FileShare.Read);

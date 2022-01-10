@@ -29,14 +29,36 @@ public interface IExcelRead<T> : IDisposable
         }
         return null;
     }
-
-    public static IExcelRead GetExcelRead(Stream stream)
+    /// <summary>
+    /// 根据文件大小选择"合适"的 IExcelRead
+    /// 5M以下随机选 EPPlus 或 NPOI
+    /// 5M以上选 MiniExcel
+    /// </summary>
+    public static IExcelRead GetExcelRead(Stream stream, ExcelType? excelType = null)
     {
-        var type = stream.Length switch
+        excelType ??= stream.Length switch
         {
-            _ => ExcelType.MiniExcel
+            >= 5 * 1024 * 1024 => ExcelType.MiniExcel,
+            <= 5 * 1024 * 1024 => new Random().Next() % 2 == 0 ? ExcelType.EPPlus : ExcelType.NPOI,
         };
-        return null;
+        IExcelRead read = excelType switch
+        {
+            ExcelType.EPPlus => new EPPlusExcelRead(stream, 1),
+            ExcelType.NPOI => new NPOIExcelRead(stream, 1),
+            ExcelType.MiniExcel => new MiniExcelRead(stream, 1),
+            _ => new MiniExcelRead(stream, 1)
+        };
+        return read;
+    }
+    /// <summary>
+    /// 根据文件大小选择"合适"的 IExcelRead
+    /// 5M以下随机选 EPPlus 或 NPOI
+    /// 5M以上选 MiniExcel
+    /// </summary>
+    public static IExcelRead GetExcelRead(string path, ExcelType? excelType = null)
+    {
+        using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+        return GetExcelRead(path, excelType);
     }
     int Zero { get; }
     long RowCount { get; }

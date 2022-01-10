@@ -28,18 +28,16 @@ public class MiniExcelRead : IExcelRead
         sheet = SheetStream.Query().ToList();
 
         rowCount = sheet.Count();
-        var sheetFirst = DynamicToDict(sheet.First() as object);
-        Headers = DynamicToStringList(sheetFirst);
+        var sheetFirst = sheet.First() as IEnumerable<KeyValuePair<string, object>>;
+        Headers = MiniExcelReadTool.ExcelHeader(SheetStream);
         HeaderIndex = sheetFirst.Select((item, index) => (item.Value, index)).ToDictionary(item => item.Value.ToString(), item => item.index);
     }
-    private IDictionary<string, object> DynamicToDict(object dy) => dy.JsonMap<IDictionary<string, object>>();
-    private IEnumerable<string> DynamicToStringList(object dy) => DynamicToDict(dy).Select(item => item.Value?.ToString() ?? string.Empty);
     IEnumerable<string> IExcelRead<string>.this[string field]
     {
         get
         {
             for (var i = headerRowCount; i < rowCount; i++)
-                yield return DynamicToStringList(sheet.ElementAt(i) as object).ElementAt(HeaderIndex[field] + MiniZero);
+                yield return (sheet.ElementAt(i) as IEnumerable<KeyValuePair<string, object>>).ElementAt(HeaderIndex[field] + MiniZero).Value?.ToString() ?? string.Empty;
         }
     }
 
@@ -47,13 +45,13 @@ public class MiniExcelRead : IExcelRead
     {
         get
         {
-            return DynamicToStringList(sheet.ElementAt((int)row) as object);
+            return (sheet.ElementAt((int)row) as IEnumerable<KeyValuePair<string, object>>).Select(item => item.Value?.ToString() ?? string.Empty);
         }
     }
 
-    string IExcelRead<string>.this[long row, long col] => DynamicToStringList(sheet.ElementAt((int)row) as object).ElementAt((int)col + MiniZero);
+    string IExcelRead<string>.this[long row, long col] => (sheet.ElementAt((int)row) as IEnumerable<KeyValuePair<string, object>>).ElementAt((int)col + MiniZero).Value?.ToString() ?? string.Empty;
 
-    string IExcelRead<string>.this[string field, long row] => DynamicToStringList(sheet.ElementAt((int)row) as object).ElementAt(HeaderIndex[field] + MiniZero);
+    string IExcelRead<string>.this[string field, long row] => (sheet.ElementAt((int)row) as IEnumerable<KeyValuePair<string, object>>).ElementAt(HeaderIndex[field] + MiniZero).Value?.ToString() ?? string.Empty;
 
     public void Dispose()
     {

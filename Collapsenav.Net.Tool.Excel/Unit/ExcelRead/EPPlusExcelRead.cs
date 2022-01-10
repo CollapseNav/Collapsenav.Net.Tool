@@ -16,6 +16,8 @@ public class EPPlusExcelRead : IExcelRead
     IEnumerable<string> IExcelRead<string>.Headers { get => Headers; }
     IDictionary<string, int> IExcelRead<string>.HeadersWithIndex { get => HeaderIndex; }
 
+    public EPPlusExcelRead(Stream stream, int headerCount = EPPlusZero) : this(ExcelReadTool.GetEPPlusSheet(stream), headerCount)
+    { }
     public EPPlusExcelRead(ExcelWorksheet sheet, int headerCount = EPPlusZero)
     {
         this.sheet = sheet;

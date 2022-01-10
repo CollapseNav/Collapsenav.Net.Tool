@@ -7,8 +7,6 @@ namespace Collapsenav.Net.Tool.Excel;
 /// </summary>
 public partial class MiniExcelReadTool
 {
-    public static IDictionary<string, object> DynamicToDict(object dy) => dy.JsonMap<IDictionary<string, object>>();
-    public static IEnumerable<string> DynamicToStringList(object dy) => DynamicToDict(dy).Select(item => item.Value.ToString());
     #region 获取表头
     /// <summary>
     /// 获取表格header(仅限简单的单行表头)
@@ -25,7 +23,7 @@ public partial class MiniExcelReadTool
     /// <param name="stream">文件流</param>
     public static IEnumerable<string> ExcelHeader(Stream stream)
     {
-        return DynamicToStringList(stream.Query().First() as object);
+        return (stream.Query().First() as IDictionary<string, object>).Select(item => item.Value?.ToString() ?? string.Empty);
     }
     #endregion
 
@@ -48,7 +46,7 @@ public partial class MiniExcelReadTool
     /// <param name="options">导出配置</param>
     public static Dictionary<string, int> ExcelHeaderByOptions<T>(Stream stream, ReadConfig<T> options)
     {
-        return DynamicToDict(stream.Query().First() as object)
+        return (stream.Query().First() as IDictionary<string, object>)
         .Select((item, index) => (item.Value, index))
         .Where(item => options.FieldOption.Any(option => option.ExcelField == item.Value.ToString()))
         .ToDictionary(item => item.Value.ToString(), item => item.index);

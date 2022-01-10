@@ -121,11 +121,25 @@ public class ExcelReadTool
         return GetEPPlusPackage(path)?.Workbook;
     }
     /// <summary>
+    /// 获取 EPPlus中使用 的 Workbook
+    /// </summary>
+    public static ExcelWorkbook GetEPPlusWorkbook(Stream stream)
+    {
+        return GetEPPlusPackage(stream)?.Workbook;
+    }
+    /// <summary>
     /// 获取 EPPlus中使用 的 Sheets
     /// </summary>
     public static ExcelWorksheets GetEPPlusSheets(string path)
     {
         return GetEPPlusWorkbook(path).Worksheets;
+    }
+    /// <summary>
+    /// 获取 EPPlus中使用 的 Sheets
+    /// </summary>
+    public static ExcelWorksheets GetEPPlusSheets(Stream stream)
+    {
+        return GetEPPlusWorkbook(stream).Worksheets;
     }
     /// <summary>
     /// 获取 EPPlus中使用 的 Sheet
@@ -137,9 +151,23 @@ public class ExcelReadTool
     /// <summary>
     /// 获取 EPPlus中使用 的 Sheet
     /// </summary>
+    public static ExcelWorksheet GetEPPlusSheet(Stream stream, string sheetname = null)
+    {
+        return sheetname.IsNull() ? GetEPPlusSheets(stream)[EPPlusZero] : GetEPPlusSheets(stream)[sheetname];
+    }
+    /// <summary>
+    /// 获取 EPPlus中使用 的 Sheet
+    /// </summary>
     public static ExcelWorksheet GetEPPlusSheet(string path, int sheetindex)
     {
         return GetEPPlusWorkbook(path).Worksheets[sheetindex];
+    }
+    /// <summary>
+    /// 获取 EPPlus中使用 的 Sheet
+    /// </summary>
+    public static ExcelWorksheet GetEPPlusSheet(Stream stream, int sheetindex)
+    {
+        return GetEPPlusWorkbook(stream).Worksheets[sheetindex];
     }
     /// <summary>
     /// 获取 NPOI中使用 的 Workbook
@@ -147,6 +175,14 @@ public class ExcelReadTool
     public static IWorkbook GetNPOIWorkbook(string path)
     {
         using var notCloseStream = new NPOINotCloseStream(path);
+        return notCloseStream.GetWorkBook();
+    }
+    /// <summary>
+    /// 获取 NPOI中使用 的 Workbook
+    /// </summary>
+    public static IWorkbook GetNPOIWorkbook(Stream stream)
+    {
+        using var notCloseStream = new NPOINotCloseStream(stream);
         return notCloseStream.GetWorkBook();
     }
     /// <summary>
@@ -160,9 +196,25 @@ public class ExcelReadTool
     /// <summary>
     /// 获取 NPOI中使用 的 Sheet
     /// </summary>
+    public static ISheet GetNPOISheet(Stream stream, string sheetname = null)
+    {
+        var workbook = GetNPOIWorkbook(stream);
+        return sheetname.IsNull() ? workbook.GetSheetAt(NPOIZero) : workbook.GetSheet(sheetname);
+    }
+    /// <summary>
+    /// 获取 NPOI中使用 的 Sheet
+    /// </summary>
     public static ISheet GetNPOISheet(string path, int sheetindex)
     {
         var workbook = GetNPOIWorkbook(path);
+        return workbook.GetSheetAt(sheetindex);
+    }
+    /// <summary>
+    /// 获取 NPOI中使用 的 Sheet
+    /// </summary>
+    public static ISheet GetNPOISheet(Stream stream, int sheetindex)
+    {
+        var workbook = GetNPOIWorkbook(stream);
         return workbook.GetSheetAt(sheetindex);
     }
     /// <summary>
