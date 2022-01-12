@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 using Xunit;
 
 namespace Collapsenav.Net.Tool.Excel.Test;
-public class EPPlusExcelOperationTest
+public class NPOIExcelOperationTest
 {
     [Fact]
     public void HeaderTest()
     {
         var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
 
-        var headers = EPPlusExcelReadTool.ExcelHeader($@"./TestExcel.xlsx");
+        var headers = NPOIExcelReadTool.ExcelHeader($@"./TestExcel.xlsx");
         Assert.True(headers.SequenceEqual(realHeader));
 
         using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open, FileAccess.Read, FileShare.Read);
-        headers = EPPlusExcelReadTool.ExcelHeader(fs);
+        headers = NPOIExcelReadTool.ExcelHeader(fs);
         Assert.True(headers.SequenceEqual(realHeader));
     }
 
@@ -31,7 +31,7 @@ public class EPPlusExcelOperationTest
         .Add("Field2", item => item.Field2, item => item == "Male")
         .Add("Field3", item => item.Field3)
         ;
-        var datas = await config.EPPlusExcelToEntityAsync(fs);
+        var datas = await config.NPOIExcelToEntityAsync(fs);
 
         var exportConfig = new ExportConfig<ExcelTestDto>(datas)
         .Add("Field0", item => item.Field0)
@@ -40,42 +40,34 @@ public class EPPlusExcelOperationTest
         .Add("Field3", item => item.Field3)
         ;
         using var headerMs = new MemoryStream();
-        var headerStream = await exportConfig.EPPlusExportHeaderAsync(headerMs);
-        using var exportHeaderFs = new FileStream("./EPPlus-Export-Header.xlsx", FileMode.OpenOrCreate);
+        var headerStream = await exportConfig.NPOIExportHeaderAsync(headerMs);
+        using var exportHeaderFs = new FileStream("./NPOI-Export-Header.xlsx", FileMode.OpenOrCreate);
         headerStream.CopyTo(exportHeaderFs);
         exportHeaderFs.Dispose();
-        Assert.True(File.Exists("./EPPlus-Export-Header.xlsx"));
-        Assert.True(new FileInfo("./EPPlus-Export-Header.xlsx").Length > 0);
-
-        using var dataMs = new MemoryStream();
-        var dataStream = await exportConfig.EPPlusExportDataAsync(dataMs);
-        using var exportDataFs = new FileStream($@"./EPPlus-Export-Data.xlsx", FileMode.OpenOrCreate);
-        dataStream.CopyTo(exportDataFs);
-        exportDataFs.Dispose();
-        Assert.True(File.Exists("./EPPlus-Export-Data.xlsx"));
-        Assert.True(new FileInfo("./EPPlus-Export-Data.xlsx").Length > 0);
+        Assert.True(File.Exists("./NPOI-Export-Header.xlsx"));
+        Assert.True(new FileInfo("./NPOI-Export-Header.xlsx").Length > 0);
 
         using var entityMs = new MemoryStream();
-        var entityStream = await exportConfig.EPPlusExportAsync(entityMs);
-        using var exportEntityFs = new FileStream("./EPPlus-Export-Entity.xlsx", FileMode.OpenOrCreate);
-        entityMs.CopyTo(exportEntityFs);
+        var entityStream = await exportConfig.NPOIExportAsync(entityMs);
+        using var exportEntityFs = new FileStream("./NPOI-Export-Entity.xlsx", FileMode.OpenOrCreate);
+        entityStream.CopyTo(exportEntityFs);
         exportEntityFs.Dispose();
-        Assert.True(File.Exists("./EPPlus-Export-Entity.xlsx"));
-        Assert.True(new FileInfo("./EPPlus-Export-Entity.xlsx").Length > 0);
+        Assert.True(File.Exists("./NPOI-Export-Entity.xlsx"));
+        Assert.True(new FileInfo("./NPOI-Export-Entity.xlsx").Length > 0);
     }
     [Fact]
     public async Task DefaultConfigTest()
     {
         var read = ReadConfig<ExcelDefaultDto>.GenDefaultConfig();
         Assert.True(read.FieldOption.Count() == 3);
-        var data = await read.EPPlusExcelToEntityAsync("./DefaultExcel.xlsx");
+        var data = await read.NPOIExcelToEntityAsync("./DefaultExcel.xlsx");
         Assert.True(data.Count() == 20);
 
         var export = ExportConfig<ExcelDefaultDto>.GenDefaultConfig(data);
-        await export.EPPlusExportAsync("./EPPlus-DefaultExportExcel.xlsx");
-        Assert.True(File.Exists("./EPPlus-DefaultExportExcel.xlsx"));
-        Assert.True(new FileInfo("./EPPlus-DefaultExportExcel.xlsx").Length > 0);
-        File.Delete("./EPPlus-DefaultExportExcel.xlsx");
+        await export.NPOIExportAsync("./NPOI-DefaultExportExcel.xlsx");
+        Assert.True(File.Exists("./NPOI-DefaultExportExcel.xlsx"));
+        Assert.True(new FileInfo("./NPOI-DefaultExportExcel.xlsx").Length > 0);
+        File.Delete("./NPOI-DefaultExportExcel.xlsx");
     }
 
     [Fact]
@@ -83,14 +75,14 @@ public class EPPlusExcelOperationTest
     {
         var read = ReadConfig<ExcelAttrDto>.GenDefaultConfig();
         Assert.True(read.FieldOption.Count() == 3);
-        var data = await read.EPPlusExcelToEntityAsync("./AttributeExcel.xlsx");
+        var data = await read.NPOIExcelToEntityAsync("./AttributeExcel.xlsx");
         Assert.True(data.Count() == 20);
 
         var export = ExportConfig<ExcelAttrDto>.GenDefaultConfig(data);
-        await export.EPPlusExportAsync("./EPPlus-AttributeExportExcel.xlsx");
-        Assert.True(File.Exists("./EPPlus-AttributeExportExcel.xlsx"));
-        Assert.True(new FileInfo("./EPPlus-AttributeExportExcel.xlsx").Length > 0);
-        File.Delete("./EPPlus-AttributeExportExcel.xlsx");
+        await export.NPOIExportAsync("./NPOI-AttributeExportExcel.xlsx");
+        Assert.True(File.Exists("./NPOI-AttributeExportExcel.xlsx"));
+        Assert.True(new FileInfo("./NPOI-AttributeExportExcel.xlsx").Length > 0);
+        File.Delete("./NPOI-AttributeExportExcel.xlsx");
     }
 
     [Fact]
@@ -114,7 +106,7 @@ public class EPPlusExcelOperationTest
         .Add("Flag", "Flag")
         .Add("Time", "Time")
         ;
-        await exportConfig.EPPlusExportAsync("./EPPlus-Config-Export.xlsx");
+        await exportConfig.NPOIExportAsync("./NPOI-Config-Export.xlsx");
 
         var readConfig = new ReadConfig<ExcelConfigDto>()
         .Add("Num", "Num")
@@ -122,7 +114,7 @@ public class EPPlusExcelOperationTest
         .Add("Flag", "Flag")
         .Add("Time", "Time")
         ;
-        var readData = await readConfig.EPPlusExcelToEntityAsync("./EPPlus-Config-Export.xlsx");
+        var readData = await readConfig.NPOIExcelToEntityAsync("./NPOI-Config-Export.xlsx");
         Assert.True(readData.Count() == 10);
         Assert.True(readData.OrderBy(item => item.Num).SequenceEqual(data, (x, y) => x.Name == y.Name && x.Num == y.Num && x.Flag == y.Flag && x.Time.ToString() == y.Time.ToString()));
     }
