@@ -27,33 +27,6 @@ public partial class MiniExcelReadTool
     }
     #endregion
 
-
-    #region 通过表格配置获取表头
-    /// <summary>
-    /// 根据传入配置 获取表头及其index
-    /// </summary>
-    /// <param name="filepath">文件路径</param>
-    /// <param name="options">导出配置</param>
-    public static Dictionary<string, int> ExcelHeaderByOptions<T>(string filepath, ReadConfig<T> options)
-    {
-        using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
-        return ExcelHeaderByOptions(fs, options);
-    }
-    /// <summary>
-    /// 根据传入配置 获取表头及其index
-    /// </summary>
-    /// <param name="stream">文件流</param>
-    /// <param name="options">导出配置</param>
-    public static Dictionary<string, int> ExcelHeaderByOptions<T>(Stream stream, ReadConfig<T> options)
-    {
-        return (stream.Query().First() as IDictionary<string, object>)
-        .Select((item, index) => (item.Value, index))
-        .Where(item => options.FieldOption.Any(option => option.ExcelField == item.Value.ToString()))
-        .ToDictionary(item => item.Value.ToString(), item => item.index);
-    }
-    #endregion
-
-
     #region 将表格数据转换为指定的数据实体
     /// <summary>
     /// 将表格数据转换为指定的数据实体

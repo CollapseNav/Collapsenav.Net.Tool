@@ -22,6 +22,8 @@ public partial class ExportConfig<T>
     {
         return await EPPlusExportTool.ExportAsync(stream, this, data, exportType);
     }
+
+
     /// <summary>
     /// 列表数据导出到excel
     /// </summary>
@@ -43,26 +45,4 @@ public partial class ExportConfig<T>
     {
         return await EPPlusExportTool.ExportHeaderAsync(stream, this);
     }
-    /// <summary>
-    /// 列表数据导出到excel
-    /// </summary>
-    public async Task<Stream> EPPlusExportDataAsync(IEnumerable<T> data = null)
-    {
-        return await EPPlusExportTool.ExportDataAsync(this, data);
-    }
-    /// <summary>
-    /// 列表数据导出到excel
-    /// </summary>
-    public async Task<Stream> EPPlusExportDataAsync(string filePath, IEnumerable<T> data = null)
-    {
-        return await EPPlusExportTool.ExportDataAsync(filePath, this, data);
-    }
-    /// <summary>
-    /// 列表数据导出到excel
-    /// </summary>
-    public async Task<Stream> EPPlusExportDataAsync(Stream stream, IEnumerable<T> data = null)
-    {
-        return await EPPlusExportTool.ExportDataAsync(stream, this, data);
-    }
-
 }

@@ -31,7 +31,7 @@ public class EPPlusExcelOperationTest
         .Add("Field2", item => item.Field2, item => item == "Male")
         .Add("Field3", item => item.Field3)
         ;
-        var datas = await config.EPPlusExcelToEntityAsync(fs);
+        var datas = await config.EPPlusToEntityAsync(fs);
 
         var exportConfig = new ExportConfig<ExcelTestDto>(datas)
         .Add("Field0", item => item.Field0)
@@ -60,7 +60,7 @@ public class EPPlusExcelOperationTest
     {
         var read = ReadConfig<ExcelDefaultDto>.GenDefaultConfig();
         Assert.True(read.FieldOption.Count() == 3);
-        var data = await read.EPPlusExcelToEntityAsync("./DefaultExcel.xlsx");
+        var data = await read.EPPlusToEntityAsync("./DefaultExcel.xlsx");
         Assert.True(data.Count() == 20);
 
         var export = ExportConfig<ExcelDefaultDto>.GenDefaultConfig(data);
@@ -75,7 +75,7 @@ public class EPPlusExcelOperationTest
     {
         var read = ReadConfig<ExcelAttrDto>.GenDefaultConfig();
         Assert.True(read.FieldOption.Count() == 3);
-        var data = await read.EPPlusExcelToEntityAsync("./AttributeExcel.xlsx");
+        var data = await read.EPPlusToEntityAsync("./AttributeExcel.xlsx");
         Assert.True(data.Count() == 20);
 
         var export = ExportConfig<ExcelAttrDto>.GenDefaultConfig(data);
@@ -114,7 +114,7 @@ public class EPPlusExcelOperationTest
         .Add("Flag", "Flag")
         .Add("Time", "Time")
         ;
-        var readData = await readConfig.EPPlusExcelToEntityAsync("./EPPlus-Config-Export.xlsx");
+        var readData = await readConfig.EPPlusToEntityAsync("./EPPlus-Config-Export.xlsx");
         Assert.True(readData.Count() == 10);
         Assert.True(readData.OrderBy(item => item.Num).SequenceEqual(data, (x, y) => x.Name == y.Name && x.Num == y.Num && x.Flag == y.Flag && x.Time.ToString() == y.Time.ToString()));
     }

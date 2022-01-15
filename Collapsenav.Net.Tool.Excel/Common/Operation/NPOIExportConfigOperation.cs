@@ -22,6 +22,8 @@ public partial class ExportConfig<T>
     {
         return await NPOIExportTool.ExportAsync(stream, this, data);
     }
+
+
     /// <summary>
     /// 列表数据导出到excel
     /// </summary>
@@ -43,26 +45,4 @@ public partial class ExportConfig<T>
     {
         return await NPOIExportTool.ExportHeaderAsync(stream, this);
     }
-    /// <summary>
-    /// 列表数据导出到excel
-    /// </summary>
-    public async Task<Stream> NPOIExportDataAsync(IEnumerable<T> data = null)
-    {
-        return await NPOIExportTool.ExportDataAsync(this, data);
-    }
-    /// <summary>
-    /// 列表数据导出到excel
-    /// </summary>
-    public async Task<Stream> NPOIExportDataAsync(string filePath, IEnumerable<T> data = null)
-    {
-        return await NPOIExportTool.ExportDataAsync(filePath, this, data);
-    }
-    /// <summary>
-    /// 列表数据导出到excel
-    /// </summary>
-    public async Task<Stream> NPOIExportDataAsync(Stream stream, IEnumerable<T> data = null)
-    {
-        return await NPOIExportTool.ExportDataAsync(stream, this, data);
-    }
-
 }

@@ -11,12 +11,12 @@ public interface IExcelRead : IExcelRead<string>
 
 public interface IExcelRead<T> : IDisposable
 {
-    IEnumerable<T> this[T field] { get; }
+    IEnumerable<T> this[string field] { get; }
     IEnumerable<T> this[long row] { get; }
     T this[long row, long col] { get; }
-    T this[T field, long row] { get; }
-    IEnumerable<T> Headers { get; }
-    IDictionary<T, int> HeadersWithIndex { get; }
+    T this[string field, long row] { get; }
+    IEnumerable<string> Headers { get; }
+    IDictionary<string, int> HeadersWithIndex { get; }
     public static IExcelRead GetExcelRead(object sheet)
     {
         if (sheet is ISheet)
@@ -60,12 +60,10 @@ public interface IExcelRead<T> : IDisposable
         using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
         return GetExcelRead(path, excelType);
     }
-    int Zero { get; }
     long RowCount { get; }
 }
 
 public enum ExcelType
-
 {
     NPOI,
     EPPlus,

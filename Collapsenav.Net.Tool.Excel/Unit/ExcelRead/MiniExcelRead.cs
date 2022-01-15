@@ -15,14 +15,14 @@ public class MiniExcelRead : IExcelRead
 
 
 
-    int IExcelRead<string>.Zero => MiniZero;
     long IExcelRead<string>.RowCount { get => rowCount; }
     IEnumerable<string> IExcelRead<string>.Headers { get => Headers; }
     IDictionary<string, int> IExcelRead<string>.HeadersWithIndex { get => HeaderIndex; }
 
     public MiniExcelRead(Stream stream, int headerCount = MiniZero)
     {
-        SheetStream = stream;
+        SheetStream = new MemoryStream();
+        stream.SeekAndCopyTo(SheetStream);
         headerRowCount += headerCount;
 
         sheet = SheetStream.Query().ToList();

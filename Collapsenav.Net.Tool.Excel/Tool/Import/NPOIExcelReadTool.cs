@@ -6,8 +6,6 @@ namespace Collapsenav.Net.Tool.Excel;
 /// </summary>
 public partial class NPOIExcelReadTool
 {
-    private const int NPOIZero = 0;
-
     #region 获取表头
     /// <summary>
     /// 获取表格header(仅限简单的单行表头)
@@ -26,7 +24,7 @@ public partial class NPOIExcelReadTool
     public static IEnumerable<string> ExcelHeader(Stream stream)
     {
         using var notCloseStream = new NPOINotCloseStream(stream);
-        return ExcelHeader(notCloseStream.GetWorkBook().GetSheetAt(NPOIZero));
+        return ExcelHeader(notCloseStream.GetWorkBook().GetSheetAt(ExcelReadTool.NPOIZero));
     }
     /// <summary>
     /// 获取表格header(仅限简单的单行表头)
@@ -37,41 +35,6 @@ public partial class NPOIExcelReadTool
         return ExcelReadTool.ExcelHeader(sheet);
     }
     #endregion
-
-
-    #region 通过表格配置获取表头
-    /// <summary>
-    /// 根据传入配置 获取表头及其index
-    /// </summary>
-    /// <param name="filepath">文件路径</param>
-    /// <param name="options">导出配置</param>
-    public static Dictionary<string, int> ExcelHeaderByOptions<T>(string filepath, ReadConfig<T> options)
-    {
-        filepath.IsXls();
-        using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
-        return ExcelHeaderByOptions(fs, options);
-    }
-    /// <summary>
-    /// 根据传入配置 获取表头及其index
-    /// </summary>
-    /// <param name="stream">文件流</param>
-    /// <param name="options">导出配置</param>
-    public static Dictionary<string, int> ExcelHeaderByOptions<T>(Stream stream, ReadConfig<T> options)
-    {
-        using var notCloseStream = new NPOINotCloseStream(stream);
-        return ExcelHeaderByOptions(notCloseStream.GetWorkBook().GetSheetAt(NPOIZero), options);
-    }
-    /// <summary>
-    /// 根据传入配置 获取表头及其index
-    /// </summary>
-    /// <param name="sheet">工作簿</param>
-    /// <param name="options">导出配置</param>
-    public static Dictionary<string, int> ExcelHeaderByOptions<T>(ISheet sheet, ReadConfig<T> options)
-    {
-        return ExcelReadTool.ExcelHeaderByOptions(sheet, options);
-    }
-    #endregion
-
 
     #region 将表格数据转换为指定的数据实体
     /// <summary>
@@ -93,7 +56,7 @@ public partial class NPOIExcelReadTool
     public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(Stream stream, ReadConfig<T> options)
     {
         using var notCloseStream = new NPOINotCloseStream(stream);
-        return await ExcelToEntityAsync(notCloseStream.GetWorkBook().GetSheetAt(NPOIZero), options);
+        return await ExcelToEntityAsync(notCloseStream.GetWorkBook().GetSheetAt(ExcelReadTool.NPOIZero), options);
     }
     /// <summary>
     /// 将表格数据转换为指定的数据实体

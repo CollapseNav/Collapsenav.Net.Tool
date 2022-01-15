@@ -39,6 +39,8 @@ public partial class EPPlusExportTool
         return await ExcelExportTool.EPPlusExportAsync(stream, option, data, exportType);
     }
 
+
+
     /// <summary>
     /// 导出表头
     /// </summary>
@@ -67,37 +69,4 @@ public partial class EPPlusExportTool
     {
         return await ExcelExportTool.EPPlusExportHeaderAsync(stream, option);
     }
-
-    /// <summary>
-    /// 导出数据
-    /// </summary>
-    /// <param name="data">指定数据</param>
-    /// <param name="option">导出配置</param>
-    public static async Task<Stream> ExportDataAsync<T>(ExportConfig<T> option, IEnumerable<T> data = null)
-    {
-        var stream = new MemoryStream();
-        return await ExportDataAsync(stream, option, data);
-    }
-    /// <summary>
-    /// 导出数据
-    /// </summary>
-    /// <param name="filePath">文件路径</param>
-    /// <param name="data">指定数据</param>
-    /// <param name="option">导出配置</param>
-    public static async Task<Stream> ExportDataAsync<T>(string filePath, ExportConfig<T> option, IEnumerable<T> data = null)
-    {
-        using var fs = new FileStream(filePath, FileMode.Create);
-        return await ExportDataAsync(fs, option, data);
-    }
-    /// <summary>
-    /// 导出数据
-    /// </summary>
-    /// <param name="stream">文件流</param>
-    /// <param name="data">指定数据</param>
-    /// <param name="option">导出配置</param>
-    public static async Task<Stream> ExportDataAsync<T>(Stream stream, ExportConfig<T> option, IEnumerable<T> data = null)
-    {
-        return await ExcelExportTool.EPPlusExportDataAsync(stream, option, data);
-    }
-
 }

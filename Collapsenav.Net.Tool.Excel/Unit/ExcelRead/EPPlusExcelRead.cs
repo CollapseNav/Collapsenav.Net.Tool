@@ -4,21 +4,19 @@ namespace Collapsenav.Net.Tool.Excel;
 
 public class EPPlusExcelRead : IExcelRead
 {
-    protected int headerRowCount = EPPlusZero;
-    protected const int EPPlusZero = 1;
+    protected int headerRowCount = ExcelReadTool.EPPlusZero;
     protected ExcelWorksheet sheet;
     protected IDictionary<string, int> HeaderIndex;
     protected IEnumerable<string> Headers;
     protected int rowCount;
 
-    int IExcelRead<string>.Zero => EPPlusZero;
     long IExcelRead<string>.RowCount { get => rowCount; }
     IEnumerable<string> IExcelRead<string>.Headers { get => Headers; }
     IDictionary<string, int> IExcelRead<string>.HeadersWithIndex { get => HeaderIndex; }
 
-    public EPPlusExcelRead(Stream stream, int headerCount = EPPlusZero) : this(ExcelReadTool.GetEPPlusSheet(stream), headerCount)
+    public EPPlusExcelRead(Stream stream, int headerCount = ExcelReadTool.EPPlusZero) : this(ExcelReadTool.EPPlusSheet(stream), headerCount)
     { }
-    public EPPlusExcelRead(ExcelWorksheet sheet, int headerCount = EPPlusZero)
+    public EPPlusExcelRead(ExcelWorksheet sheet, int headerCount = ExcelReadTool.EPPlusZero)
     {
         this.sheet = sheet;
         headerRowCount += headerCount;
@@ -33,7 +31,7 @@ public class EPPlusExcelRead : IExcelRead
         get
         {
             for (var i = headerRowCount; i < rowCount; i++)
-                yield return sheet.Cells[i, HeaderIndex[field] + EPPlusZero].Value.ToString();
+                yield return sheet.Cells[i, HeaderIndex[field] + ExcelReadTool.EPPlusZero].Value.ToString();
         }
     }
 
@@ -41,14 +39,14 @@ public class EPPlusExcelRead : IExcelRead
     {
         get
         {
-            row += EPPlusZero;
-            return sheet.Cells[(int)row, EPPlusZero, (int)row, EPPlusZero + Headers.Count()].Select(item => item.Value.ToString());
+            row += ExcelReadTool.EPPlusZero;
+            return sheet.Cells[(int)row, ExcelReadTool.EPPlusZero, (int)row, ExcelReadTool.EPPlusZero + Headers.Count()].Select(item => item.Value.ToString());
         }
     }
 
-    string IExcelRead<string>.this[long row, long col] => sheet.Cells[(int)row + EPPlusZero, (int)col + EPPlusZero].Value.ToString();
+    string IExcelRead<string>.this[long row, long col] => sheet.Cells[(int)row + ExcelReadTool.EPPlusZero, (int)col + ExcelReadTool.EPPlusZero].Value.ToString();
 
-    string IExcelRead<string>.this[string field, long row] => sheet.Cells[(int)row + EPPlusZero, HeaderIndex[field] + EPPlusZero].Value.ToString();
+    string IExcelRead<string>.this[string field, long row] => sheet.Cells[(int)row + ExcelReadTool.EPPlusZero, HeaderIndex[field] + ExcelReadTool.EPPlusZero].Value.ToString();
 
     public void Dispose()
     {
