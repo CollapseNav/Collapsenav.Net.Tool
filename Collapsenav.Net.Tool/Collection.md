@@ -17,6 +17,7 @@
 - [x] [`Shuffle` 打乱顺序](#shuffle)
 - [x] [`ForEach` 遍历操作](#foreach)
 - [x] [`AddRange` 批量添加](#addrange)
+- [x] [`SelectWithIndex`](#selectwithindex)
 - [ ] ...
 
 ## How To Use
@@ -34,7 +35,6 @@ emptyList.NotEmpty(); // false
 emptyList.IsEmpty(); // true
 notEmptyArray.NotEmpty(); // true
 notEmptyArray.IsEmpty(); // false
-
 ```
 
 ### ContainAnd
@@ -210,6 +210,15 @@ var enums = nums.AddRange((x, y) => x == y, 3, 4, 5);
 // enums { 1, 2, 3, 4, 5 }
 ```
 
+### SelectWithIndex
 
+主要是为了方便写 `foreach`
+
+```csharp
+int[] nums = new[] { 1, 2, 3 };
+foreach (var (item, index) in nums.SelectWithIndex());
+foreach (var (item, index) in nums.SelectWithIndex(num => num * num));
+foreach (var (item, index) in nums.SelectWithIndex(num => num.ToString(), num => num));
+```
 
 

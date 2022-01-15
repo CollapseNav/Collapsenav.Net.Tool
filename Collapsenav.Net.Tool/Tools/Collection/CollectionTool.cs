@@ -14,7 +14,7 @@ public partial class CollectionTool
     /// 去重
     /// </summary>
     /// <param name="query">源集合</param>
-    /// <param name="comparer">怎么比啊</param>
+    /// <param name="comparer">怎么比</param>
     /// <param name="hashCodeFunc">hash</param>
     public static IEnumerable<T> Unique<T>(IEnumerable<T> query, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc = null)
     {
@@ -42,7 +42,7 @@ public partial class CollectionTool
     /// </summary>
     /// <param name="left">集合1</param>
     /// <param name="right">集合2</param>
-    /// <param name="comparer">怎么比啊</param>
+    /// <param name="comparer">怎么比</param>
     /// <param name="hashCodeFunc">hash</param>
     public static bool SequenceEqual<T>(IEnumerable<T> left, IEnumerable<T> right, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc = null)
     {
@@ -113,6 +113,19 @@ public partial class CollectionTool
                 return false;
         return true;
     }
+    /// <summary>
+    /// 全包含
+    /// </summary>
+    /// <param name="query">源集合</param>
+    /// <param name="comparer">怎么去重啊</param>
+    /// <param name="filters">条件</param>
+    public static bool ContainAnd<T>(IEnumerable<T> query, Func<T, T, bool> comparer, IEnumerable<T> filters)
+    {
+        foreach (var filter in filters)
+            if (!query.Contains(filter, new CollapseNavEqualityComparer<T>(comparer)))
+                return false;
+        return true;
+    }
 
     /// <summary>
     /// 部分包含
@@ -133,6 +146,19 @@ public partial class CollectionTool
     /// <param name="comparer">怎么去重啊</param>
     /// <param name="filters">条件</param>
     public static bool ContainOr<T>(IEnumerable<T> query, Func<T, T, bool> comparer, params T[] filters)
+    {
+        foreach (var filter in filters)
+            if (query.Contains(filter, new CollapseNavEqualityComparer<T>(comparer)))
+                return true;
+        return false;
+    }
+    /// <summary>
+    /// 部分包含
+    /// </summary>
+    /// <param name="query">源集合</param>
+    /// <param name="comparer">怎么去重啊</param>
+    /// <param name="filters">条件</param>
+    public static bool ContainOr<T>(IEnumerable<T> query, Func<T, T, bool> comparer, IEnumerable<T> filters)
     {
         foreach (var filter in filters)
             if (query.Contains(filter, new CollapseNavEqualityComparer<T>(comparer)))

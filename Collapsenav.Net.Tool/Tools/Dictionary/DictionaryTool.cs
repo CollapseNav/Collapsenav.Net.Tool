@@ -83,4 +83,27 @@ public partial class DictionaryTool
         }
         return value;
     }
+    /// <summary>
+    /// 字典解构
+    /// </summary>
+    /// <typeparam name="K">Key 作为 index</typeparam>
+    /// <typeparam name="V">Value 作为 value</typeparam>
+    public static IEnumerable<(V value, K index)> Deconstruct<K, V>(IDictionary<K, V> dict)
+    {
+        foreach (var item in dict)
+            yield return (item.Value, item.Key);
+    }
+
+    /// <summary>
+    /// 字典解构
+    /// </summary>
+    /// <typeparam name="K">Key 作为 index</typeparam>
+    /// <typeparam name="V">Value 作为 value</typeparam>
+    /// <typeparam name="E">value</typeparam>
+    /// <typeparam name="F">index</typeparam>
+    public static IEnumerable<(E value, F index)> Deconstruct<K, V, E, F>(IDictionary<K, V> dict, Func<V, E> value, Func<K, F> index)
+    {
+        foreach (var item in dict)
+            yield return (value(item.Value), index(item.Key));
+    }
 }

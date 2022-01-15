@@ -56,7 +56,7 @@ public static partial class DateTimeExt
         return DateTimeTool.ToDefaultDateString(date, s);
     }
     /// <summary>
-    /// 转为默认日期格式字符串(yyyy-MM-dd HH:mm:ss)
+    /// 转为默认时间格式字符串(yyyy-MM-dd HH:mm:ss)
     /// </summary>
     /// <param name="time"></param>
     /// <param name="s">中间的分隔符,默认为 '-' </param>

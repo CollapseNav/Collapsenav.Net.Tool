@@ -64,4 +64,29 @@ public static partial class DictionaryExt
     {
         return DictionaryTool.GetAndRemove(dict, key);
     }
+
+    /// <summary>
+    /// 字典解构
+    /// </summary>
+    /// <typeparam name="K">Key 作为 index</typeparam>
+    /// <typeparam name="V">Value 作为 value</typeparam>
+    public static IEnumerable<(V value, K index)> Deconstruct<K, V>(this IDictionary<K, V> dict)
+    {
+        return DictionaryTool.Deconstruct(dict);
+    }
+
+    /// <summary>
+    /// 字典解构
+    /// </summary>
+    /// <typeparam name="K">Key 作为 index</typeparam>
+    /// <typeparam name="V">Value 作为 value</typeparam>
+    /// <typeparam name="E">value</typeparam>
+    /// <typeparam name="F">index</typeparam>
+    public static IEnumerable<(E value, F index)> Deconstruct<K, V, E, F>(
+        this IDictionary<K, V> dict,
+        Func<V, E> value,
+        Func<K, F> index)
+    {
+        return DictionaryTool.Deconstruct(dict, value, index);
+    }
 }

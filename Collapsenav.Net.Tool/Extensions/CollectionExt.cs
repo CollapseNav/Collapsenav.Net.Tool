@@ -22,6 +22,16 @@ public static partial class CollectionExt
     {
         return CollectionTool.ContainAnd(query, comparer, filters);
     }
+    /// <summary>
+    /// 全包含
+    /// </summary>
+    /// <param name="query">源集合</param>
+    /// <param name="comparer">怎么去重啊</param>
+    /// <param name="filters">条件</param>
+    public static bool ContainAnd<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, IEnumerable<T> filters)
+    {
+        return CollectionTool.ContainAnd(query, comparer, filters);
+    }
 
     /// <summary>
     /// 部分包含
@@ -284,5 +294,9 @@ public static partial class CollectionExt
     public static IEnumerable<(T value, E index)> SelectWithIndex<T, E>(this IEnumerable<T> origin, Func<T, E> index)
     {
         return origin.Select(value => (value, index(value)));
+    }
+    public static IEnumerable<(E value, F index)> SelectWithIndex<T, E, F>(this IEnumerable<T> origin, Func<T, E> value, Func<T, F> index)
+    {
+        return origin.Select(item => (value(item), index(item)));
     }
 }
