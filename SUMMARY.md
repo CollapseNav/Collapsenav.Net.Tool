@@ -11,3 +11,4 @@
   * [Stream](./Collapsenav.Net.Tool/Stream.md)
   * [Json](./Collapsenav.Net.Tool/Json.md)
 * [CollapseNav.Net.Tool.Excel](./Collapsenav.Net.Tool.Excel/Excel.md)
+  * [BestPractice](./Collapsenav.Net.Tool.Excel/BestPractice.md)
