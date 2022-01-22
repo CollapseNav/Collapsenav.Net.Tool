@@ -3,20 +3,15 @@ using OfficeOpenXml;
 
 namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
-/// 尝试使用 IColumnRead 统一 NPOI 和 EPPlus 的调用
+/// 尝试使用 IExcelRead 统一 NPOI , EPPlus , MiniExcel 的调用
 /// </summary>
-public interface IExcelRead : IExcelRead<string>
-{
-}
+public interface IExcelRead : IExcelRead<string> { }
 
-public interface IExcelRead<T> : IDisposable
+/// <summary>
+/// 尝试使用 IExcelRead 统一 NPOI , EPPlus , MiniExcel 的调用
+/// </summary>
+public interface IExcelRead<T> : IExcelContainer<T>, IDisposable
 {
-    IEnumerable<T> this[string field] { get; }
-    IEnumerable<T> this[long row] { get; }
-    T this[long row, long col] { get; }
-    T this[string field, long row] { get; }
-    IEnumerable<string> Headers { get; }
-    IDictionary<string, int> HeadersWithIndex { get; }
     public static IExcelRead GetExcelRead(object sheet)
     {
         if (sheet is ISheet)
@@ -60,12 +55,4 @@ public interface IExcelRead<T> : IDisposable
         using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
         return GetExcelRead(path, excelType);
     }
-    long RowCount { get; }
-}
-
-public enum ExcelType
-{
-    NPOI,
-    EPPlus,
-    MiniExcel
 }

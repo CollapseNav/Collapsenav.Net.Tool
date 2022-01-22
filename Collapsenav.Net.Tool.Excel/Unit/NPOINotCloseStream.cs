@@ -8,6 +8,7 @@ namespace Collapsenav.Net.Tool.Excel;
 /// </summary>
 public class NPOINotCloseStream : MemoryStream
 {
+    public NPOINotCloseStream() { }
     public NPOINotCloseStream(Stream stream)
     {
         stream.CopyTo(this);
