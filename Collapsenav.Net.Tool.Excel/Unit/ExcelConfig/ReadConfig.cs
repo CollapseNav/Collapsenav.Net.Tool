@@ -21,7 +21,7 @@ public partial class ReadConfig<T> : ExcelConfig<T, ReadCellOption<T>>
     {
         ExcelStream = new MemoryStream();
         filepath.IsXls();
-        using var fs = new FileStream(filepath, FileMode.Open);
+        using var fs = filepath.ReadStream();
         fs.CopyTo(ExcelStream);
     }
     /// <summary>

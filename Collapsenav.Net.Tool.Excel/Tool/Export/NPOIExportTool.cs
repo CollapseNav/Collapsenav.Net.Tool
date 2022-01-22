@@ -22,7 +22,7 @@ public partial class NPOIExportTool
     /// <param name="data">指定数据</param>
     public static async Task<Stream> ExportAsync<T>(string filePath, ExportConfig<T> option, IEnumerable<T> data = null)
     {
-        using var fs = new FileStream(filePath, FileMode.Create);
+        using var fs = filePath.CreateStream();
         return await ExportAsync(fs, option, data);
     }
     /// <summary>
@@ -54,7 +54,7 @@ public partial class NPOIExportTool
     /// <param name="option">导出配置</param>
     public static async Task<Stream> ExportHeaderAsync<T>(string filePath, ExportConfig<T> option)
     {
-        using var fs = new FileStream(filePath, FileMode.Create);
+        using var fs = filePath.CreateStream();
         return await ExportHeaderAsync(fs, option);
     }
     /// <summary>

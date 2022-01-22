@@ -135,7 +135,7 @@ public class ExcelReadTool
     }
     public static ExcelPackage EPPlusPackage(string path)
     {
-        using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+        using var fs = path.ReadShareStream();
         ExcelPackage pack = new(fs);
         return pack;
     }

@@ -97,7 +97,7 @@ public static partial class StreamExt
     public static void SaveTo(this Stream stream, string path)
     {
         stream.SeekToOrigin();
-        using var fs = new FileStream(path, FileMode.CreateNew);
+        using var fs = path.CreateStream();
         stream.CopyTo(fs);
         stream.SeekToOrigin();
     }
@@ -106,7 +106,7 @@ public static partial class StreamExt
     /// </summary>
     public static void SaveTo(this byte[] bytes, string path)
     {
-        using var fs = new FileStream(path, FileMode.CreateNew);
+        using var fs = path.CreateStream();
         fs.Write(bytes, 0, bytes.Length);
     }
     /// <summary>
@@ -115,7 +115,7 @@ public static partial class StreamExt
     public static async Task SaveToAsync(this Stream stream, string path)
     {
         stream.SeekToOrigin();
-        using var fs = new FileStream(path, FileMode.CreateNew);
+        using var fs = path.CreateStream();
         await stream.CopyToAsync(fs);
         stream.SeekToOrigin();
     }
@@ -124,7 +124,7 @@ public static partial class StreamExt
     /// </summary>
     public static async Task SaveToAsync(this byte[] bytes, string path)
     {
-        using var fs = new FileStream(path, FileMode.CreateNew);
+        using var fs = path.CreateStream();
         await fs.WriteAsync(bytes);
     }
 }

@@ -17,7 +17,7 @@ public class NPOINotCloseStream : MemoryStream
     }
     public NPOINotCloseStream(string path)
     {
-        using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+        using var fs = path.ReadShareStream();
         fs.CopyTo(this);
         this.SeekToOrigin();
     }

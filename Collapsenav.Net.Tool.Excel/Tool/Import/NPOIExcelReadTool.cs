@@ -14,7 +14,7 @@ public partial class NPOIExcelReadTool
     public static IEnumerable<string> ExcelHeader(string filepath)
     {
         filepath.IsXls();
-        using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        using var fs = filepath.ReadShareStream();
         return ExcelHeader(fs);
     }
     /// <summary>
@@ -45,7 +45,7 @@ public partial class NPOIExcelReadTool
     public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(string filepath, ReadConfig<T> options)
     {
         filepath.IsXls();
-        using var fs = new FileStream(filepath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        using var fs = filepath.ReadShareStream();
         return await ExcelToEntityAsync(fs, options);
     }
     /// <summary>

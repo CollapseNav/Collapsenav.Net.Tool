@@ -6,7 +6,6 @@ namespace Collapsenav.Net.Tool.Excel;
 /// 尝试使用 IExcelRead 统一 NPOI , EPPlus , MiniExcel 的调用
 /// </summary>
 public interface IExcelRead : IExcelRead<string> { }
-
 /// <summary>
 /// 尝试使用 IExcelRead 统一 NPOI , EPPlus , MiniExcel 的调用
 /// </summary>
@@ -52,7 +51,7 @@ public interface IExcelRead<T> : IExcelContainer<T>, IDisposable
     /// </summary>
     public static IExcelRead GetExcelRead(string path, ExcelType? excelType = null)
     {
-        using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
+        using var fs = path.ReadShareStream();
         return GetExcelRead(path, excelType);
     }
 }

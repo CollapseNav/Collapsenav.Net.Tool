@@ -23,7 +23,7 @@ public class NPOICellRead : IExcelCellRead
     }
     public NPOICellRead(string path, int headerCount = Zero)
     {
-        var fs = new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+        var fs = path.OpenOrCreateShareStream();
         Init(fs, headerCount);
     }
 
@@ -101,7 +101,7 @@ public class NPOICellRead : IExcelCellRead
     /// </summary>
     public void SaveTo(string path)
     {
-        using var fs = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write);
+        using var fs = path.OpenOrCreateShareStream();
         _sheet.Workbook.Write(fs);
         fs.SeekToOrigin();
         fs.Dispose();
