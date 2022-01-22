@@ -16,7 +16,7 @@ public class NPOIExcelOperationTest
         var headers = NPOIExcelReadTool.ExcelHeader($@"./TestExcel.xlsx");
         Assert.True(headers.SequenceEqual(realHeader));
 
-        using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open, FileAccess.Read, FileShare.Read);
+        using FileStream fs = $@"./TestExcel.xlsx".ReadShareStream();
         headers = NPOIExcelReadTool.ExcelHeader(fs);
         Assert.True(headers.SequenceEqual(realHeader));
     }
@@ -24,7 +24,7 @@ public class NPOIExcelOperationTest
     [Fact]
     public async Task ExportTest()
     {
-        using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open, FileAccess.Read, FileShare.Read);
+        using FileStream fs = $@"./TestExcel.xlsx".ReadShareStream();
         var config = new ReadConfig<ExcelTestDto>()
         .Add("Field0", item => item.Field0)
         .Add("Field1", item => item.Field1)
@@ -41,7 +41,7 @@ public class NPOIExcelOperationTest
         ;
         using var headerMs = new MemoryStream();
         var headerStream = await exportConfig.NPOIExportHeaderAsync(headerMs);
-        using var exportHeaderFs = new FileStream("./NPOI-Export-Header.xlsx", FileMode.OpenOrCreate);
+        using var exportHeaderFs = "./NPOI-Export-Header.xlsx".OpenOrCreateStream();
         headerStream.CopyTo(exportHeaderFs);
         exportHeaderFs.Dispose();
         Assert.True(File.Exists("./NPOI-Export-Header.xlsx"));
@@ -49,7 +49,7 @@ public class NPOIExcelOperationTest
 
         using var entityMs = new MemoryStream();
         var entityStream = await exportConfig.NPOIExportAsync(entityMs);
-        using var exportEntityFs = new FileStream("./NPOI-Export-Entity.xlsx", FileMode.OpenOrCreate);
+        using var exportEntityFs = "./NPOI-Export-Entity.xlsx".OpenOrCreateStream();
         entityStream.CopyTo(exportEntityFs);
         exportEntityFs.Dispose();
         Assert.True(File.Exists("./NPOI-Export-Entity.xlsx"));

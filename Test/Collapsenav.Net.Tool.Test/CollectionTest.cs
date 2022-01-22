@@ -37,8 +37,8 @@ public class CollectionTest
         Assert.True(uniqueData.Count() == 1);
         uniqueData = data.Unique(item => item.Index.GetHashCode());
         Assert.True(uniqueData.Count() == 1);
-
-
+        uniqueData = data.Unique(item => item.Index);
+        Assert.True(uniqueData.Count() == 1);
     }
 
     [Fact]

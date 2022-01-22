@@ -14,7 +14,7 @@ public class MiniExcelOperationTest
         var headers = MiniExcelReadTool.ExcelHeader($@"./TestExcel.xlsx");
         Assert.True(headers.SequenceEqual(realHeader));
 
-        using FileStream fs = new($@"./TestExcel.xlsx", FileMode.Open, FileAccess.Read, FileShare.Read);
+        using FileStream fs = $@"./TestExcel.xlsx".ReadShareStream();
         headers = MiniExcelReadTool.ExcelHeader(fs);
         Assert.True(headers.SequenceEqual(realHeader));
     }
