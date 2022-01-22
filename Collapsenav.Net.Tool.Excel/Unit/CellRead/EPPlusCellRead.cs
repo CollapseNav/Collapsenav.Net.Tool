@@ -21,7 +21,7 @@ public class EPPlusCellRead : IExcelCellRead
     }
     public EPPlusCellRead(string path, int headerCount = Zero)
     {
-        var fs = path.OpenOrCreateShareStream();
+        var fs = path.OpenCreateReadWirteShareStream();
         Init(fs, headerCount);
     }
     public EPPlusCellRead(Stream stream, int headerCount = Zero)
@@ -87,7 +87,7 @@ public class EPPlusCellRead : IExcelCellRead
     /// </summary>
     public void SaveTo(string path)
     {
-        using var fs = path.OpenOrCreateShareStream();
+        using var fs = path.OpenCreateReadWirteShareStream();
         _pack.SaveAs(fs);
 
     }

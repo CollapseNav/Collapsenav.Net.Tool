@@ -12,7 +12,7 @@ public class StreamTest
     public async Task SeekTest()
     {
         var filePath = "./Collapsenav.Net.Tool.Test.dll";
-        using var fs = filePath.ReadShareStream();
+        using var fs = filePath.OpenReadShareStream();
         Assert.True(fs.Position == 0);
 
         using var ms = new MemoryStream();
@@ -47,7 +47,7 @@ public class StreamTest
     public async Task ByteAndStreamTest()
     {
         var filePath = "./Collapsenav.Net.Tool.Test.dll";
-        using var fs = filePath.ReadShareStream();
+        using var fs = filePath.OpenReadShareStream();
         var bytes = fs.ToBytes();
         var stream = bytes.ToStream();
         Assert.True(fs.Length == stream.Length);
@@ -63,19 +63,19 @@ public class StreamTest
     public async Task SaveTest()
     {
         var filePath = "./Collapsenav.Net.Tool.Test.dll";
-        using var fs = filePath.ReadShareStream();
+        using var fs = filePath.OpenReadShareStream();
         string toFile = "./SomeFile";
         File.Delete(toFile);
         fs.SaveTo(toFile);
         Assert.True(File.Exists(toFile));
-        using var toFs1 = toFile.ReadShareStream();
+        using var toFs1 = toFile.OpenReadShareStream();
         Assert.True(fs.Length == toFs1.Length);
         Assert.True(toFs1.Sha256En() == fs.Sha256En());
         toFs1.Dispose();
         File.Delete(toFile);
 
         await fs.SaveToAsync(toFile);
-        using var toFs2 = toFile.ReadShareStream();
+        using var toFs2 = toFile.OpenReadShareStream();
         Assert.True(fs.Length == toFs2.Length);
         Assert.True(toFs2.Sha1En() == fs.Sha1En());
         toFs2.Dispose();
@@ -85,7 +85,7 @@ public class StreamTest
         var strBytes = originStr.ToBytes();
         strBytes.SaveTo(toFile);
         Assert.True(File.Exists(toFile));
-        using var toFs3 = toFile.ReadShareStream();
+        using var toFs3 = toFile.OpenReadShareStream();
         Assert.True(strBytes.Length == toFs3.Length);
         toFs3.Dispose();
         File.Delete(toFile);
@@ -93,7 +93,7 @@ public class StreamTest
         strBytes = originStr.ToBytes();
         await strBytes.SaveToAsync(toFile);
         Assert.True(File.Exists(toFile));
-        using var toFs4 = toFile.ReadShareStream();
+        using var toFs4 = toFile.OpenReadShareStream();
         Assert.True(strBytes.Length == toFs4.Length);
         toFs4.Dispose();
         File.Delete(toFile);

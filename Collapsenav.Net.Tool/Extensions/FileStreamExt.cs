@@ -2,74 +2,91 @@ namespace Collapsenav.Net.Tool;
 
 public static class FileStreamExt
 {
-    /// <summary>
-    /// 打开一个流
-    /// </summary>
     public static FileStream OpenStream(this string path)
     {
         return new FileStream(path, FileMode.Open);
     }
-    /// <summary>
-    /// 文件读取流
-    /// </summary>
-    public static FileStream ReadStream(this string path)
+    public static FileStream OpenReadStream(this string path)
     {
         return new FileStream(path, FileMode.Open, FileAccess.Read);
     }
-    /// <summary>
-    /// share 方式打开一个流
-    /// </summary>
-    public static FileStream ReadShareStream(this string path)
+    public static FileStream OpenReadShareStream(this string path)
     {
         return new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
     }
-    /// <summary>
-    /// 文件创建流
-    /// </summary>
+    public static FileStream OpenWriteStream(this string path)
+    {
+        return new FileStream(path, FileMode.Open, FileAccess.Write);
+    }
+    public static FileStream OpenWriteShareStream(this string path)
+    {
+        return new FileStream(path, FileMode.Open, FileAccess.Write, FileShare.Write);
+    }
+    public static FileStream OpenReadWirteStream(this string path)
+    {
+        return new FileStream(path, FileMode.Open, FileAccess.ReadWrite);
+    }
+    public static FileStream OpenReadWirteShareStream(this string path)
+    {
+        return new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+    }
+
+
     public static FileStream CreateStream(this string path)
     {
         return new FileStream(path, FileMode.Create);
     }
-    /// <summary>
-    /// share 方式 创建流
-    /// </summary>
-    public static FileStream CreateShareStream(this string path)
+    public static FileStream CreateReadStream(this string path)
+    {
+        return new FileStream(path, FileMode.Create, FileAccess.Read);
+    }
+    public static FileStream CreateReadShareStream(this string path)
+    {
+        return new FileStream(path, FileMode.Create, FileAccess.Read, FileShare.Read);
+    }
+    public static FileStream CreateWriteStream(this string path)
+    {
+        return new FileStream(path, FileMode.Create, FileAccess.Write);
+    }
+    public static FileStream CreateWriteShareStream(this string path)
     {
         return new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Write);
     }
-    /// <summary>
-    /// 打开一个写入流
-    /// </summary>
-    public static FileStream WriteStream(this string path)
+    public static FileStream CreateReadWirteStream(this string path)
     {
-        return new FileStream(path, FileMode.Open, FileAccess.Write);
+        return new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
     }
-    /// <summary>
-    /// share 方法打开一个写入流
-    /// </summary>
-    public static FileStream WriteShareStream(this string path)
+    public static FileStream CreateReadWirteShareStream(this string path)
     {
-        return new FileStream(path, FileMode.Open, FileAccess.Write, FileShare.Write);
+        return new FileStream(path, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
     }
-    /// <summary>
-    /// 读写流
-    /// </summary>
-    public static FileStream ReadAndWirteStream(this string path)
+
+
+    public static FileStream OpenCreateStream(this string path)
     {
-        return new FileStream(path, FileMode.Open, FileAccess.ReadWrite);
+        return new FileStream(path, FileMode.OpenOrCreate);
     }
-    /// <summary>
-    /// share方式打开一个读写流
-    /// </summary>
-    public static FileStream ReadAndWriteShareStream(this string path)
+    public static FileStream OpenCreateReadStream(this string path)
     {
-        return new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+        return new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read);
     }
-    public static FileStream OpenOrCreateStream(this string path)
+    public static FileStream OpenCreateReadShareStream(this string path)
+    {
+        return new FileStream(path, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read);
+    }
+    public static FileStream OpenCreateWriteStream(this string path)
+    {
+        return new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write);
+    }
+    public static FileStream OpenCreateWriteShareStream(this string path)
+    {
+        return new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write);
+    }
+    public static FileStream OpenCreateReadWirteStream(this string path)
     {
         return new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
     }
-    public static FileStream OpenOrCreateShareStream(this string path)
+    public static FileStream OpenCreateReadWirteShareStream(this string path)
     {
         return new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
     }

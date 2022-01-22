@@ -13,7 +13,7 @@ public partial class EPPlusExcelReadTool
     /// <param name="filepath">文件路径</param>
     public static IEnumerable<string> ExcelHeader(string filepath)
     {
-        using var fs = filepath.ReadShareStream();
+        using var fs = filepath.OpenReadShareStream();
         return ExcelHeader(fs);
     }
     /// <summary>
@@ -43,7 +43,7 @@ public partial class EPPlusExcelReadTool
     /// <param name="options">导出配置</param>
     public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(string filepath, ReadConfig<T> options)
     {
-        using var fs = filepath.ReadShareStream();
+        using var fs = filepath.OpenReadShareStream();
         return await ExcelToEntityAsync(fs, options);
     }
     /// <summary>

@@ -69,7 +69,7 @@ public class StringExtTest
     public void PingTest()
     {
         string url = "https://www.bilibili.com/";
-        Assert.True(url.CanPing());
+        Assert.True(url.CanPing(2000));
     }
 
     [Fact]
@@ -180,7 +180,7 @@ public class StringExtTest
     public void Base64ImageTest()
     {
         var imagePath = "./vscode.png";
-        using var fs = imagePath.ReadShareStream();
+        using var fs = imagePath.OpenReadShareStream();
         var base64String = fs.ImageToBase64();
         var stream = base64String.Base64ImageToStream();
         Assert.True(stream.Sha1En() == fs.Sha1En());

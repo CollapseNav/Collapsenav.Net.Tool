@@ -43,7 +43,7 @@ public class CellReadTest
         Assert.True(reader[0, 10].StringValue == "996");
         reader.Dispose();
 
-        var fs = path.ReadShareStream();
+        var fs = path.OpenReadShareStream();
         reader = new EPPlusCellRead(fs);
         reader[0, 11].Value = "233";
         reader.SaveTo(savePath);
@@ -52,7 +52,7 @@ public class CellReadTest
 
 
 
-        fs = savePath.ReadShareStream();
+        fs = savePath.OpenReadShareStream();
         reader = new EPPlusCellRead(fs);
         Assert.True(reader[0, 11].StringValue == "233");
         reader.Dispose();

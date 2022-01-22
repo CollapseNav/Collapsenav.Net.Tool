@@ -31,7 +31,7 @@ public partial class StringTool
     /// </summary>
     public static string ImageToBase64(string filepath)
     {
-        using var fs = filepath.ReadShareStream();
+        using var fs = filepath.OpenReadShareStream();
         return "data:image;base64," + StreamToBase64(fs);
     }
 

@@ -24,7 +24,7 @@ public class EPPlusExcelOperationTest
     [Fact]
     public async Task ExportTest()
     {
-        using FileStream fs = $@"./TestExcel.xlsx".ReadShareStream();
+        using FileStream fs = $@"./TestExcel.xlsx".OpenReadShareStream();
         var config = new ReadConfig<ExcelTestDto>()
         .Add("Field0", item => item.Field0)
         .Add("Field1", item => item.Field1)
@@ -41,7 +41,7 @@ public class EPPlusExcelOperationTest
         ;
         using var headerMs = new MemoryStream();
         var headerStream = await exportConfig.EPPlusExportHeaderAsync(headerMs);
-        using var exportHeaderFs = "./EPPlus-Export-Header.xlsx".OpenOrCreateStream();
+        using var exportHeaderFs = "./EPPlus-Export-Header.xlsx".OpenWriteShareStream();
         headerStream.CopyTo(exportHeaderFs);
         exportHeaderFs.Dispose();
         Assert.True(File.Exists("./EPPlus-Export-Header.xlsx"));
@@ -49,7 +49,7 @@ public class EPPlusExcelOperationTest
 
         using var entityMs = new MemoryStream();
         var entityStream = await exportConfig.EPPlusExportAsync(entityMs);
-        using var exportEntityFs = "./EPPlus-Export-Entity.xlsx".OpenOrCreateStream();
+        using var exportEntityFs = "./EPPlus-Export-Entity.xlsx".OpenWriteShareStream();
         entityMs.CopyTo(exportEntityFs);
         exportEntityFs.Dispose();
         Assert.True(File.Exists("./EPPlus-Export-Entity.xlsx"));

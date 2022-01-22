@@ -14,7 +14,7 @@ public partial class ReadConfig<T>
     /// </summary>
     public async Task<IEnumerable<T>> ToEntityAsync(string path, ExcelType? excelType = null)
     {
-        using var fs = path.ReadShareStream();
+        using var fs = path.OpenReadShareStream();
         return await ToEntityAsync(fs, excelType);
     }
     /// <summary>
@@ -38,7 +38,7 @@ public partial class ReadConfig<T>
     /// </summary>
     public static async Task<IEnumerable<T>> ExcelToEntityAsync(string path)
     {
-        using var fs = path.ReadShareStream();
+        using var fs = path.OpenReadShareStream();
         return await ExcelToEntityAsync(fs);
     }
     /// <summary>
