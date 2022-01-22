@@ -52,6 +52,6 @@ public interface IExcelRead<T> : IExcelContainer<T>, IDisposable
     public static IExcelRead GetExcelRead(string path, ExcelType? excelType = null)
     {
         using var fs = path.OpenReadShareStream();
-        return GetExcelRead(path, excelType);
+        return GetExcelRead(fs, excelType);
     }
 }
