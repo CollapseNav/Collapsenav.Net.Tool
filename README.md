@@ -17,7 +17,7 @@
 * [Collapsenav.Net.Tool](./Collapsenav.Net.Tool/README.md)
   * [NuGet 地址](https://www.nuget.org/packages/Collapsenav.Net.Tool/)
   * 一些基础类型的扩展和工具,`string,DateTime,Collection,File,Security....`
-* [Collapsenav.Net.Tool.Excel](./Collapsenav.Net.Tool.Excel/README.md)
+* [Collapsenav.Net.Tool.Excel](./Collapsenav.Net.Tool.Excel/Readme.md)
   * [NuGet 地址](https://www.nuget.org/packages/Collapsenav.Net.Tool.Excel/)
   * 简单的Excel操作(基于EPPlus实现)
 
