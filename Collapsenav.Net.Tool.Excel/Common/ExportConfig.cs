@@ -81,13 +81,11 @@ public partial class ExportConfig<T>
     public ExportConfig<T> AddIf(bool check, string field, Func<T, object> action)
     {
         if (check)
-        {
             Add(new ExportCellOption<T>
             {
                 ExcelField = field,
                 Action = action
             });
-        }
         return this;
     }
 }

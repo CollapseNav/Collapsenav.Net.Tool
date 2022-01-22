@@ -36,6 +36,36 @@ public class ExcelExportTool
         return stream;
     }
     /// <summary>
+    /// 数据实体导出为Excel(暂时使用EPPlus实现)
+    /// </summary>
+    public static async Task<Stream> DataExportAsync<T>(string path, IEnumerable<T> data)
+    {
+        return await ExportConfig<T>.DataExportAsync(path, data);
+    }
+    /// <summary>
+    /// 数据实体导出为Excel(暂时使用EPPlus实现)
+    /// </summary>
+    public static async Task<Stream> DataExportAsync<T>(Stream stream, IEnumerable<T> data)
+    {
+        return await ExportConfig<T>.DataExportAsync(stream, data);
+    }
+
+
+    /// <summary>
+    /// 配置导出表头为Excel(暂时使用EPPlus实现)
+    /// </summary>
+    public static async Task<Stream> ConfigExportHeaderAsync<T>(string path)
+    {
+        return await ExportConfig<T>.ConfigExportHeaderAsync(path);
+    }
+    /// <summary>
+    /// 配置导出表头为Excel(暂时使用EPPlus实现)
+    /// </summary>
+    public static async Task<Stream> ConfigExportHeaderAsync<T>(Stream stream)
+    {
+        return await ExportConfig<T>.ConfigExportHeaderAsync(stream);
+    }
+    /// <summary>
     /// 导出表头
     /// </summary>
     /// <param name="stream">文件流</param>
@@ -114,5 +144,23 @@ public class ExcelExportTool
         });
         await notCloseStream.SeekAndCopyToAsync(stream);
         return notCloseStream;
+    }
+
+
+    /// <summary>
+    /// 导出excel
+    /// </summary>
+    /// <param name="excel">excel</param>
+    /// <param name="option">导出配置</param>
+    /// <param name="data">指定数据</param>
+    public static async Task<Stream> ExportAsync<T>(IExcelCellRead excel, ExportConfig<T> option, IEnumerable<T> data = null)
+    {
+        await Task.Factory.StartNew(() =>
+        {
+            foreach (var (cellData, rowIndex) in (data ?? option.Data).SelectWithIndex())
+                foreach (var (item, index) in option.FieldOption.Select((item, i) => (item, i)))
+                    excel[rowIndex, index].Value = item.Action(cellData);
+        });
+        return excel.GetStream();
     }
 }

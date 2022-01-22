@@ -44,6 +44,29 @@ public class ExcelReadTool
     }
 
     /// <summary>
+    /// 将表格数据转换为T类型的集合
+    /// </summary>
+    public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(string path)
+    {
+        return await ReadConfig<T>.ExcelToEntityAsync(path);
+    }
+    /// <summary>
+    /// 将表格数据转换为T类型的集合
+    /// </summary>
+    public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(Stream stream)
+    {
+        return await ReadConfig<T>.ExcelToEntityAsync(stream);
+    }
+    /// <summary>
+    /// 将表格数据转换为T类型的集合
+    /// </summary>
+    public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(IExcelRead reader)
+    {
+        return await ReadConfig<T>.ExcelToEntityAsync(reader);
+    }
+
+
+    /// <summary>
     /// 获取表格header(仅限简单的单行表头)
     /// </summary>
     /// <param name="sheet">工作簿</param>
