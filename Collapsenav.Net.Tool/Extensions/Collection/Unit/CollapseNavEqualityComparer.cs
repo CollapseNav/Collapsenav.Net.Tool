@@ -1,4 +1,5 @@
 namespace Collapsenav.Net.Tool;
+
 public class CollapseNavEqualityComparer<T> : IEqualityComparer<T>
 {
     public CollapseNavEqualityComparer(Func<T, int> hashcodeFunc)

@@ -6,7 +6,7 @@ public static partial class StringExt
     /// </summary>
     public static string ToBase64(this byte[] bytes)
     {
-        return StringTool.ToBase64(bytes);
+        return Convert.ToBase64String(bytes);
     }
 
     /// <summary>
@@ -14,7 +14,7 @@ public static partial class StringExt
     /// </summary>
     public static byte[] FromBase64(this string base64String)
     {
-        return StringTool.FromBase64(base64String);
+        return Convert.FromBase64String(base64String);
     }
 
     /// <summary>
@@ -22,7 +22,7 @@ public static partial class StringExt
     /// </summary>
     public static string ImageToBase64(this Stream stream)
     {
-        return StringTool.ImageToBase64(stream);
+        return "data:image;base64," + stream.StreamToBase64();
     }
 
     /// <summary>
@@ -30,7 +30,8 @@ public static partial class StringExt
     /// </summary>
     public static string ImageToBase64(this string filepath)
     {
-        return StringTool.ImageToBase64(filepath);
+        using var fs = filepath.OpenReadShareStream();
+        return "data:image;base64," + fs.StreamToBase64();
     }
 
     /// <summary>
@@ -38,7 +39,7 @@ public static partial class StringExt
     /// </summary>
     public static string StreamToBase64(this Stream stream)
     {
-        return StringTool.StreamToBase64(stream);
+        return stream.ToBytes().ToBase64();
     }
 
     /// <summary>
@@ -46,7 +47,7 @@ public static partial class StringExt
     /// </summary>
     public static string Base64ImageToString(this string base64String)
     {
-        return StringTool.Base64ImageToString(base64String);
+        return base64String[(base64String.IndexOf("base64,") + "base64,".Length)..].Trim();
     }
 
     /// <summary>
@@ -54,14 +55,14 @@ public static partial class StringExt
     /// </summary>
     public static Stream Base64ImageToStream(this string base64String)
     {
-        return StringTool.Base64ImageToStream(base64String);
+        return base64String.Base64ImageToString().FromBase64().ToStream();
     }
     /// <summary>
     /// base64图片字符串转为文件
     /// </summary>
     public static void Base64ImageToStream(this string base64String, string filepath)
     {
-        StringTool.Base64ImageToStream(base64String, filepath);
+        base64String.Base64ImageToString().FromBase64().SaveTo(filepath);
     }
 
     /// <summary>
@@ -69,7 +70,7 @@ public static partial class StringExt
     /// </summary>
     public static async Task Base64ImageToStreamAsync(this string base64String, string filepath)
     {
-        await StringTool.Base64ImageToStreamAsync(base64String, filepath);
+        await base64String.Base64ImageToString().FromBase64().SaveToAsync(filepath);
     }
 
 }

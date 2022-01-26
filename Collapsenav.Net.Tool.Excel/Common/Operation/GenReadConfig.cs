@@ -30,7 +30,7 @@ public partial class ReadConfig<T>
     {
         var config = new ReadConfig<T>();
         // 直接根据属性名称创建导入配置
-        foreach (var prop in TypeTool.BuildInTypeProps(typeof(T)))
+        foreach (var prop in typeof(T).BuildInTypeProps())
             config.Add(config.GenOption(prop.Name, prop));
         return config;
     }

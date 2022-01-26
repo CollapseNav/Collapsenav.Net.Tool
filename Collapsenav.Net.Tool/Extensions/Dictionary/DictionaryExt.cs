@@ -1,12 +1,12 @@
 namespace Collapsenav.Net.Tool;
-public partial class DictionaryTool
+public static partial class DictionaryExt
 {
     /// <summary>
     /// 添加或更新
     /// </summary>
     /// <param name="dict">字典</param>
     /// <param name="item">键值对</param>
-    public static IDictionary<K, V> AddOrUpdate<K, V>(IDictionary<K, V> dict, KeyValuePair<K, V> item)
+    public static IDictionary<K, V> AddOrUpdate<K, V>(this IDictionary<K, V> dict, KeyValuePair<K, V> item)
     {
         if (dict.ContainsKey(item.Key))
             dict[item.Key] = item.Value;
@@ -20,7 +20,7 @@ public partial class DictionaryTool
     /// <param name="dict">字典</param>
     /// <param name="key"></param>
     /// <param name="value"></param>
-    public static IDictionary<K, V> AddOrUpdate<K, V>(IDictionary<K, V> dict, K key, V value)
+    public static IDictionary<K, V> AddOrUpdate<K, V>(this IDictionary<K, V> dict, K key, V value)
     {
         if (dict.ContainsKey(key))
             dict[key] = value;
@@ -33,10 +33,10 @@ public partial class DictionaryTool
     /// </summary>
     /// <param name="dict">字典</param>
     /// <param name="values">值</param>
-    public static IDictionary<K, V> AddRange<K, V>(IDictionary<K, V> dict, IDictionary<K, V> values)
+    public static IDictionary<K, V> AddRange<K, V>(this IDictionary<K, V> dict, IDictionary<K, V> values)
     {
         foreach (var item in values)
-            AddOrUpdate(dict, item);
+            dict.AddOrUpdate(item);
         return dict;
     }
     /// <summary>
@@ -44,17 +44,17 @@ public partial class DictionaryTool
     /// </summary>
     /// <param name="dict">字典</param>
     /// <param name="values">值</param>
-    public static IDictionary<K, V> AddRange<K, V>(IDictionary<K, V> dict, IEnumerable<KeyValuePair<K, V>> values)
+    public static IDictionary<K, V> AddRange<K, V>(this IDictionary<K, V> dict, IEnumerable<KeyValuePair<K, V>> values)
     {
         foreach (var item in values)
-            AddOrUpdate(dict, item);
+            dict.AddOrUpdate(item);
         return dict;
     }
     /// <summary>
     /// 将键值对集合转为字典
     /// </summary>
     /// <param name="dict"></param>
-    public static IDictionary<K, V> ToDictionary<K, V>(IEnumerable<KeyValuePair<K, V>> dict)
+    public static IDictionary<K, V> ToDictionary<K, V>(this IEnumerable<KeyValuePair<K, V>> dict)
     {
         return dict.ToDictionary(item => item.Key, item => item.Value);
     }
@@ -63,7 +63,7 @@ public partial class DictionaryTool
     /// </summary>
     /// <param name="query">集合</param>
     /// <param name="keySelector">key选择器</param>
-    public static IDictionary<K, V> ToDictionary<K, V>(IEnumerable<V> query, Func<V, K> keySelector)
+    public static IDictionary<K, V> ToDictionary<K, V>(this IEnumerable<V> query, Func<V, K> keySelector)
     {
         return query.ToDictionary(keySelector, item => item);
     }
@@ -72,7 +72,7 @@ public partial class DictionaryTool
     /// </summary>
     /// <param name="dict"></param>
     /// <param name="key"></param>
-    public static V GetAndRemove<K, V>(IDictionary<K, V> dict, K key)
+    public static V GetAndRemove<K, V>(this IDictionary<K, V> dict, K key)
     {
         var flag = dict.TryGetValue(key, out V value);
         if (flag)
@@ -83,12 +83,13 @@ public partial class DictionaryTool
         }
         return value;
     }
+
     /// <summary>
     /// 字典解构
     /// </summary>
     /// <typeparam name="K">Key 作为 index</typeparam>
     /// <typeparam name="V">Value 作为 value</typeparam>
-    public static IEnumerable<(V value, K index)> Deconstruct<K, V>(IDictionary<K, V> dict)
+    public static IEnumerable<(V value, K index)> Deconstruct<K, V>(this IDictionary<K, V> dict)
     {
         foreach (var item in dict)
             yield return (item.Value, item.Key);
@@ -101,7 +102,10 @@ public partial class DictionaryTool
     /// <typeparam name="V">Value 作为 value</typeparam>
     /// <typeparam name="E">value</typeparam>
     /// <typeparam name="F">index</typeparam>
-    public static IEnumerable<(E value, F index)> Deconstruct<K, V, E, F>(IDictionary<K, V> dict, Func<V, E> value, Func<K, F> index)
+    public static IEnumerable<(E value, F index)> Deconstruct<K, V, E, F>(
+        this IDictionary<K, V> dict,
+        Func<V, E> value,
+        Func<K, F> index)
     {
         foreach (var item in dict)
             yield return (value(item.Value), index(item.Key));

@@ -57,3 +57,6 @@ var jsonString = user.ToJson().Trim();
 // "{\"userName\":\"ABCD\",\"age\":23}"
 ```
 
+### JsonMap
+
+

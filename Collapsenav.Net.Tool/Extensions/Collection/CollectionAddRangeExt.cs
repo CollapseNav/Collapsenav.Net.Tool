@@ -1,12 +1,12 @@
 namespace Collapsenav.Net.Tool;
-public partial class CollectionTool
+public partial class CollectionExt
 {
     /// <summary>
     /// 向一个集合中添加多个对象
     /// </summary>
     /// <param name="query">源</param>
     /// <param name="values">添加的对象</param>
-    public static IEnumerable<T> AddRange<T>(IEnumerable<T> query, params T[] values)
+    public static IEnumerable<T> AddRange<T>(this IEnumerable<T> query, params T[] values)
     {
         return query.Concat(values);
     }
@@ -16,9 +16,9 @@ public partial class CollectionTool
     /// <param name="query">源</param>
     /// <param name="comparer">去重依据</param>
     /// <param name="values">添加的对象</param>
-    public static IEnumerable<T> AddRange<T>(IEnumerable<T> query, Func<T, T, bool> comparer, params T[] values)
+    public static IEnumerable<T> AddRange<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, params T[] values)
     {
-        return query.Union(values, new CollapseNavEqualityComparer<T>(comparer));
+        return query.AddRange(comparer, null, values);
     }
     /// <summary>
     /// 向一个集合中添加多个对象(带去重)
@@ -26,9 +26,9 @@ public partial class CollectionTool
     /// <param name="query">源</param>
     /// <param name="hashCodeFunc">去重依据(hash)</param>
     /// <param name="values">添加的对象</param>
-    public static IEnumerable<T> AddRange<T>(IEnumerable<T> query, Func<T, int> hashCodeFunc, params T[] values)
+    public static IEnumerable<T> AddRange<T>(this IEnumerable<T> query, Func<T, int> hashCodeFunc, params T[] values)
     {
-        return query.Union(values, new CollapseNavEqualityComparer<T>(hashCodeFunc));
+        return query.AddRange(null, hashCodeFunc, values);
     }
     /// <summary>
     /// 向一个集合中添加多个对象(带去重)
@@ -37,16 +37,17 @@ public partial class CollectionTool
     /// <param name="comparer">去重依据</param>
     /// <param name="hashCodeFunc">去重依据(hash)</param>
     /// <param name="values">添加的对象</param>
-    public static IEnumerable<T> AddRange<T>(IEnumerable<T> query, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc, params T[] values)
+    public static IEnumerable<T> AddRange<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc, params T[] values)
     {
         return query.Union(values, new CollapseNavEqualityComparer<T>(comparer, hashCodeFunc));
     }
+
     /// <summary>
     /// 向一个集合中添加多个对象
     /// </summary>
     /// <param name="query">源</param>
     /// <param name="values">添加的对象</param>
-    public static IEnumerable<T> AddRange<T>(IEnumerable<T> query, IEnumerable<T> values)
+    public static IEnumerable<T> AddRange<T>(this IEnumerable<T> query, IEnumerable<T> values)
     {
         return query.Concat(values);
     }
@@ -56,9 +57,9 @@ public partial class CollectionTool
     /// <param name="query">源</param>
     /// <param name="comparer">去重依据</param>
     /// <param name="values">添加的对象</param>
-    public static IEnumerable<T> AddRange<T>(IEnumerable<T> query, Func<T, T, bool> comparer, IEnumerable<T> values)
+    public static IEnumerable<T> AddRange<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, IEnumerable<T> values)
     {
-        return query.Union(values, new CollapseNavEqualityComparer<T>(comparer));
+        return query.AddRange(comparer, null, values);
     }
     /// <summary>
     /// 向一个集合中添加多个对象(带去重)
@@ -66,9 +67,9 @@ public partial class CollectionTool
     /// <param name="query">源</param>
     /// <param name="hashCodeFunc">去重依据(hash)</param>
     /// <param name="values">添加的对象</param>
-    public static IEnumerable<T> AddRange<T>(IEnumerable<T> query, Func<T, int> hashCodeFunc, IEnumerable<T> values)
+    public static IEnumerable<T> AddRange<T>(this IEnumerable<T> query, Func<T, int> hashCodeFunc, IEnumerable<T> values)
     {
-        return query.Union(values, new CollapseNavEqualityComparer<T>(hashCodeFunc));
+        return query.AddRange(null, hashCodeFunc, values);
     }
     /// <summary>
     /// 向一个集合中添加多个对象(带去重)
@@ -77,10 +78,12 @@ public partial class CollectionTool
     /// <param name="comparer">去重依据</param>
     /// <param name="hashCodeFunc">去重依据(hash)</param>
     /// <param name="values">添加的对象</param>
-    public static IEnumerable<T> AddRange<T>(IEnumerable<T> query, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc, IEnumerable<T> values)
+    public static IEnumerable<T> AddRange<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc, IEnumerable<T> values)
     {
         return query.Union(values, new CollapseNavEqualityComparer<T>(comparer, hashCodeFunc));
     }
+
+
 
 
 
@@ -89,7 +92,7 @@ public partial class CollectionTool
     /// </summary>
     /// <param name="query">源</param>
     /// <param name="values">添加的对象</param>
-    public static void AddRange<T>(ICollection<T> query, params T[] values)
+    public static void AddRange<T>(this ICollection<T> query, params T[] values)
     {
         foreach (var item in values)
             query.Add(item);
@@ -100,13 +103,9 @@ public partial class CollectionTool
     /// <param name="query">源</param>
     /// <param name="comparer">去重依据</param>
     /// <param name="values">添加的对象</param>
-    public static void AddRange<T>(ICollection<T> query, Func<T, T, bool> comparer, params T[] values)
+    public static void AddRange<T>(this ICollection<T> query, Func<T, T, bool> comparer, params T[] values)
     {
-        var uniqueComparer = new CollapseNavEqualityComparer<T>(comparer);
-        var uniqueData = values.Distinct(uniqueComparer);
-        foreach (var item in uniqueData)
-            if (!query.Contains(item, uniqueComparer))
-                query.Add(item);
+        query.AddRange(comparer, null, values);
     }
     /// <summary>
     /// 向一个集合中添加多个对象(带去重)
@@ -114,13 +113,9 @@ public partial class CollectionTool
     /// <param name="query">源</param>
     /// <param name="hashCodeFunc">去重依据(hash)</param>
     /// <param name="values">添加的对象</param>
-    public static void AddRange<T>(ICollection<T> query, Func<T, int> hashCodeFunc, params T[] values)
+    public static void AddRange<T>(this ICollection<T> query, Func<T, int> hashCodeFunc, params T[] values)
     {
-        var uniqueComparer = new CollapseNavEqualityComparer<T>(hashCodeFunc);
-        var uniqueData = values.Distinct(uniqueComparer);
-        foreach (var item in uniqueData)
-            if (!query.Contains(item, uniqueComparer))
-                query.Add(item);
+        query.AddRange(null, hashCodeFunc, values);
     }
     /// <summary>
     /// 向一个集合中添加多个对象(带去重)
@@ -129,7 +124,7 @@ public partial class CollectionTool
     /// <param name="comparer">去重依据</param>
     /// <param name="hashCodeFunc">去重依据(hash)</param>
     /// <param name="values">添加的对象</param>
-    public static void AddRange<T>(ICollection<T> query, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc, params T[] values)
+    public static void AddRange<T>(this ICollection<T> query, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc, params T[] values)
     {
         var uniqueComparer = new CollapseNavEqualityComparer<T>(comparer, hashCodeFunc);
         var uniqueData = values.Distinct(uniqueComparer);
@@ -137,14 +132,15 @@ public partial class CollectionTool
             if (!query.Contains(item, uniqueComparer))
                 query.Add(item);
     }
+
     /// <summary>
     /// 向一个集合中添加多个对象
     /// </summary>
     /// <param name="query">源</param>
     /// <param name="values">添加的对象</param>
-    public static void AddRange<T>(ICollection<T> query, IEnumerable<T> values)
+    public static void AddRange<T>(this ICollection<T> query, IEnumerable<T> values)
     {
-        AddRange(query, values.ToArray());
+        query.AddRange(values.ToArray());
     }
     /// <summary>
     /// 向一个集合中添加多个对象(带去重)
@@ -152,9 +148,9 @@ public partial class CollectionTool
     /// <param name="query">源</param>
     /// <param name="comparer">去重依据</param>
     /// <param name="values">添加的对象</param>
-    public static void AddRange<T>(ICollection<T> query, Func<T, T, bool> comparer, IEnumerable<T> values)
+    public static void AddRange<T>(this ICollection<T> query, Func<T, T, bool> comparer, IEnumerable<T> values)
     {
-        AddRange(query, comparer, values.ToArray());
+        query.AddRange(comparer, null, values.ToArray());
     }
     /// <summary>
     /// 向一个集合中添加多个对象(带去重)
@@ -162,9 +158,9 @@ public partial class CollectionTool
     /// <param name="query">源</param>
     /// <param name="hashCodeFunc">去重依据(hash)</param>
     /// <param name="values">添加的对象</param>
-    public static void AddRange<T>(ICollection<T> query, Func<T, int> hashCodeFunc, IEnumerable<T> values)
+    public static void AddRange<T>(this ICollection<T> query, Func<T, int> hashCodeFunc, IEnumerable<T> values)
     {
-        AddRange(query, hashCodeFunc, values.ToArray());
+        query.AddRange(null, hashCodeFunc, values.ToArray());
     }
     /// <summary>
     /// 向一个集合中添加多个对象(带去重)
@@ -173,9 +169,8 @@ public partial class CollectionTool
     /// <param name="comparer">去重依据</param>
     /// <param name="hashCodeFunc">去重依据(hash)</param>
     /// <param name="values">添加的对象</param>
-    public static void AddRange<T>(ICollection<T> query, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc, IEnumerable<T> values)
+    public static void AddRange<T>(this ICollection<T> query, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc, IEnumerable<T> values)
     {
-        AddRange(query, comparer, hashCodeFunc, values.ToArray());
+        query.AddRange(comparer, hashCodeFunc, values.ToArray());
     }
-
 }
