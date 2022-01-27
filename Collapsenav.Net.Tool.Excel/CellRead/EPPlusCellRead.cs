@@ -5,8 +5,8 @@ namespace Collapsenav.Net.Tool.Excel;
 /// </summary>
 public class EPPlusCellRead : IExcelCellRead
 {
-    protected const int Zero = ExcelReadTool.EPPlusZero;
-    protected int headerRowCount = ExcelReadTool.EPPlusZero;
+    protected const int Zero = ExcelTool.EPPlusZero;
+    protected int headerRowCount = Zero;
     protected ExcelWorksheet _sheet;
     protected ExcelPackage _pack;
     protected Stream _stream;
@@ -15,9 +15,7 @@ public class EPPlusCellRead : IExcelCellRead
     protected int rowCount;
     public EPPlusCellRead()
     {
-        _pack = new ExcelPackage();
-        _sheet = _pack.Workbook.Worksheets.Add("sheet1");
-        rowCount = 0;
+        Init();
     }
     public EPPlusCellRead(string path, int headerCount = Zero)
     {
@@ -34,8 +32,14 @@ public class EPPlusCellRead : IExcelCellRead
     }
     private void Init(Stream stream, int headerCount = Zero)
     {
+        // 使用传入的流, 可在 Save 时修改/覆盖
         _stream = stream;
-        Init(ExcelReadTool.EPPlusSheet(_stream), headerCount);
+        var sheets = ExcelTool.EPPlusSheets(_stream);
+        // 若传入的文件中无法解析出 sheets ,则使用默认的无参初始化
+        if (sheets?.Count > 0)
+            Init(ExcelTool.EPPlusSheet(_stream), headerCount);
+        else
+            Init();
     }
     private void Init(ExcelWorksheet sheet, int headerCount = Zero)
     {
@@ -49,6 +53,12 @@ public class EPPlusCellRead : IExcelCellRead
         rowCount = sheet.Dimension.Rows;
         HeaderIndex = ExcelReadTool.HeadersWithIndex(sheet);
         HeaderList = HeaderIndex.Select(item => item.Key).ToList();
+    }
+    private void Init()
+    {
+        _pack = new ExcelPackage();
+        _sheet = _pack.Workbook.Worksheets.Add("sheet1");
+        rowCount = 0;
     }
 
 
@@ -73,6 +83,13 @@ public class EPPlusCellRead : IExcelCellRead
         _stream.Dispose();
         _pack.Dispose();
     }
+    public void Save()
+    {
+        _stream.SeekToOrigin();
+        _stream.Clear();
+        _pack.SaveAs(_stream);
+        _stream.SeekToOrigin();
+    }
 
     /// <summary>
     /// 保存到流
@@ -80,8 +97,11 @@ public class EPPlusCellRead : IExcelCellRead
     public void SaveTo(Stream stream)
     {
         stream.SeekToOrigin();
+        stream.Clear();
         _pack.SaveAs(stream);
+        stream.SeekToOrigin();
     }
+
     /// <summary>
     /// 保存到文件
     /// </summary>

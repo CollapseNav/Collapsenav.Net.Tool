@@ -8,7 +8,7 @@ namespace Collapsenav.Net.Tool.Excel;
 public class NPOICellRead : IExcelCellRead
 {
     protected const int Zero = ExcelReadTool.NPOIZero;
-    protected int headerRowCount = ExcelReadTool.NPOIZero;
+    protected int headerRowCount = Zero;
     protected ISheet _sheet;
     protected IWorkbook _workbook;
     protected Stream _stream;
@@ -17,9 +17,7 @@ public class NPOICellRead : IExcelCellRead
     protected int rowCount;
     public NPOICellRead()
     {
-        _workbook = new SXSSFWorkbook();
-        _sheet = _workbook.CreateSheet("sheet1");
-        rowCount = 0;
+        Init();
     }
     public NPOICellRead(string path, int headerCount = Zero)
     {
@@ -38,7 +36,11 @@ public class NPOICellRead : IExcelCellRead
     private void Init(Stream stream, int headerCount = Zero)
     {
         _stream = stream;
-        Init(ExcelReadTool.NPOISheet(_stream), headerCount);
+        var sheet = ExcelTool.NPOISheet(_stream);
+        if (sheet == null)
+            Init();
+        else
+            Init(sheet, headerCount);
     }
     private void Init(ISheet sheet, int headerCount = Zero)
     {
@@ -49,6 +51,12 @@ public class NPOICellRead : IExcelCellRead
         rowCount = sheet.LastRowNum + 1;
         HeaderIndex = ExcelReadTool.HeadersWithIndex(sheet);
         HeaderList = HeaderIndex.Select(item => item.Key).ToList();
+    }
+    private void Init()
+    {
+        _workbook = new SXSSFWorkbook();
+        _sheet = _workbook.CreateSheet("sheet1");
+        rowCount = 0;
     }
 
 
@@ -87,11 +95,19 @@ public class NPOICellRead : IExcelCellRead
         return excelRow;
     }
 
+    public void Save()
+    {
+        _stream.SeekToOrigin();
+        _stream.Clear();
+        _sheet.Workbook.Write(_stream);
+        _stream.SeekToOrigin();
+    }
     /// <summary>
     /// 保存到流
     /// </summary>
     public void SaveTo(Stream stream)
     {
+        stream.Clear();
         _sheet.Workbook.Write(stream);
         stream.SeekToOrigin();
     }

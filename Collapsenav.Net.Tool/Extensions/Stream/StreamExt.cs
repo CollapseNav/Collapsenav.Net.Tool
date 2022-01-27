@@ -127,4 +127,11 @@ public static partial class StreamExt
         using var fs = path.CreateStream();
         await fs.WriteAsync(bytes);
     }
+    /// <summary>
+    /// 清空流
+    /// </summary>
+    public static void Clear(this Stream stream)
+    {
+        stream.SetLength(0);
+    }
 }

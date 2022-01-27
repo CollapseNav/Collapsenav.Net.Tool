@@ -6,8 +6,8 @@ namespace Collapsenav.Net.Tool.Excel;
 /// </summary>
 public class MiniCellRead : IExcelCellRead
 {
-    protected const int Zero = 0;
-    protected int headerRowCount = 0;
+    protected const int Zero = ExcelTool.MiniZero;
+    protected int headerRowCount = Zero;
     protected IEnumerable<dynamic> sheet;
     protected Stream _stream;
     protected IDictionary<string, int> HeaderIndex;
@@ -63,11 +63,21 @@ public class MiniCellRead : IExcelCellRead
         _stream.Dispose();
     }
 
+    public void Save()
+    {
+        _stream.SeekToOrigin();
+        _stream.Clear();
+        _stream.SaveAs(sheet);
+        _stream.SeekToOrigin();
+    }
+
     /// <summary>
     /// 保存到流
     /// </summary>
     public void SaveTo(Stream stream)
     {
+        stream.SeekToOrigin();
+        stream.SaveAs(sheet);
         stream.SeekToOrigin();
     }
     /// <summary>
@@ -76,7 +86,8 @@ public class MiniCellRead : IExcelCellRead
     public void SaveTo(string path)
     {
         using var fs = path.OpenCreateReadWirteShareStream();
-
+        fs.SaveAs(sheet);
+        fs.Dispose();
     }
     /// <summary>
     /// 获取流
@@ -84,6 +95,7 @@ public class MiniCellRead : IExcelCellRead
     public Stream GetStream()
     {
         var ms = new MemoryStream();
+        ms.SaveAs(sheet);
         ms.SeekToOrigin();
         return ms;
     }

@@ -117,7 +117,7 @@ public static partial class CollectionExt
     /// <param name="filter">筛选条件</param>
     public static IEnumerable<T> WhereIf<T>(this IEnumerable<T> query, string input, Func<T, bool> filter)
     {
-        return query.WhereIf(input.IsEmpty(), filter);
+        return query.WhereIf(input.NotEmpty(), filter);
     }
 
     /// <summary>
