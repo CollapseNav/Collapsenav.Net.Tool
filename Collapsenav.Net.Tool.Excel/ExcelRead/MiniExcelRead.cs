@@ -6,7 +6,7 @@ namespace Collapsenav.Net.Tool.Excel;
 public class MiniExcelRead : IExcelRead
 {
     protected int headerRowCount = MiniZero;
-    protected const int MiniZero = 0;
+    protected const int MiniZero = ExcelTool.MiniZero;
     protected Stream SheetStream;
     protected IEnumerable<dynamic> sheet;
     protected IDictionary<string, int> HeaderIndex;

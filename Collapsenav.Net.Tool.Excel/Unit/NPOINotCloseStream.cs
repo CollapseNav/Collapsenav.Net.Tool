@@ -27,12 +27,12 @@ public class NPOINotCloseStream : MemoryStream
         IWorkbook workbook;
         try
         {
-            workbook = new HSSFWorkbook(this);
+            workbook = Length > 0 ? new HSSFWorkbook(this) : new HSSFWorkbook();
         }
         catch
         {
             Seek(0, SeekOrigin.Begin);
-            workbook = new XSSFWorkbook(this);
+            workbook = Length > 0 ? new XSSFWorkbook(this) : new XSSFWorkbook();
         }
         return workbook;
     }

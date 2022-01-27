@@ -46,7 +46,7 @@ public partial class MiniExcelReadTool
     public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(Stream stream, ReadConfig<T> options)
     {
         using var notCloseStream = new NPOINotCloseStream(stream);
-        return await ExcelReadTool.ExcelToEntityAsync(new MiniExcelRead(stream, 1), options);
+        return await options.ToEntityAsync(new MiniExcelRead(stream, 1));
     }
     #endregion
 }

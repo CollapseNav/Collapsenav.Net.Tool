@@ -22,8 +22,7 @@ public partial class EPPlusExcelReadTool
     /// <param name="stream">文件流</param>
     public static IEnumerable<string> ExcelHeader(Stream stream)
     {
-        using ExcelPackage pack = new(stream);
-        return ExcelHeader(pack.Workbook.Worksheets[ExcelReadTool.EPPlusZero]);
+        return ExcelHeader(ExcelTool.EPPlusSheet(stream));
     }
     /// <summary>
     /// 获取表格header(仅限简单的单行表头)
@@ -43,8 +42,7 @@ public partial class EPPlusExcelReadTool
     /// <param name="options">导出配置</param>
     public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(string filepath, ReadConfig<T> options)
     {
-        using var fs = filepath.OpenReadShareStream();
-        return await ExcelToEntityAsync(fs, options);
+        return await ExcelToEntityAsync(ExcelTool.EPPlusSheet(filepath), options);
     }
     /// <summary>
     /// 将表格数据转换为指定的数据实体
@@ -53,8 +51,8 @@ public partial class EPPlusExcelReadTool
     /// <param name="options">导出配置</param>
     public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(Stream stream, ReadConfig<T> options)
     {
-        using ExcelPackage pack = new(stream);
-        return await ExcelToEntityAsync(pack.Workbook.Worksheets[ExcelReadTool.EPPlusZero], options);
+        using ExcelPackage pack = new();
+        return await ExcelToEntityAsync(ExcelTool.EPPlusSheet(stream), options);
     }
     /// <summary>
     /// 将表格数据转换为指定的数据实体
@@ -63,7 +61,7 @@ public partial class EPPlusExcelReadTool
     /// <param name="options">导出配置</param>
     public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(ExcelWorksheet sheet, ReadConfig<T> options)
     {
-        return await ExcelReadTool.ExcelToEntityAsync(IExcelRead.GetExcelRead(sheet), options);
+        return await options.ToEntityAsync(IExcelRead.GetExcelRead(sheet));
     }
     #endregion
 }

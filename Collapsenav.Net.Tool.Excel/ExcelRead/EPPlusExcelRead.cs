@@ -4,15 +4,15 @@ namespace Collapsenav.Net.Tool.Excel;
 
 public class EPPlusExcelRead : IExcelRead
 {
-    protected const int Zero = ExcelReadTool.EPPlusZero;
-    protected int headerRowCount = ExcelReadTool.EPPlusZero;
+    protected int headerRowCount = Zero;
+    protected const int Zero = ExcelTool.EPPlusZero;
     protected ExcelWorksheet sheet;
     protected IDictionary<string, int> HeaderIndex;
     protected IEnumerable<string> HeaderList;
     protected int rowCount;
     public EPPlusExcelRead(Stream stream, int headerCount = Zero)
     {
-        Init(ExcelReadTool.EPPlusSheet(stream), headerCount);
+        Init(ExcelTool.EPPlusSheet(stream), headerCount);
     }
     public EPPlusExcelRead(ExcelWorksheet sheet, int headerCount = Zero)
     {
@@ -27,8 +27,6 @@ public class EPPlusExcelRead : IExcelRead
         HeaderIndex = ExcelReadTool.HeadersWithIndex(sheet);
         HeaderList = HeaderIndex.Select(item => item.Key).ToList();
     }
-
-
 
     public IEnumerable<string> this[string field]
     {
@@ -48,6 +46,6 @@ public class EPPlusExcelRead : IExcelRead
 
     public void Dispose()
     {
-        throw new NotImplementedException();
+        sheet.Workbook.Dispose();
     }
 }

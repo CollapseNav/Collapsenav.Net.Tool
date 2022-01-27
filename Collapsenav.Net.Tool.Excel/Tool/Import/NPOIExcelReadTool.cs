@@ -65,7 +65,7 @@ public partial class NPOIExcelReadTool
     /// <param name="options">导出配置</param>
     public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(ISheet sheet, ReadConfig<T> options)
     {
-        return await ExcelReadTool.ExcelToEntityAsync(IExcelRead.GetExcelRead(sheet), options);
+        return await options.ToEntityAsync(IExcelRead.GetExcelRead(sheet));
     }
     #endregion
 }

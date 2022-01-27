@@ -3,8 +3,8 @@ namespace Collapsenav.Net.Tool.Excel;
 
 public class NPOIExcelRead : IExcelRead
 {
-    protected const int Zero = ExcelReadTool.NPOIZero;
-    protected int headerRowCount = ExcelReadTool.NPOIZero;
+    protected int headerRowCount = Zero;
+    protected const int Zero = ExcelTool.NPOIZero;
     protected ISheet sheet;
     public IDictionary<string, int> HeaderIndex;
     protected IEnumerable<string> HeaderList;
@@ -14,7 +14,7 @@ public class NPOIExcelRead : IExcelRead
     public IDictionary<string, int> HeadersWithIndex { get => HeaderIndex; }
     public NPOIExcelRead(Stream stream, int headerCount = Zero)
     {
-        Init(ExcelReadTool.NPOISheet(stream), headerCount);
+        Init(ExcelTool.NPOISheet(stream), headerCount);
     }
     public NPOIExcelRead(ISheet sheet, int headerCount = Zero)
     {

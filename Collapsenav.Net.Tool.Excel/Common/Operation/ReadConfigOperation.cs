@@ -1,7 +1,44 @@
+using System.Collections.Concurrent;
+
 namespace Collapsenav.Net.Tool.Excel;
 
 public partial class ReadConfig<T>
 {
+    /// <summary>
+    /// 将表格数据转换为T类型的集合
+    /// </summary>
+    public async Task<IEnumerable<T>> ToEntityAsync(IExcelRead sheet)
+    {
+        ConcurrentBag<T> data = new();
+        var header = sheet.HeadersWithIndex;
+        var rowCount = sheet.RowCount;
+        await Task.Factory.StartNew(() =>
+        {
+            Parallel.For(1, rowCount, index =>
+            {
+                Monitor.Enter(sheet);
+                var dataRow = sheet[index].ToList();
+                Monitor.Exit(sheet);
+                // 根据对应传入的设置 为obj赋值
+                var obj = Activator.CreateInstance<T>();
+                foreach (var option in FieldOption)
+                {
+                    if (!option.ExcelField.IsNull())
+                    {
+                        var value = dataRow[header[option.ExcelField]];
+                        option.Prop.SetValue(obj, option.Action == null ? value : option.Action(value));
+                    }
+                    else
+                        option.Prop.SetValue(obj, option.Action == null ? null : option.Action(string.Empty));
+                }
+                Init?.Invoke(obj);
+                data.Add(obj);
+            });
+        });
+        return data;
+    }
+
+
     /// <summary>
     /// 转换到实体
     /// </summary>
@@ -25,37 +62,27 @@ public partial class ReadConfig<T>
         var reader = IExcelRead.GetExcelRead(stream, excelType);
         return await ToEntityAsync(reader);
     }
-    /// <summary>
-    /// 转换到实体
-    /// </summary>
-    public virtual async Task<IEnumerable<T>> ToEntityAsync(IExcelRead reader)
-    {
-        return await ExcelReadTool.ExcelToEntityAsync(reader, this);
-    }
+
 
     /// <summary>
     /// 转换到实体
     /// </summary>
     public static async Task<IEnumerable<T>> ExcelToEntityAsync(string path)
     {
-        using var fs = path.OpenReadShareStream();
-        return await ExcelToEntityAsync(fs);
+        return await ExcelReadTool.ExcelToEntityAsync<T>(path);
     }
     /// <summary>
     /// 转换到实体
     /// </summary>
     public static async Task<IEnumerable<T>> ExcelToEntityAsync(Stream stream)
     {
-        var reader = IExcelRead.GetExcelRead(stream);
-        var config = GenDefaultConfig();
-        return await ExcelReadTool.ExcelToEntityAsync(reader, config);
+        return await ExcelReadTool.ExcelToEntityAsync<T>(stream);
     }
     /// <summary>
     /// 转换到实体
     /// </summary>
     public static async Task<IEnumerable<T>> ExcelToEntityAsync(IExcelRead reader)
     {
-        var config = GenDefaultConfig();
-        return await ExcelReadTool.ExcelToEntityAsync(reader, config);
+        return await ExcelReadTool.ExcelToEntityAsync<T>(reader);
     }
 }
