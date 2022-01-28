@@ -1,3 +1,4 @@
+using System.Collections;
 using OfficeOpenXml;
 namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
@@ -5,8 +6,7 @@ namespace Collapsenav.Net.Tool.Excel;
 /// </summary>
 public class EPPlusCellRead : IExcelCellRead
 {
-    protected const int Zero = ExcelTool.EPPlusZero;
-    protected int headerRowCount = Zero;
+    public int Zero => ExcelTool.EPPlusZero;
     protected ExcelWorksheet _sheet;
     protected ExcelPackage _pack;
     protected Stream _stream;
@@ -17,38 +17,37 @@ public class EPPlusCellRead : IExcelCellRead
     {
         Init();
     }
-    public EPPlusCellRead(string path, int headerCount = Zero)
+    public EPPlusCellRead(string path)
     {
         var fs = path.OpenCreateReadWirteShareStream();
-        Init(fs, headerCount);
+        Init(fs);
     }
-    public EPPlusCellRead(Stream stream, int headerCount = Zero)
+    public EPPlusCellRead(Stream stream)
     {
-        Init(stream, headerCount);
+        Init(stream);
     }
-    public EPPlusCellRead(ExcelWorksheet sheet, int headerCount = Zero)
+    public EPPlusCellRead(ExcelWorksheet sheet)
     {
-        Init(sheet, headerCount);
+        Init(sheet);
     }
-    private void Init(Stream stream, int headerCount = Zero)
+    private void Init(Stream stream)
     {
+        stream.SeekToOrigin();
         // 使用传入的流, 可在 Save 时修改/覆盖
         _stream = stream;
         var sheets = ExcelTool.EPPlusSheets(_stream);
         // 若传入的文件中无法解析出 sheets ,则使用默认的无参初始化
         if (sheets?.Count > 0)
-            Init(ExcelTool.EPPlusSheet(_stream), headerCount);
+            Init(ExcelTool.EPPlusSheet(_stream));
         else
             Init();
     }
-    private void Init(ExcelWorksheet sheet, int headerCount = Zero)
+    private void Init(ExcelWorksheet sheet)
     {
         _sheet = sheet;
         _pack ??= new ExcelPackage();
         if (_pack.Workbook.Worksheets.Count == 0)
             _sheet = _pack.Workbook.Worksheets.Add("sheet1", sheet);
-
-        headerRowCount += headerCount;
 
         rowCount = sheet.Dimension.Rows;
         HeaderIndex = ExcelReadTool.HeadersWithIndex(sheet);
@@ -69,12 +68,12 @@ public class EPPlusCellRead : IExcelCellRead
     {
         get
         {
-            for (var i = headerRowCount; i < rowCount; i++)
+            for (var i = Zero; i < rowCount + Zero; i++)
                 yield return new EPPlusCell(_sheet.Cells[i, HeaderIndex[field] + Zero]);
         }
     }
 
-    public IEnumerable<IReadCell> this[long row] => _sheet.Cells[(int)row, Zero, (int)row + Zero, Zero + Headers.Count()]?.Select(item => new EPPlusCell(item));
+    public IEnumerable<IReadCell> this[long row] => _sheet.Cells[(int)row + Zero, Zero, (int)row + Zero, Zero + Headers.Count()]?.Select(item => new EPPlusCell(item));
     public IReadCell this[long row, long col] => new EPPlusCell(_sheet.Cells[(int)row + Zero, (int)col + Zero]);
     public IReadCell this[string field, long row] => new EPPlusCell(_sheet.Cells[(int)row + Zero, HeaderIndex[field] + Zero]);
 
@@ -120,5 +119,16 @@ public class EPPlusCellRead : IExcelCellRead
         _pack.SaveAs(ms);
         ms.SeekToOrigin();
         return ms;
+    }
+
+    public IEnumerator<IEnumerable<IReadCell>> GetEnumerator()
+    {
+        for (var row = 0; row < rowCount; row++)
+            yield return this[row];
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

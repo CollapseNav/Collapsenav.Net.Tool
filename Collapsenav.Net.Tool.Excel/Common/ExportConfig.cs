@@ -7,27 +7,13 @@ namespace Collapsenav.Net.Tool.Excel;
 public partial class ExportConfig<T>
 {
     /// <summary>
-    /// 获取数据
-    /// </summary>
-    public virtual IEnumerable<object[]> GetConvertData(IEnumerable<T> data)
-    {
-        return data?.Select(item => FieldOption.Select(option => option.Action(item)).ToArray());
-    }
-    /// <summary>
-    /// 获取表头和数据
-    /// </summary>
-    public virtual IEnumerable<object[]> GetExportData(IEnumerable<T> data)
-    {
-        return ConvertHeader.Concat(GetConvertData(data));
-    }
-    /// <summary>
     /// 添加普通单元格设置
     /// </summary>
     /// <param name="field">表头列</param>
     /// <param name="propName">属性名称</param>
     public virtual ExportConfig<T> Add(string field, string propName)
     {
-        return Add(field, item => item.GetValue(propName).ToString());
+        return Add(field, item => item.GetValue(propName));
     }
     /// <summary>
     /// 添加普通单元格设置

@@ -1,3 +1,4 @@
+using System.Collections;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.Streaming;
 namespace Collapsenav.Net.Tool.Excel;
@@ -7,11 +8,11 @@ namespace Collapsenav.Net.Tool.Excel;
 /// </summary>
 public class NPOICellRead : IExcelCellRead
 {
-    protected const int Zero = ExcelReadTool.NPOIZero;
-    protected int headerRowCount = Zero;
+    public int Zero => ExcelReadTool.NPOIZero;
     protected ISheet _sheet;
     protected IWorkbook _workbook;
     protected Stream _stream;
+    protected NPOINotCloseStream notCloseStream;
     public IDictionary<string, int> HeaderIndex;
     protected IEnumerable<string> HeaderList;
     protected int rowCount;
@@ -19,34 +20,34 @@ public class NPOICellRead : IExcelCellRead
     {
         Init();
     }
-    public NPOICellRead(string path, int headerCount = Zero)
+    public NPOICellRead(string path)
     {
         var fs = path.OpenCreateReadWirteShareStream();
-        Init(fs, headerCount);
+        Init(fs);
     }
 
-    public NPOICellRead(Stream stream, int headerCount = Zero)
+    public NPOICellRead(Stream stream)
     {
-        Init(stream, headerCount);
+        Init(stream);
     }
-    public NPOICellRead(ISheet sheet, int headerCount = Zero)
+    public NPOICellRead(ISheet sheet)
     {
-        Init(sheet, headerCount);
+        Init(sheet);
     }
-    private void Init(Stream stream, int headerCount = Zero)
+    private void Init(Stream stream)
     {
         _stream = stream;
+        notCloseStream = new NPOINotCloseStream(stream);
         var sheet = ExcelTool.NPOISheet(_stream);
         if (sheet == null)
             Init();
         else
-            Init(sheet, headerCount);
+            Init(sheet);
     }
-    private void Init(ISheet sheet, int headerCount = Zero)
+    private void Init(ISheet sheet)
     {
         _sheet = sheet;
         _workbook = sheet.Workbook;
-        headerRowCount += headerCount;
 
         rowCount = sheet.LastRowNum + 1;
         HeaderIndex = ExcelReadTool.HeadersWithIndex(sheet);
@@ -67,10 +68,8 @@ public class NPOICellRead : IExcelCellRead
     {
         get
         {
-            for (var i = headerRowCount; i < rowCount; i++)
-            {
+            for (var i = Zero; i < rowCount + Zero; i++)
                 yield return new NPOICell(GetRow(i).GetCell(HeaderIndex[field] + Zero, MissingCellPolicy.CREATE_NULL_AS_BLANK));
-            }
         }
     }
     public IEnumerable<IReadCell> this[long row] => GetRow(row + Zero).Cells.Select(item => new NPOICell(item));
@@ -86,7 +85,8 @@ public class NPOICellRead : IExcelCellRead
     public void Dispose()
     {
         _stream.Dispose();
-        _sheet.Workbook.Close();
+        notCloseStream.Dispose();
+        _workbook.Close();
     }
     private IRow GetRow(long row)
     {
@@ -97,10 +97,12 @@ public class NPOICellRead : IExcelCellRead
 
     public void Save()
     {
-        _stream.SeekToOrigin();
         _stream.Clear();
-        _sheet.Workbook.Write(_stream);
-        _stream.SeekToOrigin();
+        notCloseStream.Clear();
+        var dd = _sheet.ActiveCell;
+        _workbook.Write(notCloseStream);
+        notCloseStream.SeekToOrigin();
+        notCloseStream.CopyTo(_stream);
     }
     /// <summary>
     /// 保存到流
@@ -108,7 +110,9 @@ public class NPOICellRead : IExcelCellRead
     public void SaveTo(Stream stream)
     {
         stream.Clear();
-        _sheet.Workbook.Write(stream);
+        using var fs = new NPOINotCloseStream();
+        _sheet.Workbook.Write(fs);
+        fs.CopyTo(stream);
         stream.SeekToOrigin();
     }
 
@@ -132,5 +136,16 @@ public class NPOICellRead : IExcelCellRead
         _sheet.Workbook.Write(ms);
         ms.SeekToOrigin();
         return ms;
+    }
+
+    public IEnumerator<IEnumerable<IReadCell>> GetEnumerator()
+    {
+        for (var row = 0; row < rowCount; row++)
+            yield return this[row];
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

@@ -4,45 +4,25 @@ public partial class ExportConfig<T>
     /// <summary>
     /// 列表数据导出到excel
     /// </summary>
-    public async Task<Stream> EPPlusExportAsync(IEnumerable<T> data = null, ExportType exportType = ExportType.All)
-    {
-        return await EPPlusExportTool.ExportAsync(this, data, exportType);
-    }
+    public async Task<Stream> EPPlusExportAsync(IEnumerable<T> data = null) => await ExportAsync(data, ExcelType.EPPlus);
     /// <summary>
     /// 列表数据导出到excel
     /// </summary>
-    public async Task<Stream> EPPlusExportAsync(string filePath, IEnumerable<T> data = null, ExportType exportType = ExportType.All)
-    {
-        return await EPPlusExportTool.ExportAsync(filePath, this, data, exportType);
-    }
+    public async Task<Stream> EPPlusExportAsync(string filePath, IEnumerable<T> data = null) => await ExportAsync(filePath, data, ExcelType.EPPlus);
     /// <summary>
     /// 列表数据导出到excel
     /// </summary>
-    public async Task<Stream> EPPlusExportAsync(Stream stream, IEnumerable<T> data = null, ExportType exportType = ExportType.All)
-    {
-        return await EPPlusExportTool.ExportAsync(stream, this, data, exportType);
-    }
-
-
+    public async Task<Stream> EPPlusExportAsync(Stream stream, IEnumerable<T> data = null) => await ExportAsync(stream, data, ExcelType.EPPlus);
     /// <summary>
     /// 列表数据导出到excel
     /// </summary>
-    public async Task<Stream> EPPlusExportHeaderAsync()
-    {
-        return await EPPlusExportTool.ExportHeaderAsync(this);
-    }
+    public Stream EPPlusExportHeader() => ExportHeader(ExcelType.EPPlus);
     /// <summary>
     /// 列表数据导出到excel
     /// </summary>
-    public async Task<Stream> EPPlusExportHeaderAsync(string filePath)
-    {
-        return await EPPlusExportTool.ExportHeaderAsync(filePath, this);
-    }
+    public Stream EPPlusExportHeader(string filePath) => ExportHeader(filePath, ExcelType.EPPlus);
     /// <summary>
     /// 列表数据导出到excel
     /// </summary>
-    public async Task<Stream> EPPlusExportHeaderAsync(Stream stream)
-    {
-        return await EPPlusExportTool.ExportHeaderAsync(stream, this);
-    }
+    public Stream EPPlusExportHeader(Stream stream) => ExportHeader(stream, ExcelType.EPPlus);
 }

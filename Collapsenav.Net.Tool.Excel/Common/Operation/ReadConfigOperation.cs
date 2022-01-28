@@ -59,7 +59,7 @@ public partial class ReadConfig<T>
     /// </summary>
     public virtual async Task<IEnumerable<T>> ToEntityAsync(Stream stream, ExcelType? excelType = null)
     {
-        var reader = IExcelRead.GetExcelRead(stream, excelType);
+        using var reader = IExcelRead.GetExcelRead(stream, excelType);
         return await ToEntityAsync(reader);
     }
 

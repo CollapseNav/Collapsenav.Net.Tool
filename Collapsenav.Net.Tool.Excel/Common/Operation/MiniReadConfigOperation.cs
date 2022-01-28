@@ -7,16 +7,15 @@ public partial class ReadConfig<T>
     public async Task<IEnumerable<T>> MiniToEntityAsync()
     {
         if (ExcelStream == null)
-            throw new Exception();
-        return await MiniToEntityAsync(ExcelStream);
+            throw new NullReferenceException();
+        return await ToEntityAsync(ExcelStream, ExcelType.MiniExcel);
     }
     /// <summary>
     /// 将表格数据转换为指定的数据实体-Mini
     /// </summary>
     public async Task<IEnumerable<T>> MiniToEntityAsync(string filepath)
     {
-        using var fs = filepath.OpenReadShareStream();
-        return await MiniToEntityAsync(fs);
+        return await ToEntityAsync(filepath, ExcelType.MiniExcel);
     }
     /// <summary>
     /// 将表格数据转换为指定的数据实体-Mini

@@ -6,8 +6,7 @@ namespace Collapsenav.Net.Tool.Excel;
 /// </summary>
 public class MiniCellRead : IExcelCellRead
 {
-    protected const int Zero = ExcelTool.MiniZero;
-    protected int headerRowCount = Zero;
+    public int Zero => ExcelTool.MiniZero;
     protected IEnumerable<dynamic> sheet;
     protected Stream _stream;
     protected IDictionary<string, int> HeaderIndex;
@@ -19,25 +18,23 @@ public class MiniCellRead : IExcelCellRead
         sheet = _stream.Query().ToList();
         rowCount = 0;
     }
-    public MiniCellRead(string path, int headerCount = Zero)
+    public MiniCellRead(string path)
     {
         var fs = path.OpenCreateReadWirteShareStream();
-        Init(fs, headerCount);
+        Init(fs);
     }
-    public MiniCellRead(Stream stream, int headerCount = Zero)
+    public MiniCellRead(Stream stream)
     {
-        Init(stream, headerCount);
+        Init(stream);
     }
-    private void Init(Stream stream, int headerCount = Zero)
+    private void Init(Stream stream)
     {
         _stream = stream;
         sheet = _stream.Query().ToList();
 
-        headerRowCount += headerCount;
-
         rowCount = sheet.Count();
         var sheetFirst = sheet.First() as IEnumerable<KeyValuePair<string, object>>;
-        HeaderList = MiniExcelReadTool.ExcelHeader(_stream);
+        HeaderList = sheetFirst.Select(item => item.Value?.ToString() ?? string.Empty);
         HeaderIndex = sheetFirst.Select((item, index) => (item.Value, index)).ToDictionary(item => item.Value.ToString(), item => item.index);
     }
 
@@ -49,7 +46,7 @@ public class MiniCellRead : IExcelCellRead
     {
         get
         {
-            for (var i = headerRowCount; i < rowCount; i++)
+            for (var i = Zero; i < rowCount + Zero; i++)
                 yield return new MiniCell((sheet.ElementAt(i) as IEnumerable<KeyValuePair<string, object>>).ElementAt(HeaderIndex[field] + Zero), i, HeaderIndex[field] + Zero);
         }
     }
@@ -98,5 +95,16 @@ public class MiniCellRead : IExcelCellRead
         ms.SaveAs(sheet);
         ms.SeekToOrigin();
         return ms;
+    }
+
+    public IEnumerator<IEnumerable<IReadCell>> GetEnumerator()
+    {
+        for (var row = 0; row < rowCount + Zero; row++)
+            yield return this[row];
+    }
+
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

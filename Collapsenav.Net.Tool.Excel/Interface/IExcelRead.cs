@@ -9,7 +9,7 @@ public interface IExcelRead : IExcelRead<string> { }
 /// <summary>
 /// 尝试使用 IExcelRead 统一 NPOI , EPPlus , MiniExcel 的调用
 /// </summary>
-public interface IExcelRead<T> : IExcelContainer<T>, IDisposable
+public interface IExcelRead<T> : IExcelContainer<T>
 {
     public static IExcelRead GetExcelRead(object sheet)
     {
@@ -37,10 +37,10 @@ public interface IExcelRead<T> : IExcelContainer<T>, IDisposable
         };
         IExcelRead read = excelType switch
         {
-            ExcelType.EPPlus => new EPPlusExcelRead(stream, 1),
-            ExcelType.NPOI => new NPOIExcelRead(stream, 1),
-            ExcelType.MiniExcel => new MiniExcelRead(stream, 1),
-            _ => new MiniExcelRead(stream, 1)
+            ExcelType.EPPlus => new EPPlusExcelRead(stream),
+            ExcelType.NPOI => new NPOIExcelRead(stream),
+            ExcelType.MiniExcel => new MiniExcelRead(stream),
+            _ => new MiniExcelRead(stream)
         };
         return read;
     }

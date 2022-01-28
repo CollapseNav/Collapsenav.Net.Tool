@@ -1,27 +1,35 @@
+using System.Collections;
 using OfficeOpenXml;
 
 namespace Collapsenav.Net.Tool.Excel;
 
 public class EPPlusExcelRead : IExcelRead
 {
-    protected int headerRowCount = Zero;
-    protected const int Zero = ExcelTool.EPPlusZero;
+    public int Zero => ExcelTool.EPPlusZero;
     protected ExcelWorksheet sheet;
     protected IDictionary<string, int> HeaderIndex;
     protected IEnumerable<string> HeaderList;
     protected int rowCount;
-    public EPPlusExcelRead(Stream stream, int headerCount = Zero)
+    public EPPlusExcelRead(string path)
     {
-        Init(ExcelTool.EPPlusSheet(stream), headerCount);
+        using var fs = path.OpenReadShareStream();
+        Init(fs);
     }
-    public EPPlusExcelRead(ExcelWorksheet sheet, int headerCount = Zero)
+    public EPPlusExcelRead(Stream stream)
     {
-        Init(sheet, headerCount);
+        Init(ExcelTool.EPPlusSheet(stream));
     }
-    private void Init(ExcelWorksheet sheet, int headerCount = Zero)
+    public EPPlusExcelRead(ExcelWorksheet sheet)
+    {
+        Init(sheet);
+    }
+    private void Init(Stream stream)
+    {
+        Init(ExcelTool.EPPlusSheet(stream));
+    }
+    private void Init(ExcelWorksheet sheet)
     {
         this.sheet = sheet;
-        headerRowCount += headerCount;
 
         rowCount = sheet.Dimension.Rows;
         HeaderIndex = ExcelReadTool.HeadersWithIndex(sheet);
@@ -32,7 +40,7 @@ public class EPPlusExcelRead : IExcelRead
     {
         get
         {
-            for (var i = headerRowCount; i < rowCount; i++)
+            for (var i = Zero; i < rowCount + Zero; i++)
                 yield return sheet.Cells[i, HeaderIndex[field] + Zero].Value.ToString();
         }
     }
@@ -47,5 +55,16 @@ public class EPPlusExcelRead : IExcelRead
     public void Dispose()
     {
         sheet.Workbook.Dispose();
+    }
+
+    public IEnumerator<IEnumerable<string>> GetEnumerator()
+    {
+        for (var row = 0; row < rowCount; row++)
+            yield return this[row];
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

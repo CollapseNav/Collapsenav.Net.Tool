@@ -9,29 +9,28 @@ public partial class ReadConfig<T>
     public async Task<IEnumerable<T>> NPOIToEntityAsync()
     {
         if (ExcelStream == null)
-            throw new Exception();
-        return await NPOIToEntityAsync(ExcelStream);
+            throw new NullReferenceException();
+        return await ToEntityAsync(ExcelStream, ExcelType.NPOI);
     }
     /// <summary>
     /// 将表格数据转换为指定的数据实体-NPOI
     /// </summary>
     public async Task<IEnumerable<T>> NPOIToEntityAsync(string filepath)
     {
-        using var fs = filepath.OpenReadShareStream();
-        return await NPOIToEntityAsync(fs);
+        return await ToEntityAsync(filepath, ExcelType.NPOI);
     }
     /// <summary>
     /// 将表格数据转换为指定的数据实体-NPOI
     /// </summary>
     public async Task<IEnumerable<T>> NPOIToEntityAsync(Stream stream)
     {
-        return await NPOIToEntityAsync(ExcelTool.NPOISheet(stream));
+        return await ToEntityAsync(stream, ExcelType.NPOI);
     }
     /// <summary>
     /// 将表格数据转换为指定的数据实体-NPOI
     /// </summary>
     public async Task<IEnumerable<T>> NPOIToEntityAsync(ISheet sheet)
     {
-        return await ToEntityAsync(IExcelRead.GetExcelRead(sheet));
+        return await ToEntityAsync(new NPOIExcelRead(sheet));
     }
 }

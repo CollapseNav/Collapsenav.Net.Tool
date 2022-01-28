@@ -14,7 +14,7 @@ public class NPOICell : IReadCell<ICell>
     public ICell Cell => cell;
     public int Row { get => cell.RowIndex; }
     public int Col { get => cell.ColumnIndex; }
-    public string StringValue => cell.StringCellValue;
+    public string StringValue => cell.ToString();
     public Type ValueType => cell.CellType switch
     {
         CellType.String => typeof(string),

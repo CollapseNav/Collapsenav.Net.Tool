@@ -1,10 +1,10 @@
+using System.Collections;
 using NPOI.SS.UserModel;
 namespace Collapsenav.Net.Tool.Excel;
 
 public class NPOIExcelRead : IExcelRead
 {
-    protected int headerRowCount = Zero;
-    protected const int Zero = ExcelTool.NPOIZero;
+    public int Zero => ExcelTool.NPOIZero;
     protected ISheet sheet;
     public IDictionary<string, int> HeaderIndex;
     protected IEnumerable<string> HeaderList;
@@ -12,18 +12,27 @@ public class NPOIExcelRead : IExcelRead
     public long RowCount { get => rowCount; }
     public IEnumerable<string> Headers { get => HeaderList; }
     public IDictionary<string, int> HeadersWithIndex { get => HeaderIndex; }
-    public NPOIExcelRead(Stream stream, int headerCount = Zero)
+    public NPOIExcelRead(string path)
     {
-        Init(ExcelTool.NPOISheet(stream), headerCount);
+        using var fs = path.OpenReadShareStream();
+        Init(fs); ;
     }
-    public NPOIExcelRead(ISheet sheet, int headerCount = Zero)
+    public NPOIExcelRead(Stream stream)
     {
-        Init(sheet, headerCount);
+        Init(stream);
     }
-    private void Init(ISheet sheet, int headerCount = Zero)
+    public NPOIExcelRead(ISheet sheet)
+    {
+        Init(sheet);
+    }
+    private void Init(Stream stream)
+    {
+        stream.SeekToOrigin();
+        Init(ExcelTool.NPOISheet(stream));
+    }
+    private void Init(ISheet sheet)
     {
         this.sheet = sheet;
-        headerRowCount += headerCount;
 
         rowCount = sheet.LastRowNum + 1;
         HeaderIndex = ExcelReadTool.HeadersWithIndex(sheet);
@@ -35,7 +44,7 @@ public class NPOIExcelRead : IExcelRead
     {
         get
         {
-            for (var i = headerRowCount; i < rowCount; i++)
+            for (var i = Zero; i < rowCount + Zero; i++)
                 yield return sheet.GetRow(i).GetCell(HeaderIndex[field] + Zero).ToString();
         }
     }
@@ -46,5 +55,16 @@ public class NPOIExcelRead : IExcelRead
     public void Dispose()
     {
         sheet.Workbook.Close();
+    }
+
+    public IEnumerator<IEnumerable<string>> GetEnumerator()
+    {
+        for (var row = 0; row < rowCount; row++)
+            yield return this[row];
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

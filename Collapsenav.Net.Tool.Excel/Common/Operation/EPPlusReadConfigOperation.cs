@@ -9,29 +9,28 @@ public partial class ReadConfig<T>
     public async Task<IEnumerable<T>> EPPlusToEntityAsync()
     {
         if (ExcelStream == null)
-            throw new Exception();
-        return await EPPlusToEntityAsync(ExcelStream);
+            throw new NullReferenceException();
+        return await ToEntityAsync(ExcelStream, ExcelType.EPPlus);
     }
     /// <summary>
     /// 将表格数据转换为指定的数据实体-EPPlus
     /// </summary>
     public async Task<IEnumerable<T>> EPPlusToEntityAsync(string filepath)
     {
-        using var fs = filepath.OpenReadShareStream();
-        return await EPPlusToEntityAsync(fs);
+        return await ToEntityAsync(filepath, ExcelType.EPPlus);
     }
     /// <summary>
     /// 将表格数据转换为指定的数据实体-EPPlus
     /// </summary>
     public async Task<IEnumerable<T>> EPPlusToEntityAsync(Stream stream)
     {
-        return await EPPlusToEntityAsync(ExcelTool.EPPlusSheet(stream));
+        return await ToEntityAsync(stream, ExcelType.EPPlus);
     }
     /// <summary>
     /// 将表格数据转换为指定的数据实体-EPPlus
     /// </summary>
     public async Task<IEnumerable<T>> EPPlusToEntityAsync(ExcelWorksheet sheet)
     {
-        return await ToEntityAsync(IExcelRead.GetExcelRead(sheet));
+        return await ToEntityAsync(new EPPlusExcelRead(sheet));
     }
 }

@@ -5,8 +5,6 @@ public partial class ExportConfig<T>
     /// <summary>
     /// 导出excel
     /// </summary>
-    /// <param name="excel">excel</param>
-    /// <param name="data">指定数据</param>
     public async Task<Stream> ExportAsync(IExcelCellRead excel, IEnumerable<T> data = null)
     {
         await Task.Factory.StartNew(() =>
@@ -19,32 +17,72 @@ public partial class ExportConfig<T>
         });
         return excel.GetStream();
     }
-    public async Task<Stream> ExportAsync(IEnumerable<T> data = null)
+    /// <summary>
+    /// 数据实体导出为Excel
+    /// </summary>
+    public async Task<Stream> ExportAsync(IEnumerable<T> data = null, ExcelType? excelType = null)
     {
-        var stream = new MemoryStream();
-        return await ExportAsync(stream, data);
+        using var stream = new MemoryStream();
+        return await ExportAsync(stream, data, excelType);
     }
     /// <summary>
-    /// 数据实体导出为Excel(暂时使用EPPlus实现)
+    /// 数据实体导出为Excel
     /// </summary>
-    public async Task<Stream> ExportAsync(string path, IEnumerable<T> data = null)
+    public async Task<Stream> ExportAsync(string path, IEnumerable<T> data = null, ExcelType? excelType = null)
     {
-        var fs = path.OpenCreateReadWirteShareStream();
-        return await ExportAsync(fs, data);
+        using var fs = path.OpenCreateReadWirteShareStream();
+        return await ExportAsync(fs, data, excelType);
     }
     /// <summary>
-    /// 数据实体导出为Excel(暂时使用EPPlus实现)
+    /// 数据实体导出为Excel
     /// </summary>
-    public async Task<Stream> ExportAsync(Stream stream, IEnumerable<T> data = null)
+    public async Task<Stream> ExportAsync(Stream stream, IEnumerable<T> data = null, ExcelType? excelType = null)
     {
-        using IExcelCellRead read = IExcelCellRead.GetCellRead(stream);
+        using IExcelCellRead read = IExcelCellRead.GetCellRead(stream, excelType);
         var exportStream = await ExportAsync(read, data);
         read.Save();
         return exportStream;
     }
+    /// <summary>
+    /// 导出表头
+    /// </summary>
+    public Stream ExportHeader(IExcelCellRead excel)
+    {
+        foreach (var (value, index) in Header.SelectWithIndex())
+            excel[0, index].Value = value;
+        return excel.GetStream();
+    }
+    /// <summary>
+    /// 导出表头
+    /// </summary>
+    public Stream ExportHeader(ExcelType? excelType = null)
+    {
+    using    var stream = new MemoryStream();
+        return ExportHeader(stream, excelType);
+    }
+    /// <summary>
+    /// 导出表头
+    /// </summary>
+    public Stream ExportHeader(string path, ExcelType? excelType = null)
+    {
+        using var fs = path.OpenCreateReadWirteShareStream();
+        return ExportHeader(fs, excelType);
+    }
+    /// <summary>
+    /// 导出表头
+    /// </summary>
+    public Stream ExportHeader(Stream stream, ExcelType? excelType = null)
+    {
+        using IExcelCellRead read = IExcelCellRead.GetCellRead(stream, excelType);
+        var exportStream = ExportHeader(read);
+        read.Save();
+        return exportStream;
+    }
+
+
 
     /// <summary>
-    /// 数据实体导出为Excel(暂时使用EPPlus实现)
+    /// 数据实体导出为Excel
     /// </summary>
     public static async Task<Stream> DataExportAsync(string path, IEnumerable<T> data)
     {
@@ -52,28 +90,28 @@ public partial class ExportConfig<T>
         return await config.ExportAsync(path, data);
     }
     /// <summary>
-    /// 数据实体导出为Excel(暂时使用EPPlus实现)
+    /// 数据实体导出为Excel
     /// </summary>
     public static async Task<Stream> DataExportAsync(Stream stream, IEnumerable<T> data)
     {
         var config = GenDefaultConfig(data);
-        return await EPPlusExportTool.ExportAsync(stream, config);
+        return await config.ExportAsync(stream);
     }
 
     /// <summary>
-    /// 数据实体导出为Excel(暂时使用EPPlus实现)
+    /// 数据实体导出为Excel
     /// </summary>
-    public static async Task<Stream> ConfigExportHeaderAsync(string path)
+    public static Stream ConfigExportHeader(string path)
     {
         var config = GenDefaultConfig();
-        return await EPPlusExportTool.ExportHeaderAsync(path, config);
+        return config.ExportHeader(path);
     }
     /// <summary>
-    /// 数据实体导出为Excel(暂时使用EPPlus实现)
+    /// 数据实体导出为Excel
     /// </summary>
-    public static async Task<Stream> ConfigExportHeaderAsync(Stream stream)
+    public static Stream ConfigExportHeader(Stream stream)
     {
         var config = GenDefaultConfig();
-        return await EPPlusExportTool.ExportHeaderAsync(stream, config);
+        return config.ExportHeader(stream);
     }
 }

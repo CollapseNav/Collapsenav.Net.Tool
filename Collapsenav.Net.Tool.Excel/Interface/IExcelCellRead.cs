@@ -38,10 +38,10 @@ public interface IExcelCellRead : IExcelContainer<IReadCell>
         };
         IExcelCellRead read = excelType switch
         {
-            ExcelType.EPPlus => new EPPlusCellRead(stream, 1),
-            ExcelType.NPOI => new NPOICellRead(stream, 1),
-            ExcelType.MiniExcel => new MiniCellRead(stream, 1),
-            _ => new MiniCellRead(stream, 1)
+            ExcelType.EPPlus => new EPPlusCellRead(stream),
+            ExcelType.NPOI => new NPOICellRead(stream),
+            ExcelType.MiniExcel => new MiniCellRead(stream),
+            _ => new MiniCellRead(stream)
         };
         return read;
     }

@@ -21,7 +21,7 @@ public partial class ReadConfig<T> : ExcelConfig<T, ReadCellOption<T>>
     {
         ExcelStream = new MemoryStream();
         filepath.IsXls();
-        using var fs = filepath.OpenReadStream();
+        using var fs = filepath.OpenReadShareStream();
         fs.CopyTo(ExcelStream);
     }
     /// <summary>
@@ -32,8 +32,4 @@ public partial class ReadConfig<T> : ExcelConfig<T, ReadCellOption<T>>
     {
         stream.CopyTo(ExcelStream);
     }
-}
-public class ReadConfig : ExcelConfig<object, ReadCellOption<object>>
-{
-
 }
