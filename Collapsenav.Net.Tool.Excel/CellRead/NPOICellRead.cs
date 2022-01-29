@@ -69,7 +69,7 @@ public class NPOICellRead : IExcelCellRead
         get
         {
             for (var i = Zero; i < rowCount + Zero; i++)
-                yield return new NPOICell(GetRow(i).GetCell(HeaderIndex[field] + Zero, MissingCellPolicy.CREATE_NULL_AS_BLANK));
+                yield return new NPOICell(GetCell(GetRow(i), HeaderIndex[field] + Zero));
         }
     }
     public IEnumerable<IReadCell> this[long row] => GetRow(row + Zero).Cells.Select(item => new NPOICell(item));
@@ -77,10 +77,10 @@ public class NPOICellRead : IExcelCellRead
     {
         get
         {
-            return new NPOICell(GetRow(row).GetCell((int)col, MissingCellPolicy.CREATE_NULL_AS_BLANK));
+            return new NPOICell(GetCell(GetRow(row), (int)col));
         }
     }
-    public IReadCell this[string field, long row] => new NPOICell(_sheet.GetRow((int)row).GetCell(HeaderIndex[field], MissingCellPolicy.CREATE_NULL_AS_BLANK));
+    public IReadCell this[string field, long row] => new NPOICell(GetCell(GetRow(row), HeaderIndex[field]));
 
     public void Dispose()
     {
@@ -94,12 +94,18 @@ public class NPOICellRead : IExcelCellRead
         excelRow ??= _sheet.CreateRow((int)row);
         return excelRow;
     }
+    private ICell GetCell(IRow row, int col)
+    {
+        var cell = row.GetCell(col, MissingCellPolicy.RETURN_NULL_AND_BLANK);
+        if (cell == null)
+            cell = row.CreateCell(col);
+        return cell;
+    }
 
     public void Save()
     {
         _stream.Clear();
         notCloseStream.Clear();
-        var dd = _sheet.ActiveCell;
         _workbook.Write(notCloseStream);
         notCloseStream.SeekToOrigin();
         notCloseStream.CopyTo(_stream);
@@ -112,6 +118,7 @@ public class NPOICellRead : IExcelCellRead
         stream.Clear();
         using var fs = new NPOINotCloseStream();
         _sheet.Workbook.Write(fs);
+        fs.SeekToOrigin();
         fs.CopyTo(stream);
         stream.SeekToOrigin();
     }

@@ -12,7 +12,7 @@
     <PackageReference Include="EPPlus.Core" Version="1.5.4"/>
     <PackageReference Include="NPOI" Version="2.5.5"/>
     <PackageReference Include="AutoMapper" Version="10.1.1"/>
-    <PackageReference Include="MiniExcel" Version="0.19.3-beta"/>
+    <PackageReference Include="MiniExcel" Version="0.21.4"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj"/>

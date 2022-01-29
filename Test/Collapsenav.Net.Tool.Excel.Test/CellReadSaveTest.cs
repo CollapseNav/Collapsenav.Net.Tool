@@ -24,6 +24,12 @@ public class CellReadSaveTest
         reader = new MiniCellRead(savePath);
         // MiniExcel 的导出Save暂时还有点问题
         Assert.True(reader[2, 2].StringValue == "12345");
+        reader[3, 1].Value = "👍";
+        reader.SaveTo(savePath);
+        reader.Dispose();
+
+        reader = new EPPlusCellRead(savePath);
+        Assert.True(reader[3, 1].StringValue == "👍");
         reader.Dispose();
     }
 
@@ -49,6 +55,12 @@ public class CellReadSaveTest
         reader = new MiniCellRead(savePath);
         // MiniExcel 的导出Save暂时还有点问题
         Assert.True(reader[2, 2].StringValue == "12345");
+        reader[3, 1].Value = "👍";
+        reader.SaveTo(saveStream);
+        reader.Dispose();
+
+        reader = new EPPlusCellRead(savePath);
+        Assert.True(reader[3, 1].StringValue == "👍");
         reader.Dispose();
     }
 
@@ -76,9 +88,18 @@ public class CellReadSaveTest
         saveStream.Dispose();
         reader.Dispose();
 
+        saveStream = savePath.OpenCreateReadWirteShareStream();
         reader = new MiniCellRead(savePath);
         // MiniExcel 的导出Save暂时还有点问题
         Assert.True(reader[2, 2].StringValue == "12345");
+        reader[3, 1].Value = "👍";
+        getStream = reader.GetStream();
+        getStream.CopyTo(saveStream);
+        saveStream.Dispose();
+        reader.Dispose();
+
+        reader = new EPPlusCellRead(savePath);
+        Assert.True(reader[3, 1].StringValue == "👍");
         reader.Dispose();
     }
 }

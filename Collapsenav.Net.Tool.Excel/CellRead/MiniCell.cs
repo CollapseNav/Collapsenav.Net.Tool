@@ -1,3 +1,4 @@
+using System.Reflection;
 using OfficeOpenXml;
 
 namespace Collapsenav.Net.Tool.Excel;
@@ -5,14 +6,30 @@ namespace Collapsenav.Net.Tool.Excel;
 public class MiniCell : IReadCell<KeyValuePair<string, object>>
 {
     private KeyValuePair<string, object> cell;
+    private IDictionary<string, object> cellRow;
     private readonly int _row;
     private readonly int _col;
+    private readonly string _scol;
 
-    public MiniCell(KeyValuePair<string, object> excelCell, int row, int col)
+    public MiniCell(KeyValuePair<string, object> excelCell, IDictionary<string, object> excelRow, int row, int col)
     {
         cell = excelCell;
+        cellRow = excelRow;
         _row = row;
         _col = col;
+        _scol = GetSCol(col);
+    }
+
+    public static string GetSCol(int col)
+    {
+        string scol = "";
+        do
+        {
+            var temp = col % 26;
+            scol += (char)(temp + 'A');
+            col -= 26;
+        } while (col >= 0);
+        return scol;
     }
 
     public KeyValuePair<string, object> Cell => cell;
@@ -20,6 +37,9 @@ public class MiniCell : IReadCell<KeyValuePair<string, object>>
     public int Col { get => _col; }
     public string StringValue => cell.Value.ToString().Trim();
     public Type ValueType => cell.Value?.GetType();
-    public object Value { get => cell.Value; set => cell = new(cell.Key, Value); }
+    public object Value
+    {
+        get => cell.Value; set => cellRow.AddOrUpdate(_scol, value);
+    }
 }
 

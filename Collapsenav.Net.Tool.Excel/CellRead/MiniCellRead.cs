@@ -1,5 +1,5 @@
+using System.Dynamic;
 using MiniExcelLibs;
-using OfficeOpenXml;
 namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
 /// 使用MiniExcel获取excel的单元格
@@ -7,16 +7,15 @@ namespace Collapsenav.Net.Tool.Excel;
 public class MiniCellRead : IExcelCellRead
 {
     public int Zero => ExcelTool.MiniZero;
-    protected IEnumerable<dynamic> sheet;
+    protected IEnumerable<dynamic> _sheet;
     protected Stream _stream;
     protected IDictionary<string, int> HeaderIndex;
     protected IEnumerable<string> HeaderList;
     protected int rowCount;
+    protected int colCount;
     public MiniCellRead()
     {
-        _stream = new MemoryStream();
-        sheet = _stream.Query().ToList();
-        rowCount = 0;
+        Init();
     }
     public MiniCellRead(string path)
     {
@@ -29,13 +28,28 @@ public class MiniCellRead : IExcelCellRead
     }
     private void Init(Stream stream)
     {
-        _stream = stream;
-        sheet = _stream.Query().ToList();
-
-        rowCount = sheet.Count();
-        var sheetFirst = sheet.First() as IEnumerable<KeyValuePair<string, object>>;
-        HeaderList = sheetFirst.Select(item => item.Value?.ToString() ?? string.Empty);
-        HeaderIndex = sheetFirst.Select((item, index) => (item.Value, index)).ToDictionary(item => item.Value.ToString(), item => item.index);
+        try
+        {
+            _ = stream.Query().First();
+            _stream = stream;
+            _sheet = _stream.Query().ToList();
+            rowCount = _sheet.Count();
+            var sheetFirst = _sheet.First() as IDictionary<string, object>;
+            colCount = sheetFirst.Count;
+            HeaderList = sheetFirst.Select(item => item.Value?.ToString() ?? string.Empty);
+            HeaderIndex = sheetFirst.Select((item, index) => (item.Value, index)).ToDictionary(item => item.Value.ToString(), item => item.index);
+        }
+        catch (Exception ex)
+        {
+            Init();
+            _stream = stream;
+        }
+    }
+    private void Init()
+    {
+        _stream = new MemoryStream();
+        _sheet = new List<dynamic>();
+        rowCount = 0;
     }
 
 
@@ -47,13 +61,39 @@ public class MiniCellRead : IExcelCellRead
         get
         {
             for (var i = Zero; i < rowCount + Zero; i++)
-                yield return new MiniCell((sheet.ElementAt(i) as IEnumerable<KeyValuePair<string, object>>).ElementAt(HeaderIndex[field] + Zero), i, HeaderIndex[field] + Zero);
+                yield return new MiniCell(GetCell(i, HeaderIndex[field] + Zero), GetRow(i), i, HeaderIndex[field] + Zero);
         }
     }
 
-    public IEnumerable<IReadCell> this[long row] => (sheet.ElementAt((int)row) as IEnumerable<KeyValuePair<string, object>>).Select((item, index) => new MiniCell(item, (int)row + Zero, index + Zero));
-    public IReadCell this[long row, long col] => new MiniCell((sheet.ElementAt((int)row) as IEnumerable<KeyValuePair<string, object>>).ElementAt((int)col + Zero), (int)row + Zero, (int)col + Zero);
-    public IReadCell this[string field, long row] => new MiniCell((sheet.ElementAt((int)row) as IEnumerable<KeyValuePair<string, object>>).ElementAt(HeaderIndex[field] + Zero), (int)row, HeaderIndex[field] + Zero);
+    public IEnumerable<IReadCell> this[long row] => GetRow((int)row).Select((item, index) => new MiniCell(item, GetRow((int)row), (int)row + Zero, index + Zero));
+    public IReadCell this[long row, long col] => new MiniCell(GetCell((int)row, (int)col + Zero), GetRow((int)row), (int)row + Zero, (int)col + Zero);
+    public IReadCell this[string field, long row] => new MiniCell(GetCell((int)row, HeaderIndex[field] + Zero), GetRow((int)row), (int)row, HeaderIndex[field] + Zero);
+
+    private KeyValuePair<string, object> GetCell(int row, int col)
+    {
+        var existRow = GetRow(row);
+        if (col < existRow.Count())
+            return existRow.ElementAt(col);
+
+        // for (var i = existRow.Count(); i <= colCount; i++)
+        //     existRow.Add(new KeyValuePair<string, object>(MiniCell.GetSCol(i), ""));
+        return existRow.ElementAt(col);
+    }
+    private IDictionary<string, object> GetRow(int row)
+    {
+        // _sheet = _sheet.Concat(new dynamic[] { new Dictionary<string, object>() });
+        if (row < _sheet.Count())
+            return _sheet.ElementAt(row);
+        for (var i = _sheet.Count(); i <= row; i++)
+        {
+            IDictionary<string, object> dd = new ExpandoObject();
+            for (var col = 0; col < colCount; col++)
+                dd.Add(MiniCell.GetSCol(col), "");
+            _sheet = _sheet.Append(dd);
+        }
+        // _sheet = _sheet.Concat(new dynamic[] { new Dictionary<string, object>() });
+        return _sheet.ElementAt(row);
+    }
 
     public void Dispose()
     {
@@ -62,9 +102,10 @@ public class MiniCellRead : IExcelCellRead
 
     public void Save()
     {
+        // throw new Exception();
         _stream.SeekToOrigin();
         _stream.Clear();
-        _stream.SaveAs(sheet);
+        _stream.SaveAs(_sheet, printHeader: false);
         _stream.SeekToOrigin();
     }
 
@@ -74,7 +115,7 @@ public class MiniCellRead : IExcelCellRead
     public void SaveTo(Stream stream)
     {
         stream.SeekToOrigin();
-        stream.SaveAs(sheet);
+        stream.SaveAs(_sheet, printHeader: false);
         stream.SeekToOrigin();
     }
     /// <summary>
@@ -83,7 +124,7 @@ public class MiniCellRead : IExcelCellRead
     public void SaveTo(string path)
     {
         using var fs = path.OpenCreateReadWirteShareStream();
-        fs.SaveAs(sheet);
+        fs.SaveAs(_sheet, printHeader: false);
         fs.Dispose();
     }
     /// <summary>
@@ -92,7 +133,7 @@ public class MiniCellRead : IExcelCellRead
     public Stream GetStream()
     {
         var ms = new MemoryStream();
-        ms.SaveAs(sheet);
+        ms.SaveAs(_sheet, printHeader: false);
         ms.SeekToOrigin();
         return ms;
     }
