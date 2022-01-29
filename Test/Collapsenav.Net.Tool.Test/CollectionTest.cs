@@ -83,6 +83,7 @@ public class CollectionTest
     {
         string[] strList = { "1", "2", "3", "4", "5", "6" };
         Assert.True(strList.ContainAnd(new[] { "2", "6" }));
+        Assert.True(strList.ContainAnd("2", "6"));
         Assert.False(strList.ContainAnd(new[] { "2", "8" }));
         Assert.True(strList.ContainAnd((x, y) => x == y, "2", "6"));
         Assert.False(strList.ContainAnd((x, y) => x == y, "2", "8"));

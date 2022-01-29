@@ -1,0 +1,211 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace Collapsenav.Net.Tool.Excel.Test;
+public class ExportConfigTest
+{
+    /// <summary>
+    /// 测试默认配置
+    /// </summary>
+    [Fact]
+    public async Task DefaultConfigTest()
+    {
+        var path = "./Export-DefaultExcel.xlsx";
+        var export = ExportConfig<ExcelDefaultDto>.GenDefaultConfig();
+        var read = ReadConfig<ExcelDefaultDto>.GenDefaultConfig();
+
+        Assert.True(export.FieldOption.Count() == 3);
+        var stream = await export.NPOIExportAsync(path, ExcelDefaultDto.ExportData());
+        var data = await read.NPOIToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field0.GetHashCode() ^ item.Field1.GetHashCode() ^ item.Field3.GetHashCode()));
+
+        // 现阶段 EPPlus 无法正常读取 NPOI 导出的表格，不知道啥原因
+        // data = await read.EPPlusToEntityAsync(stream);
+        // Assert.True(data.Count() == 10);
+        // Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field0.GetHashCode() ^ item.Field1.GetHashCode() ^ item.Field3.GetHashCode()));
+
+        data = await read.MiniToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field0.GetHashCode() ^ item.Field1.GetHashCode() ^ item.Field3.GetHashCode()));
+        await stream.DisposeAsync();
+
+        File.Delete(path);
+        stream = await export.EPPlusExportAsync(path, ExcelDefaultDto.ExportData());
+        data = await read.EPPlusToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field0.GetHashCode() ^ item.Field1.GetHashCode() ^ item.Field3.GetHashCode()));
+
+        data = await read.NPOIToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field0.GetHashCode() ^ item.Field1.GetHashCode() ^ item.Field3.GetHashCode()));
+
+        data = await read.MiniToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field0.GetHashCode() ^ item.Field1.GetHashCode() ^ item.Field3.GetHashCode()));
+        await stream.DisposeAsync();
+    }
+
+    /// <summary>
+    /// 测试自定义Add添加配置
+    /// </summary>
+    [Fact]
+    public async Task AddCellOptionTest()
+    {
+        var path = "./Export-TestExcel.xlsx";
+        var read = ReadConfig<ExcelTestDto>.GenDefaultConfig();
+        var export = new ExportConfig<ExcelTestDto>(ExcelTestDto.ExportData())
+        .Add("Field0", item => item.Field0 + "233")
+        .AddIf(true, "Field1", item => item.Field1)
+        .Add("Field2", item => item.Field2)
+        .AddIf(true, "Field3", item => item.Field3)
+        ;
+        var stream = await export.NPOIExportAsync(path);
+        var data = await read.NPOIToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.All(item => item.Field0.AllEndsWith("233")));
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelTestDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field2.GetHashCode() ^ item.Field3.GetHashCode()));
+
+        // 现阶段 EPPlus 无法正常读取 NPOI 导出的表格，不知道啥原因
+        // data = await read.EPPlusToEntityAsync(stream);
+        // Assert.True(data.Count() == 10);
+        // Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelTestDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field2.GetHashCode() ^ item.Field3.GetHashCode()));
+
+        data = await read.MiniToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelTestDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field2.GetHashCode() ^ item.Field3.GetHashCode()));
+        await stream.DisposeAsync();
+
+        File.Delete(path);
+        stream = await export.EPPlusExportAsync(path, ExcelTestDto.ExportData());
+        data = await read.EPPlusToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelTestDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field2.GetHashCode() ^ item.Field3.GetHashCode()));
+
+        data = await read.NPOIToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelTestDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field2.GetHashCode() ^ item.Field3.GetHashCode()));
+
+        data = await read.MiniToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelTestDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field2.GetHashCode() ^ item.Field3.GetHashCode()));
+        await stream.DisposeAsync();
+    }
+
+    /// <summary>
+    /// 测试完全使用字符串添加的配置
+    /// </summary>
+    [Fact]
+    public async Task StringCellOptionTest()
+    {
+        var path = "./Export-StringExcel.xlsx";
+        var read = ReadConfig<ExcelDefaultDto>.GenDefaultConfig();
+        var config = new ExportConfig<ExcelDefaultDto>(ExcelDefaultDto.ExportData())
+        .Add("Field0", "Field0")
+        .Add("Field1", "Field1")
+        .Add("Field3", "Field3")
+        ;
+        var stream = await config.NPOIExportAsync(path);
+        var data = await read.NPOIToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+
+        // 现阶段 EPPlus 无法正常读取 NPOI 导出的表格，不知道啥原因
+        // data = await read.EPPlusToEntityAsync(stream);
+        // Assert.True(data.Count() == 10);
+        // Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+
+        data = await read.MiniToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+        await stream.DisposeAsync();
+
+        File.Delete(path);
+        stream = await config.EPPlusExportAsync(path);
+        data = await read.NPOIToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+
+        data = await read.EPPlusToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+
+        data = await read.MiniToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+        await stream.DisposeAsync();
+    }
+
+    /// <summary>
+    /// 测试根据注解生成的配置
+    /// </summary>
+    [Fact]
+    public async Task AttributeConfigTest()
+    {
+        var path = "./Export-AttributeExcel.xlsx";
+        var read = ReadConfig<ExcelAttrDto>.GenDefaultConfig();
+        var export = ExportConfig<ExcelAttrDto>.GenDefaultConfig(ExcelAttrDto.ExportData());
+        Assert.True(export.FieldOption.Count() == 3);
+        var stream = await export.NPOIExportAsync(path);
+        var data = await read.NPOIToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelAttrDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+
+        // data = await read.NPOIToEntityAsync(stream);
+        // Assert.True(data.Count() == 10);
+        // Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelAttrDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+
+        data = await read.MiniToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelAttrDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+        await stream.DisposeAsync();
+
+        File.Delete(path);
+        stream = await export.EPPlusExportAsync(path);
+        data = await read.NPOIToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelAttrDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+
+        data = await read.NPOIToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelAttrDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+
+        data = await read.MiniToEntityAsync(stream);
+        Assert.True(data.Count() == 10);
+        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelAttrDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+        await stream.DisposeAsync();
+    }
+
+    /// <summary>
+    /// 测试根据注解生成的配置
+    /// </summary>
+    [Fact]
+    public void ExportHeaderTest()
+    {
+        var path = "./HeaderTest.xlsx";
+        var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
+        var config = new ExportConfig<ExcelTestDto>()
+        .Add("Field0", item => item.Field0)
+        .Add("Field1", item => item.Field1)
+        .Add("Field2", item => item.Field2)
+        .Add("Field3", item => item.Field3)
+        ;
+        _ = config.EPPlusExportHeader(path);
+        IExcelCellRead reader = IExcelCellRead.GetCellRead(path, ExcelType.MiniExcel);
+        Assert.True(reader.Headers.SequenceEqual(realHeader));
+        reader.Dispose();
+
+        _ = config.NPOIExportHeader(path);
+        reader = IExcelCellRead.GetCellRead(path, ExcelType.MiniExcel);
+        Assert.True(reader.Headers.SequenceEqual(realHeader));
+        reader.Dispose();
+
+        _ = config.NPOIExportHeader(path);
+        reader = IExcelCellRead.GetCellRead(path, ExcelType.MiniExcel);
+        Assert.True(reader.Headers.SequenceEqual(realHeader));
+        reader.Dispose();
+    }
+}
