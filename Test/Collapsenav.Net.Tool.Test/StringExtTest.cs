@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Collapsenav.Net.Tool.Test;
@@ -63,6 +64,7 @@ public class StringExtTest
     {
         string emailString = "collapsenav@163.com";
         Assert.True(emailString.IsEmail());
+        Assert.False("".IsEmail());
     }
 
     [Fact]
@@ -83,15 +85,24 @@ public class StringExtTest
     }
 
     [Fact]
-    public void StartEndWiths()
+    public void StringStartEndWiths()
     {
         string exampleString = "23333333333333";
-        Assert.True(StringExt.HasStartsWith(exampleString, "23"));
+        Assert.True(exampleString.HasStartsWith("23"));
+        Assert.True(exampleString.HasStartsWith(new[] { "23" }.AsEnumerable()));
         Assert.True(exampleString.AllStartsWith("23", "233", "233333"));
-        Assert.False(StringExt.HasStartsWith(exampleString, "2233"));
+        Assert.True(exampleString.AllStartsWith(new[] { "23", "233", "233333" }.AsEnumerable()));
+        Assert.False(exampleString.HasStartsWith("2233"));
+        Assert.False(exampleString.HasStartsWith(new[] { "2233" }.AsEnumerable()));
         Assert.True(exampleString.AllEndsWith("333333", "33", "3"));
-        Assert.False(StringExt.HasEndsWith(exampleString, "2333333"));
+        Assert.True(exampleString.AllEndsWith(new[] { "333333", "33", "3" }.AsEnumerable()));
+        Assert.False(exampleString.HasEndsWith("2333333"));
+        Assert.False(exampleString.HasEndsWith(new[] { "2333333" }.AsEnumerable()));
+    }
 
+    [Fact]
+    public void StringCollectionStartEndWithTest()
+    {
         string[] strs = new[] { "2333", "233333333333333", "2332" };
         Assert.True(strs.HasStartsWith("233"));
         Assert.True(strs.HasEndsWith("33"));
@@ -174,17 +185,34 @@ public class StringExtTest
         origin = "CollapseNav.Net.Tool";
         data = origin.AutoMask();
         Assert.True(data == "Col*ool");
+        data = "".AutoMask();
+        Assert.True(data == "***");
     }
 
     [Fact]
-    public void Base64ImageTest()
+    public async Task Base64ImageTest()
     {
         var imagePath = "./vscode.png";
-        using var fs = imagePath.OpenReadShareStream();
+        var imagePath2 = "./vscode-64.png";
+        var imagePath3 = "./vscode-642.png";
+        var fs = imagePath.OpenReadShareStream();
         var base64String = fs.ImageToBase64();
         var stream = base64String.Base64ImageToStream();
         Assert.True(stream.Sha1En() == fs.Sha1En());
         Assert.True(imagePath.ImageToBase64() == base64String);
+        fs.Dispose();
+        base64String.Base64ImageSaveTo(imagePath2);
+        await base64String.Base64ImageSaveToAsync(imagePath3);
+        fs = imagePath.OpenReadShareStream();
+        var fs2 = imagePath2.OpenReadShareStream();
+        var fs3 = imagePath3.OpenReadShareStream();
+
+        Assert.True(fs.Md5En() == fs2.Md5En());
+        Assert.True(fs3.Md5En() == fs2.Md5En());
+
+        fs.Dispose();
+        fs2.Dispose();
+        fs3.Dispose();
     }
 
     [Fact]
@@ -206,5 +234,12 @@ public class StringExtTest
 
         Assert.False(temp.ContainAnd("789", "5679"));
         Assert.False(temp.ContainOr("7899", "5679"));
+        temp = "ABCD";
+        Assert.True(temp.ContainAnd(new[] { "ABc", "cD" }, ignoreCase: true));
+        Assert.False(temp.ContainAnd(new[] { "ABc", "cD" }, ignoreCase: false));
+        Assert.True(temp.ContainOr(new[] { "ABc", "CD" }, ignoreCase: true));
+        Assert.True(temp.ContainOr(new[] { "ABc", "CD" }, ignoreCase: false));
+        Assert.False(temp.ContainOr(new[] { "ABcE", "cD" }, ignoreCase: false));
+
     }
 }

@@ -22,11 +22,11 @@ public static class FileStreamExt
     {
         return new FileStream(path, FileMode.Open, FileAccess.Write, FileShare.Write);
     }
-    public static FileStream OpenReadWirteStream(this string path)
+    public static FileStream OpenReadWriteStream(this string path)
     {
         return new FileStream(path, FileMode.Open, FileAccess.ReadWrite);
     }
-    public static FileStream OpenReadWirteShareStream(this string path)
+    public static FileStream OpenReadWriteShareStream(this string path)
     {
         return new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
     }
@@ -36,14 +36,6 @@ public static class FileStreamExt
     {
         return new FileStream(path, FileMode.Create);
     }
-    public static FileStream CreateReadStream(this string path)
-    {
-        return new FileStream(path, FileMode.Create, FileAccess.Read);
-    }
-    public static FileStream CreateReadShareStream(this string path)
-    {
-        return new FileStream(path, FileMode.Create, FileAccess.Read, FileShare.Read);
-    }
     public static FileStream CreateWriteStream(this string path)
     {
         return new FileStream(path, FileMode.Create, FileAccess.Write);
@@ -52,11 +44,11 @@ public static class FileStreamExt
     {
         return new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.Write);
     }
-    public static FileStream CreateReadWirteStream(this string path)
+    public static FileStream CreateReadWriteStream(this string path)
     {
         return new FileStream(path, FileMode.Create, FileAccess.ReadWrite);
     }
-    public static FileStream CreateReadWirteShareStream(this string path)
+    public static FileStream CreateReadWriteShareStream(this string path)
     {
         return new FileStream(path, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite);
     }
@@ -82,11 +74,11 @@ public static class FileStreamExt
     {
         return new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write);
     }
-    public static FileStream OpenCreateReadWirteStream(this string path)
+    public static FileStream OpenCreateReadWriteStream(this string path)
     {
         return new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
     }
-    public static FileStream OpenCreateReadWirteShareStream(this string path)
+    public static FileStream OpenCreateReadWriteShareStream(this string path)
     {
         return new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
     }

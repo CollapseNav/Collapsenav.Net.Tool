@@ -83,9 +83,9 @@ public static partial class TypeExt
         var props = type.GetProperties();
         var nameProps = props.Where(item => item.PropertyType.IsBuildInType());
         var loopProps = props.Where(item => !item.PropertyType.IsBuildInType());
-        if (depth > 0)
-            return loopProps.Select(item => item.PropertyType.PropNames(depth - 1).Select(propName => $@"{item.Name}.{propName}")).Merge(nameProps.Select(item => item.Name));
-        return nameProps.Select(item => item.Name).Concat(loopProps.Select(item => item.Name));
+        return depth > 0
+            ? loopProps.Select(item => item.PropertyType.PropNames(depth - 1).Select(propName => $@"{item.Name}.{propName}")).Merge(nameProps.Select(item => item.Name))
+            : nameProps.Select(item => item.Name).Concat(loopProps.Select(item => item.Name));
     }
 
 
@@ -132,7 +132,7 @@ public static partial class TypeExt
     public static Dictionary<PropertyInfo, object> BuildInTypeValues<T>(this T obj)
     {
         var propDict = typeof(T).BuildInTypeProps()
-        .Select(item => new KeyValuePair<PropertyInfo, object>(item, obj.GetValue<T>(item.Name)))
+        .Select(item => new KeyValuePair<PropertyInfo, object>(item, obj.GetValue(item.Name)))
         .ToDictionary(item => item.Key, item => item.Value);
         return propDict;
     }
@@ -165,8 +165,6 @@ public static partial class TypeExt
     public static object GetValue<T>(this T obj, string field)
     {
         var prop = typeof(T).GetProperties().Where(item => item.Name == field && item.PropertyType.IsBuildInType()).FirstOrDefault();
-        if (prop == null)
-            return "";
-        return prop.GetValue(obj);
+        return prop == null ? "" : prop.GetValue(obj);
     }
 }

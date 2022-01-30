@@ -19,7 +19,7 @@ public class MiniCellRead : IExcelCellRead
     }
     public MiniCellRead(string path)
     {
-        var fs = path.OpenCreateReadWirteShareStream();
+        var fs = path.OpenCreateReadWriteShareStream();
         Init(fs);
     }
     public MiniCellRead(Stream stream)
@@ -123,7 +123,7 @@ public class MiniCellRead : IExcelCellRead
     /// </summary>
     public void SaveTo(string path)
     {
-        using var fs = path.OpenCreateReadWirteShareStream();
+        using var fs = path.OpenCreateReadWriteShareStream();
         fs.SaveAs(_sheet, printHeader: false);
         fs.Dispose();
     }

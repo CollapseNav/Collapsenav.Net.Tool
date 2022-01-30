@@ -139,21 +139,7 @@ public static partial class CollectionExt
     /// <param name="filter">筛选条件</param>
     public static IQueryable<T> WhereIf<T>(this IQueryable<T> query, string input, Expression<Func<T, bool>> filter)
     {
-        return query.WhereIf(input.IsEmpty(), filter);
-    }
-
-    public static IEnumerable<T> RemoveRepeat<T>(this IEnumerable<T> query, IEnumerable<T> target = null)
-    {
-        query = query.Distinct();
-        if (target == null)
-            return query;
-        List<T> result = new();
-        foreach (var q in query)
-        {
-            if (!target.Contains(q))
-                result.Add(q);
-        }
-        return result;
+        return query.WhereIf(input.NotEmpty(), filter);
     }
 
     /// <summary>

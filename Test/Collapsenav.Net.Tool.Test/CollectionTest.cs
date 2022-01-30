@@ -87,6 +87,7 @@ public class CollectionTest
         Assert.False(strList.ContainAnd(new[] { "2", "8" }));
         Assert.True(strList.ContainAnd((x, y) => x == y, "2", "6"));
         Assert.False(strList.ContainAnd((x, y) => x == y, "2", "8"));
+        Assert.False(strList.AsEnumerable().ContainAnd((x, y) => x == y, new[] { "2", "8" }.AsEnumerable()));
     }
 
     [Fact]
@@ -99,11 +100,12 @@ public class CollectionTest
         Assert.True(strList.ContainOr((x, y) => x == y, "2", "6"));
         Assert.True(strList.ContainOr((x, y) => x == y, "2", "8"));
         Assert.False(strList.ContainOr((x, y) => x == y, "7", "8"));
+        Assert.False(strList.AsEnumerable().ContainOr((x, y) => x == y, new[] { "7", "8" }.AsEnumerable()));
     }
 
 
     [Fact]
-    public void WhereIfTest()
+    public void IEnumerableWhereIfTest()
     {
         int[] intList = { 1, 1, 2, 2, 3, 3, 4 };
         intList = intList.WhereIf(true, item => item > 1)
@@ -116,12 +118,17 @@ public class CollectionTest
     }
 
     [Fact]
-    public void RemoveRepeatTest()
+    public void IQueryableWhereIfTest()
     {
         int[] intList = { 1, 1, 2, 2, 3, 3, 4 };
-        intList = intList.RemoveRepeat(new[] { 2, 3, 4 }).ToArray();
-        Assert.True(intList.Length == 1);
-        Assert.True(intList.First() == 1);
+        intList = intList.AsQueryable()
+        .WhereIf(true, item => item > 1)
+        .WhereIf(false, item => item < 3)
+        .WhereIf("", item => item != 2)
+        .ToArray();
+        Assert.True(intList.SequenceEqual(new[] { 2, 2, 3, 3, 4 }));
+        Assert.False(new[] { 2, 2, 3, 3, 4 }.Except(intList).Any());
+        Assert.True(intList.Length == 5);
     }
 
     [Fact]
@@ -249,6 +256,8 @@ public class CollectionTest
         nums.AddRange((x, y) => x == y, new[] { 6, 7, 8 }.AsEnumerable());
         Assert.True(nums.Count == 16);
         nums.AddRange(x => x.GetHashCode(), new[] { 8, 9, 10 }.AsEnumerable());
+        Assert.True(nums.Count == 16);
+        nums.AddRange((x, y) => x == y, x => x.GetHashCode(), new[] { 8, 9, 10 }.AsEnumerable());
         Assert.True(nums.Count == 16);
     }
 

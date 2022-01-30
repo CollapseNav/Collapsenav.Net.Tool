@@ -30,7 +30,7 @@ public partial class ExportConfig<T>
     /// </summary>
     public async Task<Stream> ExportAsync(string path, IEnumerable<T> data = null, ExcelType? excelType = null)
     {
-        using var fs = path.OpenCreateReadWirteShareStream();
+        using var fs = path.OpenCreateReadWriteShareStream();
         return await ExportAsync(fs, data, excelType);
     }
     /// <summary>
@@ -65,7 +65,7 @@ public partial class ExportConfig<T>
     /// </summary>
     public Stream ExportHeader(string path, ExcelType? excelType = null)
     {
-        using var fs = path.OpenCreateReadWirteShareStream();
+        using var fs = path.OpenCreateReadWriteShareStream();
         return ExportHeader(fs, excelType);
     }
     /// <summary>

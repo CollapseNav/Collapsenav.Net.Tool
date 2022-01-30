@@ -60,7 +60,7 @@ public static partial class StringExt
     /// <summary>
     /// base64图片字符串转为文件
     /// </summary>
-    public static void Base64ImageToStream(this string base64String, string filepath)
+    public static void Base64ImageSaveTo(this string base64String, string filepath)
     {
         base64String.Base64ImageToString().FromBase64().SaveTo(filepath);
     }
@@ -68,9 +68,8 @@ public static partial class StringExt
     /// <summary>
     /// base64图片字符串转为文件
     /// </summary>
-    public static async Task Base64ImageToStreamAsync(this string base64String, string filepath)
+    public static async Task Base64ImageSaveToAsync(this string base64String, string filepath)
     {
         await base64String.Base64ImageToString().FromBase64().SaveToAsync(filepath);
     }
-
 }

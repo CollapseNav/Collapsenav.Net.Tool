@@ -77,10 +77,6 @@ public static partial class DictionaryExt
         var flag = dict.TryGetValue(key, out V value);
         if (flag)
             dict.Remove(key);
-        else
-        {
-            // TODO 抛点异常什么的
-        }
         return value;
     }
 

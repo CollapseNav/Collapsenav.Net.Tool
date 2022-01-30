@@ -98,5 +98,165 @@ public class StreamTest
         toFs4.Dispose();
         File.Delete(toFile);
     }
+
+    [Fact]
+    public void OpenFileStreamTest()
+    {
+        var path = "./vscode2.png";
+        var fs = path.OpenReadStream();
+        Assert.True(fs.CanRead);
+        Assert.False(fs.CanWrite);
+        fs.Dispose();
+
+        fs = path.OpenWriteStream();
+        Assert.False(fs.CanRead);
+        Assert.True(fs.CanWrite);
+        fs.Dispose();
+
+        fs = path.OpenReadWriteStream();
+        Assert.True(fs.CanWrite);
+        Assert.True(fs.CanRead);
+        fs.Dispose();
+
+        fs = path.OpenReadWriteShareStream();
+        Assert.True(fs.CanWrite);
+        Assert.True(fs.CanRead);
+        var fs1 = path.OpenReadWriteShareStream();
+        Assert.True(fs1.CanRead);
+        Assert.True(fs1.CanWrite);
+        fs.Dispose();
+        fs1.Dispose();
+
+        fs = path.OpenReadShareStream();
+        Assert.True(fs.CanRead);
+        Assert.False(fs.CanWrite);
+        fs1 = path.OpenReadShareStream();
+        Assert.True(fs1.CanRead);
+        Assert.False(fs1.CanWrite);
+        fs.Dispose();
+        fs1.Dispose();
+
+        fs = path.OpenWriteShareStream();
+        Assert.False(fs.CanRead);
+        Assert.True(fs.CanWrite);
+        fs1 = path.OpenWriteShareStream();
+        Assert.False(fs1.CanRead);
+        Assert.True(fs1.CanWrite);
+        fs.Dispose();
+        fs1.Dispose();
+    }
+    [Fact]
+    public void CreateFileStreamTest()
+    {
+        var path = "./vscode3.png";
+        Assert.False(File.Exists(path));
+        var fs = path.CreateWriteStream();
+        Assert.True(File.Exists(path));
+        Assert.True(fs.CanWrite);
+        Assert.False(fs.CanRead);
+        fs.Dispose();
+        File.Delete(path);
+
+        Assert.False(File.Exists(path));
+        fs = path.CreateWriteShareStream();
+        Assert.True(File.Exists(path));
+        Assert.True(fs.CanWrite);
+        Assert.False(fs.CanRead);
+        var fs1 = path.CreateWriteShareStream();
+        fs.Dispose();
+        fs1.Dispose();
+        File.Delete(path);
+
+        Assert.False(File.Exists(path));
+        fs = path.CreateWriteStream();
+        Assert.True(File.Exists(path));
+        Assert.True(fs.CanWrite);
+        Assert.False(fs.CanRead);
+        fs.Dispose();
+        File.Delete(path);
+
+        Assert.False(File.Exists(path));
+        fs = path.CreateReadWriteStream();
+        Assert.True(File.Exists(path));
+        Assert.True(fs.CanWrite);
+        Assert.True(fs.CanRead);
+        fs.Dispose();
+        File.Delete(path);
+
+        Assert.False(File.Exists(path));
+        fs = path.CreateReadWriteShareStream();
+        Assert.True(File.Exists(path));
+        Assert.True(fs.CanWrite);
+        Assert.True(fs.CanRead);
+        fs1 = path.CreateReadWriteShareStream();
+        fs.Dispose();
+        fs1.Dispose();
+        File.Delete(path);
+    }
+
+    [Fact]
+    public void OpenCreateFileStreamTest()
+    {
+        var path = "./vscode4.png";
+        Assert.False(File.Exists(path));
+        var fs = path.OpenCreateStream();
+        Assert.True(File.Exists(path));
+        fs.Dispose();
+        File.Delete(path);
+
+        Assert.False(File.Exists(path));
+        fs = path.OpenCreateReadStream();
+        Assert.True(File.Exists(path));
+        Assert.True(fs.CanRead);
+        Assert.False(fs.CanWrite);
+        fs.Dispose();
+        File.Delete(path);
+
+        Assert.False(File.Exists(path));
+        fs = path.OpenCreateWriteStream();
+        Assert.True(File.Exists(path));
+        Assert.True(fs.CanWrite);
+        Assert.False(fs.CanRead);
+        fs.Dispose();
+        File.Delete(path);
+
+        Assert.False(File.Exists(path));
+        fs = path.OpenCreateReadShareStream();
+        Assert.True(File.Exists(path));
+        Assert.True(fs.CanRead);
+        Assert.False(fs.CanWrite);
+        var fs1 = path.OpenCreateReadShareStream();
+        fs.Dispose();
+        fs1.Dispose();
+        File.Delete(path);
+
+        Assert.False(File.Exists(path));
+        fs = path.OpenCreateWriteShareStream();
+        Assert.True(File.Exists(path));
+        Assert.False(fs.CanRead);
+        Assert.True(fs.CanWrite);
+        fs1 = path.OpenCreateWriteShareStream();
+        fs.Dispose();
+        fs1.Dispose();
+        File.Delete(path);
+
+        Assert.False(File.Exists(path));
+        fs = path.OpenCreateReadWriteStream();
+        Assert.True(File.Exists(path));
+        Assert.True(fs.CanRead);
+        Assert.True(fs.CanWrite);
+        fs.Dispose();
+        File.Delete(path);
+
+        Assert.False(File.Exists(path));
+        fs = path.OpenCreateReadWriteShareStream();
+        Assert.True(File.Exists(path));
+        Assert.True(fs.CanRead);
+        Assert.True(fs.CanWrite);
+        fs1 = path.OpenCreateReadWriteShareStream();
+        fs.Dispose();
+        fs1.Dispose();
+        File.Delete(path);
+    }
 }
 

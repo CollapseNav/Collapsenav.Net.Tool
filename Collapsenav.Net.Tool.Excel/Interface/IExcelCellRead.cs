@@ -52,7 +52,7 @@ public interface IExcelCellRead : IExcelContainer<IReadCell>
     /// </summary>
     public static IExcelCellRead GetCellRead(string path, ExcelType? excelType = null)
     {
-        var fs = path.OpenCreateReadWirteShareStream();
+        var fs = path.OpenCreateReadWriteShareStream();
         return GetCellRead(fs, excelType);
     }
 }

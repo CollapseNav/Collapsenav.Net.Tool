@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestPlatform.Common.Utilities;
 using Xunit;
@@ -114,12 +115,59 @@ public class TypeTest
     [Fact]
     public void SetValueTest()
     {
-        var data = new PropTest1
-        {
-            Prop1 = "1"
-        };
+        var data = new PropTest1 { Prop1 = "1" };
         Assert.True(data.Prop1 == "1");
         data.SetValue("Prop1", "233");
         Assert.True(data.Prop1 == "233");
+    }
+
+    [Fact]
+    public void BuildInTypeValueTest()
+    {
+        var data = new PropTest0
+        {
+            Prop0 = "233",
+            Prop = new()
+            {
+                Prop1 = "1",
+                Prop2 = "2",
+                Prop3 = "3",
+            }
+        };
+        var propValues = data.BuildInTypeValues();
+        Assert.True(propValues.Count == 1);
+        Assert.True(propValues.First().Value.ToString() == "233");
+    }
+
+    [Fact]
+    public void PropsTest()
+    {
+        var props = typeof(PropTest1).Props();
+        var data = new PropTest1();
+        var props2 = data.Props();
+        Assert.True(props.SequenceEqual(props2, item => item.Name.GetHashCode()));
+        Assert.True(props.Select(item => item.Name).ContainAnd("Prop1", "Prop2", "Prop3"));
+    }
+
+    [Fact]
+    public void BuildInTypeTest()
+    {
+        Assert.True(true.IsBuildInType());
+        Assert.True(((byte)12).IsBuildInType());
+        Assert.True(((sbyte)12).IsBuildInType());
+        Assert.True('a'.IsBuildInType());
+        Assert.True(2.33m.IsBaseType());
+        Assert.True(2.33.IsBaseType());
+        Assert.True(2.33f.IsBaseType());
+        Assert.True(233.IsBaseType());
+        Assert.True(((uint)233).IsBaseType());
+        Assert.True(((short)233).IsBaseType());
+        Assert.True(((ushort)233).IsBaseType());
+        Assert.True(233333333333.IsBaseType());
+        Assert.True(((ulong)233333333333).IsBaseType());
+        Assert.True(DateTime.Now.IsBuildInType());
+        Assert.True(Guid.NewGuid().IsBuildInType());
+        Assert.True(typeof(nint).IsBuildInType());
+        Assert.True(typeof(nuint).IsBaseType());
     }
 }

@@ -133,7 +133,7 @@ public static partial class StringExt
     /// <summary>
     /// 能ping通
     /// </summary>
-    public static bool CanPing(this string domain, int timeout = 200)
+    public static bool CanPing(this string domain, int timeout = 1000)
     {
         Ping pingObj = new();
         if (domain.IsUrl())

@@ -39,7 +39,7 @@ public class CellReadSaveTest
         var path = "./CellRead.xlsx";
         var savePath = "./New-CellRead-Stream.xlsx";
 
-        var saveStream = savePath.OpenCreateReadWirteShareStream();
+        var saveStream = savePath.OpenCreateReadWriteShareStream();
 
 
         IExcelCellRead reader = new EPPlusCellRead(path);
@@ -70,7 +70,7 @@ public class CellReadSaveTest
         var path = "./CellRead.xlsx";
         var savePath = "./New-CellRead-GetStream.xlsx";
 
-        var saveStream = savePath.OpenCreateReadWirteShareStream();
+        var saveStream = savePath.OpenCreateReadWriteShareStream();
 
         IExcelCellRead reader = new EPPlusCellRead(path);
         reader[1, 0].Value = 9999;
@@ -79,7 +79,7 @@ public class CellReadSaveTest
         saveStream.Dispose();
         reader.Dispose();
 
-        saveStream = savePath.OpenCreateReadWirteShareStream();
+        saveStream = savePath.OpenCreateReadWriteShareStream();
         reader = new NPOICellRead(savePath);
         Assert.True(reader[1, 0].StringValue == "9999");
         reader[2, 2].Value = 12345;
@@ -88,7 +88,7 @@ public class CellReadSaveTest
         saveStream.Dispose();
         reader.Dispose();
 
-        saveStream = savePath.OpenCreateReadWirteShareStream();
+        saveStream = savePath.OpenCreateReadWriteShareStream();
         reader = new MiniCellRead(savePath);
         // MiniExcel 的导出Save暂时还有点问题
         Assert.True(reader[2, 2].StringValue == "12345");
