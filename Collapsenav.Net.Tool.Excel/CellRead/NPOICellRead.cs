@@ -88,6 +88,12 @@ public class NPOICellRead : IExcelCellRead
         notCloseStream.Dispose();
         _workbook.Close();
     }
+    private void AutoSize()
+    {
+        if (HeadersWithIndex.NotEmpty())
+            foreach (var col in HeadersWithIndex)
+                _sheet.AutoSizeColumn(col.Value);
+    }
     private IRow GetRow(long row)
     {
         var excelRow = _sheet.GetRow((int)row);
@@ -105,9 +111,7 @@ public class NPOICellRead : IExcelCellRead
     public void Save()
     {
         _stream.Clear();
-        notCloseStream.Clear();
-        _workbook.Write(notCloseStream);
-        notCloseStream.SeekToOrigin();
+        SaveTo(notCloseStream);
         notCloseStream.CopyTo(_stream);
     }
     /// <summary>
@@ -115,6 +119,7 @@ public class NPOICellRead : IExcelCellRead
     /// </summary>
     public void SaveTo(Stream stream)
     {
+        AutoSize();
         stream.Clear();
         using var fs = new NPOINotCloseStream();
         _sheet.Workbook.Write(fs);
@@ -129,8 +134,7 @@ public class NPOICellRead : IExcelCellRead
     public void SaveTo(string path)
     {
         using var fs = path.OpenCreateReadWriteShareStream();
-        _sheet.Workbook.Write(fs);
-        fs.SeekToOrigin();
+        SaveTo(fs);
         fs.Dispose();
     }
 
@@ -139,9 +143,9 @@ public class NPOICellRead : IExcelCellRead
     /// </summary>
     public Stream GetStream()
     {
+        AutoSize();
         var ms = new NPOINotCloseStream();
-        _sheet.Workbook.Write(ms);
-        ms.SeekToOrigin();
+        SaveTo(ms);
         return ms;
     }
 

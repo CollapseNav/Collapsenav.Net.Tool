@@ -74,14 +74,10 @@ public class MiniCellRead : IExcelCellRead
         var existRow = GetRow(row);
         if (col < existRow.Count())
             return existRow.ElementAt(col);
-
-        // for (var i = existRow.Count(); i <= colCount; i++)
-        //     existRow.Add(new KeyValuePair<string, object>(MiniCell.GetSCol(i), ""));
         return existRow.ElementAt(col);
     }
     private IDictionary<string, object> GetRow(int row)
     {
-        // _sheet = _sheet.Concat(new dynamic[] { new Dictionary<string, object>() });
         if (row < _sheet.Count())
             return _sheet.ElementAt(row);
         for (var i = _sheet.Count(); i <= row; i++)
@@ -91,7 +87,6 @@ public class MiniCellRead : IExcelCellRead
                 dd.Add(MiniCell.GetSCol(col), "");
             _sheet = _sheet.Append(dd);
         }
-        // _sheet = _sheet.Concat(new dynamic[] { new Dictionary<string, object>() });
         return _sheet.ElementAt(row);
     }
 
@@ -102,11 +97,7 @@ public class MiniCellRead : IExcelCellRead
 
     public void Save()
     {
-        // throw new Exception();
-        _stream.SeekToOrigin();
-        _stream.Clear();
-        _stream.SaveAs(_sheet, printHeader: false);
-        _stream.SeekToOrigin();
+        SaveTo(_stream);
     }
 
     /// <summary>
@@ -115,6 +106,7 @@ public class MiniCellRead : IExcelCellRead
     public void SaveTo(Stream stream)
     {
         stream.SeekToOrigin();
+        stream.Clear();
         stream.SaveAs(_sheet, printHeader: false);
         stream.SeekToOrigin();
     }
@@ -124,7 +116,7 @@ public class MiniCellRead : IExcelCellRead
     public void SaveTo(string path)
     {
         using var fs = path.OpenCreateReadWriteShareStream();
-        fs.SaveAs(_sheet, printHeader: false);
+        SaveTo(fs);
         fs.Dispose();
     }
     /// <summary>
@@ -133,8 +125,7 @@ public class MiniCellRead : IExcelCellRead
     public Stream GetStream()
     {
         var ms = new MemoryStream();
-        ms.SaveAs(_sheet, printHeader: false);
-        ms.SeekToOrigin();
+        SaveTo(ms);
         return ms;
     }
 

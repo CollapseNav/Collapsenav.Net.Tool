@@ -82,12 +82,15 @@ public class EPPlusCellRead : IExcelCellRead
         _stream.Dispose();
         _pack.Dispose();
     }
+    public void AutoSize()
+    {
+        if (HeadersWithIndex.NotEmpty())
+            foreach (var col in HeadersWithIndex)
+                _sheet.Column(col.Value + Zero).AutoFit();
+    }
     public void Save()
     {
-        _stream.SeekToOrigin();
-        _stream.Clear();
-        _pack.SaveAs(_stream);
-        _stream.SeekToOrigin();
+        SaveTo(_stream);
     }
 
     /// <summary>
@@ -95,6 +98,7 @@ public class EPPlusCellRead : IExcelCellRead
     /// </summary>
     public void SaveTo(Stream stream)
     {
+        AutoSize();
         stream.SeekToOrigin();
         stream.Clear();
         _pack.SaveAs(stream);
@@ -107,8 +111,7 @@ public class EPPlusCellRead : IExcelCellRead
     public void SaveTo(string path)
     {
         using var fs = path.OpenCreateReadWriteShareStream();
-        _pack.SaveAs(fs);
-
+        SaveTo(fs);
     }
     /// <summary>
     /// 获取流
@@ -116,8 +119,7 @@ public class EPPlusCellRead : IExcelCellRead
     public Stream GetStream()
     {
         var ms = new MemoryStream();
-        _pack.SaveAs(ms);
-        ms.SeekToOrigin();
+        SaveTo(ms);
         return ms;
     }
 

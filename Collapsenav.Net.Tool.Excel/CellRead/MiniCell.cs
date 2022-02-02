@@ -32,9 +32,9 @@ public class MiniCell : IReadCell<KeyValuePair<string, object>>
         return scol;
     }
 
-    public KeyValuePair<string, object> Cell => cell;
-    public int Row { get => _row; }
-    public int Col { get => _col; }
+    public KeyValuePair<string, object> Cell { get => cell; }
+    public int Row { get => _row - ExcelTool.MiniZero; }
+    public int Col { get => _col - ExcelTool.MiniZero; }
     public string StringValue => cell.Value.ToString().Trim();
     public Type ValueType => cell.Value?.GetType();
     public object Value

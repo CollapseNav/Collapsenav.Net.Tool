@@ -11,9 +11,9 @@ public class NPOICell : IReadCell<ICell>
         cell = excelCell;
     }
 
-    public ICell Cell => cell;
-    public int Row { get => cell.RowIndex; }
-    public int Col { get => cell.ColumnIndex; }
+    public ICell Cell { get => cell; }
+    public int Row { get => cell.RowIndex - ExcelTool.NPOIZero; }
+    public int Col { get => cell.ColumnIndex - ExcelTool.NPOIZero; }
     public string StringValue => cell.ToString();
     public Type ValueType => cell.CellType switch
     {
