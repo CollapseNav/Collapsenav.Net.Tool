@@ -194,4 +194,25 @@ public static partial class CollectionExt
     {
         return origin.Select(item => (value(item), index(item)));
     }
+
+    /// <summary>
+    /// 创建数组
+    /// </summary>
+    public static T[] BuildArray<T>(this T obj, int len = 1)
+    {
+        T[] array = new T[len];
+        Array.Fill(array, obj);
+        return array;
+    }
+    /// <summary>
+    /// 创建List集合
+    /// </summary>
+    public static List<T> BuildList<T>(this T obj, int len = 1)
+    {
+        List<T> list = new();
+        T[] array = new T[len];
+        Array.Fill(array, obj);
+        list.AddRange(array);
+        return list;
+    }
 }

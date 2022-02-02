@@ -288,4 +288,33 @@ public class CollectionTest
             Assert.True(item.ToInt() == index);
         }
     }
+
+    [Fact]
+    public void BuildArrayTest()
+    {
+        int num = 2;
+        var array = num.BuildArray();
+        Assert.True(array.Length == 1);
+        Assert.True(array.All(item => item == 2));
+        array = num.BuildArray(10);
+        Assert.True(array.Length == 10);
+        Assert.True(array.All(item => item == 2));
+        array = 233.BuildArray(233);
+        Assert.True(array.Length == 233);
+        Assert.True(array.All(item => item == 233));
+    }
+    [Fact]
+    public void BuildListTest()
+    {
+        int num = 2;
+        var array = num.BuildList();
+        Assert.True(array.Count == 1);
+        Assert.True(array.All(item => item == 2));
+        array = num.BuildList(10);
+        Assert.True(array.Count == 10);
+        Assert.True(array.All(item => item == 2));
+        array = 233.BuildList(233);
+        Assert.True(array.Count == 233);
+        Assert.True(array.All(item => item == 233));
+    }
 }

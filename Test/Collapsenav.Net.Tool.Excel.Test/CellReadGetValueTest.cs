@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using OfficeOpenXml;
 using Xunit;
 
 namespace Collapsenav.Net.Tool.Excel.Test;
@@ -17,12 +18,17 @@ public class CellReadGetValueTest
         Assert.True(reader.RowCount == 11);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
         Assert.True(reader[1, 0].StringValue == "233");
+        Assert.True(reader[1, 0].Row == 1);
+        Assert.True(reader[1, 0].Col == 0);
         Assert.True(reader[1, 3].StringValue == "233.33");
         Assert.True(reader[10, 0].StringValue == "1122");
         Assert.True(reader[10, 3].StringValue == "123.23");
+        Assert.True(reader[10, 3].Row == 10);
+        Assert.True(reader[10, 3].Col == 3);
+        Assert.True(reader[10, 3].ValueType == typeof(double));
         reader.Dispose();
 
-        using var fs = path.OpenReadShareStream();
+        using var fs = path.OpenReadWriteShareStream();
         reader = new EPPlusCellRead(fs);
 
         Assert.True(reader["Field0", 1].StringValue == "233");
@@ -42,12 +48,17 @@ public class CellReadGetValueTest
         Assert.True(reader.RowCount == 11);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
         Assert.True(reader[1, 0].StringValue == "233");
+        Assert.True(reader[1, 0].Row == 1);
+        Assert.True(reader[1, 0].Col == 0);
         Assert.True(reader[1, 3].StringValue == "233.33");
         Assert.True(reader[10, 0].StringValue == "1122");
         Assert.True(reader[10, 3].StringValue == "123.23");
+        Assert.True(reader[10, 3].Row == 10);
+        Assert.True(reader[10, 3].Col == 3);
+        Assert.True(reader[10, 3].ValueType == typeof(double));
         reader.Dispose();
 
-        using var fs = path.OpenReadShareStream();
+        using var fs = path.OpenReadWriteShareStream();
         reader = new NPOICellRead(fs);
 
         Assert.True(reader["Field0", 1].StringValue == "233");
@@ -67,12 +78,17 @@ public class CellReadGetValueTest
         Assert.True(reader.RowCount == 11);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
         Assert.True(reader[1, 0].StringValue == "233");
+        Assert.True(reader[1, 0].Row == 1);
+        Assert.True(reader[1, 0].Col == 0);
         Assert.True(reader[1, 3].StringValue == "233.33");
         Assert.True(reader[10, 0].StringValue == "1122");
         Assert.True(reader[10, 3].StringValue == "123.23");
+        Assert.True(reader[10, 3].Row == 10);
+        Assert.True(reader[10, 3].Col == 3);
+        Assert.True(reader[10, 3].ValueType == typeof(double));
         reader.Dispose();
 
-        using var fs = path.OpenReadShareStream();
+        using var fs = path.OpenReadWriteShareStream();
         reader = new MiniCellRead(fs);
 
         Assert.True(reader["Field0", 1].StringValue == "233");
@@ -102,7 +118,7 @@ public class CellReadGetValueTest
         Assert.True(reader[10].Select(item => item.StringValue).SequenceEqual(row10Data));
         reader.Dispose();
 
-        using var fs = path.OpenReadShareStream();
+        using var fs = path.OpenReadWriteShareStream();
         reader = new EPPlusCellRead(fs);
 
         var field0Data = new[] { "Field0", "233", "1122", "233", "1122", "233", "1122", "233", "1122", "233", "1122" };
@@ -130,7 +146,7 @@ public class CellReadGetValueTest
         Assert.True(reader[10].Select(item => item.StringValue).SequenceEqual(row10Data));
         reader.Dispose();
 
-        using var fs = path.OpenReadShareStream();
+        using var fs = path.OpenReadWriteShareStream();
         reader = new NPOICellRead(fs);
 
         var field0Data = new[] { "Field0", "233", "1122", "233", "1122", "233", "1122", "233", "1122", "233", "1122" };
@@ -158,7 +174,7 @@ public class CellReadGetValueTest
         Assert.True(reader[10].Select(item => item.StringValue).SequenceEqual(row10Data));
         reader.Dispose();
 
-        using var fs = path.OpenReadShareStream();
+        using var fs = path.OpenReadWriteShareStream();
         reader = new MiniCellRead(fs);
 
         var field0Data = new[] { "Field0", "233", "1122", "233", "1122", "233", "1122", "233", "1122", "233", "1122" };
@@ -188,7 +204,7 @@ public class CellReadGetValueTest
         Assert.True(reader.Last().Select(item => item.StringValue).SequenceEqual(row10Data));
         reader.Dispose();
 
-        using var fs = path.OpenReadShareStream();
+        using var fs = path.OpenReadWriteShareStream();
         reader = new EPPlusCellRead(fs);
 
         Assert.True(reader.Reverse().First().Select(item => item.StringValue).SequenceEqual(row10Data));
@@ -213,7 +229,7 @@ public class CellReadGetValueTest
         Assert.True(reader.Last().Select(item => item.StringValue).SequenceEqual(row10Data));
         reader.Dispose();
 
-        using var fs = path.OpenReadShareStream();
+        using var fs = path.OpenReadWriteShareStream();
         reader = new NPOICellRead(fs);
 
         Assert.True(reader.Reverse().First().Select(item => item.StringValue).SequenceEqual(row10Data));
@@ -238,7 +254,7 @@ public class CellReadGetValueTest
         Assert.True(reader.Last().Select(item => item.StringValue).SequenceEqual(row10Data));
         reader.Dispose();
 
-        using var fs = path.OpenReadShareStream();
+        using var fs = path.OpenReadWriteShareStream();
         reader = new MiniCellRead(fs);
 
         Assert.True(reader.Reverse().First().Select(item => item.StringValue).SequenceEqual(row10Data));

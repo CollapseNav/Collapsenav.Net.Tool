@@ -21,10 +21,6 @@ public class ExportCellOption<T> : BaseCellOption<T>
         set => action = value;
     }
     private Func<T, object> action;
-    public void InitExcelCell(ExcelRangeBase cell, string value)
-    {
-        cell.Value = value;
-    }
 }
 
 public class ExportCellOption : ExportCellOption<object>

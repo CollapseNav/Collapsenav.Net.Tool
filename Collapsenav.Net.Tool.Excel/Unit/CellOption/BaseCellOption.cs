@@ -14,7 +14,7 @@ public class BaseCellOption<T>
     {
         get
         {
-            if (prop == null && PropName.NotEmpty())
+            if (prop == null && propName.NotEmpty())
                 prop = typeof(T).GetProperty(PropName);
             return prop;
         }
@@ -28,7 +28,7 @@ public class BaseCellOption<T>
     {
         get
         {
-            if (propName.IsEmpty() && Prop != null)
+            if (propName.IsEmpty() && prop != null)
                 propName = Prop.Name;
             return propName;
         }

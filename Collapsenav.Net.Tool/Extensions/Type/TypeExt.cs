@@ -164,7 +164,7 @@ public static partial class TypeExt
     /// <param name="field">属性/字段</param>
     public static object GetValue<T>(this T obj, string field)
     {
-        var prop = typeof(T).GetProperties().Where(item => item.Name == field && item.PropertyType.IsBuildInType()).FirstOrDefault();
+        var prop = typeof(T).GetProperties().Where(item => item.Name == field).FirstOrDefault();
         return prop == null ? "" : prop.GetValue(obj);
     }
 }
