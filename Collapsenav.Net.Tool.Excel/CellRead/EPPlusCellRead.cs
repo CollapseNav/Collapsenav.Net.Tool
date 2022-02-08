@@ -50,7 +50,7 @@ public class EPPlusCellRead : IExcelCellRead
             _sheet = _pack.Workbook.Worksheets.Add("sheet1", sheet);
 
         rowCount = sheet.Dimension.Rows;
-        HeaderIndex = ExcelReadTool.HeadersWithIndex(sheet);
+        HeaderIndex = ExcelTool.HeadersWithIndex(sheet);
         HeaderList = HeaderIndex.Select(item => item.Key).ToList();
     }
     private void Init()
@@ -79,8 +79,8 @@ public class EPPlusCellRead : IExcelCellRead
 
     public void Dispose()
     {
-        _stream.Dispose();
-        _pack.Dispose();
+        _stream?.Dispose();
+        _pack?.Dispose();
     }
     public void AutoSize()
     {

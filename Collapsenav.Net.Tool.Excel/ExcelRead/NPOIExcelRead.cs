@@ -35,7 +35,7 @@ public class NPOIExcelRead : IExcelRead
         this.sheet = sheet;
 
         rowCount = sheet.LastRowNum + 1;
-        HeaderIndex = ExcelReadTool.HeadersWithIndex(sheet);
+        HeaderIndex = ExcelTool.HeadersWithIndex(sheet);
         HeaderList = HeaderIndex.Select(item => item.Key).ToList();
     }
 

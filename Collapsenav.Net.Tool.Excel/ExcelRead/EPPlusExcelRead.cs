@@ -32,7 +32,7 @@ public class EPPlusExcelRead : IExcelRead
         this.sheet = sheet;
 
         rowCount = sheet.Dimension.Rows;
-        HeaderIndex = ExcelReadTool.HeadersWithIndex(sheet);
+        HeaderIndex = ExcelTool.HeadersWithIndex(sheet);
         HeaderList = HeaderIndex.Select(item => item.Key).ToList();
     }
 

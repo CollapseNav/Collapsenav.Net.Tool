@@ -23,6 +23,7 @@
         <None Include="CellRead.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>
         <None Include="TestExcel.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>
         <None Include="ExcelRead.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>
+        <None Include="RequireExcel.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>
         <None Include="DefaultExcel.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>
         <None Include="AttributeExcel.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>
     </ItemGroup>

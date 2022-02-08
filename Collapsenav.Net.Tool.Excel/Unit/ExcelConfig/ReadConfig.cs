@@ -30,6 +30,7 @@ public partial class ReadConfig<T> : ExcelConfig<T, ReadCellOption<T>>
     /// <param name="stream">文件流</param>
     public ReadConfig(Stream stream) : this()
     {
+        ExcelStream = new MemoryStream();
         stream.CopyTo(ExcelStream);
     }
 }

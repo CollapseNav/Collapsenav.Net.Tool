@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
-namespace Collapsenav.Net.Tool;
+﻿namespace Collapsenav.Net.Tool;
 public static partial class DateTimeExt
 {
     public static long ToTimestamp(this DateTime time)

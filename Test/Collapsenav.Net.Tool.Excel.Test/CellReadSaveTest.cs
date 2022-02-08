@@ -1,3 +1,4 @@
+using System.IO;
 using Xunit;
 
 namespace Collapsenav.Net.Tool.Excel.Test;
@@ -101,5 +102,66 @@ public class CellReadSaveTest
         reader = new EPPlusCellRead(savePath);
         Assert.True(reader[3, 1].StringValue == "👍");
         reader.Dispose();
+    }
+
+    [Fact]
+    public void CellReadSaveWithNoParamTest()
+    {
+        var path = "./CellRead.xlsx";
+        var copyPath = "./Copy-CellRead.xlsx";
+        File.Copy(path, copyPath);
+        IExcelCellRead reader = new EPPlusCellRead(copyPath);
+        reader[0, 0].Value = "🗡️";
+        reader.Save();
+        reader.Dispose();
+
+        reader = new NPOICellRead(copyPath);
+        Assert.True(reader[0, 0].StringValue == "🗡️");
+        reader[1, 1].Value = "🗡️";
+        reader.Save();
+        reader.Dispose();
+
+        reader = new MiniCellRead(copyPath);
+        Assert.True(reader[1, 1].StringValue == "🗡️");
+        reader[2, 2].Value = "🗡️";
+        reader.Save();
+        reader.Dispose();
+
+        reader = new EPPlusCellRead(copyPath);
+        Assert.True(reader[2, 2].StringValue == "🗡️");
+        reader.Dispose();
+        File.Delete(copyPath);
+    }
+
+    [Fact]
+    public void NoOriginFileCellReadTest()
+    {
+        var savePath = "./Save-CellRead.xlsx";
+        IExcelCellRead reader = new EPPlusCellRead();
+        reader[0, 0].Value = "2333";
+        reader.SaveTo(savePath);
+        reader.Dispose();
+        reader = new EPPlusCellRead(savePath);
+        Assert.True(reader[0, 0].StringValue == "2333");
+        reader.Dispose();
+        File.Delete(savePath);
+
+        reader = new NPOICellRead();
+        reader[1, 1].Value = "2333";
+        reader.SaveTo(savePath);
+        reader.Dispose();
+        reader = new NPOICellRead(savePath);
+        Assert.True(reader[1, 1].StringValue == "2333");
+        reader.Dispose();
+        File.Delete(savePath);
+
+        reader = new MiniCellRead();
+        reader[2, 2].Value = "2333";
+        reader.SaveTo(savePath);
+        reader.Dispose();
+        reader = new MiniCellRead(savePath);
+        Assert.True(reader[2, 2].StringValue == "2333");
+        reader.Dispose();
+        File.Delete(savePath);
     }
 }

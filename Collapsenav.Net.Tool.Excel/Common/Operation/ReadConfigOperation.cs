@@ -69,20 +69,20 @@ public partial class ReadConfig<T>
     /// </summary>
     public static async Task<IEnumerable<T>> ExcelToEntityAsync(string path)
     {
-        return await ExcelReadTool.ExcelToEntityAsync<T>(path);
+        return await ExcelTool.ExcelToEntityAsync<T>(path);
     }
     /// <summary>
     /// 转换到实体
     /// </summary>
     public static async Task<IEnumerable<T>> ExcelToEntityAsync(Stream stream)
     {
-        return await ExcelReadTool.ExcelToEntityAsync<T>(stream);
+        return await ExcelTool.ExcelToEntityAsync<T>(stream);
     }
     /// <summary>
     /// 转换到实体
     /// </summary>
     public static async Task<IEnumerable<T>> ExcelToEntityAsync(IExcelRead reader)
     {
-        return await ExcelReadTool.ExcelToEntityAsync<T>(reader);
+        return await ExcelTool.ExcelToEntityAsync<T>(reader);
     }
 }

@@ -8,7 +8,7 @@ namespace Collapsenav.Net.Tool.Excel;
 /// </summary>
 public class NPOICellRead : IExcelCellRead
 {
-    public int Zero => ExcelReadTool.NPOIZero;
+    public int Zero => ExcelTool.NPOIZero;
     protected ISheet _sheet;
     protected IWorkbook _workbook;
     protected Stream _stream;
@@ -50,8 +50,8 @@ public class NPOICellRead : IExcelCellRead
         _workbook = sheet.Workbook;
 
         rowCount = sheet.LastRowNum + 1;
-        HeaderIndex = ExcelReadTool.HeadersWithIndex(sheet);
-        HeaderList = HeaderIndex.Select(item => item.Key).ToList();
+        HeaderIndex = ExcelTool.HeadersWithIndex(sheet);
+        HeaderList = HeaderIndex?.Select(item => item.Key).ToList();
     }
     private void Init()
     {
@@ -84,9 +84,9 @@ public class NPOICellRead : IExcelCellRead
 
     public void Dispose()
     {
-        _stream.Dispose();
-        notCloseStream.Dispose();
-        _workbook.Close();
+        _stream?.Dispose();
+        notCloseStream?.Dispose();
+        _workbook?.Close();
     }
     private void AutoSize()
     {

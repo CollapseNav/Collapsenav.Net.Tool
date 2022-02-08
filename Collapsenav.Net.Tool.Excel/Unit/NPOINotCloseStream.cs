@@ -19,6 +19,7 @@ public class NPOINotCloseStream : MemoryStream
     {
         using var fs = path.OpenReadShareStream();
         fs.CopyTo(this);
+        fs.Dispose();
         this.SeekToOrigin();
     }
     public override void Close() { }

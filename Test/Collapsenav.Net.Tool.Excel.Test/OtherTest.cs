@@ -38,4 +38,32 @@ public class OtherTest
         Assert.True(exportConfig.FieldOption.Count() == 3);
         Assert.True(exportConfig.FieldOption.Select(item => item.ExcelField).ContainAnd("Field0", "Field2", "Field3"));
     }
+
+    [Fact]
+    public void GetCellReadTest()
+    {
+        string path = "./TestExcel.xlsx";
+        var epplusSheet = ExcelTool.EPPlusSheet(path);
+        var npoiSheet = ExcelTool.NPOISheet(path);
+        using var reader1 = IExcelCellRead.GetCellRead(epplusSheet);
+        using var reader2 = IExcelCellRead.GetCellRead(npoiSheet);
+        Assert.True(reader1[0, 0].StringValue == reader2[0, 0].StringValue);
+        Assert.True(reader1[0, 1].StringValue == reader2[0, 1].StringValue);
+        Assert.True(reader1[2, 2].StringValue == reader2[2, 2].StringValue);
+        Assert.True(reader1[4, 2].StringValue == reader2[4, 2].StringValue);
+    }
+
+    [Fact]
+    public void GetExcelReadTest()
+    {
+        string path = "./TestExcel.xlsx";
+        var epplusSheet = ExcelTool.EPPlusSheet(path);
+        var npoiSheet = ExcelTool.NPOISheet(path);
+        using var reader1 = IExcelRead.GetExcelRead(epplusSheet);
+        using var reader2 = IExcelRead.GetExcelRead(npoiSheet);
+        Assert.True(reader1[0, 0] == reader2[0, 0]);
+        Assert.True(reader1[0, 1] == reader2[0, 1]);
+        Assert.True(reader1[2, 2] == reader2[2, 2]);
+        Assert.True(reader1[4, 2] == reader2[4, 2]);
+    }
 }

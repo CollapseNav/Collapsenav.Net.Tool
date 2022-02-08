@@ -3,10 +3,8 @@ using NPOI.SS.UserModel;
 using OfficeOpenXml;
 
 namespace Collapsenav.Net.Tool.Excel;
-public class ExcelReadTool
+public partial class ExcelTool
 {
-    public const int EPPlusZero = 1;
-    public const int NPOIZero = 0;
 
     /// <summary>
     /// 将表格数据转换为T类型的集合
@@ -49,7 +47,7 @@ public class ExcelReadTool
     /// <param name="sheet">工作簿</param>
     public static IEnumerable<string> ExcelHeader(ISheet sheet)
     {
-        var header = sheet.GetRow(NPOIZero).Cells.Select(item => item.ToString()?.Trim());
+        var header = sheet.GetRow(NPOIZero)?.Cells.Select(item => item.ToString()?.Trim());
         return header;
     }
     /// <summary>
@@ -57,7 +55,7 @@ public class ExcelReadTool
     /// </summary>
     public static IDictionary<string, int> HeadersWithIndex(ISheet sheet)
     {
-        var headers = sheet.GetRow(NPOIZero).Cells
+        var headers = sheet.GetRow(NPOIZero)?.Cells
         .Where(item => item.ToString().NotNull())
         .ToDictionary(item => item.ToString()?.Trim(), item => item.ColumnIndex);
         return headers;

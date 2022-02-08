@@ -1,5 +1,4 @@
 using MiniExcelLibs;
-using OfficeOpenXml;
 
 namespace Collapsenav.Net.Tool.Excel;
 
@@ -31,7 +30,7 @@ public class MiniExcelRead : IExcelRead
         rowCount = sheet.Count();
         var sheetFirst = sheet.First() as IEnumerable<KeyValuePair<string, object>>;
         HeaderList = sheetFirst.Select(item => item.Value?.ToString() ?? string.Empty);
-        HeaderIndex = sheetFirst.Select((item, index) => (item.Value, index)).ToDictionary(item => item.Value.ToString(), item => item.index);
+        HeaderIndex = sheetFirst.Select((item, index) => (item.Value, index)).ToDictionary(item => item.Value?.ToString() ?? item.index.ToString(), item => item.index);
     }
 
 
