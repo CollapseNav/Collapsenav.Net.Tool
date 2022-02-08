@@ -3,10 +3,7 @@
     <PropertyGroup>
         <PackageTags>Tools,Utility,Extensions,ClassLibrary</PackageTags>
         <Description>
-.net core ext tools.
-封装了了Collection,string,DateTime,Hash等常用操作
-大多都提供了扩展方法
-也可以使用对应的Tool进行操作
+以扩展方法的形式封装了Collection,string,Stream,Hash等常用操作
         </Description>
         <Product>Collapsenav.Net.Tool</Product>
         <PackageId>Collapsenav.Net.Tool</PackageId>
