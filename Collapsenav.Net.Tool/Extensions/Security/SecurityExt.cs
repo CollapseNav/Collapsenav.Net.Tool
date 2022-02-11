@@ -82,4 +82,18 @@ public static partial class SecurityExt
         return AESTool.Decrypt(input, key);
     }
 
+    /// <summary>
+    /// Des加密
+    /// </summary>
+    public static string DesEn(this string input, string key = DesTool.DefaultKey)
+    {
+        return DesTool.Encrypt(input, key);
+    }
+    /// <summary>
+    /// Des解密
+    /// </summary>
+    public static string DesDe(this string input, string key = DesTool.DefaultKey)
+    {
+        return DesTool.Decrypt(input, key);
+    }
 }
