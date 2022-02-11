@@ -1,5 +1,6 @@
 # Collapsenav.Net.Tool
 
+
 适用于 **netstandard2.1;net6**
 
 由于 **net2.1 LTS 已过**, 所以放弃 **netstandard2.0** 的支持

@@ -38,7 +38,7 @@ public partial class ExportConfig<T>
     /// </summary>
     public async Task<Stream> ExportAsync(Stream stream, IEnumerable<T> data = null, ExcelType? excelType = null)
     {
-        using IExcelCellRead read = IExcelCellRead.GetCellRead(stream, excelType);
+        using IExcelCellRead read = ExcelTool.GetCellRead(stream, excelType);
         var exportStream = await ExportAsync(read, data);
         read.Save();
         return exportStream;
@@ -57,7 +57,7 @@ public partial class ExportConfig<T>
     /// </summary>
     public Stream ExportHeader(ExcelType? excelType = null)
     {
-    using    var stream = new MemoryStream();
+        using var stream = new MemoryStream();
         return ExportHeader(stream, excelType);
     }
     /// <summary>
@@ -73,7 +73,7 @@ public partial class ExportConfig<T>
     /// </summary>
     public Stream ExportHeader(Stream stream, ExcelType? excelType = null)
     {
-        using IExcelCellRead read = IExcelCellRead.GetCellRead(stream, excelType);
+        using IExcelCellRead read = ExcelTool.GetCellRead(stream, excelType);
         var exportStream = ExportHeader(read);
         read.Save();
         return exportStream;

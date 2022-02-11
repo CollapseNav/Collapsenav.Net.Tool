@@ -11,6 +11,8 @@ public interface IExcelRead : IExcelRead<string> { }
 /// </summary>
 public interface IExcelRead<T> : IExcelContainer<T>
 {
+#if NETSTANDARD2_0
+#else
     public static IExcelRead GetExcelRead(object sheet)
     {
         if (sheet is ISheet)
@@ -54,4 +56,5 @@ public interface IExcelRead<T> : IExcelContainer<T>
         using var fs = path.OpenReadShareStream();
         return GetExcelRead(fs, excelType);
     }
+#endif
 }

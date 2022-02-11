@@ -210,7 +210,12 @@ public static partial class StringExt
     /// <param name="ignoreCase">是否忽略大小写(默认不忽略)</param>
     public static bool ContainAnd(this string origin, IEnumerable<string> keys, bool ignoreCase = false)
     {
+
+#if NETSTANDARD2_0
+        return keys.All(key => origin.ToLower().Contains(key.ToLower()));
+#else
         return keys.All(key => origin.Contains(key, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal));
+#endif
     }
     /// <summary>
     /// 部分包含
@@ -220,7 +225,11 @@ public static partial class StringExt
     /// <param name="ignoreCase">是否忽略大小写(默认不忽略)</param>
     public static bool ContainOr(this string origin, IEnumerable<string> keys, bool ignoreCase = false)
     {
+#if NETSTANDARD2_0
+        return keys.Any(key => origin.ToLower().Contains(key.ToLower()));
+#else
         return keys.Any(key => origin.Contains(key, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal));
+#endif
     }
     /// <summary>
     /// 全包含(不忽略大小写)

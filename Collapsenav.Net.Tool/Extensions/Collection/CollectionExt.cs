@@ -108,6 +108,16 @@ public static partial class CollectionExt
     {
         return flag ? query.Where(filter) : query;
     }
+    /// <summary>
+    /// WhereIf
+    /// </summary>
+    /// <param name="query">query</param>
+    /// <param name="flag">bool 作为标记，true则应用 filter</param>
+    /// <param name="filter">筛选条件</param>
+    public static IEnumerable<T> WhereIf<T>(this IEnumerable<T> query, T? flag, Func<T, bool> filter) where T : struct
+    {
+        return flag.HasValue ? query.Where(filter) : query;
+    }
 
     /// <summary>
     /// WhereIf
@@ -201,7 +211,12 @@ public static partial class CollectionExt
     public static T[] BuildArray<T>(this T obj, int len = 1)
     {
         T[] array = new T[len];
+#if NETSTANDARD2_0
+        for (var i = 0; i < array.Length; i++)
+            array[i] = obj;
+#else
         Array.Fill(array, obj);
+#endif
         return array;
     }
     /// <summary>
@@ -211,7 +226,12 @@ public static partial class CollectionExt
     {
         List<T> list = new();
         T[] array = new T[len];
+#if NETSTANDARD2_0
+        for (var i = 0; i < array.Length; i++)
+            array[i] = obj;
+#else
         Array.Fill(array, obj);
+#endif
         list.AddRange(array);
         return list;
     }

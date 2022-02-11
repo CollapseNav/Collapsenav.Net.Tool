@@ -5,6 +5,94 @@ using OfficeOpenXml;
 namespace Collapsenav.Net.Tool.Excel;
 public partial class ExcelTool
 {
+    public static IExcelRead GetExcelRead(object sheet)
+    {
+        if (sheet is ISheet)
+        {
+            return new NPOIExcelRead(sheet as ISheet);
+        }
+        else if (sheet is ExcelWorksheet)
+        {
+            return new EPPlusExcelRead(sheet as ExcelWorksheet);
+        }
+        return null;
+    }
+    /// <summary>
+    /// 根据文件大小选择"合适"的 IExcelRead
+    /// 5M以下随机选 EPPlus 或 NPOI
+    /// 5M以上选 MiniExcel
+    /// </summary>
+    public static IExcelRead GetExcelRead(Stream stream, ExcelType? excelType = null)
+    {
+        excelType ??= stream.Length switch
+        {
+            >= 5 * 1024 * 1024 => ExcelType.MiniExcel,
+            <= 5 * 1024 * 1024 => new Random().Next() % 2 == 0 ? ExcelType.EPPlus : ExcelType.NPOI,
+        };
+        IExcelRead read = excelType switch
+        {
+            ExcelType.EPPlus => new EPPlusExcelRead(stream),
+            ExcelType.NPOI => new NPOIExcelRead(stream),
+            ExcelType.MiniExcel => new MiniExcelRead(stream),
+            _ => new MiniExcelRead(stream)
+        };
+        return read;
+    }
+    /// <summary>
+    /// 根据文件大小选择"合适"的 IExcelRead
+    /// 5M以下随机选 EPPlus 或 NPOI
+    /// 5M以上选 MiniExcel
+    /// </summary>
+    public static IExcelRead GetExcelRead(string path, ExcelType? excelType = null)
+    {
+        using var fs = path.OpenReadShareStream();
+        return GetExcelRead(fs, excelType);
+    }
+
+    public static IExcelCellRead GetCellRead(object sheet)
+    {
+        if (sheet is ISheet)
+        {
+            return new NPOICellRead(sheet as ISheet);
+        }
+        else if (sheet is ExcelWorksheet)
+        {
+            return new EPPlusCellRead(sheet as ExcelWorksheet);
+        }
+        return null;
+    }
+    /// <summary>
+    /// 根据文件大小选择"合适"的 IExcelRead
+    /// 5M以下随机选 EPPlus 或 NPOI
+    /// 5M以上选 MiniExcel
+    /// </summary>
+    public static IExcelCellRead GetCellRead(Stream stream, ExcelType? excelType = null)
+    {
+        excelType ??= stream.Length switch
+        {
+            >= 5 * 1024 * 1024 => ExcelType.MiniExcel,
+            <= 5 * 1024 * 1024 => new Random().Next() % 2 == 0 ? ExcelType.EPPlus : ExcelType.NPOI,
+        };
+        IExcelCellRead read = excelType switch
+        {
+            ExcelType.EPPlus => new EPPlusCellRead(stream),
+            ExcelType.NPOI => new NPOICellRead(stream),
+            ExcelType.MiniExcel => new MiniCellRead(stream),
+            _ => new MiniCellRead(stream)
+        };
+        return read;
+    }
+    /// <summary>
+    /// 根据文件大小选择"合适"的 IExcelRead
+    /// 5M以下随机选 EPPlus 或 NPOI
+    /// 5M以上选 MiniExcel
+    /// </summary>
+    public static IExcelCellRead GetCellRead(string path, ExcelType? excelType = null)
+    {
+        var fs = path.OpenCreateReadWriteShareStream();
+        return GetCellRead(fs, excelType);
+    }
+
 
     /// <summary>
     /// 将表格数据转换为T类型的集合
@@ -19,7 +107,7 @@ public partial class ExcelTool
     /// </summary>
     public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(Stream stream, ReadConfig<T> config = null)
     {
-        var reader = IExcelRead.GetExcelRead(stream);
+        var reader = GetExcelRead(stream);
         return await ExcelToEntityAsync(reader, config);
     }
     /// <summary>

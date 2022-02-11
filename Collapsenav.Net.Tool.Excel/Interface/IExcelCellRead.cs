@@ -12,6 +12,8 @@ public interface IExcelCellRead : IExcelContainer<IReadCell>
     void SaveTo(string path);
     Stream GetStream();
 
+#if NETSTANDARD2_0
+#else
     public static IExcelCellRead GetCellRead(object sheet)
     {
         if (sheet is ISheet)
@@ -55,4 +57,5 @@ public interface IExcelCellRead : IExcelContainer<IReadCell>
         var fs = path.OpenCreateReadWriteShareStream();
         return GetCellRead(fs, excelType);
     }
+#endif
 }

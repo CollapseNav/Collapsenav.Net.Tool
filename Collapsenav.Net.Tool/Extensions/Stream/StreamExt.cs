@@ -69,7 +69,11 @@ public static partial class StreamExt
     {
         stream.SeekToOrigin();
         byte[] bytes = new byte[stream.Length];
+#if NETSTANDARD2_0
+        await stream.ReadAsync(bytes, 0, (int)stream.Length);
+#else
         await stream.ReadAsync(bytes);
+#endif
         stream.SeekToOrigin();
         return bytes;
     }
@@ -88,7 +92,11 @@ public static partial class StreamExt
     public static async Task<Stream> ToStreamAsync(this byte[] bytes)
     {
         MemoryStream ms = new();
+#if NETSTANDARD2_0
+        await ms.WriteAsync(bytes, 0, (int)bytes.Length);
+#else
         await ms.WriteAsync(bytes);
+#endif
         return ms;
     }
     /// <summary>
@@ -125,7 +133,11 @@ public static partial class StreamExt
     public static async Task SaveToAsync(this byte[] bytes, string path)
     {
         using var fs = path.CreateStream();
+#if NETSTANDARD2_0
+        await fs.WriteAsync(bytes, 0, bytes.Length);
+#else
         await fs.WriteAsync(bytes);
+#endif
     }
     /// <summary>
     /// 清空流
