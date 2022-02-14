@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -240,6 +242,13 @@ public class StringExtTest
         Assert.True(temp.ContainOr(new[] { "ABc", "CD" }, ignoreCase: true));
         Assert.True(temp.ContainOr(new[] { "ABc", "CD" }, ignoreCase: false));
         Assert.False(temp.ContainOr(new[] { "ABcE", "cD" }, ignoreCase: false));
+    }
 
+    [Fact]
+    public void HexStringTest()
+    {
+        string str = "123456789";
+        var hexStr = str.ToBytes().ToHexString();
+        Assert.True(str == hexStr.HexToBytes().BytesToString());
     }
 }

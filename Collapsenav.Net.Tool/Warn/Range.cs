@@ -1,3 +1,7 @@
+#if NETSTANDARD2_0
+
+#nullable enable
+
 using System.Runtime.CompilerServices;
 
 namespace System;
@@ -227,3 +231,4 @@ public readonly struct Range : IEquatable<Range>
         return (start, end - start);
     }
 }
+#endif

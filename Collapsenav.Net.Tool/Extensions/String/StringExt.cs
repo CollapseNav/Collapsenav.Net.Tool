@@ -102,7 +102,7 @@ public static partial class StringExt
     /// <param name="query">源集合</param>
     /// <param name="separate">分隔符</param>
     /// <param name="getStr">针对复杂类型的委托</param>
-    public static string Join<T>(this IEnumerable<T> query, string separate, Func<T, object> getStr = null)
+    public static string Join<T>(this IEnumerable<T> query, string separate = "", Func<T, object> getStr = null)
     {
         return string.Join(separate, query.Select(getStr ?? (item => item.ToString())));
     }
@@ -248,5 +248,59 @@ public static partial class StringExt
     public static bool ContainOr(this string origin, params string[] keys)
     {
         return keys.Any(key => origin.Contains(key));
+    }
+
+    /// <summary>
+    /// byte[] 转为 hex 字符串
+    /// </summary>
+    public static string ToHexString(this byte[] bytes)
+    {
+        return BitConverter.ToString(bytes).Replace("-", string.Empty).ToLower();
+    }
+
+    /// <summary>
+    /// hex 字符串转为 byte[]
+    /// </summary>
+    public static byte[] HexToBytes(this string hex)
+    {
+        var bytes = new byte[hex.Length / 2];
+        for (var i = 0; i < bytes.Length; i++)
+            bytes[i] = (byte)Convert.ToInt32(hex[(i * 2)..(i * 2 + 2)], 16);
+        return bytes;
+    }
+
+    /// <summary>
+    /// bytes转为string
+    /// </summary>
+    public static string BytesToString(this byte[] bytes, Encoding encoding = null)
+    {
+        encoding ??= Encoding.UTF8;
+        return encoding.GetString(bytes);
+    }
+
+    /// <summary>
+    /// 打乱字符串顺序
+    /// </summary>
+    public static string Shuffle(this string input)
+    {
+        return input.Shuffle<char>().Join();
+    }
+
+    public static string AddIf(this string origin, bool check, string value)
+    {
+        if (check)
+            origin += value;
+        return origin;
+    }
+    public static string Add(this string origin, string value)
+    {
+        return origin + value;
+    }
+
+    public static string AddIf<T>(this string origin, T? check, string value) where T : struct
+    {
+        if (check.HasValue)
+            origin += value;
+        return origin;
     }
 }

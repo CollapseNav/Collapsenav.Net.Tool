@@ -174,11 +174,9 @@ public static partial class CollectionExt
     /// </summary>
     public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> query)
     {
-        // TODO 应该也可以改成使用 Guid.NewGuid() 然后 OrderBy 的方式做,但孰优孰劣就不清楚了
         var random = new Random();
         var resultList = new List<T>();
-        foreach (var item in query)
-            resultList.Insert(random.Next(resultList.Count), item);
+        resultList = query.OrderBy(item => Guid.NewGuid()).ToList();
         return resultList;
     }
 
