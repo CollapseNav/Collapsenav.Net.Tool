@@ -247,4 +247,19 @@ public class ExcelReadTest
         reader.Dispose();
     }
     #endregion
+
+    [Fact]
+    public void CollapseNavNetToolCollectionExtTest()
+    {
+        var path = "./ExcelRead.xlsx";
+        var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
+        var row1Data = new[] { "233", "23", "Male", "233.33" };
+        var row10Data = new[] { "1122", "12", "Female", "123.23" };
+        IExcelRead reader = new MiniExcelRead(path);
+        var mergeData = reader.Merge();
+        Assert.True(mergeData.Count() == 44);
+        Assert.True(mergeData.Take(4).SequenceEqual(realHeader));
+        Assert.True(mergeData.Skip(4).Take(4).SequenceEqual(row1Data));
+        Assert.True(mergeData.TakeLast(4).SequenceEqual(row10Data));
+    }
 }

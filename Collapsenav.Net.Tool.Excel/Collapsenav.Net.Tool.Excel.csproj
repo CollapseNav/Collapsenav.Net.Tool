@@ -7,6 +7,7 @@
         </Description>
         <Product>Collapsenav.Net.Tool.Excel</Product>
         <PackageId>Collapsenav.Net.Tool.Excel</PackageId>
+        <ProjectUrl>http://doc.collapsenav.cn/docs/Excel/</ProjectUrl>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="EPPlus.Core" Version="1.5.4"/>
