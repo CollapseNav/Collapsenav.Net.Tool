@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Collapsenav.Net.Tool;
 public static partial class JsonExt
@@ -6,7 +7,8 @@ public static partial class JsonExt
     public static JsonSerializerOptions DefaultJsonSerializerOption = new()
     {
         PropertyNameCaseInsensitive = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        ReferenceHandler = ReferenceHandler.IgnoreCycles,
     };
     /// <summary>
     /// Json字符串转为对象
