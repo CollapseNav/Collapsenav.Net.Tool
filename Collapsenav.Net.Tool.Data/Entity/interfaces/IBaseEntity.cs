@@ -1,19 +1,18 @@
 namespace Collapsenav.Net.Tool.Data;
-public interface IBaseEntity
+public interface IBaseEntity : IBaseEntity<object>
 {
-    object Id { get; set; }
+}
+public interface IBaseEntity<TKey>
+{
+    TKey Id { get; set; }
     bool IsDeleted { get; set; }
     DateTime? CreationTime { get; set; }
     DateTime? LastModificationTime { get; set; }
+    TKey CreatorId { get; set; }
+    TKey LastModifierId { get; set; }
     void Init();
     void InitModifyId();
     void SoftDelete();
     void Update();
-}
-public interface IBaseEntity<TKey> : IBaseEntity
-{
-    new TKey Id { get; set; }
-    TKey CreatorId { get; set; }
-    TKey LastModifierId { get; set; }
     IBaseEntity<TKey> Entity();
 }

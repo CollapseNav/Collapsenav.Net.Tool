@@ -1,9 +1,8 @@
-using Collapsenav.Net.Tool.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Collapsenav.Net.Tool.WebApi.Test;
-    public class DIConfig
+public class DIConfig
     {
         public static ServiceProvider GetProvider()
         {
@@ -14,8 +13,7 @@ namespace Collapsenav.Net.Tool.WebApi.Test;
                 options.UseSqlite("Data Source = Test.db;");
             })
             .AddTransient(typeof(DbContext), typeof(TestDbContext))
-            .AddRepository()
-            .AddController()
+            .AddRepController()
             .BuildServiceProvider();
         }
         public static ServiceProvider GetTestRepositoryProvider()
@@ -27,8 +25,7 @@ namespace Collapsenav.Net.Tool.WebApi.Test;
             })
             .AddAutoMapper(typeof(MappingProfile))
             .AddTransient(typeof(DbContext), typeof(TestDbContext))
-            .AddRepository()
-            .AddController()
+            .AddRepController()
             .BuildServiceProvider();
         }
 }

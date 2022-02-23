@@ -23,7 +23,6 @@ public class DIConfig
             options.UseSqlite("Data Source = Test.db;");
         })
         .AddTransient(typeof(DbContext), typeof(TestDbContext))
-        .AddRepository(typeof(TestRepository), typeof(TestQueryRepository), typeof(TestModifyRepository))
         .BuildServiceProvider();
     }
 }

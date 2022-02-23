@@ -13,7 +13,7 @@ public class BaseGet : IBaseGet
         return query;
     }
 }
-public class BaseGet<T> : BaseGet, IBaseGet<T>
+public class BaseGet<T> : IBaseGet<T>
 {
     public virtual Expression<Func<T, bool>> GetExpression(Expression<Func<T, bool>> exp)
     {

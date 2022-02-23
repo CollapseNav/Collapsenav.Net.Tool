@@ -1,6 +1,4 @@
 using System.Security.Cryptography;
-using System.Text;
-
 namespace Collapsenav.Net.Tool;
 /// <summary>
 /// Md5工具
@@ -20,7 +18,7 @@ public partial class MD5Tool
     public static string Encrypt(string msg)
     {
         using var md5 = MD5.Create();
-        var result = md5.ComputeHash(Encoding.UTF8.GetBytes(msg));
+        var result = md5.ComputeHash(msg.ToBytes());
         return BitConverter.ToString(result).Replace("-", "");
     }
     /// <summary>

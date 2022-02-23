@@ -1,16 +1,15 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace Collapsenav.Net.Tool.Data;
-public partial class BaseEntity<T> : IBaseEntity<T>
+public partial class BaseEntity<TKey> : IBaseEntity<TKey>
 {
     [Key]
-    public T Id { get; set; }
+    public TKey Id { get; set; }
     public bool IsDeleted { get; set; }
     public DateTime? CreationTime { get; set; }
-    public T CreatorId { get; set; }
+    public TKey CreatorId { get; set; }
     public DateTime? LastModificationTime { get; set; }
-    public T LastModifierId { get; set; }
-    object IBaseEntity.Id { get => Id; set => Console.WriteLine(""); }
+    public TKey LastModifierId { get; set; }
     public virtual void Init()
     {
         CreationTime = DateTime.Now;
@@ -31,7 +30,7 @@ public partial class BaseEntity<T> : IBaseEntity<T>
         InitModifyId();
     }
 
-    public virtual IBaseEntity<T> Entity()
+    public virtual IBaseEntity<TKey> Entity()
     {
         if (IsDeleted) return null;
         return this;

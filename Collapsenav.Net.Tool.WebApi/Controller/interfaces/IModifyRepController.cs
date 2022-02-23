@@ -2,10 +2,9 @@ using Collapsenav.Net.Tool.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Collapsenav.Net.Tool.WebApi;
-public interface IModifyRepController<TKey, T, CreateT, GetT> : IQueryRepController<TKey, T, GetT>, IDisposable
+public interface IModifyRepController<TKey, T, CreateT> : IRepController, IDisposable
     where T : IBaseEntity<TKey>
     where CreateT : IBaseCreate
-    where GetT : IBaseGet<T>
 {
     /// <summary>
     /// 添加(单个)

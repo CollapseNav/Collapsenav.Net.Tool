@@ -4,15 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Collapsenav.Net.Tool.WebApi;
-[Route("api/[controller]")]
-public class ModifyRepController<TKey, T, CreateT, GetT> : QueryRepController<TKey, T, GetT>, IModifyRepController<TKey, T, CreateT, GetT>
+[ApiController]
+[Route("[controller]")]
+public class ModifyRepController<TKey, T, CreateT> : ControllerBase, IModifyRepController<TKey, T, CreateT>
     where T : class, IBaseEntity<TKey>
     where CreateT : IBaseCreate<T>
-    where GetT : IBaseGet<T>
 {
-    protected new readonly IModifyRepository<T> Repository;
+    protected readonly IModifyRepository<TKey, T> Repository;
     protected readonly IMapper Mapper;
-    public ModifyRepController(IModifyRepository<T> repository, IMapper mapper) : base(repository)
+    public ModifyRepController(IModifyRepository<TKey, T> repository, IMapper mapper)
     {
         Repository = repository;
         Mapper = mapper;

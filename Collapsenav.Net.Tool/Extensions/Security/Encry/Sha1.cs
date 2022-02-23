@@ -1,5 +1,4 @@
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Collapsenav.Net.Tool;
 /// <summary>
@@ -20,7 +19,7 @@ public partial class Sha1Tool
     public static string Encrypt(string msg)
     {
         using var sha1 = SHA1.Create();
-        var result = sha1.ComputeHash(Encoding.UTF8.GetBytes(msg));
+        var result = sha1.ComputeHash(msg.ToBytes());
         return BitConverter.ToString(result).Replace("-", "");
     }
     /// <summary>

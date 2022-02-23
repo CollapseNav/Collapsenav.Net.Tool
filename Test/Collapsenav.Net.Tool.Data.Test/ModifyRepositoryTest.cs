@@ -10,11 +10,13 @@ namespace Collapsenav.Net.Tool.Data.Test;
 public class ModifyRepositoryTest
 {
     protected readonly IServiceProvider Provider;
-    protected readonly IModifyRepository<TestModifyEntity> Repository;
+    protected readonly IModifyRepository<int, TestModifyEntity> Repository;
+    protected readonly IQueryRepository<int, TestModifyEntity> Read;
     public ModifyRepositoryTest()
     {
         Provider = DIConfig.GetProvider();
-        Repository = GetService<IModifyRepository<TestModifyEntity>>();
+        Repository = GetService<IModifyRepository<int, TestModifyEntity>>();
+        Read = GetService<IQueryRepository<int, TestModifyEntity>>();
     }
     protected T GetService<T>()
     {
@@ -36,10 +38,11 @@ public class ModifyRepositoryTest
                 new (19,"23333",2333,true),
                 new (20,"23333",2333,true),
             };
-        await Repository.AddAsync(entitys);
+        await Repository.AddAsync(entitys.First());
+        await Repository.AddAsync(entitys.Skip(1));
         await Repository.SaveAsync();
-        var data = await Repository.FindAsync(item => true);
-        Assert.True(data.Count() == 10);
+        var data = await Read.QueryAsync(item => true);
+        Assert.True(data.Count() == 20);
     }
 
     [Fact, Order(22)]
@@ -47,26 +50,47 @@ public class ModifyRepositoryTest
     {
         var updateCount = await Repository.UpdateAsync(item => item.Id > 18, entity => new TestModifyEntity { Number = 123 });
         await Repository.SaveAsync();
-        var numberEqual123 = await Repository.FindAsync(item => item.Number == 123);
+        var numberEqual123 = await Read.QueryAsync(item => item.Number == 123);
         Assert.True(updateCount == 2);
         Assert.True(numberEqual123.Count() == 2);
     }
 
     [Fact, Order(23)]
-    public async Task ModifyRepositoryDeleteTest()
+    public async Task ModifyRepositorySoftDeleteTest()
     {
-        var delCount = await Repository.DeleteAsync(item => item.Id < 13, true);
+        var delCount = await Repository.DeleteAsync(item => item.Id < 11, false);
         await Repository.SaveAsync();
-        var leftData = await Repository.FindAsync(item => true);
-        Assert.True(delCount == 2);
+        Assert.True(delCount == 10);
+        await Repository.DeleteAsync(11, false);
+        Repository.Save();
+        await Repository.DeleteAsync(new[] { 12 }, false);
+        Repository.Save();
+        var leftData = await Read.QueryAsync(item => !item.IsDeleted);
         Assert.True(leftData.Count() == 8);
+        leftData = await Read.QueryAsync(item => true);
+        Assert.True(leftData.Count() == 20);
     }
     [Fact, Order(24)]
+    public async Task ModifyRepositoryDeleteTest()
+    {
+        var delCount = await Repository.DeleteAsync(item => item.Id < 11, true);
+        await Repository.SaveAsync();
+        Assert.True(delCount == 10);
+        await Repository.DeleteAsync(11, true);
+        Repository.Save();
+        await Repository.DeleteAsync(new[] { 12 }, true);
+        Repository.Save();
+        var leftData = await Read.QueryAsync(item => true);
+        Assert.True(leftData.Count() == 8);
+    }
+
+
+    [Fact, Order(25)]
     public async Task ModifyRepositoryDeleteAllTest()
     {
         var delCount = await Repository.DeleteAsync(item => true, true);
         await Repository.SaveAsync();
-        var leftData = await Repository.FindAsync(item => true);
+        var leftData = await Read.QueryAsync(item => true);
         Assert.True(delCount == 8);
         Assert.True(leftData.IsEmpty());
     }
