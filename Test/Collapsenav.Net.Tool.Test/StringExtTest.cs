@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -250,5 +247,35 @@ public class StringExtTest
         string str = "123456789";
         var hexStr = str.ToBytes().ToHexString();
         Assert.True(str == hexStr.HexToBytes().BytesToString());
+    }
+
+    [Fact]
+    public void AddBeginTest()
+    {
+        string[] strs = new[] { "2", "3" };
+        strs.AddBegin("999");
+        Assert.True(strs.AllStartsWith("999"));
+        List<string> strList = new() { "4", "5" };
+        strList.AddBegin("233");
+        Assert.True(strList.AllStartsWith("233"));
+        IEnumerable<string> strEnums = new[] { "6", "7" };
+        var newStrEnums = strEnums.AddBegin("777");
+        Assert.True(newStrEnums.AllStartsWith("777"));
+        Assert.False(strEnums.AllStartsWith("777"));
+    }
+
+    [Fact]
+    public void AddEndTest()
+    {
+        string[] strs = new[] { "2", "3" };
+        strs.AddEnd("999");
+        Assert.True(strs.AllEndsWith("999"));
+        List<string> strList = new() { "4", "5" };
+        strList.AddEnd("233");
+        Assert.True(strList.AllEndsWith("233"));
+        IEnumerable<string> strEnums = new[] { "6", "7" };
+        var newStrEnums = strEnums.AddEnd("777");
+        Assert.True(newStrEnums.AllEndsWith("777"));
+        Assert.False(strEnums.AllEndsWith("777"));
     }
 }

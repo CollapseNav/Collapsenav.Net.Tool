@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestPlatform.Common.Utilities;
 using Xunit;
 
 namespace Collapsenav.Net.Tool.Test;

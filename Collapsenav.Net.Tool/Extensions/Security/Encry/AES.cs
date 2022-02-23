@@ -1,6 +1,4 @@
-using System.Buffers;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Collapsenav.Net.Tool;
 /// <summary>
@@ -15,50 +13,49 @@ public partial class AESTool
     /// </summary>
     /// <param name="secmsg">密文</param>
     /// <param name="key">key</param>
-    public static string Decrypt(string secmsg, string key = DefaultKey)
+    /// <param name="mode"></param>
+    /// <param name="padding"></param>
+    /// <param name="iv">向量</param>
+    /// <param name="level">加密级别</param>
+    public static string Decrypt(string secmsg, string key = DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, string iv = DefaultIV, int level = 32)
     {
-        var decryptKey = GetAesBytes(key);
-        var decryptMsg = Convert.FromBase64String(secmsg);
-
+        var decryptMsg = secmsg.FromBase64();
         using var aes = Aes.Create();
-        aes.Key = decryptKey;
-        aes.Mode = CipherMode.ECB;
-        aes.Padding = PaddingMode.PKCS7;
-        using var decrypt = aes.CreateDecryptor();
+        aes.Mode = mode;
+        aes.Padding = padding;
+        using var decrypt = aes.CreateDecryptor(GetAesBytes(key, level), GetAesBytes(iv, 16));
         var result = decrypt.TransformFinalBlock(decryptMsg, 0, decryptMsg.Length);
-        return Encoding.UTF8.GetString(result);
+        return result.BytesToString();
     }
     /// <summary>
     /// 加密
     /// </summary>
     /// <param name="msg">原文</param>
     /// <param name="key">key</param>
+    /// <param name="mode"></param>
+    /// <param name="padding"></param>
     /// <param name="iv">向量</param>
     /// <param name="level">加密级别</param>
-    public static string Encrypt(string msg, string key = DefaultKey, string iv = DefaultIV, int level = 32)
+    public static string Encrypt(string msg, string key = DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, string iv = DefaultIV, int level = 32)
     {
-        var encryptMsg = Encoding.UTF8.GetBytes(msg);
-
         using var aes = Aes.Create();
-        aes.Key = GetAesBytes(key, level);
-        aes.IV = iv.IsNull() ? aes.IV : GetAesBytes(iv, 16);
-        aes.Mode = CipherMode.ECB;
-        aes.Padding = PaddingMode.PKCS7;
-        using var encrypt = aes.CreateEncryptor();
-        var result = encrypt.TransformFinalBlock(encryptMsg, 0, msg.Length);
-        return Convert.ToBase64String(result);
+        aes.Mode = mode;
+        aes.Padding = padding;
+        using var encrypt = aes.CreateEncryptor(GetAesBytes(key, level), GetAesBytes(iv, 16));
+        var result = encrypt.TransformFinalBlock(msg.ToBytes(), 0, msg.Length);
+        return result.ToBase64();
     }
 
     public static byte[] GetAesBytes(string key, int level = 32)
     {
         if (key.Length < level)
             key = key.PadLeft(level, '#');
-        return Encoding.UTF8.GetBytes(key[..level]);
+        return key.First(level).ToBytes();
     }
     public static byte[] GetAesBytes(byte[] key, int level = 32)
     {
         if (key.Length < level)
-            key = key.Concat(Encoding.UTF8.GetBytes('#'.ToString(level - key.Length))).ToArray();
+            key = '#'.ToString(level - key.Length).ToBytes().Concat(key).ToArray();
         return key.Take(level).ToArray();
     }
 }

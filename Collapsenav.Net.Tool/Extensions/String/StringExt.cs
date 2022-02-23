@@ -303,4 +303,39 @@ public static partial class StringExt
             origin += value;
         return origin;
     }
+
+    public static IEnumerable<string> AddBegin(this IEnumerable<string> origin, string value)
+    {
+        origin = origin.Select(item => value + item);
+        return origin;
+    }
+    public static IEnumerable<string> AddEnd(this IEnumerable<string> origin, string value)
+    {
+        origin = origin.Select(item => item + value);
+        return origin;
+    }
+    public static string[] AddBegin(this string[] origin, string value)
+    {
+        for (var i = 0; i < origin.Length; i++)
+            origin[i] = value + origin[i];
+        return origin;
+    }
+    public static string[] AddEnd(this string[] origin, string value)
+    {
+        for (var i = 0; i < origin.Length; i++)
+            origin[i] += value;
+        return origin;
+    }
+    public static IList<string> AddBegin(this IList<string> origin, string value)
+    {
+        for (var i = 0; i < origin.Count; i++)
+            origin[i] = value + origin[i];
+        return origin;
+    }
+    public static IList<string> AddEnd(this IList<string> origin, string value)
+    {
+        for (var i = 0; i < origin.Count; i++)
+            origin[i] += value;
+        return origin;
+    }
 }
