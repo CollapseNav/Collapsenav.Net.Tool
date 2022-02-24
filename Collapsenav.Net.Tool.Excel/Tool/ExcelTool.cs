@@ -18,7 +18,7 @@ public partial class ExcelTool
         if (filepath.IsEmpty())
             throw new NoNullAllowedException("文件路径不能为空");
         var ext = Path.GetExtension(filepath).ToLower();
-        if (!ext.ContainOr(".xlsx", ".xls"))
+        if (!ext.HasContain(".xlsx", ".xls"))
             throw new Exception("文件必须为excel格式");
         if (!File.Exists(filepath))
             throw new FileNotFoundException($@"我找不到这个叫 {filepath} 的文件,你看看是不是路径写错了");

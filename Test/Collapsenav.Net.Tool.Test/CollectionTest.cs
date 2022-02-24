@@ -82,25 +82,25 @@ public class CollectionTest
     public void ContainAndTest()
     {
         string[] strList = { "1", "2", "3", "4", "5", "6" };
-        Assert.True(strList.ContainAnd(new[] { "2", "6" }));
-        Assert.True(strList.ContainAnd("2", "6"));
-        Assert.False(strList.ContainAnd(new[] { "2", "8" }));
-        Assert.True(strList.ContainAnd((x, y) => x == y, "2", "6"));
-        Assert.False(strList.ContainAnd((x, y) => x == y, "2", "8"));
-        Assert.False(strList.AsEnumerable().ContainAnd((x, y) => x == y, new[] { "2", "8" }.AsEnumerable()));
+        Assert.True(strList.AllContain(new[] { "2", "6" }));
+        Assert.True(strList.AllContain("2", "6"));
+        Assert.False(strList.AllContain(new[] { "2", "8" }));
+        Assert.True(strList.AllContain((x, y) => x == y, "2", "6"));
+        Assert.False(strList.AllContain((x, y) => x == y, "2", "8"));
+        Assert.False(strList.AsEnumerable().AllContain((x, y) => x == y, new[] { "2", "8" }.AsEnumerable()));
     }
 
     [Fact]
     public void ContainOrTest()
     {
         string[] strList = { "1", "2", "3", "4", "5", "6" };
-        Assert.True(strList.ContainOr(new[] { "2", "6" }));
-        Assert.True(strList.ContainOr(new[] { "2", "8" }));
-        Assert.False(strList.ContainOr(new[] { "7", "8" }));
-        Assert.True(strList.ContainOr((x, y) => x == y, "2", "6"));
-        Assert.True(strList.ContainOr((x, y) => x == y, "2", "8"));
-        Assert.False(strList.ContainOr((x, y) => x == y, "7", "8"));
-        Assert.False(strList.AsEnumerable().ContainOr((x, y) => x == y, new[] { "7", "8" }.AsEnumerable()));
+        Assert.True(strList.HasContain(new[] { "2", "6" }));
+        Assert.True(strList.HasContain(new[] { "2", "8" }));
+        Assert.False(strList.HasContain(new[] { "7", "8" }));
+        Assert.True(strList.HasContain((x, y) => x == y, "2", "6"));
+        Assert.True(strList.HasContain((x, y) => x == y, "2", "8"));
+        Assert.False(strList.HasContain((x, y) => x == y, "7", "8"));
+        Assert.False(strList.AsEnumerable().HasContain((x, y) => x == y, new[] { "7", "8" }.AsEnumerable()));
     }
 
 

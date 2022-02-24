@@ -6,7 +6,7 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="query">源集合</param>
     /// <param name="filters">条件</param>
-    public static bool ContainAnd<T>(this IEnumerable<T> query, params T[] filters)
+    public static bool AllContain<T>(this IEnumerable<T> query, params T[] filters)
     {
         foreach (var filter in filters)
             if (!query.Contains(filter))
@@ -19,7 +19,7 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么去重</param>
     /// <param name="filters">条件</param>
-    public static bool ContainAnd<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, params T[] filters)
+    public static bool AllContain<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, params T[] filters)
     {
         foreach (var filter in filters)
             if (!query.Contains(filter, new CollapseNavEqualityComparer<T>(comparer)))
@@ -32,9 +32,9 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么去重</param>
     /// <param name="filters">条件</param>
-    public static bool ContainAnd<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, IEnumerable<T> filters)
+    public static bool AllContain<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, IEnumerable<T> filters)
     {
-        return query.ContainAnd(comparer, filters.ToArray());
+        return query.AllContain(comparer, filters.ToArray());
     }
 
     /// <summary>
@@ -42,7 +42,7 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="query">源集合</param>
     /// <param name="filters">条件</param>
-    public static bool ContainOr<T>(this IEnumerable<T> query, params T[] filters)
+    public static bool HasContain<T>(this IEnumerable<T> query, params T[] filters)
     {
         foreach (var filter in filters)
             if (query.Contains(filter))
@@ -55,7 +55,7 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么去重</param>
     /// <param name="filters">条件</param>
-    public static bool ContainOr<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, params T[] filters)
+    public static bool HasContain<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, params T[] filters)
     {
         foreach (var filter in filters)
             if (query.Contains(filter, new CollapseNavEqualityComparer<T>(comparer)))
@@ -68,8 +68,8 @@ public static partial class CollectionExt
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么判断重复</param>
     /// <param name="filters">条件</param>
-    public static bool ContainOr<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, IEnumerable<T> filters)
+    public static bool HasContain<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, IEnumerable<T> filters)
     {
-        return query.ContainOr(comparer, filters.ToArray());
+        return query.HasContain(comparer, filters.ToArray());
     }
 }

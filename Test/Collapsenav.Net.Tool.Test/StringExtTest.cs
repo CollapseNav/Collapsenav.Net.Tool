@@ -226,19 +226,19 @@ public class StringExtTest
     public void ContainTest()
     {
         string temp = "123456789";
-        Assert.True(temp.ContainAnd(new[] { "123", "345" }));
-        Assert.True(temp.ContainAnd("789", "567"));
-        Assert.True(temp.ContainOr(new[] { "234", "444" }));
-        Assert.True(temp.ContainOr("456", "898"));
+        Assert.True(temp.AllContain(new[] { "123", "345" }));
+        Assert.True(temp.AllContain("789", "567"));
+        Assert.True(temp.HasContain(new[] { "234", "444" }));
+        Assert.True(temp.HasContain("456", "898"));
 
-        Assert.False(temp.ContainAnd("789", "5679"));
-        Assert.False(temp.ContainOr("7899", "5679"));
+        Assert.False(temp.AllContain("789", "5679"));
+        Assert.False(temp.HasContain("7899", "5679"));
         temp = "ABCD";
-        Assert.True(temp.ContainAnd(new[] { "ABc", "cD" }, ignoreCase: true));
-        Assert.False(temp.ContainAnd(new[] { "ABc", "cD" }, ignoreCase: false));
-        Assert.True(temp.ContainOr(new[] { "ABc", "CD" }, ignoreCase: true));
-        Assert.True(temp.ContainOr(new[] { "ABc", "CD" }, ignoreCase: false));
-        Assert.False(temp.ContainOr(new[] { "ABcE", "cD" }, ignoreCase: false));
+        Assert.True(temp.AllContain(new[] { "ABc", "cD" }, ignoreCase: true));
+        Assert.False(temp.AllContain(new[] { "ABc", "cD" }, ignoreCase: false));
+        Assert.True(temp.HasContain(new[] { "ABc", "CD" }, ignoreCase: true));
+        Assert.True(temp.HasContain(new[] { "ABc", "CD" }, ignoreCase: false));
+        Assert.False(temp.HasContain(new[] { "ABcE", "cD" }, ignoreCase: false));
     }
 
     [Fact]
@@ -277,5 +277,20 @@ public class StringExtTest
         var newStrEnums = strEnums.AddEnd("777");
         Assert.True(newStrEnums.AllEndsWith("777"));
         Assert.False(strEnums.AllEndsWith("777"));
+    }
+    [Fact]
+    public void FirstToTest()
+    {
+        string value = "123456789.2333";
+        Assert.True(value.FirstTo(".") == "123456789");
+        Assert.True(value.FirstTo('.') == "123456789");
+    }
+
+    [Fact]
+    public void EndToTest()
+    {
+        string value = "123456789.2333";
+        Assert.True(value.EndTo(".") == "2333");
+        Assert.True(value.EndTo('.') == "2333");
     }
 }

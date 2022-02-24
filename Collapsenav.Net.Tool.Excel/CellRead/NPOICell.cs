@@ -28,7 +28,7 @@ public class NPOICell : IReadCell<ICell>
         {
             var typeName = value.GetType().Name.Split('.')[^1];
             var strValue = value.ToString().Trim();
-            if (typeName.ContainOr(nameof(Int16), nameof(Int32), nameof(Int64), nameof(UInt16), nameof(UInt32), nameof(UInt64), nameof(Double), nameof(Byte), nameof(Decimal)))
+            if (typeName.HasContain(nameof(Int16), nameof(Int32), nameof(Int64), nameof(UInt16), nameof(UInt32), nameof(UInt64), nameof(Double), nameof(Byte), nameof(Decimal)))
                 cell.SetCellValue(double.Parse(strValue));
             else if (DateTime.TryParse(strValue, out DateTime date))
                 cell.SetCellValue(date);

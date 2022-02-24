@@ -20,11 +20,11 @@ public class OtherTest
         Assert.True(readConfig.FieldOption.Count() == 4);
         readConfig.FilterOptionByHeaders(new[] { "Field0", "Field0", "Field2", "Field3" });
         Assert.True(readConfig.FieldOption.Count() == 3);
-        Assert.True(readConfig.FieldOption.Select(item => item.ExcelField).ContainAnd("Field0", "Field2", "Field3"));
-        Assert.True(readConfig.FieldOption.Select(item => item.PropName).ContainAnd("Field0", "Field2", "Field3"));
+        Assert.True(readConfig.FieldOption.Select(item => item.ExcelField).AllContain("Field0", "Field2", "Field3"));
+        Assert.True(readConfig.FieldOption.Select(item => item.PropName).AllContain("Field0", "Field2", "Field3"));
         readConfig.Remove("Field0");
         Assert.True(readConfig.FieldOption.Count() == 2);
-        Assert.True(readConfig.FieldOption.Select(item => item.Prop).Select(item => item.Name).ContainAnd("Field2", "Field3"));
+        Assert.True(readConfig.FieldOption.Select(item => item.Prop).Select(item => item.Name).AllContain("Field2", "Field3"));
 
         var exportConfig = new ExportConfig<ExcelTestDto>()
         .Add("Field0", item => item.Field0)
@@ -36,7 +36,7 @@ public class OtherTest
         Assert.True(exportConfig.FieldOption.Count() == 4);
         exportConfig.FilterOptionByHeaders(new[] { "Field0", "Field0", "Field2", "Field3" });
         Assert.True(exportConfig.FieldOption.Count() == 3);
-        Assert.True(exportConfig.FieldOption.Select(item => item.ExcelField).ContainAnd("Field0", "Field2", "Field3"));
+        Assert.True(exportConfig.FieldOption.Select(item => item.ExcelField).AllContain("Field0", "Field2", "Field3"));
     }
 
     [Fact]

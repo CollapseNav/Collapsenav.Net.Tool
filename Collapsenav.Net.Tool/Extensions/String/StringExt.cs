@@ -6,32 +6,6 @@ namespace Collapsenav.Net.Tool;
 public static partial class StringExt
 {
     /// <summary>
-    /// 是空的
-    /// </summary>
-    public static bool IsNull(this string str) => string.IsNullOrWhiteSpace(str);
-    /// <summary>
-    /// 若空则返回value
-    /// </summary>
-    public static string IsNull(this string str, string value) => str.IsNull() ? value : str;
-    /// <summary>
-    /// 是空的
-    /// </summary>
-    public static bool IsEmpty(this string str) => string.IsNullOrWhiteSpace(str);
-    /// <summary>
-    /// 若空则返回value
-    /// </summary>
-    public static string IsEmpty(this string str, string value) => str.IsEmpty() ? value : str;
-    /// <summary>
-    /// 没空
-    /// </summary>
-    public static bool NotNull(this string str) => !str.IsNull();
-    /// <summary>
-    /// 没空
-    /// </summary>
-    public static bool NotEmpty(this string str) => !str.IsEmpty();
-
-
-    /// <summary>
     /// 左填充
     /// </summary>
     /// <param name="obj">源</param>
@@ -61,14 +35,10 @@ public static partial class StringExt
     /// <param name="act">一个委托</param>
     /// <param name="fill">填充字符</param>
     public static string PadRight<T>(this T obj, int total, Func<T, object> act, char? fill = ' ') => act(obj).ToString().PadRight(total, fill ?? ' ');
-
-
-
     /// <summary>
     /// 数字转为中文,暂时只支持整数,支持最大的整数长度为16位
     /// </summary>
     /// <param name="num"></param>
-    /// <returns></returns>
     public static string ToChinese(this string num)
     {
         string[] nums = { "零", "一", "二", "三", "四", "五", "六", "七", "八", "九" };
@@ -108,41 +78,6 @@ public static partial class StringExt
     }
 
     /// <summary>
-    /// 检查是否邮箱格式
-    /// </summary>
-    public static bool IsEmail(this string email)
-    {
-        if (email.IsNull())
-            return false;
-        return Regex.IsMatch(email, "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+.[a-zA-Z0-9]+$");
-    }
-
-    /// <summary>
-    /// 检查是否 Url 格式
-    /// </summary>
-    public static bool IsUrl(this string url, bool check = false)
-    {
-        // TODO 日后写正则判断...
-        var isHttp = url.HasStartsWith("https://", "http://");
-        if (!isHttp) return false;
-        // ping测试
-        if (check && !url.GetDomain().CanPing()) return false;
-        return true;
-    }
-
-    /// <summary>
-    /// 能ping通
-    /// </summary>
-    public static bool CanPing(this string domain, int timeout = 1000)
-    {
-        Ping pingObj = new();
-        if (domain.IsUrl())
-            domain = domain.GetDomain();
-        var reply = pingObj.Send(domain, timeout);
-        return reply.Status == IPStatus.Success;
-    }
-
-    /// <summary>
     /// 获取 Domain 域名
     /// </summary>
     public static string GetDomain(this string input)
@@ -179,7 +114,6 @@ public static partial class StringExt
             return Regex.Replace(origin, "(.{3}).*(.{3})", $"$1{mask}$2");
         }
     }
-
     /// <summary>
     /// 字符串转为byte[] 默认 utf8
     /// </summary>
@@ -202,54 +136,6 @@ public static partial class StringExt
     {
         return len > origin.Length ? origin : origin.Substring(origin.Length - len, len);
     }
-    /// <summary>
-    /// 全包含
-    /// </summary>
-    /// <param name="origin">源字符串</param>
-    /// <param name="keys"></param>
-    /// <param name="ignoreCase">是否忽略大小写(默认不忽略)</param>
-    public static bool ContainAnd(this string origin, IEnumerable<string> keys, bool ignoreCase = false)
-    {
-
-#if NETSTANDARD2_0
-        return keys.All(key => origin.ToLower().Contains(key.ToLower()));
-#else
-        return keys.All(key => origin.Contains(key, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal));
-#endif
-    }
-    /// <summary>
-    /// 部分包含
-    /// </summary>
-    /// <param name="origin">源字符串</param>
-    /// <param name="keys"></param>
-    /// <param name="ignoreCase">是否忽略大小写(默认不忽略)</param>
-    public static bool ContainOr(this string origin, IEnumerable<string> keys, bool ignoreCase = false)
-    {
-#if NETSTANDARD2_0
-        return keys.Any(key => origin.ToLower().Contains(key.ToLower()));
-#else
-        return keys.Any(key => origin.Contains(key, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal));
-#endif
-    }
-    /// <summary>
-    /// 全包含(不忽略大小写)
-    /// </summary>
-    /// <param name="origin">源字符串</param>
-    /// <param name="keys"></param>
-    public static bool ContainAnd(this string origin, params string[] keys)
-    {
-        return keys.All(key => origin.Contains(key));
-    }
-    /// <summary>
-    /// 部分包含(不忽略大小写)
-    /// </summary>
-    /// <param name="origin">源字符串</param>
-    /// <param name="keys"></param>
-    public static bool ContainOr(this string origin, params string[] keys)
-    {
-        return keys.Any(key => origin.Contains(key));
-    }
-
     /// <summary>
     /// byte[] 转为 hex 字符串
     /// </summary>
@@ -303,39 +189,88 @@ public static partial class StringExt
             origin += value;
         return origin;
     }
-
+    /// <summary>
+    /// 加前缀
+    /// </summary>
     public static IEnumerable<string> AddBegin(this IEnumerable<string> origin, string value)
     {
         origin = origin.Select(item => value + item);
         return origin;
     }
+    /// <summary>
+    /// 加后缀
+    /// </summary>
     public static IEnumerable<string> AddEnd(this IEnumerable<string> origin, string value)
     {
         origin = origin.Select(item => item + value);
         return origin;
     }
+    /// <summary>
+    /// 加前缀
+    /// </summary>
     public static string[] AddBegin(this string[] origin, string value)
     {
         for (var i = 0; i < origin.Length; i++)
             origin[i] = value + origin[i];
         return origin;
     }
+    /// <summary>
+    /// 加后缀
+    /// </summary>
     public static string[] AddEnd(this string[] origin, string value)
     {
         for (var i = 0; i < origin.Length; i++)
             origin[i] += value;
         return origin;
     }
+    /// <summary>
+    /// 加前缀
+    /// </summary>
     public static IList<string> AddBegin(this IList<string> origin, string value)
     {
         for (var i = 0; i < origin.Count; i++)
             origin[i] = value + origin[i];
         return origin;
     }
+    /// <summary>
+    /// 加后缀
+    /// </summary>
     public static IList<string> AddEnd(this IList<string> origin, string value)
     {
         for (var i = 0; i < origin.Count; i++)
             origin[i] += value;
         return origin;
+    }
+    /// <summary>
+    /// 从前取到
+    /// </summary>
+    public static string FirstTo(this string origin, string target)
+    {
+        var index = origin.IndexOf(target);
+        return index == -1 ? origin : origin.First(index);
+    }
+    /// <summary>
+    /// 从后取到
+    /// </summary>
+    public static string EndTo(this string origin, string target)
+    {
+        var index = origin.LastIndexOf(target);
+        return index == -1 ? origin : origin.Last(origin.Length - (target.Length + index));
+    }
+    /// <summary>
+    /// 从前取到
+    /// </summary>
+    public static string FirstTo(this string origin, char target)
+    {
+        var index = origin.IndexOf(target);
+        return index == -1 ? origin : origin.First(index);
+    }
+    /// <summary>
+    /// 从后取到
+    /// </summary>
+    public static string EndTo(this string origin, char target)
+    {
+        var index = origin.LastIndexOf(target);
+        return index == -1 ? origin : origin.Last(origin.Length - (index + 1));
     }
 }
