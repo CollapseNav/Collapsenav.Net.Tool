@@ -3,7 +3,7 @@ using System.Linq;
 using Xunit;
 
 namespace Collapsenav.Net.Tool.Test;
-[System.AttributeUsage(System.AttributeTargets.All, Inherited = false, AllowMultiple = false)]
+[AttributeUsage(System.AttributeTargets.All, Inherited = false, AllowMultiple = false)]
 sealed class UnitTestAttribute : System.Attribute
 {
     readonly string _field;
@@ -53,20 +53,20 @@ public class TypeTest
     public void PropNamesTest()
     {
         var props = typeof(PropTest1).PropNames();
-        Assert.True(props.Count() == 3 && props.ContainAnd("Prop1", "Prop2", "Prop3"));
+        Assert.True(props.Count() == 3 && props.AllContain("Prop1", "Prop2", "Prop3"));
         props = new PropTest1().PropNames();
-        Assert.True(props.Count() == 3 && props.ContainAnd("Prop1", "Prop2", "Prop3"));
+        Assert.True(props.Count() == 3 && props.AllContain("Prop1", "Prop2", "Prop3"));
         props = new PropTest0().PropNames();
-        Assert.True(props.Count() == 2 && props.ContainAnd("Prop0", "Prop"));
+        Assert.True(props.Count() == 2 && props.AllContain("Prop0", "Prop"));
     }
 
     [Fact]
     public void PropNamesHasDepthTest()
     {
         var props = new PropTest0().PropNames(1);
-        Assert.True(props.Count() == 4 && props.ContainAnd("Prop0", "Prop.Prop1", "Prop.Prop2", "Prop.Prop3"));
+        Assert.True(props.Count() == 4 && props.AllContain("Prop0", "Prop.Prop1", "Prop.Prop2", "Prop.Prop3"));
         props = typeof(PropTest0).PropNames(0);
-        Assert.True(props.Count() == 2 && props.ContainAnd("Prop0", "Prop"));
+        Assert.True(props.Count() == 2 && props.AllContain("Prop0", "Prop"));
     }
     [Fact]
     public void GetBuildInTypePropNames()
@@ -145,7 +145,7 @@ public class TypeTest
         var data = new PropTest1();
         var props2 = data.Props();
         Assert.True(props.SequenceEqual(props2, item => item.Name.GetHashCode()));
-        Assert.True(props.Select(item => item.Name).ContainAnd("Prop1", "Prop2", "Prop3"));
+        Assert.True(props.Select(item => item.Name).AllContain("Prop1", "Prop2", "Prop3"));
     }
 
     [Fact]
@@ -168,5 +168,76 @@ public class TypeTest
         Assert.True(Guid.NewGuid().IsBuildInType());
         Assert.True(typeof(nint).IsBuildInType());
         Assert.True(typeof(nuint).IsBaseType());
+    }
+
+    [Fact]
+    public void SetValueWithPropsTest()
+    {
+        PropTest0 testData = new()
+        {
+            Prop0 = "string",
+            Prop = new()
+            {
+                Prop1 = "value1",
+                Prop2 = "value2",
+            }
+        };
+        testData.SetValue("Prop.Prop2", "SetValue");
+        Assert.True(testData.Prop.Prop2 == "SetValue");
+    }
+
+    [Fact]
+    public void GetValueWithPropsTest()
+    {
+        PropTest0 testData = new()
+        {
+            Prop0 = "string",
+            Prop = new()
+            {
+                Prop1 = "value1",
+                Prop2 = "value2",
+            }
+        };
+        Assert.True(testData.GetValue("Prop.Prop1").ToString() == "value1");
+    }
+    [Fact]
+    public void AnonymousSetValueTest()
+    {
+        var data = new
+        {
+            Index = 0,
+            Name = "",
+            Item = new
+            {
+                I_Index = 0,
+                I_Name = ""
+            }
+        };
+        Assert.True(data.Index == 0);
+        Assert.True(data.Name == "");
+        data.SetAnonymousValue("Index", 233);
+        Assert.True(data.Index == 233);
+
+        data.SetAnonymousValue("Item.I_Index", 233);
+        Assert.True(data.Item.I_Index == 233);
+    }
+    [Fact]
+    public void AnonymousGetValueTest()
+    {
+        var data = new
+        {
+            Index = 233,
+            Name = "233",
+            Item = new
+            {
+                I_Index = 233,
+                I_Name = "233"
+            }
+        };
+        Assert.True(data.Index == 233);
+        Assert.True(data.Name == "233");
+
+        Assert.True((int)data.GetValue("Index") == 233);
+        Assert.True((int)data.GetValue("Item.I_Index") == 233);
     }
 }

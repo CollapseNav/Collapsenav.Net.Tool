@@ -136,10 +136,42 @@ public static partial class TypeExt
         .ToDictionary(item => item.Key, item => item.Value);
         return propDict;
     }
-
-    public static void SetValue<T>(this T obj, string field, object value)
+    /// <summary>
+    /// 设置值
+    /// </summary>
+    public static void SetValue<T>(this T obj, string field, object value) where T : class
     {
-        typeof(T).GetProperty(field)?.SetValue(obj, value);
+        // 判断是否匿名类型, 可能会对性能有影响, 暂时不确定是否应该开启
+        // var objType = obj.GetType();
+        // if (objType.Name.Contains("AnonymousType"))
+        //     obj.SetAnonymousValue(field, value);
+        var fieldName = field.FirstTo('.');
+        var prop = obj.GetType().GetProperty(fieldName);
+        if (fieldName.Length == field.Length)
+            prop?.SetValue(obj, value);
+        else if (prop != null)
+        {
+            var propValue = obj.GetValue(fieldName);
+            if (propValue == null)
+            {
+                propValue = Activator.CreateInstance(prop.PropertyType);
+                obj.SetValue(fieldName, propValue);
+            }
+            propValue.SetValue(field.Last(field.Length - (fieldName.Length + 1)), value);
+        }
+    }
+
+    /// <summary>
+    /// 设置匿名对象的值
+    /// </summary>
+    public static void SetAnonymousValue(this object obj, string field, object value)
+    {
+        var fieldName = field.FirstTo('.');
+        var runtimeField = obj.GetType().GetRuntimeFields().FirstOrDefault(item => item.Name == $"<{fieldName}>i__Field");
+        if (fieldName == field)
+            runtimeField?.SetValue(obj, value);
+        else if (runtimeField != null)
+            obj.GetValue(fieldName)?.SetAnonymousValue(field.Last(field.Length - (fieldName.Length + 1)), value);
     }
 
     /// <summary>
@@ -164,7 +196,22 @@ public static partial class TypeExt
     /// <param name="field">属性/字段</param>
     public static object GetValue<T>(this T obj, string field)
     {
-        var prop = typeof(T).GetProperties().Where(item => item.Name == field).FirstOrDefault();
-        return prop == null ? "" : prop.GetValue(obj);
+        var fieldName = field.FirstTo('.');
+        var prop = obj.GetType().GetProperty(fieldName);
+        if (fieldName.Length == field.Length)
+            return prop?.GetValue(obj);
+        else if (prop != null)
+        {
+            var propValue = prop?.GetValue(obj);
+            return propValue?.GetValue(field.Last(field.Length - (fieldName.Length + 1)));
+        }
+        return null;
+    }
+    /// <summary>
+    /// 比较两个对象
+    /// </summary>
+    public static Difference<T> Difference<T>(this T before, T end)
+    {
+        return new Difference<T>(before, end);
     }
 }
