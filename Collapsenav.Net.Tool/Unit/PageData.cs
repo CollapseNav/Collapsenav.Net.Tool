@@ -1,4 +1,4 @@
-namespace Collapsenav.Net.Tool.Data;
+namespace Collapsenav.Net.Tool;
 public class PageData : PageData<object>
 {
 }
@@ -11,6 +11,11 @@ public class PageData<T>
     public PageData(int? total, IEnumerable<T> data)
     {
         Total = total;
+        Data = data;
+    }
+    public PageData(IEnumerable<T> data)
+    {
+        Total = data.Count();
         Data = data;
     }
 }

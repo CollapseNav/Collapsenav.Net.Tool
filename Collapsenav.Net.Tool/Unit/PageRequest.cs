@@ -1,4 +1,4 @@
-namespace Collapsenav.Net.Tool.Data;
+namespace Collapsenav.Net.Tool;
 public class PageRequest
 {
     public virtual int Index { get; set; } = 1;
