@@ -1,8 +1,9 @@
+using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Collapsenav.Net.Tool.Data;
-public class Repository<TKey, T> : IRepository<TKey, T> where T : class, IBaseEntity<TKey>
+public class Repository<T> : IRepository<T> where T : class, IEntity
 {
     protected readonly DbContext _db;
     protected readonly DbSet<T> dbSet;
@@ -37,4 +38,21 @@ public class Repository<TKey, T> : IRepository<TKey, T> where T : class, IBaseEn
     {
         return await _db.SaveChangesAsync();
     }
+    /// <summary>
+    /// 获取主键
+    /// </summary>
+    protected Type KeyType()
+    {
+        var types = typeof(T).AttrValues<KeyAttribute>();
+        if (types.IsEmpty())
+            throw new Exception("");
+        var type = types.First().Key.PropertyType;
+        if (type.IsGenericType)
+            return type.GenericTypeArguments.First();
+        return type;
+    }
+}
+public class Repository<TKey, T> : Repository<T>, IRepository<TKey, T> where T : class, IEntity<TKey>
+{
+    public Repository(DbContext db) : base(db) { }
 }

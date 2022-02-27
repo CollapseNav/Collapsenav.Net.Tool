@@ -6,6 +6,12 @@ public static class RepositoryExt
     public static IServiceCollection AddRepository(this IServiceCollection services)
     {
         services
+        .AddTransient(typeof(IRepository<>), typeof(Repository<>))
+        .AddTransient(typeof(IQueryRepository<>), typeof(QueryRepository<>))
+        .AddTransient(typeof(ICheckExistRepository<>), typeof(QueryRepository<>))
+        .AddTransient(typeof(ICountRepository<>), typeof(QueryRepository<>))
+        .AddTransient(typeof(IModifyRepository<>), typeof(ModifyRepository<>))
+        .AddTransient(typeof(ICrudRepository<>), typeof(CrudRepository<>))
         .AddTransient(typeof(IRepository<,>), typeof(Repository<,>))
         .AddTransient(typeof(IQueryRepository<,>), typeof(QueryRepository<,>))
         .AddTransient(typeof(IModifyRepository<,>), typeof(ModifyRepository<,>))

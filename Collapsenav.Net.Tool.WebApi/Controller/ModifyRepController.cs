@@ -6,18 +6,17 @@ using Microsoft.EntityFrameworkCore;
 namespace Collapsenav.Net.Tool.WebApi;
 [ApiController]
 [Route("[controller]")]
-public class ModifyRepController<TKey, T, CreateT> : ControllerBase, IModifyRepController<TKey, T, CreateT>
-    where T : class, IBaseEntity<TKey>
+public class ModifyRepController<T, CreateT> : ControllerBase, IModifyRepController<T, CreateT>
+    where T : class, IEntity
     where CreateT : IBaseCreate<T>
 {
-    protected readonly IModifyRepository<TKey, T> Repository;
+    protected readonly IModifyRepository<T> Repository;
     protected readonly IMapper Mapper;
-    public ModifyRepController(IModifyRepository<TKey, T> repository, IMapper mapper)
+    public ModifyRepController(IModifyRepository<T> repository, IMapper mapper)
     {
         Repository = repository;
         Mapper = mapper;
     }
-
     /// <summary>
     /// 添加(单个)
     /// </summary>
@@ -28,7 +27,48 @@ public class ModifyRepController<TKey, T, CreateT> : ControllerBase, IModifyRepC
         var result = await Repository.AddAsync(data);
         return result;
     }
+    /// <summary>
+    /// 添加(多个)
+    /// </summary>
+    [HttpPost, Route("AddRange")]
+    public virtual async Task<int> AddRangeAsync(IEnumerable<CreateT> entitys)
+    {
+        var result = await Repository.AddAsync(entitys.Select(item => Mapper.Map<T>(item)));
+        return result;
+    }
+    /// <summary>
+    /// 删除(单个 id)
+    /// </summary>
+    [HttpDelete, Route("{id}")]
+    public virtual async Task DeleteAsync(string id, [FromQuery] bool isTrue = false)
+    {
+        await Repository.DeleteAsync(id, isTrue);
+    }
 
+    [NonAction]
+    public void Dispose()
+    {
+        Repository.Save();
+    }
+
+}
+public class ModifyRepController<TKey, T, CreateT> : ModifyRepController<T, CreateT>, IModifyRepController<TKey, T, CreateT>
+    where T : class, IEntity<TKey>
+    where CreateT : IBaseCreate<T>
+{
+    protected new readonly IModifyRepository<TKey, T> Repository;
+    protected new readonly IMapper Mapper;
+    public ModifyRepController(IModifyRepository<TKey, T> repository, IMapper mapper) : base(repository, mapper)
+    {
+        Repository = repository;
+        Mapper = mapper;
+    }
+
+    [NonAction]
+    public override Task DeleteAsync(string id, [FromQuery] bool isTrue = false)
+    {
+        return base.DeleteAsync(id, isTrue);
+    }
     /// <summary>
     /// 删除(单个 id)
     /// </summary>
@@ -44,7 +84,7 @@ public class ModifyRepController<TKey, T, CreateT> : ControllerBase, IModifyRepC
     [HttpDelete]
     public virtual async Task<int> DeleteRangeAsync([FromQuery] IEnumerable<TKey> id, [FromQuery] bool isTrue = false)
     {
-        var result = await Repository.DeleteAsync(item => id.Contains(item.Id), isTrue);
+        var result = await Repository.DeleteAsync(id, isTrue);
         return result;
     }
 
@@ -55,23 +95,8 @@ public class ModifyRepController<TKey, T, CreateT> : ControllerBase, IModifyRepC
     public virtual async Task UpdateAsync(TKey id, CreateT entity)
     {
         var data = Mapper.Map<T>(entity);
-        data.Id = id;
+        data.SetValue("Id", id);
         await Repository.UpdateAsync(data);
-    }
-
-    /// <summary>
-    /// 添加(多个)
-    /// </summary>
-    [HttpPost, Route("AddRange")]
-    public virtual async Task<int> AddRangeAsync(IEnumerable<CreateT> entitys)
-    {
-        var result = await Repository.AddAsync(entitys.Select(item => Mapper.Map<T>(item)));
-        return result;
-    }
-
-    public void Dispose()
-    {
-        Repository.Save();
     }
 }
 

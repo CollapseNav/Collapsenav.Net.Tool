@@ -7,6 +7,9 @@ public static class ControllerExt
     {
         services.AddRepository();
         services
+        .AddTransient(typeof(IModifyRepController<,>), typeof(ModifyRepController<,>))
+        .AddTransient(typeof(IQueryRepController<,>), typeof(QueryRepController<,>))
+        .AddTransient(typeof(ICrudRepController<,,>), typeof(CrudRepController<,,>))
         .AddTransient(typeof(IModifyRepController<,,>), typeof(ModifyRepController<,,>))
         .AddTransient(typeof(IQueryRepController<,,>), typeof(QueryRepController<,,>))
         .AddTransient(typeof(ICrudRepController<,,,>), typeof(CrudRepController<,,,>))

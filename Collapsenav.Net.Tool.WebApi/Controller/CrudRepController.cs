@@ -6,21 +6,20 @@ namespace Collapsenav.Net.Tool.WebApi;
 
 [ApiController]
 [Route("[controller]")]
-public class CrudRepController<TKey, T, CreateT, GetT> : ControllerBase, ICrudRepController<TKey, T, CreateT, GetT>
-    where T : class, IBaseEntity<TKey>
+public class CrudRepController<T, CreateT, GetT> : ControllerBase, ICrudRepController<T, CreateT, GetT>
+    where T : class, IEntity
     where CreateT : IBaseCreate<T>
     where GetT : IBaseGet<T>
 {
-    ICrudRepository<TKey, T> Repo;
-    IModifyRepController<TKey, T, CreateT> Write;
-    IQueryRepController<TKey, T, GetT> Read;
-    public CrudRepController(ICrudRepository<TKey, T> repo, IMapper mapper)
+    protected ICrudRepository<T> Repo;
+    protected IModifyRepController<T, CreateT> Write;
+    protected IQueryRepController<T, GetT> Read;
+    public CrudRepController(ICrudRepository<T> repo, IMapper mapper)
     {
         Repo = repo;
-        Write = new ModifyRepController<TKey, T, CreateT>(Repo, mapper);
-        Read = new QueryRepController<TKey, T, GetT>(Repo);
+        Write = new ModifyRepController<T, CreateT>(Repo, mapper);
+        Read = new QueryRepController<T, GetT>(Repo);
     }
-
     /// <summary>
     /// 添加(单个)
     /// </summary>
@@ -38,6 +37,67 @@ public class CrudRepController<TKey, T, CreateT, GetT> : ControllerBase, ICrudRe
     {
         return await Write.AddRangeAsync(entitys);
     }
+    /// <summary>
+    /// 带条件分页
+    /// </summary>
+    [HttpGet]
+    public virtual async Task<PageData<T>> QueryPageAsync([FromQuery] GetT input, [FromQuery] PageRequest page = null)
+    {
+        return await Read.QueryPageAsync(input, page);
+    }
+    /// <summary>
+    /// 带条件查询(不分页)
+    /// </summary>
+    [HttpGet, Route("Query")]
+    public virtual async Task<IEnumerable<T>> QueryAsync([FromQuery] GetT input)
+    {
+        return await Read.QueryAsync(input);
+    }
+    [NonAction]
+    public virtual void Dispose()
+    {
+        Repo.Save();
+        Write.Dispose();
+        // Read.Dispose();
+    }
+    [NonAction]
+    public virtual IQueryable<T> GetQuery(GetT input)
+    {
+        return Read.GetQuery(input);
+    }
+    /// <summary>
+    /// 查找(单个 id)
+    /// </summary>
+    [HttpGet, Route("{id}")]
+    public virtual async Task<T> QueryAsync(string id)
+    {
+        return await Read.QueryAsync(id);
+    }
+    /// <summary>
+    /// 查找(单个 id)
+    /// </summary>
+    [HttpDelete, Route("{id}")]
+    public virtual async Task DeleteAsync(string id, [FromQuery] bool isTrue = false)
+    {
+        await Write.DeleteAsync(id, isTrue);
+    }
+}
+[ApiController]
+[Route("[controller]")]
+public class CrudRepController<TKey, T, CreateT, GetT> : CrudRepController<T, CreateT, GetT>, ICrudRepController<TKey, T, CreateT, GetT>
+    where T : class, IEntity<TKey>
+    where CreateT : IBaseCreate<T>
+    where GetT : IBaseGet<T>
+{
+    protected new ICrudRepository<TKey, T> Repo;
+    protected new IModifyRepController<TKey, T, CreateT> Write;
+    protected new IQueryRepController<TKey, T, GetT> Read;
+    public CrudRepController(ICrudRepository<TKey, T> repo, IMapper mapper) : base(repo, mapper)
+    {
+        Repo = repo;
+        Write = new ModifyRepController<TKey, T, CreateT>(Repo, mapper);
+        Read = new QueryRepController<TKey, T, GetT>(Repo);
+    }
 
     /// <summary>
     /// 删除(单个 id)
@@ -46,6 +106,11 @@ public class CrudRepController<TKey, T, CreateT, GetT> : ControllerBase, ICrudRe
     public virtual async Task DeleteAsync(TKey id, [FromQuery] bool isTrue = false)
     {
         await Write.DeleteAsync(id, isTrue);
+    }
+    [NonAction]
+    public override Task DeleteAsync(string id, [FromQuery] bool isTrue = false)
+    {
+        return base.DeleteAsync(id, isTrue);
     }
 
     /// <summary>
@@ -65,17 +130,6 @@ public class CrudRepController<TKey, T, CreateT, GetT> : ControllerBase, ICrudRe
         await Write.UpdateAsync(id, entity);
     }
 
-    public virtual void Dispose()
-    {
-        Repo.Save();
-        Write.Dispose();
-        // Read.Dispose();
-    }
-    [NonAction]
-    public virtual IQueryable<T> GetQuery(GetT input)
-    {
-        return Read.GetQuery(input);
-    }
     /// <summary>
     /// 查找(单个 id)
     /// </summary>
@@ -84,13 +138,10 @@ public class CrudRepController<TKey, T, CreateT, GetT> : ControllerBase, ICrudRe
     {
         return await Read.QueryAsync(id);
     }
-    /// <summary>
-    /// 带条件查询(不分页)
-    /// </summary>
-    [HttpGet, Route("Query")]
-    public virtual async Task<IEnumerable<T>> QueryAsync([FromQuery] GetT input)
+    [NonAction]
+    public override Task<T> QueryAsync(string id)
     {
-        return await Read.QueryAsync(input);
+        return base.QueryAsync(id);
     }
     /// <summary>
     /// 根据Ids查询
@@ -107,13 +158,5 @@ public class CrudRepController<TKey, T, CreateT, GetT> : ControllerBase, ICrudRe
     public virtual async Task<IEnumerable<T>> QueryByIdsPostAsync(IEnumerable<TKey> ids)
     {
         return await Read.QueryByIdsPostAsync(ids);
-    }
-    /// <summary>
-    /// 带条件分页
-    /// </summary>
-    [HttpGet]
-    public virtual async Task<PageData<T>> QueryPageAsync([FromQuery] GetT input, [FromQuery] PageRequest page = null)
-    {
-        return await Read.QueryPageAsync(input, page);
     }
 }

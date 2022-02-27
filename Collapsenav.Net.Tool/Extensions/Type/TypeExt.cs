@@ -120,7 +120,7 @@ public static partial class TypeExt
     /// </summary>
     public static Dictionary<PropertyInfo, E> AttrValues<E>(this Type type) where E : Attribute
     {
-        var props = type.BuildInTypeProps().Where(item => item.CustomAttributes.Any(attr => attr.AttributeType == typeof(E)));
+        var props = type.Props().Where(item => item.CustomAttributes.Any(attr => attr.AttributeType == typeof(E)));
         var propData = props.Select(item => new KeyValuePair<PropertyInfo, E>(item, item.GetCustomAttribute<E>()))
         .ToDictionary(item => item.Key, item => item.Value);
         return propData;

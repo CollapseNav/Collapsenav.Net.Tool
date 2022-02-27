@@ -3,13 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Z.EntityFramework.Plus;
 
 namespace Collapsenav.Net.Tool.Data;
-public partial class ModifyRepository<TKey, T> : Repository<TKey, T>, IModifyRepository<TKey, T>
-    where T : class, IBaseEntity<TKey>, new()
+public partial class ModifyRepository<T> : Repository<T>, IModifyRepository<T>
+    where T : class, IEntity, new()
 {
     public ModifyRepository(DbContext db) : base(db)
     {
     }
-
     /// <summary>
     /// 添加数据(单个)
     /// </summary>
@@ -32,38 +31,6 @@ public partial class ModifyRepository<TKey, T> : Repository<TKey, T>, IModifyRep
         await Task.FromResult("");
     }
     /// <summary>
-    /// 根据id删除数据
-    /// </summary>
-    /// <param name="id">主键ID</param>
-    /// <param name="isTrue">是否真删</param>
-    public virtual async Task<int> DeleteAsync(IEnumerable<TKey> id, bool isTrue = false)
-    {
-        if (isTrue)
-            return await dbSet.Where(item => id.Contains(item.Id)).DeleteAsync();
-        return await dbSet.Where(item => id.Contains(item.Id)).UpdateAsync(entity => new T()
-        {
-            LastModificationTime = DateTime.Now,
-            IsDeleted = true
-        });
-    }
-    /// <summary>
-    /// 根据id删除数据
-    /// </summary>
-    /// <param name="id">主键ID</param>
-    /// <param name="isTrue">是否真删</param>
-    public virtual async Task<bool> DeleteAsync(TKey id, bool isTrue = false)
-    {
-        var entity = await dbSet.FindAsync(id);
-        if (isTrue)
-            dbSet.Remove(entity);
-        else
-        {
-            entity.SoftDelete();
-            await UpdateAsync(entity);
-        }
-        return true;
-    }
-    /// <summary>
     /// 添加数据(集合)
     /// </summary>
     /// <param name="entityList">新的数据集合</param>
@@ -81,11 +48,31 @@ public partial class ModifyRepository<TKey, T> : Repository<TKey, T>, IModifyRep
     /// <param name="isTrue">是否真删</param>
     public virtual async Task<int> DeleteAsync(Expression<Func<T, bool>> exp, bool isTrue = false)
     {
-        if (isTrue)
+        return await dbSet.Where(exp).DeleteAsync();
+    }
+    /// <summary>
+    /// 根据id删除数据
+    /// </summary>
+    /// <param name="id">主键ID</param>
+    /// <param name="isTrue">是否真删</param>
+    public virtual async Task<bool> DeleteAsync(object id, bool isTrue = false)
+    {
+        var entity = KeyType().Name switch
         {
-            return await dbSet.Where(exp).DeleteAsync();
+            nameof(Int32) => await dbSet.FindAsync(int.Parse(id.ToString())),
+            nameof(Int64) => await dbSet.FindAsync(long.Parse(id.ToString())),
+            nameof(String) => await dbSet.FindAsync(id.ToString()),
+            nameof(Guid) => await dbSet.FindAsync(Guid.Parse(id.ToString())),
+            _ => null,
+        };
+        if (isTrue)
+            dbSet.Remove(entity);
+        else
+        {
+            entity.SoftDelete();
+            await UpdateAsync(entity);
         }
-        return await UpdateAsync(exp, entity => new T { IsDeleted = true, LastModificationTime = DateTime.Now });
+        return true;
     }
     /// <summary>
     /// 实现按需要只更新部分更新
@@ -94,5 +81,47 @@ public partial class ModifyRepository<TKey, T> : Repository<TKey, T>, IModifyRep
     public virtual async Task<int> UpdateAsync(Expression<Func<T, bool>> where, Expression<Func<T, T>> entity)
     {
         return await dbSet.Where(where).UpdateAsync(entity);
+    }
+
+}
+public partial class ModifyRepository<TKey, T> : ModifyRepository<T>, IModifyRepository<TKey, T>
+    where T : class, IBaseEntity<TKey>, new()
+{
+    public ModifyRepository(DbContext db) : base(db) { }
+
+    /// <summary>
+    /// 根据id删除数据
+    /// </summary>
+    /// <param name="id">主键ID</param>
+    /// <param name="isTrue">是否真删</param>
+    public virtual async Task<int> DeleteAsync(IEnumerable<TKey> id, bool isTrue = false)
+    {
+        if (isTrue)
+            return await dbSet.Where(item => id.Contains(item.Id)).DeleteAsync();
+        return await dbSet.Where(item => id.Contains(item.Id)).UpdateAsync(entity => new
+        {
+            LastModificationTime = DateTime.Now,
+            IsDeleted = true
+        });
+    }
+    /// <summary>
+    /// 根据id删除数据
+    /// </summary>
+    /// <param name="id">主键ID</param>
+    /// <param name="isTrue">是否真删</param>
+    public virtual async Task<bool> DeleteAsync(TKey id, bool isTrue = false)
+    {
+        return await base.DeleteAsync(id, isTrue);
+    }
+    /// <summary>
+    /// 有条件地删除数据
+    /// </summary>
+    /// <param name="exp">筛选条件</param>
+    /// <param name="isTrue">是否真删</param>
+    public override async Task<int> DeleteAsync(Expression<Func<T, bool>> exp, bool isTrue = false)
+    {
+        if (isTrue)
+            return await dbSet.Where(exp).DeleteAsync();
+        return await dbSet.Where(exp).UpdateAsync(entity => new { IsDeleted = true, LastModificationTime = DateTime.Now });
     }
 }

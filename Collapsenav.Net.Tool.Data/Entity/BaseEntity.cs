@@ -35,4 +35,9 @@ public partial class BaseEntity<TKey> : IBaseEntity<TKey>
         if (IsDeleted) return null;
         return this;
     }
+
+    public Type KeyType()
+    {
+        return typeof(TKey);
+    }
 }
