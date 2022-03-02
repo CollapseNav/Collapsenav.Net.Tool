@@ -83,29 +83,29 @@ public static partial class SecurityExt
     /// <summary>
     /// Des加密
     /// </summary>
-    public static string DesEn(this string input, string key = DesTool.DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7)
+    public static string DesEn(this string input, string key = DesTool.DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, int level = 8)
     {
-        return DesTool.Encrypt(input, key, mode, padding);
+        return DesTool.Encrypt(input, key, mode, padding, level: level);
     }
     /// <summary>
     /// Des解密
     /// </summary>
-    public static string DesDe(this string input, string key = DesTool.DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7)
+    public static string DesDe(this string input, string key = DesTool.DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, int level = 8)
     {
-        return DesTool.Decrypt(input, key, mode, padding);
+        return DesTool.Decrypt(input, key, mode, padding, level: level);
     }
     /// <summary>
     /// 3Des加密
     /// </summary>
-    public static string TripleDesEn(this string input, string key = TripleDesTool.DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7)
+    public static string TripleDesEn(this string input, string key = TripleDesTool.DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, int level = 24)
     {
-        return TripleDesTool.Encrypt(input, key, mode, padding);
+        return TripleDesTool.Encrypt(input, key, mode, padding, level: level);
     }
     /// <summary>
     /// 3Des解密
     /// </summary>
-    public static string TripleDesDe(this string input, string key = TripleDesTool.DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7)
+    public static string TripleDesDe(this string input, string key = TripleDesTool.DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, int level = 24)
     {
-        return TripleDesTool.Decrypt(input, key, mode, padding);
+        return TripleDesTool.Decrypt(input, key, mode, padding, level: level);
     }
 }

@@ -11,8 +11,8 @@ public class ModifyRepController<T, CreateT> : ControllerBase, IModifyRepControl
     where CreateT : IBaseCreate<T>
 {
     protected readonly IModifyRepository<T> Repository;
-    protected readonly IMapper Mapper;
-    public ModifyRepController(IModifyRepository<T> repository, IMapper mapper)
+    protected readonly IMap Mapper;
+    public ModifyRepController(IModifyRepository<T> repository, IMap mapper)
     {
         Repository = repository;
         Mapper = mapper;
@@ -57,8 +57,8 @@ public class ModifyRepController<TKey, T, CreateT> : ModifyRepController<T, Crea
     where CreateT : IBaseCreate<T>
 {
     protected new readonly IModifyRepository<TKey, T> Repository;
-    protected new readonly IMapper Mapper;
-    public ModifyRepController(IModifyRepository<TKey, T> repository, IMapper mapper) : base(repository, mapper)
+    protected new readonly IMap Mapper;
+    public ModifyRepController(IModifyRepository<TKey, T> repository, IMap mapper) : base(repository, mapper)
     {
         Repository = repository;
         Mapper = mapper;

@@ -14,7 +14,7 @@ public class CrudRepController<T, CreateT, GetT> : ControllerBase, ICrudRepContr
     protected ICrudRepository<T> Repo;
     protected IModifyRepController<T, CreateT> Write;
     protected IQueryRepController<T, GetT> Read;
-    public CrudRepController(ICrudRepository<T> repo, IMapper mapper)
+    public CrudRepController(ICrudRepository<T> repo, IMap mapper)
     {
         Repo = repo;
         Write = new ModifyRepController<T, CreateT>(Repo, mapper);
@@ -92,7 +92,7 @@ public class CrudRepController<TKey, T, CreateT, GetT> : CrudRepController<T, Cr
     protected new ICrudRepository<TKey, T> Repo;
     protected new IModifyRepController<TKey, T, CreateT> Write;
     protected new IQueryRepController<TKey, T, GetT> Read;
-    public CrudRepController(ICrudRepository<TKey, T> repo, IMapper mapper) : base(repo, mapper)
+    public CrudRepController(ICrudRepository<TKey, T> repo, IMap mapper) : base(repo, mapper)
     {
         Repo = repo;
         Write = new ModifyRepController<TKey, T, CreateT>(Repo, mapper);
