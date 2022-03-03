@@ -118,20 +118,51 @@ public class StringExtTest
     }
 
     [Fact]
-    public void NullOrEmptyTest()
+    public void NullTest()
     {
-        string empty = "";
-        string notEmpty = "NotEmpty";
-        string whiteSpace = "   ";
-        Assert.True(empty.IsNull() && empty.IsEmpty());
-        Assert.True(notEmpty.NotEmpty() && notEmpty.NotNull());
-        Assert.True(whiteSpace.IsEmpty());
-        Assert.False(empty.NotEmpty());
-        Assert.False(whiteSpace.NotNull());
+        string nullString = null;
+        string notNull = "NotNull";
 
-        Assert.True(empty.IsNull("233") == "233");
-        Assert.False(notEmpty.IsEmpty("233") == "233");
+        Assert.True(nullString.IsNull());
+        Assert.True(notNull.NotNull());
+
+        Assert.False(notNull.IsNull());
+        Assert.False(nullString.NotNull());
+
+        Assert.True(nullString.IsNull("233") == "233");
+        Assert.True(notNull.IsNull("233") == "NotNull");
+    }
+
+    [Fact]
+    public void EmptyTest()
+    {
+        string emptyString = "";
+        string notEmpty = "NotEmpty";
+
+        Assert.True(emptyString.IsEmpty());
+        Assert.True(notEmpty.NotEmpty());
+
+        Assert.False(notEmpty.IsEmpty());
+        Assert.False(emptyString.NotEmpty());
+
+        Assert.True(emptyString.IsEmpty("233") == "233");
         Assert.True(notEmpty.IsEmpty("233") == "NotEmpty");
+    }
+
+    [Fact]
+    public void WhiteTest()
+    {
+        string whiteString = "   ";
+        string notWhite = "NotWhite";
+
+        Assert.True(whiteString.IsWhite());
+        Assert.True(notWhite.NotWhite());
+
+        Assert.False(notWhite.IsWhite());
+        Assert.False(whiteString.NotWhite());
+
+        Assert.True(whiteString.IsWhite("233") == "233");
+        Assert.True(notWhite.IsWhite("233") == "NotWhite");
     }
 
     [Fact]

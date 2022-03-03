@@ -2,7 +2,7 @@ using Collapsenav.Net.Tool.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Collapsenav.Net.Tool.WebApi;
-public interface IQueryRepController<T, GetT> : IRepController
+public interface IQueryController<T, GetT> : IController
     where T : IEntity
     where GetT : IBaseGet<T>
 {
@@ -24,7 +24,7 @@ public interface IQueryRepController<T, GetT> : IRepController
     [HttpGet, Route("{id}")]
     Task<T> QueryAsync(string id);
 }
-public interface IQueryRepController<TKey, T, GetT> : IQueryRepController<T, GetT>
+public interface IQueryController<TKey, T, GetT> : IQueryController<T, GetT>
     where T : IEntity<TKey>
     where GetT : IBaseGet<T>
 {

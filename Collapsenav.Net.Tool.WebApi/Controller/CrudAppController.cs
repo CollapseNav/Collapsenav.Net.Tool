@@ -6,19 +6,19 @@ namespace Collapsenav.Net.Tool.WebApi;
 
 [ApiController]
 [Route("[controller]")]
-public class CrudRepController<T, CreateT, GetT> : ControllerBase, ICrudController<T, CreateT, GetT>
+public class CrudAppController<T, CreateT, GetT> : ControllerBase, ICrudController<T, CreateT, GetT>
     where T : class, IEntity
     where CreateT : IBaseCreate<T>
     where GetT : IBaseGet<T>
 {
-    protected ICrudRepository<T> Repo;
+    protected ICrudApplication<T, CreateT, GetT> App;
     protected IModifyController<T, CreateT> Write;
     protected IQueryController<T, GetT> Read;
-    public CrudRepController(ICrudRepository<T> repo, IMap mapper)
+    public CrudAppController(ICrudApplication<T, CreateT, GetT> app, IMap mapper)
     {
-        Repo = repo;
-        Write = new ModifyRepController<T, CreateT>(Repo, mapper);
-        Read = new QueryRepController<T, GetT>(Repo);
+        App = app;
+        Write = new ModifyAppController<T, CreateT>(App, mapper);
+        Read = new QueryAppController<T, GetT>(App);
     }
     /// <summary>
     /// 添加(单个)
@@ -56,8 +56,7 @@ public class CrudRepController<T, CreateT, GetT> : ControllerBase, ICrudControll
     [NonAction]
     public virtual void Dispose()
     {
-        Repo.Save();
-        // Read.Dispose();
+        Write.Dispose();
     }
     [NonAction]
     public virtual IQueryable<T> GetQuery(GetT input)
@@ -83,19 +82,19 @@ public class CrudRepController<T, CreateT, GetT> : ControllerBase, ICrudControll
 }
 [ApiController]
 [Route("[controller]")]
-public class CrudRepController<TKey, T, CreateT, GetT> : CrudRepController<T, CreateT, GetT>, ICrudController<TKey, T, CreateT, GetT>
+public class CrudAppController<TKey, T, CreateT, GetT> : CrudAppController<T, CreateT, GetT>, ICrudController<TKey, T, CreateT, GetT>
     where T : class, IEntity<TKey>
     where CreateT : IBaseCreate<T>
     where GetT : IBaseGet<T>
 {
-    protected new ICrudRepository<TKey, T> Repo;
+    protected new ICrudApplication<TKey, T, CreateT, GetT> App;
     protected new IModifyController<TKey, T, CreateT> Write;
     protected new IQueryController<TKey, T, GetT> Read;
-    public CrudRepController(ICrudRepository<TKey, T> repo, IMap mapper) : base(repo, mapper)
+    public CrudAppController(ICrudApplication<TKey, T, CreateT, GetT> app, IMap mapper) : base(app, mapper)
     {
-        Repo = repo;
-        Write = new ModifyRepController<TKey, T, CreateT>(Repo, mapper);
-        Read = new QueryRepController<TKey, T, GetT>(Repo);
+        App = app;
+        Write = new ModifyAppController<TKey, T, CreateT>(App, mapper);
+        Read = new QueryAppController<TKey, T, GetT>(App);
     }
 
     /// <summary>

@@ -5,21 +5,57 @@ namespace Collapsenav.Net.Tool.WebApi;
 public static class ControllerExt
 {
     /// <summary>
-    /// 注册泛型controller
+    /// 注册泛型controller(基于Repository)
     /// </summary>
     public static IServiceCollection AddRepController(this IServiceCollection services)
     {
-        services.AddRepository();
         services
-        .AddTransient(typeof(IModifyRepController<,>), typeof(ModifyRepController<,>))
-        .AddTransient(typeof(IQueryRepController<,>), typeof(QueryRepController<,>))
-        .AddTransient(typeof(ICrudRepController<,,>), typeof(CrudRepController<,,>))
-        .AddTransient(typeof(IModifyRepController<,,>), typeof(ModifyRepController<,,>))
-        .AddTransient(typeof(IQueryRepController<,,>), typeof(QueryRepController<,,>))
-        .AddTransient(typeof(ICrudRepController<,,,>), typeof(CrudRepController<,,,>))
+        .AddRepository()
+        .AddTransient(typeof(IModifyController<,>), typeof(ModifyRepController<,>))
+        .AddTransient(typeof(IQueryController<,>), typeof(QueryRepController<,>))
+        .AddTransient(typeof(ICrudController<,,>), typeof(CrudRepController<,,>))
+        .AddTransient(typeof(IModifyController<,,>), typeof(ModifyRepController<,,>))
+        .AddTransient(typeof(IQueryController<,,>), typeof(QueryRepController<,,>))
+        .AddTransient(typeof(ICrudController<,,,>), typeof(CrudRepController<,,,>))
         .AddMap()
         ;
+        return services;
+    }
 
+    /// <summary>
+    /// 注册泛型controller(基于Application)
+    /// </summary>
+    public static IServiceCollection AddAppController(this IServiceCollection services)
+    {
+        services
+        .AddRepository()
+        .AddApplication()
+        .AddTransient(typeof(IModifyController<,>), typeof(ModifyAppController<,>))
+        .AddTransient(typeof(IQueryController<,>), typeof(QueryAppController<,>))
+        .AddTransient(typeof(ICrudController<,,>), typeof(CrudAppController<,,>))
+        .AddTransient(typeof(IModifyController<,,>), typeof(ModifyAppController<,,>))
+        .AddTransient(typeof(IQueryController<,,>), typeof(QueryAppController<,,>))
+        .AddTransient(typeof(ICrudController<,,,>), typeof(CrudAppController<,,,>))
+        .AddMap()
+        ;
+        return services;
+    }
+
+    /// <summary>
+    /// 注册泛型application
+    /// </summary>
+    public static IServiceCollection AddApplication(this IServiceCollection services)
+    {
+        services.AddRepository();
+        services
+        .AddTransient(typeof(IModifyApplication<,>), typeof(ModifyRepApplication<,>))
+        .AddTransient(typeof(IQueryApplication<,>), typeof(QueryRepApplication<,>))
+        .AddTransient(typeof(ICrudApplication<,,>), typeof(CrudRepApplication<,,>))
+        .AddTransient(typeof(IModifyApplication<,,>), typeof(ModifyRepApplication<,,>))
+        .AddTransient(typeof(IQueryApplication<,,>), typeof(QueryRepApplication<,,>))
+        .AddTransient(typeof(ICrudApplication<,,,>), typeof(CrudRepApplication<,,,>))
+        .AddMap()
+        ;
         return services;
     }
     /// <summary>
