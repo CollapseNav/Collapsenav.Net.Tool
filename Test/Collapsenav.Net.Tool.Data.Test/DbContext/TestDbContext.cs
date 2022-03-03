@@ -10,3 +10,13 @@ public class TestDbContext : DbContext
     {
     }
 }
+
+public class TestNotBaseDbContext : DbContext
+{
+    public DbSet<TestNotBaseEntity> TestNotBases { get; set; }
+    public DbSet<TestNotBaseQueryEntity> TestNotBaseQuerys { get; set; }
+    public DbSet<TestNotBaseModifyEntity> TestNotBaseModifys { get; set; }
+    public TestNotBaseDbContext(DbContextOptions<TestNotBaseDbContext> options) : base(options)
+    {
+    }
+}

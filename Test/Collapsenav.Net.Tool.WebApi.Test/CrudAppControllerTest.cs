@@ -2,18 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Collapsenav.Net.Tool.Data;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Collapsenav.Net.Tool.WebApi.Test;
 [TestCaseOrderer("Collapsenav.Net.Tool.WebApi.Test.TestOrders", "Collapsenav.Net.Tool.WebApi.Test")]
-public class CrudRepControllerTest
+public class CrudAppControllerTest
 {
     protected readonly IServiceProvider Provider;
-    public CrudRepControllerTest()
+    public CrudAppControllerTest()
     {
-        Provider = DIConfig.GetProvider();
+        Provider = DIConfig.GetAppProvider();
     }
     protected T GetService<T>()
     {

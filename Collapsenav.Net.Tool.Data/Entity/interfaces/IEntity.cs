@@ -17,7 +17,6 @@ public interface IEntity
     }
 #endif
 }
-
 public interface IEntity<TKey> : IEntity
 {
 }

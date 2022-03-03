@@ -15,6 +15,17 @@ public class DIConfig
         .AddRepository()
         .BuildServiceProvider();
     }
+    public static ServiceProvider GetNotBaseProvider()
+    {
+        return new ServiceCollection()
+        .AddDbContext<TestNotBaseDbContext>(options =>
+        {
+            options.UseSqlite("Data Source = Test.db;");
+        })
+        .AddTransient(typeof(DbContext), typeof(TestNotBaseDbContext))
+        .AddRepository()
+        .BuildServiceProvider();
+    }
     public static ServiceProvider GetTestRepositoryProvider()
     {
         return new ServiceCollection()

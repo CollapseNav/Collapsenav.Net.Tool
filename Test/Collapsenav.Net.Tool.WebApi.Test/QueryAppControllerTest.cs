@@ -6,13 +6,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Collapsenav.Net.Tool.WebApi.Test;
-public class QueryControllerTest
+public class QueryAppControllerTest
 {
     protected readonly IServiceProvider Provider;
     protected readonly IQueryController<int, TestQueryEntity, TestQueryEntityGet> RepController;
-    public QueryControllerTest()
+    public QueryAppControllerTest()
     {
-        Provider = DIConfig.GetProvider();
+        Provider = DIConfig.GetAppProvider();
         RepController = GetService<IQueryController<int, TestQueryEntity, TestQueryEntityGet>>();
     }
     protected T GetService<T>()
@@ -56,7 +56,7 @@ public class QueryControllerTest
         data = await RepController.QueryPageAsync(new TestQueryEntityGet { Number = 233 }, new PageRequest { Index = 2, Max = 3 });
         Assert.True(data.Length == 3);
         Assert.True(data.Total == 8);
-        data = await RepController.QueryPageAsync(new TestQueryEntityGet { Number = 233  }, new PageRequest { Index = 3, Max = 3 });
+        data = await RepController.QueryPageAsync(new TestQueryEntityGet { Number = 233 }, new PageRequest { Index = 3, Max = 3 });
         Assert.True(data.Length == 2);
         Assert.True(data.Total == 8);
     }

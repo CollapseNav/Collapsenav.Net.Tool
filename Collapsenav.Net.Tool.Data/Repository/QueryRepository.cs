@@ -38,7 +38,7 @@ public class QueryRepository<T> : Repository<T>, IQueryRepository<T> where T : c
     /// </summary>
     public virtual async Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>> exp = null)
     {
-        return await Query(exp).ToListAsync();
+        return await Query(exp)?.ToListAsync();
     }
 
     public async Task<PageData<T>> QueryPageAsync(Expression<Func<T, bool>> exp, PageRequest page = null)

@@ -28,7 +28,6 @@ public static class ControllerExt
     public static IServiceCollection AddAppController(this IServiceCollection services)
     {
         services
-        .AddRepository()
         .AddApplication()
         .AddTransient(typeof(IModifyController<,>), typeof(ModifyAppController<,>))
         .AddTransient(typeof(IQueryController<,>), typeof(QueryAppController<,>))
@@ -46,8 +45,8 @@ public static class ControllerExt
     /// </summary>
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        services.AddRepository();
         services
+        .AddRepository()
         .AddTransient(typeof(IModifyApplication<,>), typeof(ModifyRepApplication<,>))
         .AddTransient(typeof(IQueryApplication<,>), typeof(QueryRepApplication<,>))
         .AddTransient(typeof(ICrudApplication<,,>), typeof(CrudRepApplication<,,>))

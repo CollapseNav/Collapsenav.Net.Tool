@@ -37,3 +37,44 @@ public class TestModifyEntityCreate : BaseCreate<TestModifyEntity>
         IsTest = isTest;
     }
 }
+
+
+
+public class TestNotBaseEntityCreate : BaseCreate<TestNotBaseEntity>
+{
+    public string Code { get; set; }
+    public int? Number { get; set; }
+    public bool? IsTest { get; set; }
+    public TestNotBaseEntityCreate(string code, int? number, bool? isTest)
+    {
+        Code = code;
+        Number = number;
+        IsTest = isTest;
+    }
+}
+
+public class TestNotBaseQueryEntityCreate : BaseCreate<TestNotBaseQueryEntity>
+{
+    public string Code { get; set; }
+    public int? Number { get; set; }
+    public bool? IsTest { get; set; }
+    public TestNotBaseQueryEntityCreate(string code, int? number, bool? isTest)
+    {
+        Code = code;
+        Number = number;
+        IsTest = isTest;
+    }
+}
+
+public class TestNotBaseModifyEntityCreate : BaseCreate<TestNotBaseModifyEntity>
+{
+    public string Code { get; set; }
+    public int? Number { get; set; }
+    public bool? IsTest { get; set; }
+    public TestNotBaseModifyEntityCreate(string code, int? number, bool? isTest)
+    {
+        Code = code;
+        Number = number;
+        IsTest = isTest;
+    }
+}

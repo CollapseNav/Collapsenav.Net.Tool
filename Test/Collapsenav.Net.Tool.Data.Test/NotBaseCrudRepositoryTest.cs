@@ -7,14 +7,14 @@ using Xunit;
 
 namespace Collapsenav.Net.Tool.Data.Test;
 [TestCaseOrderer("Collapsenav.Net.Tool.Data.Test.TestOrders", "Collapsenav.Net.Tool.Data.Test")]
-public class CrudRepositoryTest
+public class NotBaseCrudRepositoryTest
 {
     protected readonly IServiceProvider Provider;
-    protected readonly ICrudRepository<int, TestQueryEntity> Repository;
-    public CrudRepositoryTest()
+    protected readonly ICrudRepository<TestNotBaseQueryEntity> Repository;
+    public NotBaseCrudRepositoryTest()
     {
-        Provider = DIConfig.GetProvider();
-        Repository = GetService<ICrudRepository<int, TestQueryEntity>>();
+        Provider = DIConfig.GetNotBaseProvider();
+        Repository = GetService<ICrudRepository<TestNotBaseQueryEntity>>();
     }
     protected T GetService<T>()
     {
@@ -48,17 +48,6 @@ public class CrudRepositoryTest
         Assert.False((await Repository.CountAsync(item => item.Id < 4)) == 4);
     }
 
-    [Fact, Order(34)]
-    public async Task CrudRepositoryQueryByIdsTest()
-    {
-        var ids = new[] { 1, 3, 5, 7, 9 };
-        var data = await Repository.QueryAsync(ids);
-        Assert.True(data.Count() == 5);
-        ids = new[] { 2, 6, 8 };
-        data = await Repository.QueryAsync(ids);
-        Assert.True(data.Count() == 3);
-    }
-
     [Fact, Order(35)]
     public async Task CrudRepositoryQueryPageTest()
     {
@@ -76,10 +65,10 @@ public class CrudRepositoryTest
         Assert.True(data.Data.First().Id == 10);
     }
 
-    [Fact, Order(41)]
+    [Fact, Order(61)]
     public async Task CrudRepositoryAddTest()
     {
-        var entitys = new List<TestQueryEntity>{
+        var entitys = new List<TestNotBaseQueryEntity>{
                 new (11,"23333",2333,true),
                 new (12,"23333",2333,true),
                 new (13,"23333",2333,true),
@@ -97,46 +86,41 @@ public class CrudRepositoryTest
         Assert.True(data.Count() == 20);
     }
 
-    [Fact, Order(42)]
+    [Fact, Order(62)]
     public async Task CrudRepositoryUpdateTest()
     {
-        var updateCount = await Repository.UpdateAsync(item => item.Id > 18, entity => new TestQueryEntity { Number = 123 });
+        var updateCount = await Repository.UpdateAsync(item => item.Id > 18, entity => new TestNotBaseQueryEntity { Number = 123 });
         await Repository.SaveAsync();
         var numberEqual123 = await Repository.QueryAsync(item => item.Number == 123);
         Assert.True(updateCount == 2);
         Assert.True(numberEqual123.Count() == 2);
     }
 
-    [Fact, Order(43)]
+    [Fact, Order(63)]
     public async Task ModifyRepositorySoftDeleteTest()
     {
         var delCount = await Repository.DeleteAsync(item => item.Id < 11, false);
         await Repository.SaveAsync();
-        Assert.True(delCount == 10);
+        Assert.True(delCount == 0);
         await Repository.DeleteAsync(11, false);
         Repository.Save();
-        await Repository.DeleteAsync(new[] { 12 }, false);
-        Repository.Save();
-        var leftData = await Repository.QueryAsync(item => item.IsDeleted != true);
-        Assert.True(leftData.Count() == 8);
-        leftData = await Repository.QueryAsync(item => true);
+        var leftData = await Repository.QueryAsync();
         Assert.True(leftData.Count() == 20);
     }
-    [Fact, Order(44)]
+    [Fact, Order(64)]
     public async Task CrudRepositoryDeleteTest()
     {
         var delCount = await Repository.DeleteAsync(item => item.Id < 11, true);
         await Repository.SaveAsync();
         Assert.True(delCount == 10);
         await Repository.DeleteAsync(11, true);
+        await Repository.DeleteAsync(12, true);
         Repository.Save();
-        await Repository.DeleteAsync(new[] { 12 }, true);
-        Repository.Save();
-        var leftData = await Repository.QueryAsync(item => item.IsDeleted != true);
+        var leftData = await Repository.QueryAsync(item => true);
         Assert.True(leftData.Count() == 8);
     }
 
-    [Fact, Order(45)]
+    [Fact, Order(65)]
     public async Task CrudRepositoryDeleteAllTest()
     {
         var delCount = await Repository.DeleteAsync(item => true, true);

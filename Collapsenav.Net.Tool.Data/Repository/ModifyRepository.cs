@@ -48,7 +48,9 @@ public partial class ModifyRepository<T> : Repository<T>, IModifyRepository<T>
     /// <param name="isTrue">是否真删</param>
     public virtual async Task<int> DeleteAsync(Expression<Func<T, bool>> exp, bool isTrue = false)
     {
-        return await dbSet.Where(exp).DeleteAsync();
+        if (isTrue)
+            return await dbSet.Where(exp).DeleteAsync();
+        return 0;
     }
     /// <summary>
     /// 根据id删除数据

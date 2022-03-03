@@ -7,12 +7,12 @@ using Xunit;
 
 namespace Collapsenav.Net.Tool.WebApi.Test;
 [TestCaseOrderer("Collapsenav.Net.Tool.WebApi.Test.TestOrders", "Collapsenav.Net.Tool.WebApi.Test")]
-public class ModifyRepControllerTest
+public class ModifyAppControllerTest
 {
     protected readonly IServiceProvider Provider;
-    public ModifyRepControllerTest()
+    public ModifyAppControllerTest()
     {
-        Provider = DIConfig.GetProvider();
+        Provider = DIConfig.GetAppProvider();
     }
     protected T GetService<T>()
     {
