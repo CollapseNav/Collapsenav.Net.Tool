@@ -8,7 +8,7 @@ public partial class StringExt
     /// <summary>
     /// 是空的
     /// </summary>
-    public static bool IsNull(this string str) => string.IsNullOrWhiteSpace(str);
+    public static bool IsNull(this string str) => string.IsNullOrEmpty(str);
     /// <summary>
     /// 若空则返回value
     /// </summary>
@@ -16,7 +16,7 @@ public partial class StringExt
     /// <summary>
     /// 是空的
     /// </summary>
-    public static bool IsEmpty(this string str) => string.IsNullOrWhiteSpace(str);
+    public static bool IsEmpty(this string str) => string.IsNullOrEmpty(str);
     /// <summary>
     /// 若空则返回value
     /// </summary>
@@ -30,6 +30,18 @@ public partial class StringExt
     /// </summary>
     public static bool NotEmpty(this string str) => !str.IsEmpty();
     /// <summary>
+    /// 是空白字符串
+    /// </summary>
+    public static bool IsWhite(this string str) => string.IsNullOrWhiteSpace(str);
+    /// <summary>
+    /// 不是空白字符串
+    /// </summary>
+    public static bool NotWhite(this string str) => !str.IsWhite();
+    /// <summary>
+    /// 若是空白字符串则返回value
+    /// </summary>
+    public static string IsWhite(this string str, string value) => str.IsWhite() ? value : str;
+    /// <summary>
     /// 全包含
     /// </summary>
     /// <param name="origin">源字符串</param>
@@ -37,7 +49,6 @@ public partial class StringExt
     /// <param name="ignoreCase">是否忽略大小写(默认不忽略)</param>
     public static bool AllContain(this string origin, IEnumerable<string> keys, bool ignoreCase = false)
     {
-
 #if NETSTANDARD2_0
         return keys.All(key => origin.ToLower().Contains(key.ToLower()));
 #else
