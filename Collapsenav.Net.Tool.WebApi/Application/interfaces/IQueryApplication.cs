@@ -18,6 +18,9 @@ public interface IQueryApplication<T, GetT> : IApplication
     /// 查找(单个 id)
     /// </summary>
     Task<T> QueryAsync(string id);
+    Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT input) where NewGetT : IBaseGet<T>;
+    Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(GetT input);
+    Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>(NewGetT input) where NewGetT : IBaseGet<T>;
 }
 public interface IQueryApplication<TKey, T, GetT> : IQueryApplication<T, GetT>
     where T : IEntity<TKey>

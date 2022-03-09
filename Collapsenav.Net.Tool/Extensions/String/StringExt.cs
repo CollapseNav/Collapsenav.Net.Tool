@@ -178,6 +178,12 @@ public static partial class StringExt
             origin += value;
         return origin;
     }
+
+    public static string AddIf(this string origin, string check, string value)
+    {
+        return check.IsEmpty() ? origin : origin + value;
+    }
+
     public static string Add(this string origin, string value)
     {
         return origin + value;

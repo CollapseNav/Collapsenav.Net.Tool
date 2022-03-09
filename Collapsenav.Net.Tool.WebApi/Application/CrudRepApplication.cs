@@ -14,7 +14,7 @@ public class CrudRepApplication<T, CreateT, GetT> : ICrudApplication<T, CreateT,
     {
         Repo = repo;
         Write = new ModifyRepApplication<T, CreateT>(Repo, mapper);
-        Read = new QueryRepApplication<T, GetT>(Repo);
+        Read = new QueryRepApplication<T, GetT>(Repo, mapper);
     }
     /// <summary>
     /// 添加(单个)
@@ -67,6 +67,21 @@ public class CrudRepApplication<T, CreateT, GetT> : ICrudApplication<T, CreateT,
     {
         await Write.DeleteAsync(id, isTrue);
     }
+
+    public virtual async Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT input) where NewGetT : IBaseGet<T>
+    {
+        return await Read.QueryAsync(input);
+    }
+
+    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(GetT input)
+    {
+        return await Read.QueryAsync<ReturnT>(input);
+    }
+
+    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>(NewGetT input) where NewGetT : IBaseGet<T>
+    {
+        return await Read.QueryAsync<NewGetT, ReturnT>(input);
+    }
 }
 public class CrudRepApplication<TKey, T, CreateT, GetT> : CrudRepApplication<T, CreateT, GetT>, ICrudApplication<TKey, T, CreateT, GetT>
     where T : class, IEntity<TKey>
@@ -80,7 +95,7 @@ public class CrudRepApplication<TKey, T, CreateT, GetT> : CrudRepApplication<T, 
     {
         Repo = repo;
         Write = new ModifyRepApplication<TKey, T, CreateT>(Repo, mapper);
-        Read = new QueryRepApplication<TKey, T, GetT>(Repo);
+        Read = new QueryRepApplication<TKey, T, GetT>(Repo, mapper);
     }
 
     /// <summary>
@@ -90,6 +105,7 @@ public class CrudRepApplication<TKey, T, CreateT, GetT> : CrudRepApplication<T, 
     {
         await Write.DeleteAsync(id, isTrue);
     }
+
     public override Task DeleteAsync(string id, bool isTrue = false)
     {
         return base.DeleteAsync(id, isTrue);

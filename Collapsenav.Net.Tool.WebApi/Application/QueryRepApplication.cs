@@ -8,9 +8,11 @@ public class QueryRepApplication<T, GetT> : IQueryApplication<T, GetT>
     where GetT : IBaseGet<T>
 {
     protected readonly IQueryRepository<T> Repository;
-    public QueryRepApplication(IQueryRepository<T> repository) : base()
+    protected readonly IMap Mapper;
+    public QueryRepApplication(IQueryRepository<T> repository, IMap mapper) : base()
     {
         Repository = repository;
+        Mapper = mapper;
     }
     /// <summary>
     /// 带条件分页
@@ -26,22 +28,33 @@ public class QueryRepApplication<T, GetT> : IQueryApplication<T, GetT>
     /// 查找(单个 id)
     /// </summary>
     public virtual async Task<T> QueryAsync(string id) => await Repository.QueryAsync(id);
+
+    public virtual async Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT input) where NewGetT : IBaseGet<T>
+    {
+        return await input.GetQuery(Repository.Query(item => true)).ToListAsync();
+    }
+
+    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(GetT input)
+    {
+        var data = await input.GetQuery(Repository.Query(item => true)).ToListAsync();
+        return Mapper.Map<IEnumerable<ReturnT>>(data);
+    }
+
+    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>(NewGetT input) where NewGetT : IBaseGet<T>
+    {
+        var data = await input.GetQuery(Repository.Query(item => true)).ToListAsync();
+        return Mapper.Map<IEnumerable<ReturnT>>(data);
+    }
 }
 public class QueryRepApplication<TKey, T, GetT> : QueryRepApplication<T, GetT>, IQueryApplication<TKey, T, GetT>
     where T : class, IEntity<TKey>
     where GetT : IBaseGet<T>
 {
     protected new IQueryRepository<TKey, T> Repository;
-    public QueryRepApplication(IQueryRepository<TKey, T> repository) : base(repository)
+    public QueryRepApplication(IQueryRepository<TKey, T> repository, IMap mapper) : base(repository, mapper)
     {
         Repository = repository;
     }
-
-    public override Task<T> QueryAsync(string id)
-    {
-        return base.QueryAsync(id);
-    }
-
     /// <summary>
     /// 查找(单个 id)
     /// </summary>
