@@ -49,7 +49,7 @@ public class QueryRepository<T> : Repository<T>, IQueryRepository<T> where T : c
         return new PageData<T>
         {
             Total = await query.CountAsync(),
-            Data = await query.Skip(page.Skip).Take(page.Max).ToListAsync()
+            Data = await query.Skip(page.Skip).Take(page.Max)?.ToListAsync()
         };
     }
 

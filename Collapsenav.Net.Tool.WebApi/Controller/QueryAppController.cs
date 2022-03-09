@@ -13,7 +13,7 @@ public class QueryAppController<T, GetT> : ControllerBase, IQueryController<T, G
     where GetT : IBaseGet<T>
 {
     protected readonly IQueryApplication<T, GetT> App;
-    public QueryAppController(IQueryApplication<T, GetT> app) : base()
+    public QueryAppController(IQueryApplication<T, GetT> app)
     {
         App = app;
     }

@@ -1,9 +1,18 @@
 using AutoMapper;
 using Collapsenav.Net.Tool.Data;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 namespace Collapsenav.Net.Tool.WebApi;
 public static class ControllerExt
 {
+    public static IServiceCollection AddDynamicController(this IServiceCollection services)
+    {
+        return services
+        .AddMap()
+        .AddSingleton<IActionDescriptorChangeProvider>(AddControllerChangeProvider.Instance)
+        .AddSingleton(AddControllerChangeProvider.Instance)
+        .AddHostedService<ChangeActionService>();
+    }
     /// <summary>
     /// 注册泛型controller(基于Repository)
     /// </summary>
@@ -18,6 +27,7 @@ public static class ControllerExt
         .AddTransient(typeof(IQueryController<,,>), typeof(QueryRepController<,,>))
         .AddTransient(typeof(ICrudController<,,,>), typeof(CrudRepController<,,,>))
         .AddMap()
+        .AddDynamicController()
         ;
         return services;
     }
@@ -36,6 +46,7 @@ public static class ControllerExt
         .AddTransient(typeof(IQueryController<,,>), typeof(QueryAppController<,,>))
         .AddTransient(typeof(ICrudController<,,,>), typeof(CrudAppController<,,,>))
         .AddMap()
+        .AddDynamicController()
         ;
         return services;
     }
@@ -54,6 +65,7 @@ public static class ControllerExt
         .AddTransient(typeof(IQueryApplication<,,>), typeof(QueryRepApplication<,,>))
         .AddTransient(typeof(ICrudApplication<,,,>), typeof(CrudRepApplication<,,,>))
         .AddMap()
+        .AddDynamicController()
         ;
         return services;
     }

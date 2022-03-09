@@ -1,4 +1,3 @@
-using AutoMapper;
 using Collapsenav.Net.Tool.Data;
 using Microsoft.AspNetCore.Mvc;
 

@@ -25,7 +25,7 @@ public class QueryRepController<T, GetT> : ControllerBase, IQueryController<T, G
     /// 带条件查询(不分页)
     /// </summary>
     [HttpGet, Route("Query")]
-    public virtual async Task<IEnumerable<T>> QueryAsync([FromQuery] GetT input) => await GetQuery(input).ToListAsync();
+    public virtual async Task<IEnumerable<T>> QueryAsync([FromQuery] GetT input) => await GetQuery(input)?.ToListAsync();
     [NonAction]
     public virtual IQueryable<T> GetQuery(GetT input) => input.GetQuery(Repository.Query(item => true));
     [NonAction]
