@@ -14,4 +14,4 @@ jobs:
                   SSH_PRIVATE_KEY: ${{ secrets.SSHKEY }}
               with:
                   source-repo: "git@github.com:CollapseNav/Collapsenav.Net.Tool.git"
-                  destination-repo: "git@gitee.com:CollapseNav/test-push.git"
+                  destination-repo: "git@gitee.com:CollapseNav/Collapsenav.Net.Tool.git"
