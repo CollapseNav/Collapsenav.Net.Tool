@@ -5,8 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Collapsenav.Net.Tool.WebApi;
 public static class ControllerExt
 {
+    /// <summary>
+    /// 添加动态controller支持
+    /// </summary>
     public static IServiceCollection AddDynamicController(this IServiceCollection services)
     {
+        if (services.Any(item => item.ServiceType == typeof(IActionDescriptorChangeProvider)))
+            return services;
         return services
         .AddMap()
         .AddSingleton<IActionDescriptorChangeProvider>(AddControllerChangeProvider.Instance)

@@ -28,6 +28,7 @@ public static class AddNewControllerExt
 #endif
         services.AddTransient(typeof(IQueryRepository<T>), typeof(QueryRepository<T>));
         services.AddTransient(typeof(IQueryController<T, GetT>), type);
+        services.AddDynamicController();
         return services;
     }
     public static IServiceCollection AddQueryRepController<TKey, T, GetT>(this IServiceCollection services, string route) where T : class, IBaseEntity<TKey> where GetT : IBaseGet<T>
@@ -49,6 +50,7 @@ public static class AddNewControllerExt
 #endif
         services.AddTransient(typeof(IQueryRepository<TKey, T>), typeof(QueryRepository<TKey, T>));
         services.AddTransient(typeof(IQueryController<TKey, T, GetT>), type);
+        services.AddDynamicController();
         return services;
     }
 
@@ -72,6 +74,7 @@ public static class AddNewControllerExt
 #endif
         services.AddTransient(typeof(IModifyRepository<T>), typeof(ModifyRepository<T>));
         services.AddTransient(typeof(IModifyController<T, CreateT>), type);
+        services.AddDynamicController();
         return services;
     }
     public static IServiceCollection AddModifyRepController<TKey, T, CreateT>(this IServiceCollection services, string route) where T : class, IBaseEntity<TKey>, new() where CreateT : IBaseCreate<T>
@@ -94,6 +97,7 @@ public static class AddNewControllerExt
 #endif
         services.AddTransient(typeof(IModifyRepository<TKey, T>), typeof(ModifyRepository<TKey, T>));
         services.AddTransient(typeof(IModifyController<TKey, T, CreateT>), type);
+        services.AddDynamicController();
         return services;
     }
     public static IServiceCollection AddCrudRepController<T, CreateT, GetT>(this IServiceCollection services, string route) where T : class, IEntity, new() where CreateT : IBaseCreate<T> where GetT : IBaseGet<T>
@@ -116,6 +120,7 @@ public static class AddNewControllerExt
 #endif
         services.AddTransient(typeof(ICrudRepository<T>), typeof(CrudRepository<T>));
         services.AddTransient(typeof(ICrudController<T, CreateT, GetT>), type);
+        services.AddDynamicController();
         return services;
     }
     public static IServiceCollection AddCrudRepController<TKey, T, CreateT, GetT>(this IServiceCollection services, string route) where T : class, IBaseEntity<TKey>, new() where CreateT : IBaseCreate<T> where GetT : IBaseGet<T>
@@ -138,6 +143,7 @@ public static class AddNewControllerExt
 #endif
         services.AddTransient(typeof(ICrudRepository<TKey, T>), typeof(CrudRepository<TKey, T>));
         services.AddTransient(typeof(ICrudController<TKey, T, CreateT, GetT>), type);
+        services.AddDynamicController();
         return services;
     }
 

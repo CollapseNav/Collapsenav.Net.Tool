@@ -4,6 +4,9 @@ using Microsoft.Extensions.Hosting;
 
 namespace Collapsenav.Net.Tool.WebApi;
 
+/// <summary>
+/// 触发change 应用新增的controller
+/// </summary>
 public class ChangeActionService : IHostedService
 {
     private readonly ApplicationPartManager Part;
