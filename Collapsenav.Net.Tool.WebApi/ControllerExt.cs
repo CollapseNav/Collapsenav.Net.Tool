@@ -10,7 +10,7 @@ public static class ControllerExt
     /// </summary>
     public static IServiceCollection AddDynamicController(this IServiceCollection services)
     {
-        if (services.Any(item => item.ServiceType == typeof(IActionDescriptorChangeProvider)))
+        if (services.Any(item => item.ServiceType == typeof(AddControllerChangeProvider)))
             return services;
         return services
         .AddMap()
