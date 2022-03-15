@@ -1,11 +1,14 @@
 namespace Collapsenav.Net.Tool.Data;
 #nullable enable
-public interface IBaseEntity<TKey> : IEntity<TKey>
+public interface IBaseEntity
 {
-    TKey? Id { get; set; }
     bool? IsDeleted { get; set; }
     DateTime? CreationTime { get; set; }
     DateTime? LastModificationTime { get; set; }
+}
+public interface IBaseEntity<TKey> : IBaseEntity, IEntity<TKey>
+{
+    TKey? Id { get; set; }
     TKey? CreatorId { get; set; }
     TKey? LastModifierId { get; set; }
 }

@@ -33,4 +33,13 @@ public static partial class DateTimeExt
     {
         return time.ToString($"yyyy-MM-dd HH:mm:ss").Replace("-", s);
     }
+    /// <summary>
+    /// 转为默认时间格式字符串(yyyy-MM-dd HH:mm:ss.fff)
+    /// </summary>
+    /// <param name="time"></param>
+    /// <param name="s">中间的分隔符,默认为 '-' </param>
+    public static string ToDefaultMilliString(this DateTime time, string s = "-")
+    {
+        return time.ToString($"yyyy-MM-dd HH:mm:ss.fff").Replace("-", s);
+    }
 }
