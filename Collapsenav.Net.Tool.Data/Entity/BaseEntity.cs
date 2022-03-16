@@ -6,6 +6,9 @@ public partial class BaseEntity : IBaseEntity
     public bool? IsDeleted { get; set; }
     public DateTime? CreationTime { get; set; }
     public DateTime? LastModificationTime { get; set; }
+    /// <summary>
+    /// 获取当前时间
+    /// </summary>
     public static Func<DateTime> GetNow = () => DateTime.Now;
 }
 public partial class BaseEntity<TKey> : BaseEntity, IBaseEntity<TKey>
@@ -16,10 +19,16 @@ public partial class BaseEntity<TKey> : BaseEntity, IBaseEntity<TKey>
     public TKey LastModifierId { get; set; }
     public virtual void Init()
     {
+        if (GetKey == null)
+            Id = GetKey();
         CreationTime = GetNow();
         LastModificationTime = GetNow();
         InitModifyId();
     }
+    /// <summary>
+    /// 获取主键值
+    /// </summary>
+    public static Func<TKey> GetKey = null;
 
     public virtual void InitModifyId()
     {

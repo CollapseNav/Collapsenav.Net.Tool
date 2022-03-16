@@ -16,6 +16,7 @@ public static class RepositoryExt
         .AddTransient(typeof(IQueryRepository<,>), typeof(QueryRepository<,>))
         .AddTransient(typeof(IModifyRepository<,>), typeof(ModifyRepository<,>))
         .AddTransient(typeof(ICrudRepository<,>), typeof(CrudRepository<,>))
+        .AddDefaultIdGenerator()
         ;
         return services;
     }

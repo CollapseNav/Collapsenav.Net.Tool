@@ -1,4 +1,4 @@
-﻿using System.Net.NetworkInformation;
+﻿using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -278,5 +278,42 @@ public static partial class StringExt
     {
         var index = origin.LastIndexOf(target);
         return index == -1 ? origin : origin.Last(origin.Length - (index + 1));
+    }
+
+    /// <summary>
+    /// 大写(从前算)
+    /// </summary>
+    public static string ToUpperFirst(this string origin, int num = 1)
+    {
+        return $"{origin.First(num).ToUpper()}{origin.Last(origin.Length - num)}";
+    }
+    /// <summary>
+    /// 小写(从前算)
+    /// </summary>
+    /// <returns></returns>
+    public static string ToLowerFirst(this string origin, int num = 1)
+    {
+        return $"{origin.First(num).ToLower()}{origin.Last(origin.Length - num)}";
+    }
+
+    /// <summary>
+    /// 小写(从后算)
+    /// </summary>
+    public static string ToUpperEnd(this string origin, int num = 1)
+    {
+        return $"{origin.First(origin.Length - num)}{origin.Last(num).ToUpper()}";
+    }
+
+    /// <summary>
+    /// 小写(从后算)
+    /// </summary>
+    public static string ToLowerEnd(this string origin, int num = 1)
+    {
+        return $"{origin.First(origin.Length - num)}{origin.Last(num).ToLower()}";
+    }
+
+    public static string UpFirstLetter(this string origin)
+    {
+        return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(origin);
     }
 }
