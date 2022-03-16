@@ -324,4 +324,40 @@ public class StringExtTest
         Assert.True(value.EndTo(".") == "2333");
         Assert.True(value.EndTo('.') == "2333");
     }
+
+    [Fact]
+    public void ToUpperFirstTest()
+    {
+        string data = "collapsenav.net.tool";
+        Assert.True(data.ToUpperFirst() == "Collapsenav.net.tool");
+        Assert.True(data.ToUpperFirst(3) == "COLlapsenav.net.tool");
+        Assert.True(data.ToUpperFirst(data.Length) == "COLLAPSENAV.NET.TOOL");
+    }
+
+    [Fact]
+    public void ToLowerFirstTest()
+    {
+        string data = "COLLAPSENAV.NET.TOOL";
+        Assert.True(data.ToLowerFirst() == "cOLLAPSENAV.NET.TOOL");
+        Assert.True(data.ToLowerFirst(3) == "colLAPSENAV.NET.TOOL");
+        Assert.True(data.ToLowerFirst(data.Length) == "collapsenav.net.tool");
+    }
+
+    [Fact]
+    public void ToUpperEndTest()
+    {
+        string data = "collapsenav.net.tool";
+        Assert.True(data.ToUpperEnd() == "collapsenav.net.tooL");
+        Assert.True(data.ToUpperEnd(3) == "collapsenav.net.tOOL");
+        Assert.True(data.ToUpperEnd(data.Length) == "COLLAPSENAV.NET.TOOL");
+    }
+
+    [Fact]
+    public void ToLowerEndTest()
+    {
+        string data = "COLLAPSENAV.NET.TOOL";
+        Assert.True(data.ToLowerEnd() == "COLLAPSENAV.NET.TOOl");
+        Assert.True(data.ToLowerEnd(3) == "COLLAPSENAV.NET.Tool");
+        Assert.True(data.ToLowerEnd(data.Length) == "collapsenav.net.tool");
+    }
 }

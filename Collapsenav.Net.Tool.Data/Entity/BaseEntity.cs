@@ -19,7 +19,7 @@ public partial class BaseEntity<TKey> : BaseEntity, IBaseEntity<TKey>
     public TKey LastModifierId { get; set; }
     public virtual void Init()
     {
-        if (GetKey == null)
+        if (GetKey != null)
             Id = GetKey();
         CreationTime = GetNow();
         LastModificationTime = GetNow();

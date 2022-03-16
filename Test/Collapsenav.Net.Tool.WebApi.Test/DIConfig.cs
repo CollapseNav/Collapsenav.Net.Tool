@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+using Collapsenav.Net.Tool.Data;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Collapsenav.Net.Tool.WebApi.Test;
@@ -7,22 +7,16 @@ public class DIConfig
     public static ServiceProvider GetProvider()
     {
         return new ServiceCollection()
-        .AddDbContext<TestDbContext>(options =>
-        {
-            options.UseSqlite("Data Source = Test.db;");
-        })
-        .AddTransient(typeof(DbContext), typeof(TestDbContext))
+        .AddSqlite<TestDbContext>("Test.db")
+        .AddDefaultDbContext<TestDbContext>()
         .AddRepController()
         .BuildServiceProvider();
     }
     public static ServiceProvider GetNotBaseProvider()
     {
         return new ServiceCollection()
-        .AddDbContext<TestNotBaseDbContext>(options =>
-        {
-            options.UseSqlite("Data Source = Test.db;");
-        })
-        .AddTransient(typeof(DbContext), typeof(TestNotBaseDbContext))
+        .AddSqlite<TestNotBaseDbContext>("Test.db")
+        .AddDefaultDbContext<TestNotBaseDbContext>()
         .AddRepController()
         .BuildServiceProvider();
     }
@@ -30,36 +24,18 @@ public class DIConfig
     public static ServiceProvider GetAppProvider()
     {
         return new ServiceCollection()
-        .AddDbContext<TestDbContext>(options =>
-        {
-            options.UseSqlite("Data Source = TestApp.db;");
-        })
-        .AddTransient(typeof(DbContext), typeof(TestDbContext))
+        .AddSqlite<TestDbContext>("TestApp.db")
+        .AddDefaultDbContext<TestDbContext>()
         .AddAppController()
         .BuildServiceProvider();
     }
     public static ServiceProvider GetNotBaseAppProvider()
     {
         return new ServiceCollection()
-        .AddDbContext<TestNotBaseDbContext>(options =>
-        {
-            options.UseSqlite("Data Source = TestApp.db;");
-        })
+        .AddSqlite<TestNotBaseDbContext>("TestApp.db")
         .AddMap(typeof(MappingProfile))
-        .AddTransient(typeof(DbContext), typeof(TestNotBaseDbContext))
+        .AddDefaultDbContext<TestNotBaseDbContext>()
         .AddAppController()
-        .BuildServiceProvider();
-    }
-    public static ServiceProvider GetTestRepositoryProvider()
-    {
-        return new ServiceCollection()
-        .AddDbContext<TestDbContext>(options =>
-        {
-            options.UseSqlite("Data Source = Test.db;");
-        })
-        .AddMap<MappingProfile>()
-        .AddTransient(typeof(DbContext), typeof(TestDbContext))
-        .AddRepController()
         .BuildServiceProvider();
     }
 }
