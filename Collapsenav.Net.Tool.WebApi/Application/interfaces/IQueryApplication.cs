@@ -1,7 +1,7 @@
 using Collapsenav.Net.Tool.Data;
 
 namespace Collapsenav.Net.Tool.WebApi;
-public interface IQueryApplication<T, GetT> : IApplication
+public interface IQueryApplication<T, GetT> : IReadApplication<T>
     where T : IEntity
     where GetT : IBaseGet<T>
 {
@@ -14,22 +14,15 @@ public interface IQueryApplication<T, GetT> : IApplication
     /// 带条件查询(不分页)
     /// </summary>
     Task<IEnumerable<T>> QueryAsync(GetT input);
-    /// <summary>
-    /// 查找(单个 id)
-    /// </summary>
-    Task<T> QueryAsync(string id);
-    Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT input) where NewGetT : IBaseGet<T>;
     Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(GetT input);
-    Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>(NewGetT input) where NewGetT : IBaseGet<T>;
+    Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT input) where NewGetT : class, IBaseGet<T>;
+    Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>(NewGetT input) where NewGetT : class, IBaseGet<T>;
 }
-public interface IQueryApplication<TKey, T, GetT> : IQueryApplication<T, GetT>
+public interface IQueryApplication<TKey, T, GetT> : IQueryApplication<T, GetT>,
+IReadApplication<TKey, T>
     where T : IEntity<TKey>
     where GetT : IBaseGet<T>
 {
-    /// <summary>
-    /// 查找(单个 id)
-    /// </summary>
-    Task<T> QueryAsync(TKey id);
     /// <summary>
     /// 根据Id查询
     /// </summary>

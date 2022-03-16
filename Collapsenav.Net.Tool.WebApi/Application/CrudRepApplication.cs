@@ -56,9 +56,9 @@ public class CrudRepApplication<T, CreateT, GetT> : ICrudApplication<T, CreateT,
     /// <summary>
     /// 查找(单个 id)
     /// </summary>
-    public virtual async Task<T> QueryAsync(string id)
+    public virtual async Task<T> QueryByStringIdAsync(string id)
     {
-        return await Read.QueryAsync(id);
+        return await Read.QueryByStringIdAsync(id);
     }
     /// <summary>
     /// 查找(单个 id)
@@ -68,7 +68,7 @@ public class CrudRepApplication<T, CreateT, GetT> : ICrudApplication<T, CreateT,
         await Write.DeleteAsync(id, isTrue);
     }
 
-    public virtual async Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT input) where NewGetT : IBaseGet<T>
+    public virtual async Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT input) where NewGetT : class, IBaseGet<T>
     {
         return await Read.QueryAsync(input);
     }
@@ -78,7 +78,7 @@ public class CrudRepApplication<T, CreateT, GetT> : ICrudApplication<T, CreateT,
         return await Read.QueryAsync<ReturnT>(input);
     }
 
-    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>(NewGetT input) where NewGetT : IBaseGet<T>
+    public virtual async Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>(NewGetT input) where NewGetT : class, IBaseGet<T>
     {
         return await Read.QueryAsync<NewGetT, ReturnT>(input);
     }
@@ -133,9 +133,9 @@ public class CrudRepApplication<TKey, T, CreateT, GetT> : CrudRepApplication<T, 
     {
         return await Read.QueryAsync(id);
     }
-    public override Task<T> QueryAsync(string id)
+    public override Task<T> QueryByStringIdAsync(string id)
     {
-        return base.QueryAsync(id);
+        return base.QueryByStringIdAsync(id);
     }
     /// <summary>
     /// 根据Ids查询

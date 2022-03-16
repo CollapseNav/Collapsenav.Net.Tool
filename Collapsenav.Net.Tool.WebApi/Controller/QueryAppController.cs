@@ -45,7 +45,7 @@ public class QueryAppController<T, GetT> : ControllerBase, IQueryController<T, G
     /// 查找(单个 id)
     /// </summary>
     [HttpGet, Route("{id}")]
-    public virtual async Task<T> QueryAsync(string id) => await App.QueryAsync(id);
+    public virtual async Task<T> QueryAsync(string id) => await App.QueryByStringIdAsync(id);
 }
 [ApiController]
 [Route("[controller]")]

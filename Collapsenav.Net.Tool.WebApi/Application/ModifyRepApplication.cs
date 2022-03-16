@@ -1,15 +1,15 @@
 using Collapsenav.Net.Tool.Data;
 
 namespace Collapsenav.Net.Tool.WebApi;
-public class ModifyRepApplication<T, CreateT> : IModifyApplication<T, CreateT>
+public class ModifyRepApplication<T, CreateT> : WriteRepApplication<T>, IModifyApplication<T, CreateT>
     where T : class, IEntity
     where CreateT : IBaseCreate<T>
 {
-    protected readonly IModifyRepository<T> Repository;
+    protected new readonly IModifyRepository<T> Repo;
     protected readonly IMap Mapper;
-    public ModifyRepApplication(IModifyRepository<T> repository, IMap mapper)
+    public ModifyRepApplication(IModifyRepository<T> repository, IMap mapper) : base(repository)
     {
-        Repository = repository;
+        Repo = repository;
         Mapper = mapper;
     }
     /// <summary>
@@ -18,7 +18,7 @@ public class ModifyRepApplication<T, CreateT> : IModifyApplication<T, CreateT>
     public virtual async Task<T> AddAsync(CreateT entity)
     {
         var data = Mapper.Map<T>(entity);
-        var result = await Repository.AddAsync(data);
+        var result = await Repo.AddAsync(data);
         return result;
     }
     /// <summary>
@@ -26,45 +26,37 @@ public class ModifyRepApplication<T, CreateT> : IModifyApplication<T, CreateT>
     /// </summary>
     public virtual async Task<int> AddRangeAsync(IEnumerable<CreateT> entitys)
     {
-        var result = await Repository.AddAsync(entitys.Select(item => Mapper.Map<T>(item)));
+        var result = await Repo.AddAsync(entitys.Select(item => Mapper.Map<T>(item)));
         return result;
     }
-    /// <summary>
-    /// 删除(单个 id)
-    /// </summary>
-    public virtual async Task DeleteAsync(string id, bool isTrue = false)
-    {
-        await Repository.DeleteAsync(id, isTrue);
-    }
-
-    public void Dispose()
-    {
-        Repository.Save();
-    }
-
 }
-public class ModifyRepApplication<TKey, T, CreateT> : ModifyRepApplication<T, CreateT>, IModifyApplication<TKey, T, CreateT>
+public class ModifyRepApplication<TKey, T, CreateT> : WriteRepApplication<TKey, T>, IModifyApplication<TKey, T, CreateT>
     where T : class, IEntity<TKey>
     where CreateT : IBaseCreate<T>
 {
-    protected new readonly IModifyRepository<TKey, T> Repository;
-    protected new readonly IMap Mapper;
-    public ModifyRepApplication(IModifyRepository<TKey, T> repository, IMap mapper) : base(repository, mapper)
+    protected new readonly IModifyRepository<TKey, T> Repo;
+    protected IModifyApplication<T, CreateT> App;
+    protected readonly IMap Mapper;
+    public ModifyRepApplication(IModifyRepository<TKey, T> repository, IMap mapper) : base(repository)
     {
-        Repository = repository;
+        Repo = repository;
         Mapper = mapper;
+        App = new ModifyRepApplication<T, CreateT>(repository, mapper);
+    }
+
+    public virtual async Task<T> AddAsync(CreateT entity)
+    {
+        return await App.AddAsync(entity);
+    }
+
+    public virtual async Task<int> AddRangeAsync(IEnumerable<CreateT> entitys)
+    {
+        return await App.AddRangeAsync(entitys);
     }
 
     public override Task DeleteAsync(string id, bool isTrue = false)
     {
         return base.DeleteAsync(id, isTrue);
-    }
-    /// <summary>
-    /// 删除(单个 id)
-    /// </summary>
-    public virtual async Task DeleteAsync(TKey id, bool isTrue = false)
-    {
-        await Repository.DeleteAsync(id, isTrue);
     }
 
     /// <summary>
@@ -72,10 +64,9 @@ public class ModifyRepApplication<TKey, T, CreateT> : ModifyRepApplication<T, Cr
     /// </summary>
     public virtual async Task<int> DeleteRangeAsync(IEnumerable<TKey> id, bool isTrue = false)
     {
-        var result = await Repository.DeleteAsync(id, isTrue);
+        var result = await Repo.DeleteAsync(id, isTrue);
         return result;
     }
-
     /// <summary>
     /// 更新
     /// </summary>
@@ -83,7 +74,7 @@ public class ModifyRepApplication<TKey, T, CreateT> : ModifyRepApplication<T, Cr
     {
         var data = Mapper.Map<T>(entity);
         data.SetValue("Id", id);
-        await Repository.UpdateAsync(data);
+        await Repo.UpdateAsync(data);
     }
 }
 
