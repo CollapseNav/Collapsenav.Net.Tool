@@ -5,13 +5,16 @@ public interface IQueryApplication<T, GetT> : IReadApplication<T>
     where T : IEntity
     where GetT : IBaseGet<T>
 {
+    /// <summary>
+    /// 获取query
+    /// </summary>
     IQueryable<T> GetQuery(GetT input);
     /// <summary>
-    /// 带条件分页
+    /// 分页查询
     /// </summary>
     Task<PageData<T>> QueryPageAsync(GetT input, PageRequest page = null);
     /// <summary>
-    /// 带条件查询(不分页)
+    /// 列表查询
     /// </summary>
     Task<IEnumerable<T>> QueryAsync(GetT input);
     Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(GetT input);

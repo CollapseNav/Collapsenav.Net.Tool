@@ -3,7 +3,8 @@ using Collapsenav.Net.Tool.Data;
 using Microsoft.EntityFrameworkCore;
 namespace Collapsenav.Net.Tool.WebApi;
 
-public class QueryRepApplication<T, GetT> : ReadRepApplication<T, GetT>, IQueryApplication<T, GetT>
+public class QueryRepApplication<T, GetT> : ReadRepApplication<T, GetT>, IQueryApplication<T, GetT>,
+ICountApplication<T>, ICheckExistApplication<T>
     where T : class, IEntity
     where GetT : IBaseGet<T>
 {
@@ -14,13 +15,7 @@ public class QueryRepApplication<T, GetT> : ReadRepApplication<T, GetT>, IQueryA
         Repo = repository;
         Mapper = mapper;
     }
-    /// <summary>
-    /// 带条件分页
-    /// </summary>
     public virtual async Task<PageData<T>> QueryPageAsync(GetT input, PageRequest page = null) => await Repo.QueryPageAsync(GetExpression(input), page);
-    /// <summary>
-    /// 带条件查询(不分页)
-    /// </summary>
     public virtual async Task<IEnumerable<T>> QueryAsync(GetT input) => await GetQuery(input).ToListAsync();
     public virtual IQueryable<T> GetQuery(GetT input) => input.GetQuery(Repo.Query(item => true));
     public virtual Expression<Func<T, bool>> GetExpression(GetT input) => input.GetExpression(item => true);
@@ -40,6 +35,14 @@ public class QueryRepApplication<T, GetT> : ReadRepApplication<T, GetT>, IQueryA
         var data = await input.GetQuery(Repo.Query(item => true)).ToListAsync();
         return Mapper.Map<IEnumerable<ReturnT>>(data);
     }
+    public virtual async Task<bool> IsExistAsync(Expression<Func<T, bool>> exp)
+    {
+        return await Repo.IsExistAsync(exp);
+    }
+    public virtual async Task<int> CountAsync(Expression<Func<T, bool>> exp = null)
+    {
+        return await Repo.CountAsync(exp);
+    }
 }
 public class QueryRepApplication<TKey, T, GetT> : ReadRepApplication<T, GetT>, IQueryApplication<TKey, T, GetT>
     where T : class, IEntity<TKey>
@@ -58,9 +61,6 @@ public class QueryRepApplication<TKey, T, GetT> : ReadRepApplication<T, GetT>, I
         return App.GetQuery(input);
     }
 
-    /// <summary>
-    /// 查找(单个 id)
-    /// </summary>
     public virtual async Task<T> QueryAsync(TKey id) => await Repo.QueryAsync(id);
 
     public virtual async Task<IEnumerable<T>> QueryAsync(GetT input)
@@ -83,9 +83,6 @@ public class QueryRepApplication<TKey, T, GetT> : ReadRepApplication<T, GetT>, I
         return await App.QueryAsync<NewGetT, ReturnT>(input);
     }
 
-    /// <summary>
-    /// 根据Ids查询
-    /// </summary>
     public virtual async Task<IEnumerable<T>> QueryByIdsAsync(IEnumerable<TKey> ids) => await Repo.QueryAsync(ids);
 
     public virtual async Task<PageData<T>> QueryPageAsync(GetT input, PageRequest page = null)

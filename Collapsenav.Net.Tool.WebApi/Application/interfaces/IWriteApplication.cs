@@ -11,7 +11,11 @@ public interface IWriteApplication<T> : IApplication<T>, IDisposable
     /// <summary>
     /// 添加(单个)
     /// </summary>
-    // Task<T> AddAsync(T entity);
+    Task<T> AddAsync(T entity);
+    /// <summary>
+    /// 修改
+    /// </summary>
+    Task UpdateAsync(string id, T entity);
 }
 public interface IWriteApplication<TKey, T> : IWriteApplication<T>
     where T : IEntity<TKey>

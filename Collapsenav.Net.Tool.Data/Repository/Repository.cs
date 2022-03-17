@@ -41,7 +41,7 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
     /// <summary>
     /// 获取主键
     /// </summary>
-    protected Type KeyType()
+    public Type KeyType()
     {
         var types = typeof(T).AttrValues<KeyAttribute>();
         if (types.IsEmpty())

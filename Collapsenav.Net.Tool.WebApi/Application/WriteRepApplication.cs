@@ -9,9 +9,12 @@ public class WriteRepApplication<T> : Application<T>, IWriteApplication<T>
     {
         Repo = repository;
     }
-    /// <summary>
-    /// 删除(单个 id)
-    /// </summary>
+
+    public virtual async Task<T> AddAsync(T entity)
+    {
+        return await Repo.AddAsync(entity);
+    }
+
     public virtual async Task DeleteAsync(string id, bool isTrue = false)
     {
         await Repo.DeleteAsync(id, isTrue);
@@ -22,6 +25,11 @@ public class WriteRepApplication<T> : Application<T>, IWriteApplication<T>
         Repo.Save();
     }
 
+    public virtual async Task UpdateAsync(string id, T entity)
+    {
+        entity.SetValue(Repo.KeyType().Name, id);
+        await Repo.UpdateAsync(entity);
+    }
 }
 public class WriteRepApplication<TKey, T> : WriteRepApplication<T>, IWriteApplication<TKey, T>
     where T : class, IEntity<TKey>
@@ -31,9 +39,6 @@ public class WriteRepApplication<TKey, T> : WriteRepApplication<T>, IWriteApplic
     {
         Repo = repository;
     }
-    /// <summary>
-    /// 删除(单个 id)
-    /// </summary>
     public virtual async Task DeleteAsync(TKey id, bool isTrue = false)
     {
         await Repo.DeleteAsync(id, isTrue);

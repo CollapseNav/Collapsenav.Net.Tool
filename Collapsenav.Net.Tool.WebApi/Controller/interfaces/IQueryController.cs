@@ -2,12 +2,10 @@ using Collapsenav.Net.Tool.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Collapsenav.Net.Tool.WebApi;
-public interface IQueryController<T, GetT> : IController
+public interface IQueryController<T, GetT> : IReadController<T, GetT>
     where T : IEntity
     where GetT : IBaseGet<T>
 {
-    [NonAction]
-    IQueryable<T> GetQuery(GetT input);
     /// <summary>
     /// 带条件分页
     /// </summary>
@@ -18,21 +16,11 @@ public interface IQueryController<T, GetT> : IController
     /// </summary>
     [HttpGet, Route("Query")]
     Task<IEnumerable<T>> QueryAsync([FromQuery] GetT input);
-    /// <summary>
-    /// 查找(单个 id)
-    /// </summary>
-    [HttpGet, Route("{id}")]
-    Task<T> QueryAsync(string id);
 }
-public interface IQueryController<TKey, T, GetT> : IQueryController<T, GetT>
+public interface IQueryController<TKey, T, GetT> : IReadController<TKey, T, GetT>, IQueryController<T, GetT>
     where T : IEntity<TKey>
     where GetT : IBaseGet<T>
 {
-    /// <summary>
-    /// 查找(单个 id)
-    /// </summary>
-    [HttpGet, Route("{id}")]
-    Task<T> QueryAsync(TKey id);
     /// <summary>
     /// 根据Id查询
     /// </summary>

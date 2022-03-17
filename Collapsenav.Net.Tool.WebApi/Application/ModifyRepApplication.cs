@@ -12,18 +12,12 @@ public class ModifyRepApplication<T, CreateT> : WriteRepApplication<T>, IModifyA
         Repo = repository;
         Mapper = mapper;
     }
-    /// <summary>
-    /// 添加(单个)
-    /// </summary>
     public virtual async Task<T> AddAsync(CreateT entity)
     {
         var data = Mapper.Map<T>(entity);
         var result = await Repo.AddAsync(data);
         return result;
     }
-    /// <summary>
-    /// 添加(多个)
-    /// </summary>
     public virtual async Task<int> AddRangeAsync(IEnumerable<CreateT> entitys)
     {
         var result = await Repo.AddAsync(entitys.Select(item => Mapper.Map<T>(item)));
@@ -59,17 +53,11 @@ public class ModifyRepApplication<TKey, T, CreateT> : WriteRepApplication<TKey, 
         return base.DeleteAsync(id, isTrue);
     }
 
-    /// <summary>
-    /// 删除(多个 id)
-    /// </summary>
     public virtual async Task<int> DeleteRangeAsync(IEnumerable<TKey> id, bool isTrue = false)
     {
         var result = await Repo.DeleteAsync(id, isTrue);
         return result;
     }
-    /// <summary>
-    /// 更新
-    /// </summary>
     public virtual async Task UpdateAsync(TKey id, CreateT entity)
     {
         var data = Mapper.Map<T>(entity);

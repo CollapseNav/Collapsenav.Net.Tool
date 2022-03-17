@@ -10,9 +10,6 @@ public class ReadRepApplication<T, GetT> : Application<T>, IReadApplication<T>
     {
         Repo = repository;
     }
-    /// <summary>
-    /// 查找(单个 id)
-    /// </summary>
     public virtual async Task<T> QueryByStringIdAsync(string id) => await Repo.QueryAsync(id);
 
 }
@@ -25,9 +22,6 @@ public class ReadRepApplication<TKey, T, GetT> : ReadRepApplication<T, GetT>, IR
     {
         Repo = repository;
     }
-    /// <summary>
-    /// 查找(单个 id)
-    /// </summary>
     public virtual async Task<T> QueryAsync(TKey id) => await Repo.QueryAsync(id);
 }
 
