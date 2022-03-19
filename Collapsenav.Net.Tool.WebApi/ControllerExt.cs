@@ -15,7 +15,7 @@ public static class ControllerExt
         return services
         .AddMap()
         .AddSingleton<IActionDescriptorChangeProvider>(AddControllerChangeProvider.Instance)
-        .AddSingleton(AddControllerChangeProvider.Instance)
+        // .AddSingleton(AddControllerChangeProvider.Instance)
         .AddHostedService<ChangeActionService>();
     }
     /// <summary>
