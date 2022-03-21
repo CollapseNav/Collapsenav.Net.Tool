@@ -25,7 +25,7 @@ public static partial class JsonExt
     /// <param name="obj"></param>
     /// <param name="options"></param>
     /// <returns></returns>
-    public static string ToJson(this object obj, JsonSerializerOptions options = null) => JsonSerializer.Serialize(obj, options ?? DefaultJsonSerializerOption);
+    public static string ToJson<T>(this T obj, JsonSerializerOptions options = null) => JsonSerializer.Serialize(obj, options ?? DefaultJsonSerializerOption);
 
     /// <summary>
     /// 通过json的序列化反序列化map对象
