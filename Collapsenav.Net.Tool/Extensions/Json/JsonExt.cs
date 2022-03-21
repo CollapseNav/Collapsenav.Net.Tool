@@ -24,11 +24,14 @@ public static partial class JsonExt
     /// </summary>
     /// <param name="obj"></param>
     /// <param name="options"></param>
-    /// <returns></returns>
     public static string ToJson<T>(this T obj, JsonSerializerOptions options = null) => JsonSerializer.Serialize(obj, options ?? DefaultJsonSerializerOption);
 
     /// <summary>
     /// 通过json的序列化反序列化map对象
     /// </summary>
     public static T JsonMap<T>(this object obj) => obj.ToJson().ToObj<T>();
+    /// <summary>
+    /// 通过json的序列化反序列化map对象
+    /// </summary>
+    public static T JsonMap<S, T>(this S obj) => obj.ToJson().ToObj<T>();
 }
