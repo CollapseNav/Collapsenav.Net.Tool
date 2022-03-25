@@ -14,3 +14,21 @@ public interface IReadRepository<TKey, T> : IReadRepository<T>, IRepository<TKey
     /// </summary>
     Task<T> QueryAsync(TKey id);
 }
+
+#region 无泛型约束
+
+public interface INoConstraintsReadRepository<T> : INoConstraintsRepository<T>
+{
+    /// <summary>
+    /// 根据Id查询
+    /// </summary>
+    Task<T> QueryAsync(object id);
+}
+public interface INoConstraintsReadRepository<TKey, T> : INoConstraintsReadRepository<T>, INoConstraintsRepository<TKey, T>
+{
+    /// <summary>
+    /// 根据Id查询
+    /// </summary>
+    Task<T> QueryAsync(TKey id);
+}
+#endregion

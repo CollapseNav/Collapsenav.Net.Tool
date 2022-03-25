@@ -14,3 +14,12 @@ public interface ICrudApplication<TKey, T, CreateT, GetT> : ICrudApplication<T, 
     where GetT : IBaseGet<T>
 {
 }
+
+#region 无泛型约束
+public interface INoConstraintsCrudApplication<T, CreateT, GetT> : INoConstraintsQueryApplication<T, GetT>, INoConstraintsModifyApplication<T, CreateT>
+{
+}
+public interface INoConstraintsCrudApplication<TKey, T, CreateT, GetT> : INoConstraintsCrudApplication<T, CreateT, GetT>, INoConstraintsQueryApplication<TKey, T, GetT>, INoConstraintsModifyApplication<TKey, T, CreateT>
+{
+}
+#endregion
