@@ -7,8 +7,9 @@ public interface IReadCell
     string StringValue { get; }
     Type ValueType { get; }
     object Value { get; set; }
+    void CopyCellFrom(IReadCell cell);
 }
 public interface IReadCell<T> : IReadCell
 {
-    T Cell { get; }
+    T Cell { get; set; }
 }

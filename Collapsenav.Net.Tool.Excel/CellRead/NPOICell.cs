@@ -3,14 +3,14 @@ using NPOI.SS.UserModel;
 namespace Collapsenav.Net.Tool.Excel;
 public class NPOICell : IReadCell<ICell>
 {
-    private readonly ICell cell;
+    private ICell cell;
 
     public NPOICell(ICell excelCell)
     {
         cell = excelCell;
     }
 
-    public ICell Cell { get => cell; }
+    public ICell Cell { get => cell; set => cell = value; }
     public int Row { get => cell.RowIndex - ExcelTool.NPOIZero; }
     public int Col { get => cell.ColumnIndex - ExcelTool.NPOIZero; }
     public string StringValue => cell.ToString();
@@ -35,5 +35,14 @@ public class NPOICell : IReadCell<ICell>
             else
                 cell.SetCellValue(strValue);
         }
+    }
+    public void CopyCellFrom(IReadCell cell)
+    {
+        if (cell is not IReadCell<ICell> tcell)
+            return;
+        Value = tcell.StringValue;
+        var style = Cell.Sheet.Workbook.CreateCellStyle();
+        style.CloneStyleFrom(tcell.Cell.CellStyle);
+        Cell.CellStyle = style;
     }
 }

@@ -29,7 +29,7 @@ public class MiniCell : IReadCell<KeyValuePair<string, object>>
         return scol;
     }
 
-    public KeyValuePair<string, object> Cell { get => cell; }
+    public KeyValuePair<string, object> Cell { get => cell; set => cell = value; }
     public int Row { get => _row - ExcelTool.MiniZero; }
     public int Col { get => _col - ExcelTool.MiniZero; }
     public string StringValue => cell.Value.ToString().Trim();
@@ -37,6 +37,12 @@ public class MiniCell : IReadCell<KeyValuePair<string, object>>
     public object Value
     {
         get => cell.Value; set => cellRow.AddOrUpdate(_scol, value);
+    }
+    public void CopyCellFrom(IReadCell cell)
+    {
+        if (cell is not IReadCell<KeyValuePair<string, object>> tcell)
+            return;
+        Value = cell.Value;
     }
 }
 
