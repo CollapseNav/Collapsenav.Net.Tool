@@ -14,3 +14,12 @@ public interface ICrudController<TKey, T, CreateT, GetT> : IQueryController<TKey
     where GetT : IBaseGet<T>
 {
 }
+
+#region 无泛型约束
+public interface INoConstraintsCrudController<T, CreateT, GetT> : INoConstraintsQueryController<T, GetT>, INoConstraintsModifyController<T, CreateT>
+{
+}
+public interface INoConstraintsCrudController<TKey, T, CreateT, GetT> : INoConstraintsQueryController<TKey, T, GetT>, INoConstraintsModifyController<TKey, T, CreateT>
+{
+}
+#endregion
