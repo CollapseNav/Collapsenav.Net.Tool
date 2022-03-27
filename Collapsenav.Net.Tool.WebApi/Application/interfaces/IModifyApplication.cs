@@ -25,7 +25,7 @@ public interface IModifyApplication<TKey, T, CreateT> : IModifyApplication<T, Cr
     /// <summary>
     /// 更新
     /// </summary>
-    Task UpdateAsync(TKey id, CreateT entity);
+    Task<int> UpdateAsync(TKey id, CreateT entity);
 }
 
 #region 无泛型约束
@@ -40,7 +40,7 @@ public interface INoConstraintsModifyApplication<T, CreateT> : INoConstraintsWri
     /// </summary>
     Task<int> AddRangeAsync(IEnumerable<CreateT> entitys);
 }
-public interface INoConstraintsModifyApplication<TKey, T, CreateT> : INoConstraintsModifyApplication<T, CreateT>, INoConstraintsWriteApplication<TKey, T> 
+public interface INoConstraintsModifyApplication<TKey, T, CreateT> : INoConstraintsModifyApplication<T, CreateT>, INoConstraintsWriteApplication<TKey, T>
 {
     /// <summary>
     /// 删除(多个 id)
@@ -49,7 +49,7 @@ public interface INoConstraintsModifyApplication<TKey, T, CreateT> : INoConstrai
     /// <summary>
     /// 更新
     /// </summary>
-    Task UpdateAsync(TKey id, CreateT entity);
+    Task<int> UpdateAsync(TKey id, CreateT entity);
 }
 #endregion
 

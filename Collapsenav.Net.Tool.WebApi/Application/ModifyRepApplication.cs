@@ -48,7 +48,7 @@ public class ModifyRepApplication<TKey, T, CreateT> : WriteRepApplication<TKey, 
         return await App.AddRangeAsync(entitys);
     }
 
-    public override Task DeleteAsync(string id, bool isTrue = false)
+    public override Task<bool> DeleteAsync(string id, bool isTrue = false)
     {
         return base.DeleteAsync(id, isTrue);
     }
@@ -58,11 +58,11 @@ public class ModifyRepApplication<TKey, T, CreateT> : WriteRepApplication<TKey, 
         var result = await Repo.DeleteAsync(id, isTrue);
         return result;
     }
-    public virtual async Task UpdateAsync(TKey id, CreateT entity)
+    public virtual async Task<int> UpdateAsync(TKey id, CreateT entity)
     {
         var data = Mapper.Map<T>(entity);
         data.SetValue("Id", id);
-        await Repo.UpdateAsync(data);
+        return await Repo.UpdateAsync(data);
     }
 }
 

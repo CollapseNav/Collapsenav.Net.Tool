@@ -44,9 +44,9 @@ public class CrudRepApplication<T, CreateT, GetT> : ICrudApplication<T, CreateT,
     {
         return await Read.QueryByStringIdAsync(id);
     }
-    public virtual async Task DeleteAsync(string id, bool isTrue = false)
+    public virtual async Task<bool> DeleteAsync(string id, bool isTrue = false)
     {
-        await Write.DeleteAsync(id, isTrue);
+        return await Write.DeleteAsync(id, isTrue);
     }
 
     public virtual async Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT input) where NewGetT : class, IBaseGet<T>
@@ -69,9 +69,9 @@ public class CrudRepApplication<T, CreateT, GetT> : ICrudApplication<T, CreateT,
         return await Write.AddAsync(entity);
     }
 
-    public virtual async Task UpdateAsync(string id, T entity)
+    public virtual async Task<int> UpdateAsync(string id, T entity)
     {
-        await Write.UpdateAsync(id, entity);
+        return await Write.UpdateAsync(id, entity);
     }
 }
 public class CrudRepApplication<TKey, T, CreateT, GetT> : CrudRepApplication<T, CreateT, GetT>, ICrudApplication<TKey, T, CreateT, GetT>
@@ -88,12 +88,12 @@ public class CrudRepApplication<TKey, T, CreateT, GetT> : CrudRepApplication<T, 
         Write = new ModifyRepApplication<TKey, T, CreateT>(Repo, mapper);
         Read = new QueryRepApplication<TKey, T, GetT>(Repo, mapper);
     }
-    public virtual async Task DeleteAsync(TKey id, bool isTrue = false)
+    public virtual async Task<bool> DeleteAsync(TKey id, bool isTrue = false)
     {
-        await Write.DeleteAsync(id, isTrue);
+        return await Write.DeleteAsync(id, isTrue);
     }
 
-    public override Task DeleteAsync(string id, bool isTrue = false)
+    public override Task<bool> DeleteAsync(string id, bool isTrue = false)
     {
         return base.DeleteAsync(id, isTrue);
     }
@@ -102,9 +102,9 @@ public class CrudRepApplication<TKey, T, CreateT, GetT> : CrudRepApplication<T, 
     {
         return await Write.DeleteRangeAsync(id, isTrue);
     }
-    public virtual async Task UpdateAsync(TKey id, CreateT entity)
+    public virtual async Task<int> UpdateAsync(TKey id, CreateT entity)
     {
-        await Write.UpdateAsync(id, entity);
+        return await Write.UpdateAsync(id, entity);
     }
 
     public virtual async Task<T> QueryAsync(TKey id)
