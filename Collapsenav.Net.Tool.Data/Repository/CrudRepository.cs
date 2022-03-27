@@ -46,9 +46,9 @@ public class CrudRepository<T> : Repository<T>, ICrudRepository<T> where T : cla
         return await Read.IsExistAsync(exp);
     }
 
-    public virtual async Task UpdateAsync(T entity)
+    public virtual async Task<int> UpdateAsync(T entity)
     {
-        await Write.UpdateAsync(entity);
+        return await Write.UpdateAsync(entity);
     }
 
     public virtual async Task<int> UpdateAsync(Expression<Func<T, bool>> where, Expression<Func<T, T>> entity)
@@ -105,6 +105,5 @@ public class CrudRepository<TKey, T> : CrudRepository<T>, ICrudRepository<TKey, 
     {
         return await Read.QueryAsync(ids);
     }
-
 }
 

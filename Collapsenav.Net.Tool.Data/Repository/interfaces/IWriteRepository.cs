@@ -13,7 +13,7 @@ public interface IWriteRepository<T> : IRepository<T> where T : class, IEntity
     /// <summary>
     /// 更新
     /// </summary>
-    Task UpdateAsync(T entity);
+    Task<int> UpdateAsync(T entity);
 }
 public interface IWriteRepository<TKey, T> : IRepository<TKey, T> where T : class, IEntity<TKey>
 {
@@ -37,7 +37,7 @@ public interface INoConstraintsWriteRepository<T> : INoConstraintsRepository<T>
     /// <summary>
     /// 更新
     /// </summary>
-    Task UpdateAsync(T entity);
+    Task<int> UpdateAsync(T entity);
 }
 public interface INoConstraintsWriteRepository<TKey, T> : INoConstraintsRepository<TKey, T>
 {

@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Z.EntityFramework.Plus;
 
@@ -22,13 +21,14 @@ public partial class WriteRepository<T> : Repository<T>, IWriteRepository<T>
     /// <summary>
     /// 更新数据
     /// </summary>
-    public virtual async Task UpdateAsync(T entity)
+    public virtual async Task<int> UpdateAsync(T entity)
     {
         // dbSet.Update(entity);
         entity.Update();
         var entry = _db.Entry(entity);
         entry.State = EntityState.Modified;
         await Task.FromResult("");
+        return 1;
     }
     /// <summary>
     /// 根据id删除数据
