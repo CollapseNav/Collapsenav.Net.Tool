@@ -16,7 +16,7 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Collapsenav.Net.Tool.Data\Collapsenav.Net.Tool.Data.csproj"/>
-        <ProjectReference Include="..\Collapsenav.Net.Tool.Excel\Collapsenav.Net.Tool.Excel.csproj"/>
+        <ProjectReference Include="..\..\Data\Collapsenav.Net.Tool.Data\Collapsenav.Net.Tool.Data.csproj"/>
+        <ProjectReference Include="..\..\Excel\Collapsenav.Net.Tool.Excel\Collapsenav.Net.Tool.Excel.csproj"/>
     </ItemGroup>
 </Project>

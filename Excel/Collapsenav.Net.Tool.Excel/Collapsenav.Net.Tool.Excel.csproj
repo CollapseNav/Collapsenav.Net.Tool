@@ -16,6 +16,6 @@
         <PackageReference Include="MiniExcel" Version="0.21.4"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj"/>
+        <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj"/>
     </ItemGroup>
 </Project>

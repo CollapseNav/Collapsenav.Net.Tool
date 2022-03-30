@@ -19,7 +19,7 @@
         <PackageReference Include="coverlet.msbuild" Version="3.1.0"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\Collapsenav.Net.Tool.Excel\Collapsenav.Net.Tool.Excel.csproj"/>
+        <ProjectReference Include="..\..\Excel\Collapsenav.Net.Tool.Excel\Collapsenav.Net.Tool.Excel.csproj"/>
         <None Include="CellRead.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>
         <None Include="TestExcel.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>
         <None Include="ExcelRead.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>

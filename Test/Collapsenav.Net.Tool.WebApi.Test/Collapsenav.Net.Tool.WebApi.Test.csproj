@@ -21,7 +21,7 @@
         <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\Collapsenav.Net.Tool.WebApi\Collapsenav.Net.Tool.WebApi.csproj"/>
+        <ProjectReference Include="..\..\WebApi\Collapsenav.Net.Tool.WebApi\Collapsenav.Net.Tool.WebApi.csproj"/>
         <None Include="./Test.db" CopyToOutputDirectory="Always"/>
         <None Include="./TestApp.db" CopyToOutputDirectory="Always"/>
     </ItemGroup>

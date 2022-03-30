@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Excel", "Collapsenav.Net.Tool.Excel\Collapsenav.Net.Tool.Excel.csproj", "{1A1F8329-51BE-4869-B47E-232EC1CE2C73}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Excel", "Excel\Collapsenav.Net.Tool.Excel\Collapsenav.Net.Tool.Excel.csproj", "{1A1F8329-51BE-4869-B47E-232EC1CE2C73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool", "Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj", "{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool", "Tool\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj", "{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Data", "Collapsenav.Net.Tool.Data\Collapsenav.Net.Tool.Data.csproj", "{13EED916-E91B-4732-8DD0-64409F2D01E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Data", "Data\Collapsenav.Net.Tool.Data\Collapsenav.Net.Tool.Data.csproj", "{13EED916-E91B-4732-8DD0-64409F2D01E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.WebApi", "Collapsenav.Net.Tool.WebApi\Collapsenav.Net.Tool.WebApi.csproj", "{DCB44857-99CF-4C3E-9F40-5B94A047CEEA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.WebApi", "WebApi\Collapsenav.Net.Tool.WebApi\Collapsenav.Net.Tool.WebApi.csproj", "{DCB44857-99CF-4C3E-9F40-5B94A047CEEA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{B0A6264A-858D-498A-8AF3-4EC4624F484A}"
 EndProject
@@ -20,6 +20,20 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Test", "Test\Collapsenav.Net.Tool.Test\Collapsenav.Net.Tool.Test.csproj", "{5A90FAA9-A57C-433A-A7E2-876D9F78E934}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.WebApi.Test", "Test\Collapsenav.Net.Tool.WebApi.Test\Collapsenav.Net.Tool.WebApi.Test.csproj", "{3385464A-DA8E-4A10-94F7-7F510A1AA731}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Identity", "Identity\Collapsenav.Net.Tool.Identity\Collapsenav.Net.Tool.Identity.csproj", "{1C6718BD-9485-4450-8E11-D0CF9D95D3C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Ids", "Identity\Collapsenav.Net.Tool.Ids\Collapsenav.Net.Tool.Ids.csproj", "{4543434E-163A-4809-BDE1-20B8808FA0A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tool", "Tool", "{32F39130-AFD9-11EC-A4DD-89292EA21490}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{5997D710-AFD9-11EC-A4DD-89292EA21490}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApi", "WebApi", "{5D070D30-AFD9-11EC-A4DD-89292EA21490}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Excel", "Excel", "{635FF5C0-AFD9-11EC-A4DD-89292EA21490}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{7554AB90-AFD9-11EC-A4DD-89292EA21490}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -127,8 +141,38 @@ Global
 		{3385464A-DA8E-4A10-94F7-7F510A1AA731}.Release|x64.Build.0 = Release|Any CPU
 		{3385464A-DA8E-4A10-94F7-7F510A1AA731}.Release|x86.ActiveCfg = Release|Any CPU
 		{3385464A-DA8E-4A10-94F7-7F510A1AA731}.Release|x86.Build.0 = Release|Any CPU
+		{1C6718BD-9485-4450-8E11-D0CF9D95D3C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C6718BD-9485-4450-8E11-D0CF9D95D3C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C6718BD-9485-4450-8E11-D0CF9D95D3C9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1C6718BD-9485-4450-8E11-D0CF9D95D3C9}.Debug|x64.Build.0 = Debug|Any CPU
+		{1C6718BD-9485-4450-8E11-D0CF9D95D3C9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1C6718BD-9485-4450-8E11-D0CF9D95D3C9}.Debug|x86.Build.0 = Debug|Any CPU
+		{1C6718BD-9485-4450-8E11-D0CF9D95D3C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C6718BD-9485-4450-8E11-D0CF9D95D3C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C6718BD-9485-4450-8E11-D0CF9D95D3C9}.Release|x64.ActiveCfg = Release|Any CPU
+		{1C6718BD-9485-4450-8E11-D0CF9D95D3C9}.Release|x64.Build.0 = Release|Any CPU
+		{1C6718BD-9485-4450-8E11-D0CF9D95D3C9}.Release|x86.ActiveCfg = Release|Any CPU
+		{1C6718BD-9485-4450-8E11-D0CF9D95D3C9}.Release|x86.Build.0 = Release|Any CPU
+		{4543434E-163A-4809-BDE1-20B8808FA0A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4543434E-163A-4809-BDE1-20B8808FA0A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4543434E-163A-4809-BDE1-20B8808FA0A9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4543434E-163A-4809-BDE1-20B8808FA0A9}.Debug|x64.Build.0 = Debug|Any CPU
+		{4543434E-163A-4809-BDE1-20B8808FA0A9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4543434E-163A-4809-BDE1-20B8808FA0A9}.Debug|x86.Build.0 = Debug|Any CPU
+		{4543434E-163A-4809-BDE1-20B8808FA0A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4543434E-163A-4809-BDE1-20B8808FA0A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4543434E-163A-4809-BDE1-20B8808FA0A9}.Release|x64.ActiveCfg = Release|Any CPU
+		{4543434E-163A-4809-BDE1-20B8808FA0A9}.Release|x64.Build.0 = Release|Any CPU
+		{4543434E-163A-4809-BDE1-20B8808FA0A9}.Release|x86.ActiveCfg = Release|Any CPU
+		{4543434E-163A-4809-BDE1-20B8808FA0A9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{DCB44857-99CF-4C3E-9F40-5B94A047CEEA} = {5D070D30-AFD9-11EC-A4DD-89292EA21490}
+		{4543434E-163A-4809-BDE1-20B8808FA0A9} = {7554AB90-AFD9-11EC-A4DD-89292EA21490}
+		{1C6718BD-9485-4450-8E11-D0CF9D95D3C9} = {7554AB90-AFD9-11EC-A4DD-89292EA21490}
+		{1A1F8329-51BE-4869-B47E-232EC1CE2C73} = {635FF5C0-AFD9-11EC-A4DD-89292EA21490}
+		{13EED916-E91B-4732-8DD0-64409F2D01E3} = {5997D710-AFD9-11EC-A4DD-89292EA21490}
+		{F4C7AF1C-6F28-4D97-84F9-C2B53F6B297E} = {32F39130-AFD9-11EC-A4DD-89292EA21490}
 		{894EDBB2-060C-41D4-92AF-B4CCED74E0B3} = {B0A6264A-858D-498A-8AF3-4EC4624F484A}
 		{F48DB8ED-2FAC-417D-A0F1-A4DDCDA0B2A6} = {B0A6264A-858D-498A-8AF3-4EC4624F484A}
 		{5A90FAA9-A57C-433A-A7E2-876D9F78E934} = {B0A6264A-858D-498A-8AF3-4EC4624F484A}

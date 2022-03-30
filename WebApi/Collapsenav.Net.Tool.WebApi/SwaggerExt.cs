@@ -55,4 +55,45 @@ public static class SwaggerExt
         });
         return services;
     }
+    /// <summary>
+    /// 带JWT的Swagger
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="url"></param>
+    /// <returns></returns>
+    public static IServiceCollection AddSwaggerWithOAuth(this IServiceCollection services, string url)
+    {
+        services.AddSwaggerGen(options =>
+        {
+            options.DocInclusionPredicate((_, _) => true);
+            foreach (var dir in new DirectoryInfo(AppContext.BaseDirectory).GetFiles("*.xml"))
+                options.IncludeXmlComments(dir.FullName, true);
+            options.AddSecurityDefinition("OAuth", new OpenApiSecurityScheme
+            {
+                Description = "OAuth",
+                Type = SecuritySchemeType.OAuth2,
+                Flows = new()
+                {
+                    Implicit = new()
+                    {
+                        AuthorizationUrl = new($"{url}/connect/authorize"),
+                    }
+                }
+            });
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "OAuth"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
+        });
+        return services;
+    }
 }

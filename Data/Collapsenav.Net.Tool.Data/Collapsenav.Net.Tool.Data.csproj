@@ -9,7 +9,7 @@
         <PackageId>Collapsenav.Net.Tool.Data</PackageId>
     </PropertyGroup>
     <ItemGroup>
-        <ProjectReference Include="..\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj"/>
+        <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj"/>
     </ItemGroup>
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.*"/>

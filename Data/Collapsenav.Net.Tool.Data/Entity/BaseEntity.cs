@@ -23,6 +23,7 @@ public partial class BaseEntity<TKey> : BaseEntity, IBaseEntity<TKey>
             Id = GetKey();
         CreationTime = GetNow();
         LastModificationTime = GetNow();
+        IsDeleted = false;
         InitModifyId();
     }
     /// <summary>

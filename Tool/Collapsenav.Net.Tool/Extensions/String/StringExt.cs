@@ -311,7 +311,9 @@ public static partial class StringExt
     {
         return $"{origin.First(origin.Length - num)}{origin.Last(num).ToLower()}";
     }
-
+    /// <summary>
+    /// 首字母大写
+    /// </summary>
     public static string UpFirstLetter(this string origin)
     {
         return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(origin);

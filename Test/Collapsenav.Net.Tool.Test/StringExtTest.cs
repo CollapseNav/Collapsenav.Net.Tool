@@ -360,4 +360,13 @@ public class StringExtTest
         Assert.True(data.ToLowerEnd(3) == "COLLAPSENAV.NET.Tool");
         Assert.True(data.ToLowerEnd(data.Length) == "collapsenav.net.tool");
     }
+
+    [Fact]
+    public void UpFirstLetterTest()
+    {
+        string data = "collapsenav.net.tool";
+        Assert.True(data.UpFirstLetter() == "Collapsenav.Net.Tool");
+        data = "collapsenav net tool";
+        Assert.True(data.UpFirstLetter() == "Collapsenav Net Tool");
+    }
 }
