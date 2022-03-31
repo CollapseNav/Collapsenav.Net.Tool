@@ -313,7 +313,7 @@ public class ReadConfigTest
         .Add("Field2", item => item.Field2, item => item == "Male")
         .Add("Field3", item => item.Field3)
         ;
-        var epplusSheet = ExcelTool.EPPlusSheet(path);
+        var epplusSheet = EPPlusTool.EPPlusSheet(path);
         var data = await config.EPPlusToEntityAsync(epplusSheet);
         Assert.True(data.Count() == 3000);
         Assert.True(data.Count(item => item.Field0 == "233") == 1500);
@@ -321,7 +321,7 @@ public class ReadConfigTest
         Assert.True(data.Count(item => item.Field2 == true) == 1500);
         Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
 
-        var npoiSheet = ExcelTool.NPOISheet(path);
+        var npoiSheet = NPOITool.NPOISheet(path);
         data = await config.NPOIToEntityAsync(npoiSheet);
         Assert.True(data.Count() == 3000);
         Assert.True(data.Count(item => item.Field0 == "233") == 1500);
@@ -418,7 +418,7 @@ public class ReadConfigTest
     public async Task StaticReadConfigFuncByIExcelReadTest()
     {
         string path = "./TestExcel.xlsx";
-        using var reader = IExcelRead.GetExcelRead(path);
+        using var reader = IExcelReader.GetExcelRead(path);
         var config = new ReadConfig<ExcelTestDto>()
         .Add("Field0", item => item.Field0)
         .Add("Field1", item => item.Field1)

@@ -214,4 +214,14 @@ public static partial class TypeExt
     {
         return new Difference<T>(before, end);
     }
+
+    public static bool HasInterface(this Type type, Type interfaceType)
+    {
+        return type.GetTypeInfo().ImplementedInterfaces.Any(item => item == interfaceType);
+    }
+
+    public static bool HasGenericInterface(this Type type, Type interfaceType)
+    {
+        return type.GetTypeInfo().ImplementedInterfaces.Any(item => (item.IsGenericType ? item.GetGenericTypeDefinition() : item) == interfaceType);
+    }
 }

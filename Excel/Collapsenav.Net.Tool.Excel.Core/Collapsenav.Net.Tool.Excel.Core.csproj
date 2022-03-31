@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="../version.props"/>
+    <PropertyGroup>
+        <PackageTags>Excel,EPPlus</PackageTags>
+        <Description>
+基于MiniExcel提供了导出导出功能
+        </Description>
+        <Product>Collapsenav.Net.Tool.Excel.Core</Product>
+        <PackageId>Collapsenav.Net.Tool.Excel.Core</PackageId>
+        <ProjectUrl>http://doc.collapsenav.cn/docs/Excel/</ProjectUrl>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj" />
+        <PackageReference Include="AutoMapper" Version="10.1.1" />
+    </ItemGroup>
+</Project>

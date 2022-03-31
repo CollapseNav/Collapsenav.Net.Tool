@@ -14,7 +14,7 @@ public class CellReadGetValueTest
         var path = "./CellRead.xlsx";
         var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
 
-        IExcelCellRead reader = new EPPlusCellRead(path);
+        IExcelCellReader reader = new EPPlusCellReader(path);
         Assert.True(reader.RowCount == 11);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
         Assert.True(reader[1, 0].StringValue == "233");
@@ -29,7 +29,7 @@ public class CellReadGetValueTest
         reader.Dispose();
 
         using var fs = path.OpenReadWriteShareStream();
-        reader = new EPPlusCellRead(fs);
+        reader = new EPPlusCellReader(fs);
 
         Assert.True(reader["Field0", 1].StringValue == "233");
         Assert.True(reader["Field3", 1].StringValue == "233.33");
@@ -44,7 +44,7 @@ public class CellReadGetValueTest
         var path = "./CellRead.xlsx";
         var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
 
-        IExcelCellRead reader = new NPOICellRead(path);
+        IExcelCellReader reader = new NPOICellReader(path);
         Assert.True(reader.RowCount == 11);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
         Assert.True(reader[1, 0].StringValue == "233");
@@ -59,7 +59,7 @@ public class CellReadGetValueTest
         reader.Dispose();
 
         using var fs = path.OpenReadWriteShareStream();
-        reader = new NPOICellRead(fs);
+        reader = new NPOICellReader(fs);
 
         Assert.True(reader["Field0", 1].StringValue == "233");
         Assert.True(reader["Field3", 1].StringValue == "233.33");
@@ -74,7 +74,7 @@ public class CellReadGetValueTest
         var path = "./CellRead.xlsx";
         var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
 
-        IExcelCellRead reader = new MiniCellRead(path);
+        IExcelCellReader reader = new MiniCellReader(path);
         Assert.True(reader.RowCount == 11);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
         Assert.True(reader[1, 0].StringValue == "233");
@@ -89,7 +89,7 @@ public class CellReadGetValueTest
         reader.Dispose();
 
         using var fs = path.OpenReadWriteShareStream();
-        reader = new MiniCellRead(fs);
+        reader = new MiniCellReader(fs);
 
         Assert.True(reader["Field0", 1].StringValue == "233");
         Assert.True(reader["Field3", 1].StringValue == "233.33");
@@ -109,7 +109,7 @@ public class CellReadGetValueTest
         var row1Data = new[] { "233", "23", "Male", "233.33" };
         var row10Data = new[] { "1122", "12", "Female", "123.23" };
 
-        IExcelCellRead reader = new EPPlusCellRead(path);
+        IExcelCellReader reader = new EPPlusCellReader(path);
         Assert.True(reader.RowCount == 11);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
 
@@ -119,7 +119,7 @@ public class CellReadGetValueTest
         reader.Dispose();
 
         using var fs = path.OpenReadWriteShareStream();
-        reader = new EPPlusCellRead(fs);
+        reader = new EPPlusCellReader(fs);
 
         var field0Data = new[] { "Field0", "233", "1122", "233", "1122", "233", "1122", "233", "1122", "233", "1122" };
         var field3Data = new[] { "Field3", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23" };
@@ -137,7 +137,7 @@ public class CellReadGetValueTest
         var row1Data = new[] { "233", "23", "Male", "233.33" };
         var row10Data = new[] { "1122", "12", "Female", "123.23" };
 
-        IExcelCellRead reader = new NPOICellRead(path);
+        IExcelCellReader reader = new NPOICellReader(path);
         Assert.True(reader.RowCount == 11);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
 
@@ -147,7 +147,7 @@ public class CellReadGetValueTest
         reader.Dispose();
 
         using var fs = path.OpenReadWriteShareStream();
-        reader = new NPOICellRead(fs);
+        reader = new NPOICellReader(fs);
 
         var field0Data = new[] { "Field0", "233", "1122", "233", "1122", "233", "1122", "233", "1122", "233", "1122" };
         var field3Data = new[] { "Field3", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23" };
@@ -165,7 +165,7 @@ public class CellReadGetValueTest
         var row1Data = new[] { "233", "23", "Male", "233.33" };
         var row10Data = new[] { "1122", "12", "Female", "123.23" };
 
-        IExcelCellRead reader = new MiniCellRead(path);
+        IExcelCellReader reader = new MiniCellReader(path);
         Assert.True(reader.RowCount == 11);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
 
@@ -175,7 +175,7 @@ public class CellReadGetValueTest
         reader.Dispose();
 
         using var fs = path.OpenReadWriteShareStream();
-        reader = new MiniCellRead(fs);
+        reader = new MiniCellReader(fs);
 
         var field0Data = new[] { "Field0", "233", "1122", "233", "1122", "233", "1122", "233", "1122", "233", "1122" };
         var field3Data = new[] { "Field3", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23" };
@@ -196,7 +196,7 @@ public class CellReadGetValueTest
         var row1Data = new[] { "233", "23", "Male", "233.33" };
         var row10Data = new[] { "1122", "12", "Female", "123.23" };
 
-        IExcelCellRead reader = new EPPlusCellRead(path);
+        IExcelCellReader reader = new EPPlusCellReader(path);
         Assert.True(reader.Count() == 11);
         Assert.True(reader.First().Select(item => item.StringValue).SequenceEqual(realHeader));
 
@@ -205,7 +205,7 @@ public class CellReadGetValueTest
         reader.Dispose();
 
         using var fs = path.OpenReadWriteShareStream();
-        reader = new EPPlusCellRead(fs);
+        reader = new EPPlusCellReader(fs);
 
         Assert.True(reader.Reverse().First().Select(item => item.StringValue).SequenceEqual(row10Data));
         Assert.True(reader.SkipLast(1).Last().Select(item => item.StringValue).SequenceEqual(row1Data));
@@ -221,7 +221,7 @@ public class CellReadGetValueTest
         var row1Data = new[] { "233", "23", "Male", "233.33" };
         var row10Data = new[] { "1122", "12", "Female", "123.23" };
 
-        IExcelCellRead reader = new NPOICellRead(path);
+        IExcelCellReader reader = new NPOICellReader(path);
         Assert.True(reader.Count() == 11);
         Assert.True(reader.First().Select(item => item.StringValue).SequenceEqual(realHeader));
 
@@ -230,7 +230,7 @@ public class CellReadGetValueTest
         reader.Dispose();
 
         using var fs = path.OpenReadWriteShareStream();
-        reader = new NPOICellRead(fs);
+        reader = new NPOICellReader(fs);
 
         Assert.True(reader.Reverse().First().Select(item => item.StringValue).SequenceEqual(row10Data));
         Assert.True(reader.SkipLast(1).Last().Select(item => item.StringValue).SequenceEqual(row1Data));
@@ -246,7 +246,7 @@ public class CellReadGetValueTest
         var row1Data = new[] { "233", "23", "Male", "233.33" };
         var row10Data = new[] { "1122", "12", "Female", "123.23" };
 
-        IExcelCellRead reader = new MiniCellRead(path);
+        IExcelCellReader reader = new MiniCellReader(path);
         Assert.True(reader.Count() == 11);
         Assert.True(reader.First().Select(item => item.StringValue).SequenceEqual(realHeader));
 
@@ -255,7 +255,7 @@ public class CellReadGetValueTest
         reader.Dispose();
 
         using var fs = path.OpenReadWriteShareStream();
-        reader = new MiniCellRead(fs);
+        reader = new MiniCellReader(fs);
 
         Assert.True(reader.Reverse().First().Select(item => item.StringValue).SequenceEqual(row10Data));
         Assert.True(reader.SkipLast(1).Last().Select(item => item.StringValue).SequenceEqual(row1Data));
@@ -271,7 +271,7 @@ public class CellReadGetValueTest
         var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
         var row1Data = new[] { "233", "23", "Male", "233.33" };
         var row10Data = new[] { "1122", "12", "Female", "123.23" };
-        IExcelCellRead reader = new MiniCellRead(path);
+        IExcelCellReader reader = new MiniCellReader(path);
         var mergeData = reader.Merge();
         Assert.True(mergeData.Count() == 44);
         Assert.True(mergeData.Take(4).Select(item => item.StringValue).SequenceEqual(realHeader));

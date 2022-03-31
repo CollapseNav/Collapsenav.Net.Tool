@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="../version.props"/>
+    <PropertyGroup>
+        <PackageTags>Excel,EPPlus</PackageTags>
+        <Description>
+基于NPOI提供了导出导出功能
+        </Description>
+        <Product>Collapsenav.Net.Tool.Excel.NPOI</Product>
+        <PackageId>Collapsenav.Net.Tool.Excel.NPOI</PackageId>
+        <ProjectUrl>http://doc.collapsenav.cn/docs/Excel/</ProjectUrl>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="NPOI" Version="2.5.5"/>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj" />
+        <ProjectReference Include="..\Collapsenav.Net.Tool.Excel.Core\Collapsenav.Net.Tool.Excel.Core.csproj" />
+    </ItemGroup>
+</Project>
