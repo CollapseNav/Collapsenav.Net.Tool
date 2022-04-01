@@ -369,4 +369,15 @@ public class StringExtTest
         data = "collapsenav net tool";
         Assert.True(data.UpFirstLetter() == "Collapsenav Net Tool");
     }
+
+    [Fact]
+    public void PadWithTest()
+    {
+        string origin = "123";
+        string value = "789";
+        Assert.True(origin.PadWith(value, 9) == "123   789");
+        Assert.True(origin.PadWith(value, 9).Length == 9);
+        Assert.True(origin.PadWith(value, 6) == "123789");
+        Assert.True(origin.PadWith(value, 3) == "123789");
+    }
 }

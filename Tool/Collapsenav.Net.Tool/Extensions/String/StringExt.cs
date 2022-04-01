@@ -318,4 +318,11 @@ public static partial class StringExt
     {
         return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(origin);
     }
+
+    public static string PadWith(this string origin, string value, int len)
+    {
+        if ((origin.Length + value.Length) >= len)
+            return origin + value;
+        return origin.PadRight(len - value.Length) + value;
+    }
 }
