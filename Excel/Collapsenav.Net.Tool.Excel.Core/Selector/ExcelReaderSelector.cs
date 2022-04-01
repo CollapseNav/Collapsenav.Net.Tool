@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace Collapsenav.Net.Tool.Excel;
 
 public class ExcelReaderSelector
@@ -16,13 +18,11 @@ public class ExcelReaderSelector
     }
     public static IExcelReader GetExcelReader(object obj, ExcelType? excelType = null)
     {
-        if (ObjSelectorDict.IsEmpty()) Console.WriteLine("Empty");
         if (obj == null || ObjSelectorDict.IsEmpty()) return null;
         if (excelType.HasValue && !ObjSelectorDict.ContainsKey(excelType.Value))
             return null;
         if (excelType != null)
             return ObjSelectorDict[excelType.Value](obj);
-
         foreach (var kv in ObjSelectorDict)
         {
             var reader = kv.Value(obj);
@@ -40,9 +40,14 @@ public class ExcelReaderSelector
         IExcelReader reader = StreamSelectorDict[excelType.Value](stream);
         return reader;
     }
-    public static ExcelType? DefaultExcelType(Stream stream) => stream.Length switch
+    public static ExcelType? DefaultExcelType(Stream stream)
     {
-        >= 5 * 1024 * 1024 => ExcelType.MiniExcel,
-        <= 5 * 1024 * 1024 => new Random().Next() % 2 == 0 ? ExcelType.EPPlus : ExcelType.NPOI,
-    };
+        if (ObjSelectorDict.Count == 1)
+            return ObjSelectorDict.First().Key;
+        return stream.Length switch
+        {
+            >= 5 * 1024 * 1024 => ObjSelectorDict.ContainsKey(ExcelType.MiniExcel) && StreamSelectorDict.ContainsKey(ExcelType.MiniExcel) ? ExcelType.MiniExcel : null,
+            <= 5 * 1024 * 1024 => ObjSelectorDict.ElementAt(new Random().Next() % ObjSelectorDict.Count).Key,
+        };
+    }
 }
