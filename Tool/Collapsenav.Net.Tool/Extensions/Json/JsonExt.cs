@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
 namespace Collapsenav.Net.Tool;
@@ -34,4 +35,19 @@ public static partial class JsonExt
     /// 通过json的序列化反序列化map对象
     /// </summary>
     public static T JsonMap<S, T>(this S obj) => obj.ToJson().ToObj<T>();
+
+    public static JsonElement GetJsonElement(this string path) => path.GetJsonDocument().RootElement;
+    public static async ValueTask<JsonElement> GetJsonElementAsync(this string path) => (await path.GetJsonDocumentAsync()).RootElement;
+    public static JsonDocument GetJsonDocument(this string path)
+    {
+        using var stream = path.OpenReadWriteShareStream();
+        return JsonDocument.Parse(stream);
+    }
+    public static async ValueTask<JsonDocument> GetJsonDocumentAsync(this string path)
+    {
+        using var stream = path.OpenReadWriteShareStream();
+        return await JsonDocument.ParseAsync(stream);
+    }
+    public static JsonObject GetJsonObject(this string path) => JsonObject.Create(path.GetJsonElement());
+    public static async ValueTask<JsonObject> GetJsonObjectAsync(this string path) => JsonObject.Create(await path.GetJsonElementAsync());
 }
