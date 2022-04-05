@@ -63,26 +63,25 @@ public partial class ReadConfig<T>
         return await ToEntityAsync(reader);
     }
 
-
-    // /// <summary>
-    // /// 转换到实体
-    // /// </summary>
-    // public static async Task<IEnumerable<T>> ExcelToEntityAsync(string path)
-    // {
-    //     return await ExcelTool.ExcelToEntityAsync<T>(path);
-    // }
-    // /// <summary>
-    // /// 转换到实体
-    // /// </summary>
-    // public static async Task<IEnumerable<T>> ExcelToEntityAsync(Stream stream)
-    // {
-    //     return await ExcelTool.ExcelToEntityAsync<T>(stream);
-    // }
-    // /// <summary>
-    // /// 转换到实体
-    // /// </summary>
-    // public static async Task<IEnumerable<T>> ExcelToEntityAsync(IExcelReader reader)
-    // {
-    //     return await ExcelTool.ExcelToEntityAsync<T>(reader);
-    // }
+    /// <summary>
+    /// 转换到实体
+    /// </summary>
+    public static async Task<IEnumerable<T>> ExcelToEntityAsync(string path)
+    {
+        return await ExcelTool.ExcelToEntityAsync<T>(path);
+    }
+    /// <summary>
+    /// 转换到实体
+    /// </summary>
+    public static async Task<IEnumerable<T>> ExcelToEntityAsync(Stream stream)
+    {
+        return await ExcelTool.ExcelToEntityAsync<T>(stream);
+    }
+    /// <summary>
+    /// 转换到实体
+    /// </summary>
+    public static async Task<IEnumerable<T>> ExcelToEntityAsync(IExcelReader reader)
+    {
+        return await ExcelTool.ExcelToEntityAsync<T>(reader);
+    }
 }

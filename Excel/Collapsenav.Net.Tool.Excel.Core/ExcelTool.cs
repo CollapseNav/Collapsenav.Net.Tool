@@ -26,30 +26,30 @@ public partial class ExcelTool
     public static IExcelCellReader GetCellReader(string path, ExcelType? excelType = null)
     {
         using var fs = path.OpenReadShareStream();
-        return CellReaderSelector.GetCellReader(fs, excelType);
+        return CellReaderSelector.GetCellReader(fs, excelType.ToString());
     }
     public static IExcelCellReader GetCellReader(Stream stream, ExcelType? excelType = null)
     {
-        return CellReaderSelector.GetCellReader(stream, excelType);
+        return CellReaderSelector.GetCellReader(stream, excelType.ToString());
     }
     public static IExcelCellReader GetCellReader(object obj, ExcelType? excelType = null)
     {
-        return CellReaderSelector.GetCellReader(obj, excelType);
+        return CellReaderSelector.GetCellReader(obj, excelType.ToString());
     }
 
 
     public static IExcelReader GetExcelReader(string path, ExcelType? excelType = null)
     {
         using var fs = path.OpenReadShareStream();
-        return ExcelReaderSelector.GetExcelReader(fs, excelType);
+        return ExcelReaderSelector.GetExcelReader(fs, excelType.ToString());
     }
     public static IExcelReader GetExcelReader(Stream stream, ExcelType? excelType = null)
     {
-        return ExcelReaderSelector.GetExcelReader(stream, excelType);
+        return ExcelReaderSelector.GetExcelReader(stream, excelType.ToString());
     }
     public static IExcelReader GetExcelReader(object obj, ExcelType? excelType = null)
     {
-        return ExcelReaderSelector.GetExcelReader(obj, excelType);
+        return ExcelReaderSelector.GetExcelReader(obj, excelType.ToString());
     }
 
     /// <summary>

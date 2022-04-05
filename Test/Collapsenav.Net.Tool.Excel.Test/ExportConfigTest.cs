@@ -246,12 +246,12 @@ public class ExportConfigTest
         .Add("Field3", item => item.Field3)
         ;
         _ = config.EPPlusExportHeader(path);
-        IExcelCellReader reader = IExcelCellReader.GetCellRead(path, ExcelType.MiniExcel);
+        IExcelCellReader reader = IExcelCellReader.GetCellReader(path, ExcelType.MiniExcel);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
         reader.Dispose();
 
         _ = config.NPOIExportHeader(path);
-        reader = IExcelCellReader.GetCellRead(path, ExcelType.MiniExcel);
+        reader = IExcelCellReader.GetCellReader(path, ExcelType.MiniExcel);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
         reader.Dispose();
     }
@@ -269,14 +269,14 @@ public class ExportConfigTest
         ;
         var fs = path.OpenCreateReadWriteShareStream();
         _ = config.EPPlusExportHeader(fs);
-        IExcelCellReader reader = IExcelCellReader.GetCellRead(path, ExcelType.MiniExcel);
+        IExcelCellReader reader = IExcelCellReader.GetCellReader(path, ExcelType.MiniExcel);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
         reader.Dispose();
         fs.Dispose();
 
         fs = path.OpenCreateReadWriteShareStream();
         _ = config.NPOIExportHeader(fs);
-        reader = IExcelCellReader.GetCellRead(path, ExcelType.MiniExcel);
+        reader = IExcelCellReader.GetCellReader(path, ExcelType.MiniExcel);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
         reader.Dispose();
         fs.Dispose();
@@ -296,14 +296,14 @@ public class ExportConfigTest
         var fs = config.EPPlusExportHeader();
         fs.SaveTo(path);
         fs.Dispose();
-        IExcelCellReader reader = IExcelCellReader.GetCellRead(path, ExcelType.MiniExcel);
+        IExcelCellReader reader = IExcelCellReader.GetCellReader(path, ExcelType.MiniExcel);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
         reader.Dispose();
 
         fs = config.NPOIExportHeader();
         fs.SaveTo(path);
         fs.Dispose();
-        reader = IExcelCellReader.GetCellRead(path, ExcelType.MiniExcel);
+        reader = IExcelCellReader.GetCellReader(path, ExcelType.MiniExcel);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
         reader.Dispose();
     }

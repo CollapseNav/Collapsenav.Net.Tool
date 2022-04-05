@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Collapsenav.Net.Tool;
 public static partial class StringExt
 {
@@ -8,6 +10,10 @@ public static partial class StringExt
     {
         return Convert.ToBase64String(bytes);
     }
+    public static string ToBase64(this string origin)
+    {
+        return Convert.ToBase64String(origin.ToBytes());
+    }
 
     /// <summary>
     /// base64字符串 转为 bytes
@@ -15,6 +21,13 @@ public static partial class StringExt
     public static byte[] FromBase64(this string base64String)
     {
         return Convert.FromBase64String(base64String);
+    }
+    /// <summary>
+    /// base64字符串 转为 bytes
+    /// </summary>
+    public static string FromBase64ToString(this string base64String)
+    {
+        return Convert.FromBase64String(base64String).BytesToString();
     }
 
     /// <summary>

@@ -7,18 +7,18 @@ public interface IExcelCellReader : IExcelContainer<IReadCell>
     Stream GetStream();
 #if NETSTANDARD2_0
 #else
-    public static IExcelCellReader GetCellRead(object sheet)
+    public static IExcelCellReader GetCellReader(object sheet)
     {
         return CellReaderSelector.GetCellReader(sheet);
     }
-    public static IExcelCellReader GetCellRead(Stream stream, ExcelType? excelType = null)
+    public static IExcelCellReader GetCellReader(Stream stream, ExcelType? excelType = null)
     {
-        return CellReaderSelector.GetCellReader(stream, excelType);
+        return CellReaderSelector.GetCellReader(stream, excelType.ToString());
     }
-    public static IExcelCellReader GetCellRead(string path, ExcelType? excelType = null)
+    public static IExcelCellReader GetCellReader(string path, ExcelType? excelType = null)
     {
-        using var fs = path.OpenCreateReadWriteShareStream();
-        return GetCellRead(fs, excelType);
+        using var fs = path.OpenReadWriteShareStream();
+        return GetCellReader(fs, excelType);
     }
 #endif
 }

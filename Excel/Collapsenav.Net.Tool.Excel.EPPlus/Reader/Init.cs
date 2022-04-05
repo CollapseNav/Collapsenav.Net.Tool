@@ -6,33 +6,30 @@ namespace Collapsenav.Net.Tool.Excel;
 internal class Init
 {
 #if NETCOREAPP
+
+    [ModuleInitializer]
+    public static void InitTypeSelector()
+    {
+        Selector.AddTypeSelector(ExcelType.EPPlus,
+            obj => obj is ExcelWorksheet,
+            stream => stream.Length > 5 * 1024 ? 50 : 1
+        );
+    }
     [ModuleInitializer]
     public static void InitCellReader()
     {
-        CellReaderSelector.Add(ExcelType.EPPlus, (obj) =>
-        {
-            if (obj is ExcelWorksheet sheet)
-                return new EPPlusCellReader(sheet);
-            return null;
-        });
-        CellReaderSelector.Add(ExcelType.EPPlus, (stream) =>
-        {
-            return new EPPlusCellReader(stream);
-        });
+        Selector.AddCellSelector(ExcelType.EPPlus,
+            obj => (obj is ExcelWorksheet sheet) ? new EPPlusCellReader(sheet) : null,
+            stream => new EPPlusCellReader(stream)
+        );
     }
     [ModuleInitializer]
     public static void InitExcelReader()
     {
-        ExcelReaderSelector.Add(ExcelType.EPPlus, (obj) =>
-        {
-            if (obj is ExcelWorksheet sheet)
-                return new EPPlusExcelReader(sheet);
-            return null;
-        });
-        ExcelReaderSelector.Add(ExcelType.EPPlus, (stream) =>
-        {
-            return new EPPlusExcelReader(stream);
-        });
+        Selector.AddExcelSelector(ExcelType.EPPlus,
+            obj => (obj is ExcelWorksheet sheet) ? new EPPlusExcelReader(sheet) : null,
+            stream => new EPPlusExcelReader(stream)
+        );
     }
 #endif
 }

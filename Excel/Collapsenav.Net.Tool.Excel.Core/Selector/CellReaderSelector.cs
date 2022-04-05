@@ -2,51 +2,56 @@ namespace Collapsenav.Net.Tool.Excel;
 
 public class CellReaderSelector
 {
-    private static Dictionary<ExcelType, Func<Stream, IExcelCellReader>> StreamSelectorDict = null;
-    private static Dictionary<ExcelType, Func<object, IExcelCellReader>> ObjSelectorDict = null;
-    public static void Add(ExcelType excelType, Func<object, IExcelCellReader> func)
+    private static Dictionary<string, Func<Stream, IExcelCellReader>> StreamSelectorDict = null;
+    private static Dictionary<string, Func<object, IExcelCellReader>> ObjSelectorDict = null;
+    public static void Add(string excelType, Func<object, IExcelCellReader> func)
     {
         ObjSelectorDict ??= new();
         ObjSelectorDict.AddOrUpdate(excelType, func);
     }
-    public static void Add(ExcelType excelType, Func<Stream, IExcelCellReader> func)
+    public static void Add(string excelType, Func<Stream, IExcelCellReader> func)
     {
         StreamSelectorDict ??= new();
         StreamSelectorDict.AddOrUpdate(excelType, func);
     }
-    public static IExcelCellReader GetCellReader(object obj, ExcelType? excelType = null)
+    public static void Add(ExcelType excelType, Func<object, IExcelCellReader> func)
     {
-        if (obj == null || ObjSelectorDict.IsEmpty()) return null;
-        if (excelType.HasValue && !ObjSelectorDict.ContainsKey(excelType.Value))
-            return null;
-        if (excelType != null)
-            return ObjSelectorDict[excelType.Value](obj);
-        foreach (var kv in ObjSelectorDict)
-        {
-            var reader = kv.Value(obj);
-            if (reader != null)
-                return reader;
-        }
-        return null;
+        ObjSelectorDict ??= new();
+        ObjSelectorDict.AddOrUpdate(excelType.ToString(), func);
     }
-    public static IExcelCellReader GetCellReader(Stream stream, ExcelType? excelType = null)
+    public static void Add(ExcelType excelType, Func<Stream, IExcelCellReader> func)
     {
-        if (stream == null || StreamSelectorDict.IsEmpty()) return null;
-        excelType ??= DefaultExcelType(stream);
-        if (!StreamSelectorDict.ContainsKey(excelType.Value))
-            return null;
-        IExcelCellReader reader = StreamSelectorDict[excelType.Value](stream);
-        return reader;
+        StreamSelectorDict ??= new();
+        StreamSelectorDict.AddOrUpdate(excelType.ToString(), func);
     }
-
-    public static ExcelType? DefaultExcelType(Stream stream)
+    public static IExcelCellReader GetCellReader(object obj)
     {
-        if (ObjSelectorDict.Count == 1)
-            return ObjSelectorDict.First().Key;
-        return stream.Length switch
-        {
-            >= 5 * 1024 * 1024 => ObjSelectorDict.ContainsKey(ExcelType.MiniExcel) && StreamSelectorDict.ContainsKey(ExcelType.MiniExcel) ? ExcelType.MiniExcel : null,
-            <= 5 * 1024 * 1024 => ObjSelectorDict.ElementAt(new Random().Next() % ObjSelectorDict.Count).Key,
-        };
+        return GetCellReader(obj, null);
+    }
+    public static IExcelCellReader GetCellReader(object obj, string excelType)
+    {
+        if (ObjSelectorDict.IsEmpty())
+            throw new Exception("项目中不存在 IExcelReader 实现");
+        excelType = ExcelTypeSelector.GetExcelType(obj, excelType);
+        if (excelType.NotWhite() && !ObjSelectorDict.ContainsKey(excelType))
+            throw new Exception($"未注册 {excelType} 的 IExcelReader 实现");
+        else if (excelType.IsWhite())
+            throw new Exception("未注册具体的 IExcelReader 实现");
+        return ObjSelectorDict[excelType](obj);
+    }
+    public static IExcelCellReader GetCellReader(Stream stream)
+    {
+        return GetCellReader(stream, null);
+    }
+    public static IExcelCellReader GetCellReader(Stream stream, string excelType)
+    {
+        if (StreamSelectorDict.IsEmpty())
+            throw new Exception("未注册具体的 IExcelReader 实现");
+        excelType = ExcelTypeSelector.GetExcelType(stream, excelType);
+        if (excelType.NotWhite() && !StreamSelectorDict.ContainsKey(excelType))
+            throw new Exception("未注册指定类型的 IExcelReader 实现");
+        else if (excelType.IsWhite())
+            throw new Exception("未注册具体的 IExcelReader 实现");
+        return StreamSelectorDict[excelType](stream);
     }
 }

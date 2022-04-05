@@ -7,32 +7,28 @@ internal class Init
 {
 #if NETCOREAPP
     [ModuleInitializer]
+    public static void InitTypeSelector()
+    {
+        Selector.AddTypeSelector(ExcelType.NPOI,
+            obj => obj is ISheet,
+            stream => stream.Length > 5 * 1024 ? 50 : 1
+        );
+    }
+    [ModuleInitializer]
     public static void InitCellReader()
     {
-        CellReaderSelector.Add(ExcelType.NPOI, (obj) =>
-        {
-            if (obj is ISheet sheet)
-                return new NPOICellReader(sheet);
-            return null;
-        });
-        CellReaderSelector.Add(ExcelType.NPOI, (stream) =>
-        {
-            return new NPOICellReader(stream);
-        });
+        Selector.AddCellSelector(ExcelType.NPOI,
+            obj => (obj is ISheet sheet) ? new NPOICellReader(sheet) : null,
+            stream => new NPOICellReader(stream)
+        );
     }
     [ModuleInitializer]
     public static void InitExcelReader()
     {
-        ExcelReaderSelector.Add(ExcelType.NPOI, (obj) =>
-        {
-            if (obj is ISheet sheet)
-                return new NPOIExcelReader(sheet);
-            return null;
-        });
-        ExcelReaderSelector.Add(ExcelType.NPOI, (stream) =>
-        {
-            return new NPOIExcelReader(stream);
-        });
+        Selector.AddExcelSelector(ExcelType.NPOI,
+            obj => (obj is ISheet sheet) ? new NPOIExcelReader(sheet) : null,
+            stream => new NPOIExcelReader(stream)
+        );
     }
 #endif
 }

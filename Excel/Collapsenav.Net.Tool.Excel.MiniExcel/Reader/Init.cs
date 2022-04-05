@@ -4,33 +4,30 @@ namespace Collapsenav.Net.Tool.Excel;
 internal static class Init
 {
 #if NETCOREAPP
+
+    [ModuleInitializer]
+    public static void InitTypeSelector()
+    {
+        Selector.AddTypeSelector(ExcelType.MiniExcel,
+            obj => obj is Stream,
+            stream => stream.Length > 5 * 1024 ? 99 : 50
+        );
+    }
     [ModuleInitializer]
     public static void InitCellReader()
     {
-        CellReaderSelector.Add(ExcelType.MiniExcel, obj =>
-        {
-            if (obj is Stream stream)
-                return new MiniCellReader(stream);
-            return null;
-        });
-        CellReaderSelector.Add(ExcelType.MiniExcel, stream =>
-        {
-            return new MiniCellReader(stream);
-        });
+        Selector.AddCellSelector(ExcelType.MiniExcel,
+            obj => (obj is Stream stream) ? new MiniCellReader(stream) : null,
+            stream => new MiniCellReader(stream)
+        );
     }
     [ModuleInitializer]
     public static void InitExcelReader()
     {
-        ExcelReaderSelector.Add(ExcelType.MiniExcel, obj =>
-        {
-            if (obj is Stream stream)
-                return new MiniExcelReader(stream);
-            return null;
-        });
-        ExcelReaderSelector.Add(ExcelType.MiniExcel, stream =>
-        {
-            return new MiniExcelReader(stream);
-        });
+        Selector.AddExcelSelector(ExcelType.MiniExcel,
+            obj => (obj is Stream stream) ? new MiniExcelReader(stream) : null,
+            stream => new MiniExcelReader(stream)
+        );
     }
 #endif
 }

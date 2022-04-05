@@ -14,7 +14,6 @@ public static class Init
         var newAsses = files.Select(item => Assembly.LoadFrom(item)).ToList();
         newAsses.ForEach(item => AppDomain.CurrentDomain.Load(item.FullName));
         var types = newAsses.SelectMany(s => s.GetTypes().Where(item => item.IsClass && item.IsPublic && item.HasGenericInterface(typeof(IExcelContainer<>))));
-
         types.ForEach(item =>
         {
             try

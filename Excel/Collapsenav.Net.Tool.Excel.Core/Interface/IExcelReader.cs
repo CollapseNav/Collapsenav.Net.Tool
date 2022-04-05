@@ -10,18 +10,18 @@ public interface IExcelReader<T> : IExcelContainer<T>
 {
 #if NETSTANDARD2_0
 #else
-    public static IExcelReader GetExcelRead(object sheet)
+    public static IExcelReader GetExcelReader(object sheet)
     {
         return ExcelReaderSelector.GetExcelReader(sheet);
     }
-    public static IExcelReader GetExcelRead(Stream stream, ExcelType? excelType = null)
+    public static IExcelReader GetExcelReader(Stream stream, ExcelType? excelType = null)
     {
-        return ExcelReaderSelector.GetExcelReader(stream, excelType);
+        return ExcelReaderSelector.GetExcelReader(stream, excelType.ToString());
     }
-    public static IExcelReader GetExcelRead(string path, ExcelType? excelType = null)
+    public static IExcelReader GetExcelReader(string path, ExcelType? excelType = null)
     {
-        using var fs = path.OpenCreateReadWriteShareStream();
-        return GetExcelRead(fs, excelType);
+        using var fs = path.OpenReadWriteShareStream();
+        return GetExcelReader(fs, excelType);
     }
 #endif
 }
