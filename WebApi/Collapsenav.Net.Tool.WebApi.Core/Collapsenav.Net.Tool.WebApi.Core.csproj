@@ -5,8 +5,8 @@
         <Description>&#xD;
 提供一些带有简单实现的Controller&#xD;
         </Description>
-        <Product>Collapsenav.Net.Tool.WebApi</Product>
-        <PackageId>Collapsenav.Net.Tool.WebApi</PackageId>
+        <Product>Collapsenav.Net.Tool.WebApi.Core</Product>
+        <PackageId>Collapsenav.Net.Tool.WebApi.Core</PackageId>
         <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
     </PropertyGroup>
     <ItemGroup>
@@ -16,8 +16,6 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\Data\Collapsenav.Net.Tool.Data\Collapsenav.Net.Tool.Data.csproj"/>
-        <ProjectReference Include="..\..\Excel\Collapsenav.Net.Tool.Excel\Collapsenav.Net.Tool.Excel.csproj"/>
-        <ProjectReference Include="..\Collapsenav.Net.Tool.WebApi.Core/Collapsenav.Net.Tool.WebApi.Core.csproj"/>
+        <ProjectReference Include="..\..\Data\Collapsenav.Net.Tool.Data.Core\Collapsenav.Net.Tool.Data.Core.csproj"/>
     </ItemGroup>
 </Project>

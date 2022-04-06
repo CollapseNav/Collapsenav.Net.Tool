@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="../version.props" />
+    <PropertyGroup>
+        <PackageTags>Tools,EF,Freesql,Data</PackageTags>
+        <Description>
+提供基于EF orm的仓储类，工具类
+        </Description>
+        <Product>Collapsenav.Net.Tool.Data.Core</Product>
+        <PackageId>Collapsenav.Net.Tool.Data.Core</PackageId>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj"/>
+    </ItemGroup>
+</Project>
