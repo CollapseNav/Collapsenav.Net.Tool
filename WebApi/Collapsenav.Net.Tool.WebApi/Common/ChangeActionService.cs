@@ -16,7 +16,7 @@ public class ChangeActionService : IHostedService
     }
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        Part.ApplicationParts.Add(new AssemblyPart(AddNewControllerExt.Ass));
+        Part.ApplicationParts.Add(new AssemblyPart(DynamicApiExt.Ass));
         AddControllerChangeProvider.Instance.HasChanged = true;
         AddControllerChangeProvider.Instance.TokenSource.Cancel();
         await Task.CompletedTask;

@@ -1,9 +1,11 @@
+using System.Collections.Concurrent;
+
 namespace Collapsenav.Net.Tool.Excel;
 
 public class ExcelTypeSelector
 {
-    public static Dictionary<string, Func<Stream, int>> StreamSelector = null;
-    public static Dictionary<string, Func<object, bool>> ObjSelector = null;
+    public static ConcurrentDictionary<string, Func<Stream, int>> StreamSelector = null;
+    public static ConcurrentDictionary<string, Func<object, bool>> ObjSelector = null;
     public static void Add(ExcelType excelType, Func<Stream, int> func)
     {
         StreamSelector ??= new();

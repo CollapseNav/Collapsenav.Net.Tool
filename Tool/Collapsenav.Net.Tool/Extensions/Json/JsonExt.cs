@@ -36,6 +36,15 @@ public static partial class JsonExt
     /// </summary>
     public static T JsonMap<S, T>(this S obj) => obj.ToJson().ToObj<T>();
 
+    public static T JsonMap<S, T>(this S origin, T target) where S : class where T : class
+    {
+        var propNames = origin.PropNames();
+        var temp = target.ToJson().ToObj<T>();
+        foreach (var name in propNames)
+            temp.SetValue(name, origin.GetValue(name));
+        return temp;
+    }
+
     public static JsonElement GetJsonElement(this string path) => path.GetJsonDocument().RootElement;
     public static async ValueTask<JsonElement> GetJsonElementAsync(this string path) => (await path.GetJsonDocumentAsync()).RootElement;
     public static JsonDocument GetJsonDocument(this string path)
