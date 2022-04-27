@@ -98,5 +98,33 @@ public class JsonTest
         var users2 = users.JsonMap<IEnumerable<UserInfo>, IEnumerable<UserInfoTwo>>();
         Assert.True(users.First().UserName == users2.First().UserName && users.First().Age == users2.First().Age);
     }
+
+    [Fact]
+    public void JsonMapFromObjToObjTest()
+    {
+        var obj1 = new TestJsonObj1 { Age = 1, UserName = "1", Id = 1 };
+        var obj2 = new TestJsonObj2 { Age = 2, UserName = "2" };
+        var temp = obj1.JsonMap(obj2);
+        Assert.True(temp.Age == 1);
+        Assert.True(temp.UserName == "1");
+        var temp2 = obj2.JsonMap(obj1);
+        Assert.True(temp2.Age == 2);
+        Assert.True(temp2.UserName == "2");
+        Assert.True(temp2.Id == 1);
+    }
+
+    public class TestJsonObj1
+    {
+        public int Id { get; set; }
+        public string UserName { get; set; }
+        public int Age { get; set; }
+    }
+
+    public class TestJsonObj2
+    {
+
+        public string UserName { get; set; }
+        public int Age { get; set; }
+    }
 }
 

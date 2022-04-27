@@ -79,4 +79,23 @@ public static partial class ExpressionExt
             return origin;
         return OrIf(origin, true, exp);
     }
+
+    public static Expression<Func<E, E>> NewExpression<E>(this object obj, bool ignoreNull = false)
+    {
+        var type = obj.GetType();
+        var paramExp = Expression.Parameter(typeof(E), "item");
+        var binds = new List<MemberBinding>();
+        type.Props().ForEach(prop =>
+        {
+            var value = obj.GetValue(prop.Name);
+            if (ignoreNull && value == null)
+                return;
+            var eprop = typeof(E).GetProperty(prop.Name);
+            if (eprop == null) return;
+            binds.Add(Expression.Bind(eprop, Expression.Constant(value, prop.PropertyType)));
+        });
+        var init = Expression.MemberInit(Expression.New(typeof(E)), binds.ToArray());
+        var lambda = Expression.Lambda<Func<E, E>>(init, new ParameterExpression[] { paramExp });
+        return lambda;
+    }
 }
