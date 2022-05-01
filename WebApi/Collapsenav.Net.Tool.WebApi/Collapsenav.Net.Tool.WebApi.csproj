@@ -2,22 +2,15 @@
     <Import Project="../version.props"/>
     <PropertyGroup>
         <PackageTags>Tools,WebApi</PackageTags>
-        <Description>&#xD;
-提供一些带有简单实现的Controller&#xD;
+        <Description>
+提供一些带有简单实现的Controller
         </Description>
         <Product>Collapsenav.Net.Tool.WebApi</Product>
         <PackageId>Collapsenav.Net.Tool.WebApi</PackageId>
         <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5"/>
-        <PackageReference Include="AutoMapper" Version="10.1.1"/>
-        <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.*"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
-    </ItemGroup>
-    <ItemGroup>
         <ProjectReference Include="..\..\Data\Collapsenav.Net.Tool.Data\Collapsenav.Net.Tool.Data.csproj"/>
-        <ProjectReference Include="..\..\Excel\Collapsenav.Net.Tool.Excel\Collapsenav.Net.Tool.Excel.csproj"/>
         <ProjectReference Include="..\Collapsenav.Net.Tool.WebApi.Core/Collapsenav.Net.Tool.WebApi.Core.csproj"/>
     </ItemGroup>
 </Project>

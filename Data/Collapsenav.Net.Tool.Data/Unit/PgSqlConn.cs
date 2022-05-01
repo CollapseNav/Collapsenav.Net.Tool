@@ -13,7 +13,7 @@ public class PgsqlConn : Conn
         return GetConnString();
     }
 
-    public string GetConnString()
+    public override string GetConnString()
     {
         StringBuilder sb = new();
         sb.Append($"Host = {Source}; Port = {Port.ToString()}; Database = {DataBase}; Username = {User}; Password = {Pwd};");

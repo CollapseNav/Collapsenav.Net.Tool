@@ -61,14 +61,19 @@ public class CrudRepository<T> : Repository<T>, ICrudRepository<T> where T : cla
         return await Read.QueryAsync(exp);
     }
 
-    public virtual async Task<T> QueryAsync(object id)
+    public virtual async Task<T> GetByIdAsync(object id)
     {
-        return await Read.QueryAsync(id);
+        return await Read.GetByIdAsync(id);
     }
 
     public virtual async Task<bool> DeleteAsync(object id, bool isTrue = false)
     {
         return await Write.DeleteAsync(id, isTrue);
+    }
+
+    public virtual async Task<IEnumerable<T>> QueryDataAsync(IQueryable<T> query)
+    {
+        return await Read.QueryDataAsync(query);
     }
 }
 public class CrudRepository<TKey, T> : CrudRepository<T>, ICrudRepository<TKey, T> where T : class, IBaseEntity<TKey>, new()
@@ -96,9 +101,9 @@ public class CrudRepository<TKey, T> : CrudRepository<T>, ICrudRepository<TKey, 
         return await Write.DeleteAsync(exp, isTrue);
     }
 
-    public virtual async Task<T> QueryAsync(TKey id)
+    public virtual async Task<T> GetByIdAsync(TKey id)
     {
-        return await Read.QueryAsync(id);
+        return await Read.GetByIdAsync(id);
     }
 
     public virtual async Task<IEnumerable<T>> QueryAsync(IEnumerable<TKey> ids)

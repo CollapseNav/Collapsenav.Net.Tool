@@ -2,8 +2,8 @@
     <Import Project="../version.props"/>
     <PropertyGroup>
         <PackageTags>Tools,WebApi</PackageTags>
-        <Description>&#xD;
-提供一些带有简单实现的Controller&#xD;
+        <Description>
+提供一些带有简单实现的Controller
         </Description>
         <Product>Collapsenav.Net.Tool.WebApi.Core</Product>
         <PackageId>Collapsenav.Net.Tool.WebApi.Core</PackageId>

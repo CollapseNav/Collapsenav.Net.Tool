@@ -1,20 +1,18 @@
-using AutoMapper;
 using Collapsenav.Net.Tool.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Collapsenav.Net.Tool.WebApi;
 [ApiController]
 [Route("[controller]")]
-public class ModifyAppController<T, CreateT> : ControllerBase, IModifyController<T, CreateT>
+public class ModifyRepController<T, CreateT> : ControllerBase, IModifyController<T, CreateT>
     where T : class, IEntity
     where CreateT : IBaseCreate<T>
 {
-    protected readonly IModifyApplication<T, CreateT> App;
+    protected readonly IModifyRepository<T> Repository;
     protected readonly IMap Mapper;
-    public ModifyAppController(IModifyApplication<T, CreateT> app, IMap mapper)
+    public ModifyRepController(IModifyRepository<T> repository, IMap mapper)
     {
-        App = app;
+        Repository = repository;
         Mapper = mapper;
     }
     /// <summary>
@@ -23,7 +21,8 @@ public class ModifyAppController<T, CreateT> : ControllerBase, IModifyController
     [HttpPost]
     public virtual async Task<T> AddAsync([FromBody] CreateT entity)
     {
-        var result = await App.AddAsync(entity);
+        var data = Mapper.Map<T>(entity);
+        var result = await Repository.AddAsync(data);
         return result;
     }
     /// <summary>
@@ -32,7 +31,7 @@ public class ModifyAppController<T, CreateT> : ControllerBase, IModifyController
     [HttpPost, Route("AddRange")]
     public virtual async Task<int> AddRangeAsync(IEnumerable<CreateT> entitys)
     {
-        var result = await App.AddRangeAsync(entitys);
+        var result = await Repository.AddAsync(entitys.Select(item => Mapper.Map<T>(item)));
         return result;
     }
     /// <summary>
@@ -41,23 +40,25 @@ public class ModifyAppController<T, CreateT> : ControllerBase, IModifyController
     [HttpDelete, Route("{id}")]
     public virtual async Task DeleteAsync(string id, [FromQuery] bool isTrue = false)
     {
-        await App.DeleteAsync(id, isTrue);
+        await Repository.DeleteAsync(id, isTrue);
     }
+
     [NonAction]
     public void Dispose()
     {
-        App.Dispose();
+        Repository.Save();
     }
+
 }
-public class ModifyAppController<TKey, T, CreateT> : ModifyAppController<T, CreateT>, IModifyController<TKey, T, CreateT>
+public class ModifyRepController<TKey, T, CreateT> : ModifyRepController<T, CreateT>, IModifyController<TKey, T, CreateT>
     where T : class, IEntity<TKey>
     where CreateT : IBaseCreate<T>
 {
-    protected new readonly IModifyApplication<TKey, T, CreateT> App;
+    protected new readonly IModifyRepository<TKey, T> Repository;
     protected new readonly IMap Mapper;
-    public ModifyAppController(IModifyApplication<TKey, T, CreateT> app, IMap mapper) : base(app, mapper)
+    public ModifyRepController(IModifyRepository<TKey, T> repository, IMap mapper) : base(repository, mapper)
     {
-        App = app;
+        Repository = repository;
         Mapper = mapper;
     }
 
@@ -72,7 +73,7 @@ public class ModifyAppController<TKey, T, CreateT> : ModifyAppController<T, Crea
     [HttpDelete, Route("{id}")]
     public virtual async Task DeleteAsync(TKey id, [FromQuery] bool isTrue = false)
     {
-        await App.DeleteAsync(id, isTrue);
+        await Repository.DeleteAsync(id, isTrue);
     }
 
     /// <summary>
@@ -81,7 +82,7 @@ public class ModifyAppController<TKey, T, CreateT> : ModifyAppController<T, Crea
     [HttpDelete]
     public virtual async Task<int> DeleteRangeAsync([FromQuery] IEnumerable<TKey> id, [FromQuery] bool isTrue = false)
     {
-        var result = await App.DeleteRangeAsync(id, isTrue);
+        var result = await Repository.DeleteAsync(id, isTrue);
         return result;
     }
 
@@ -91,7 +92,9 @@ public class ModifyAppController<TKey, T, CreateT> : ModifyAppController<T, Crea
     [HttpPut, Route("{id}")]
     public virtual async Task UpdateAsync(TKey id, CreateT entity)
     {
-        await App.UpdateAsync(id, entity);
+        var data = Mapper.Map<T>(entity);
+        data.SetValue("Id", id);
+        await Repository.UpdateAsync(data);
     }
 }
 

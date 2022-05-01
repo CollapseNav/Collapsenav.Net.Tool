@@ -2,7 +2,7 @@ namespace Collapsenav.Net.Tool.Data;
 
 public class SqliteConn : Conn
 {
-    public SqliteConn(string source) : base(source)
+    public SqliteConn(string source) : base(source, null, null, null, null)
     {
     }
 
@@ -11,7 +11,7 @@ public class SqliteConn : Conn
         return GetConnString();
     }
 
-    public string GetConnString()
+    public override string GetConnString()
     {
         return $"Data Source = {Source}";
     }

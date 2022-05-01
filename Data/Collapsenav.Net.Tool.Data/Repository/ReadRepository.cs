@@ -7,7 +7,7 @@ public class ReadRepository<T> : Repository<T>, IReadRepository<T> where T : cla
 {
     public ReadRepository(DbContext db) : base(db) { }
 
-    public virtual async Task<T> QueryAsync(object id)
+    public virtual async Task<T> GetByIdAsync(object id)
     {
         return KeyType().Name switch
         {
@@ -18,12 +18,17 @@ public class ReadRepository<T> : Repository<T>, IReadRepository<T> where T : cla
             _ => null,
         };
     }
+
+    public virtual async Task<IEnumerable<T>> QueryDataAsync(IQueryable<T> query)
+    {
+        return await query.ToListAsync();
+    }
 }
 public class ReadRepository<TKey, T> : ReadRepository<T>, IReadRepository<TKey, T> where T : class, IBaseEntity<TKey>
 {
     public ReadRepository(DbContext db) : base(db) { }
 
-    public virtual async Task<T> QueryAsync(TKey id)
+    public virtual async Task<T> GetByIdAsync(TKey id)
     {
         return await dbSet.FindAsync(id);
     }

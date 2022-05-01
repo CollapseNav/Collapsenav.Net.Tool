@@ -26,7 +26,7 @@ public class NotBaseCrudRepositoryTest
     {
         var datas = await Repository.QueryAsync(item => item.Id < 5);
         Assert.True(datas.Count() == 4);
-        var data = await Repository.QueryAsync(1);
+        var data = await Repository.GetByIdAsync(1);
         Assert.True(data.Number == 92);
     }
 

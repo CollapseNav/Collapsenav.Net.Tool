@@ -1,14 +1,12 @@
 using System.Linq.Expressions;
 using Collapsenav.Net.Tool.Data;
-using Collapsenav.Net.Tool.Excel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Collapsenav.Net.Tool.WebApi;
 
 [ApiController]
 [Route("[controller]")]
-public class QueryAppController<T, GetT> : ControllerBase, IQueryController<T, GetT>, IExcelExportController<T, GetT>
+public class QueryAppController<T, GetT> : ControllerBase, IQueryController<T, GetT>
     where T : class, IEntity
     where GetT : IBaseGet<T>
 {
@@ -26,21 +24,12 @@ public class QueryAppController<T, GetT> : ControllerBase, IQueryController<T, G
     /// 带条件查询(不分页)
     /// </summary>
     [HttpGet, Route("Query")]
-    public virtual async Task<IEnumerable<T>> QueryAsync([FromQuery] GetT input) => await GetQuery(input).ToListAsync();
+    public virtual async Task<IEnumerable<T>> QueryAsync([FromQuery] GetT input) => await App.QueryAsync(input);
     [NonAction]
     public virtual IQueryable<T> GetQuery(GetT input) => App.GetQuery(input);
     [NonAction]
     public virtual Expression<Func<T, bool>> GetExpression(GetT input) => input.GetExpression(item => true);
-    /// <summary>
-    /// 导出为Excel
-    /// </summary>
-    [HttpGet("Export")]
-    public async Task<FileStreamResult> ExportExcelAsync([FromQuery] GetT input)
-    {
-        var data = await QueryAsync(input);
-        var defaultConfig = ExportConfig<T>.GenDefaultConfig(data);
-        return File(await defaultConfig.EPPlusExportAsync(new MemoryStream()), "application/octet-stream", $@"{DateTime.Now:yyyyMMddHHmmssfff}.xlsx");
-    }
+
     /// <summary>
     /// 查找(单个 id)
     /// </summary>
@@ -49,7 +38,7 @@ public class QueryAppController<T, GetT> : ControllerBase, IQueryController<T, G
 }
 [ApiController]
 [Route("[controller]")]
-public class QueryAppController<TKey, T, GetT> : QueryAppController<T, GetT>, IQueryController<TKey, T, GetT>, IExcelExportController<T, GetT>
+public class QueryAppController<TKey, T, GetT> : QueryAppController<T, GetT>, IQueryController<TKey, T, GetT>
     where T : class, IEntity<TKey>
     where GetT : IBaseGet<T>
 {

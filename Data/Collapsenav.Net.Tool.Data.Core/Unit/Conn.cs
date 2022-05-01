@@ -2,10 +2,6 @@ namespace Collapsenav.Net.Tool.Data;
 
 public abstract class Conn
 {
-    protected Conn(string source)
-    {
-        Source = source;
-    }
     protected Conn(string source, int? port, string dataBase, string user, string pwd)
     {
         Source = source;
@@ -14,6 +10,11 @@ public abstract class Conn
         User = user;
         Pwd = pwd;
     }
+
+    /// <summary>
+    /// 获取连接字符串
+    /// </summary>
+    public abstract string GetConnString();
 
     public string Source { get; set; }
     public int? Port { get; set; }

@@ -14,7 +14,7 @@ public class SqlServerConn : Conn
         return GetConnString();
     }
 
-    public string GetConnString()
+    public override string GetConnString()
     {
         StringBuilder sb = new();
         sb.Append($"Data Source = {Source},{Port.ToString()}; Database = {DataBase}; Uid = {User}; Pwd = {Pwd};");

@@ -12,7 +12,7 @@ public class MariaDbConn : Conn
         return GetConnString();
     }
 
-    public string GetConnString()
+    public override string GetConnString()
     {
         StringBuilder sb = new();
         sb.Append($"Server = {Source}; Port = {Port.ToString()}; Database = {DataBase}; Uid = {User}; Pwd = {Pwd};");

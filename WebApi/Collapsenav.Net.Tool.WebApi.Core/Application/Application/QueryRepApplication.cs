@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
 using Collapsenav.Net.Tool.Data;
-using Microsoft.EntityFrameworkCore;
 namespace Collapsenav.Net.Tool.WebApi;
 
 public class QueryRepApplication<T, GetT> : ReadRepApplication<T, GetT>, IQueryApplication<T, GetT>,
@@ -16,23 +15,23 @@ ICountApplication<T>, ICheckExistApplication<T>
         Mapper = mapper;
     }
     public virtual async Task<PageData<T>> QueryPageAsync(GetT input, PageRequest page = null) => await Repo.QueryPageAsync(GetExpression(input), page);
-    public virtual async Task<IEnumerable<T>> QueryAsync(GetT input) => await GetQuery(input).ToListAsync();
+    public virtual async Task<IEnumerable<T>> QueryAsync(GetT input) => await Repo.QueryDataAsync(GetQuery(input));
     public virtual IQueryable<T> GetQuery(GetT input) => input.GetQuery(Repo.Query(item => true));
     public virtual Expression<Func<T, bool>> GetExpression(GetT input) => input.GetExpression(item => true);
     public virtual async Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT input) where NewGetT : class, IBaseGet<T>
     {
-        return await input.GetQuery(Repo.Query(item => true)).ToListAsync();
+        return await Repo.QueryDataAsync(input.GetQuery(Repo.Query(item => true)));
     }
 
     public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(GetT input)
     {
-        var data = await input.GetQuery(Repo.Query(item => true)).ToListAsync();
+        var data = await Repo.QueryDataAsync(input.GetQuery(Repo.Query(item => true)));
         return Mapper.Map<IEnumerable<ReturnT>>(data);
     }
 
     public virtual async Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>(NewGetT input) where NewGetT : class, IBaseGet<T>
     {
-        var data = await input.GetQuery(Repo.Query(item => true)).ToListAsync();
+        var data = await Repo.QueryDataAsync(input.GetQuery(Repo.Query(item => true)));
         return Mapper.Map<IEnumerable<ReturnT>>(data);
     }
     public virtual async Task<bool> IsExistAsync(Expression<Func<T, bool>> exp)
@@ -61,7 +60,7 @@ public class QueryRepApplication<TKey, T, GetT> : ReadRepApplication<T, GetT>, I
         return App.GetQuery(input);
     }
 
-    public virtual async Task<T> QueryAsync(TKey id) => await Repo.QueryAsync(id);
+    public virtual async Task<T> QueryAsync(TKey id) => await Repo.GetByIdAsync(id);
 
     public virtual async Task<IEnumerable<T>> QueryAsync(GetT input)
     {
