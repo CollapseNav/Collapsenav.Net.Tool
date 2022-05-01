@@ -1,4 +1,6 @@
-﻿namespace Collapsenav.Net.Tool;
+﻿using System.Text;
+
+namespace Collapsenav.Net.Tool;
 public static partial class StreamExt
 {
     /// <summary>
@@ -145,5 +147,13 @@ public static partial class StreamExt
     public static void Clear(this Stream stream)
     {
         stream.SetLength(0);
+    }
+
+    public static string ReadString(this Stream stream, Encoding encoding = null)
+    {
+        encoding ??= Encoding.UTF8;
+        stream.SeekToOrigin();
+        using var reader = new StreamReader(stream, encoding);
+        return reader.ReadToEnd();
     }
 }

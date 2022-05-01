@@ -17,6 +17,7 @@ public class DateTimeTest
         DateTime date = new(2021, 11, 11, 11, 11, 11);
         Assert.True(date.ToDefaultTimeString() == "2021-11-11 11:11:11");
         Assert.True(date.ToDefaultTimeString("WTF") == "2021WTF11WTF11 11:11:11");
+        Assert.True(date.ToDefaultTimeString("WTF", "FFF") == "2021WTF11WTF11 11FFF11FFF11");
     }
 
     [Fact]
@@ -33,5 +34,7 @@ public class DateTimeTest
         DateTime date = new(2021, 11, 11, 11, 11, 11, 111);
         Assert.True(date.ToDefaultMilliString() == "2021-11-11 11:11:11.111");
         Assert.True(date.ToDefaultMilliString("WTF") == "2021WTF11WTF11 11:11:11.111");
+        Assert.True(date.ToDefaultMilliString("WTF", "FFF") == "2021WTF11WTF11 11FFF11FFF11.111");
+        Assert.True(date.ToDefaultMilliString("WTF", "FFF", "MMM") == "2021WTF11WTF11 11FFF11FFF11MMM111");
     }
 }

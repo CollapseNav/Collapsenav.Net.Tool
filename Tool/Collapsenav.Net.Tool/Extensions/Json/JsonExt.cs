@@ -57,6 +57,14 @@ public static partial class JsonExt
         using var stream = path.OpenReadWriteShareStream();
         return await JsonDocument.ParseAsync(stream);
     }
+    public static JsonDocument ToJsonDocument(this string jsonStr)
+    {
+        return JsonDocument.Parse(jsonStr);
+    }
+    public static JsonElement ToJsonElement(this string jsonStr)
+    {
+        return JsonDocument.Parse(jsonStr).RootElement;
+    }
     public static JsonObject GetJsonObject(this string path) => JsonObject.Create(path.GetJsonElement());
     public static async ValueTask<JsonObject> GetJsonObjectAsync(this string path) => JsonObject.Create(await path.GetJsonElementAsync());
 }

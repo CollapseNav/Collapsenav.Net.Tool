@@ -11,14 +11,14 @@ public static partial class StringExt
     /// <param name="obj">源</param>
     /// <param name="total">总长度</param>
     /// <param name="fill">填充字符</param>
-    public static string PadLeft(this object obj, int total, char? fill = ' ') => obj.ToString().PadLeft(total, fill ?? ' ');
+    public static string PadLeft<T>(this T obj, int total, char? fill = ' ') => obj.ToString().PadLeft(total, fill ?? ' ');
     /// <summary>
     /// 右填充
     /// </summary>
     /// <param name="obj">源</param>
     /// <param name="total">总长度</param>
     /// <param name="fill">填充字符</param>
-    public static string PadRight(this object obj, int total, char? fill = ' ') => obj.ToString().PadRight(total, fill ?? ' ');
+    public static string PadRight<T>(this T obj, int total, char? fill = ' ') => obj.ToString().PadRight(total, fill ?? ' ');
     /// <summary>
     /// 左填充
     /// </summary>
