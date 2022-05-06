@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,19 +8,15 @@ using Xunit;
 namespace Collapsenav.Net.Tool.Test;
 public class StringExtTest
 {
-    [Fact]
-    public void NumToChineseTest()
+    [Theory]
+    [InlineData("10510001010", "一百零五亿一千万零一千零一十")]
+    [InlineData("1010", "一千零一十")]
+    [InlineData("99999", "九万九千九百九十九")]
+    [InlineData("203300010001", "二千零三十三亿零一万零一")]
+    [InlineData("9999999999999999", "九千九百九十九万九千九百九十九亿九千九百九十九万九千九百九十九")]
+    public void NumToChineseTest(string num, string result)
     {
-        string num = "10510001010";
-        Assert.True("一百零五亿一千万零一千零一十" == num.ToChinese());
-        num = "1010";
-        Assert.True("一千零一十" == num.ToChinese());
-        num = "99999";
-        Assert.True("九万九千九百九十九" == num.ToChinese());
-        num = "203300010001";
-        Assert.True("二千零三十三亿零一万零一" == num.ToChinese());
-        num = "9999999999999999";
-        Assert.True("九千九百九十九万九千九百九十九亿九千九百九十九万九千九百九十九" == num.ToChinese());
+        Assert.True(num.ToChinese() == result);
     }
 
     [Fact]
@@ -38,7 +35,7 @@ public class StringExtTest
     }
 
     [Fact]
-    public void JoinTest()
+    public void StringListJoinTest()
     {
         string strJoin = "233.233.233.233";
         Assert.True("2@3@3@.@2@3@3@.@2@3@3@.@2@3@3" == strJoin.Join("@"));
@@ -58,45 +55,93 @@ public class StringExtTest
         Assert.True(dicts.Where(item => item.Key % 2 == 0).Select(item => item.Value).Join("@") == "22@44@66");
     }
 
-    [Fact]
-    public void EmailTest()
+    [Theory]
+    [InlineData("collapsenav@163.com", true)]
+    [InlineData("", false)]
+    public void EmailTest(string email, bool result)
     {
-        string emailString = "collapsenav@163.com";
-        Assert.True(emailString.IsEmail());
-        Assert.False("".IsEmail());
+        Assert.True(email.IsEmail() == result);
     }
 
-    [Fact]
-    public void PingTest()
+    [Theory]
+    [InlineData("https://www.bilibili.com/")]
+    [InlineData("https://www.baidu.com/")]
+    public void PingTest(string url)
     {
-        string url = "https://www.bilibili.com/";
         Assert.True(url.CanPing(2000));
     }
 
-    [Fact]
-    public void UrlTest()
+    [Theory]
+    [InlineData("https://www.bilibili.com/")]
+    [InlineData("https://www.baidu.com/")]
+    public void IsUrlTest(string url)
     {
-        string url = "https://www.bilibili.com/";
         Assert.True(url.IsUrl());
-        Assert.True(url.IsUrl(true));
-        url = "httttttps://www.bilibili.com/";
+    }
+
+    [Theory]
+    [InlineData("httpsssss://www.bilibili.com/")]
+    [InlineData("https//www.baidu.com/")]
+    public void NotUrlTest(string url)
+    {
         Assert.False(url.IsUrl());
     }
 
-    [Fact]
-    public void StringStartEndWiths()
+    [Theory]
+    [InlineData("https://www.bilibili.com/")]
+    [InlineData("https://www.baidu.com/")]
+    public void IsUrlAndCanPingTest(string url)
     {
-        string exampleString = "23333333333333";
-        Assert.True(exampleString.HasStartsWith("23"));
-        Assert.True(exampleString.HasStartsWith(new[] { "23" }.AsEnumerable()));
-        Assert.True(exampleString.AllStartsWith("23", "233", "233333"));
-        Assert.True(exampleString.AllStartsWith(new[] { "23", "233", "233333" }.AsEnumerable()));
-        Assert.False(exampleString.HasStartsWith("2233"));
-        Assert.False(exampleString.HasStartsWith(new[] { "2233" }.AsEnumerable()));
-        Assert.True(exampleString.AllEndsWith("333333", "33", "3"));
-        Assert.True(exampleString.AllEndsWith(new[] { "333333", "33", "3" }.AsEnumerable()));
-        Assert.False(exampleString.HasEndsWith("2333333"));
-        Assert.False(exampleString.HasEndsWith(new[] { "2333333" }.AsEnumerable()));
+        Assert.True(url.IsUrl(true));
+    }
+
+    [Theory]
+    [InlineData("https://www.bilibiliffffffffffffffffffffffffff.com/")]
+    [InlineData("https://www.baiduuuuuuuuuuuuuuuuuuuuuuuuuu.com/")]
+    public void IsUrlAndCanNotPingTest(string url)
+    {
+        Assert.ThrowsAny<Exception>(() => url.IsUrl(true));
+    }
+
+    [Theory]
+    [InlineData(true, "23333333333333", "2333", "23")]
+    [InlineData(true, "23333333333333", "2333", "23", "3")]
+    [InlineData(false, "23333333333333", "333", "333333", "3")]
+    public void StringHasStartWiths(bool result, string origin, params string[] strs)
+    {
+        Assert.Equal(result, origin.HasStartsWith(strs));
+        Assert.Equal(result, origin.HasStartsWith(strs.AsEnumerable()));
+        Assert.Equal(result, origin.HasStartsWith(strs.ToList()));
+    }
+    [Theory]
+    [InlineData(true, "23333333333333", "2333")]
+    [InlineData(true, "23333333333333", "2333", "23")]
+    [InlineData(false, "23333333333333", "2333", "23333333", "3")]
+    public void StringAllStartWiths(bool result, string origin, params string[] strs)
+    {
+        Assert.Equal(result, origin.AllStartsWith(strs));
+        Assert.Equal(result, origin.AllStartsWith(strs.AsEnumerable()));
+        Assert.Equal(result, origin.AllStartsWith(strs.ToList()));
+    }
+    [Theory]
+    [InlineData(true, "23333333333333", "3", "333333")]
+    [InlineData(true, "23333333333333", "3", "3333333", "2")]
+    [InlineData(false, "23333333333333", "2333", "23333333", "2")]
+    public void StringHasEndWiths(bool result, string origin, params string[] strs)
+    {
+        Assert.Equal(result, origin.HasEndsWith(strs));
+        Assert.Equal(result, origin.HasEndsWith(strs.AsEnumerable()));
+        Assert.Equal(result, origin.HasEndsWith(strs.ToList()));
+    }
+    [Theory]
+    [InlineData(true, "23333333333333", "3", "333333")]
+    [InlineData(true, "23333333333333", "3", "3333333333", "23333333333333")]
+    [InlineData(false, "23333333333333", "3", "3333333333", "233333333333")]
+    public void StringAllEndWiths(bool result, string origin, params string[] strs)
+    {
+        Assert.Equal(result, origin.AllEndsWith(strs));
+        Assert.Equal(result, origin.AllEndsWith(strs.AsEnumerable()));
+        Assert.Equal(result, origin.AllEndsWith(strs.ToList()));
     }
 
     [Fact]
@@ -361,23 +406,23 @@ public class StringExtTest
         Assert.True(data.ToLowerEnd(data.Length) == "collapsenav.net.tool");
     }
 
-    [Fact]
-    public void UpFirstLetterTest()
+    [Theory]
+    [InlineData("collapsenav.net.tool", "Collapsenav.Net.Tool")]
+    [InlineData("collapsenav net tool", "Collapsenav Net Tool")]
+    public void UpFirstLetterTest(string origin, string result)
     {
-        string data = "collapsenav.net.tool";
-        Assert.True(data.UpFirstLetter() == "Collapsenav.Net.Tool");
-        data = "collapsenav net tool";
-        Assert.True(data.UpFirstLetter() == "Collapsenav Net Tool");
+        Assert.True(origin.UpFirstLetter() == result);
     }
 
-    [Fact]
-    public void PadWithTest()
+    [Theory]
+    [InlineData("123", "789", 9, "123   789")]
+    [InlineData("123", "789", 3, "123789")]
+    public void PadWithTest(string origin, string value, int len, string result)
     {
-        string origin = "123";
-        string value = "789";
-        Assert.True(origin.PadWith(value, 9) == "123   789");
-        Assert.True(origin.PadWith(value, 9).Length == 9);
-        Assert.True(origin.PadWith(value, 6) == "123789");
-        Assert.True(origin.PadWith(value, 3) == "123789");
+        Assert.True(origin.PadWith(value, len) == result);
+        if (origin.Length + value.Length <= len)
+            Assert.True(origin.PadWith(value, len).Length == len);
+        else
+            Assert.True(origin.PadWith(value, len).Length == origin.Length + value.Length);
     }
 }

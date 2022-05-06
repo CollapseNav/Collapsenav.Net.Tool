@@ -6,7 +6,14 @@ namespace Collapsenav.Net.Tool.WebApi;
 
 public class SwaggerBuilder
 {
-    private Dictionary<string, Action<SwaggerGenOptions>> Actions;
+    private readonly Dictionary<string, Action<SwaggerGenOptions>> Actions;
+    /// <summary>
+    /// Api信息配置
+    /// </summary>
+    private OpenApiInfo info;
+    /// <summary>
+    /// 使用注释
+    /// </summary>
     public bool? UseComments
     {
         get => Actions?.ContainsKey(nameof(UseComments)); set
@@ -21,6 +28,9 @@ public class SwaggerBuilder
                 Actions.Remove(nameof(UseComments));
         }
     }
+    /// <summary>
+    /// 使用jwt
+    /// </summary>
     public bool? UseJwtAuth
     {
         get => Actions?.ContainsKey(nameof(UseJwtAuth)); set
@@ -71,7 +81,6 @@ public class SwaggerBuilder
             }
         }
     }
-    private OpenApiInfo info;
 
     public SwaggerBuilder()
     {

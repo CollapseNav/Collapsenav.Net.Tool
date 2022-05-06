@@ -19,7 +19,7 @@ public static class DbContextConnExt
                 MysqlConn => (DbContextOptionsBuilder option) => option.UseMySql(conn.ToString(), new MySqlServerVersion("8.0")),
                 MariaDbConn => (DbContextOptionsBuilder option) => option.UseMySql(conn.ToString(), new MySqlServerVersion("8.0")),
 #endif
-                PgsqlConn => (DbContextOptionsBuilder option) => option.UseSqlite(conn.ToString()),
+                PgsqlConn => (DbContextOptionsBuilder option) => option.UseNpgsql(conn.ToString()),
                 _ => null
             };
         var assName = ass?.GetName().Name;
@@ -34,21 +34,21 @@ public static class DbContextConnExt
             MysqlConn => (DbContextOptionsBuilder option) => option.UseMySql(conn.ToString(), new MySqlServerVersion("8.0"), o => o.MigrationsAssembly(assName)),
             MariaDbConn => (DbContextOptionsBuilder option) => option.UseMySql(conn.ToString(), new MySqlServerVersion("8.0"), o => o.MigrationsAssembly(assName)),
 #endif
-            PgsqlConn => (DbContextOptionsBuilder option) => option.UseSqlite(conn.ToString(), o => o.MigrationsAssembly(assName)),
+            PgsqlConn => (DbContextOptionsBuilder option) => option.UseNpgsql(conn.ToString(), o => o.MigrationsAssembly(assName)),
             _ => null
         };
     }
     public static IServiceCollection AddDbContext<T, E>(this IServiceCollection services, E conn, Assembly ass = null) where T : DbContext where E : Conn
     {
         services.AddDefaultIdGenerator();
-        if (typeof(T) == typeof(PgsqlConn))
+        if (conn.GetType() == typeof(PgsqlConn))
             BaseEntity.GetNow = () => DateTime.UtcNow;
         return services.AddDbContext<T>(conn.GenBuilder());
     }
     public static IServiceCollection AddDbContextPool<T, E>(this IServiceCollection services, E conn, Assembly ass = null) where T : DbContext where E : Conn
     {
         services.AddDefaultIdGenerator();
-        if (typeof(T) == typeof(PgsqlConn))
+        if (conn.GetType() == typeof(PgsqlConn))
             BaseEntity.GetNow = () => DateTime.UtcNow;
         return services.AddDbContextPool<T>(conn.GenBuilder());
     }
