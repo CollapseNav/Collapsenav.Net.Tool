@@ -162,85 +162,92 @@ public class StringExtTest
         Assert.True(strs.AllEndsWith("aBcd", true));
     }
 
-    [Fact]
-    public void NullTest()
+    [Theory]
+    [InlineData("")]
+    [InlineData("", "default")]
+    [InlineData(null)]
+    [InlineData(null, "default")]
+    public void NullTest(string value, string defaultValue = "")
     {
-        string nullString = null;
-        string notNull = "NotNull";
-
-        Assert.True(nullString.IsNull());
-        Assert.True(notNull.NotNull());
-
-        Assert.False(notNull.IsNull());
-        Assert.False(nullString.NotNull());
-
-        Assert.True(nullString.IsNull("233") == "233");
-        Assert.True(notNull.IsNull("233") == "NotNull");
+        Assert.True(value.IsNull());
+        Assert.True(value.IsEmpty());
+        Assert.False(value.NotNull());
+        Assert.False(value.NotEmpty());
+        if (!string.IsNullOrEmpty(defaultValue))
+        {
+            Assert.True(value.IsNull(defaultValue) == defaultValue);
+            Assert.True(value.IsEmpty(defaultValue) == defaultValue);
+        }
+    }
+    [Theory]
+    [InlineData("123")]
+    [InlineData(" ")]
+    public void NotNullTest(string value)
+    {
+        Assert.False(value.IsNull());
+        Assert.False(value.IsEmpty());
+        Assert.True(value.NotNull());
+        Assert.True(value.NotEmpty());
     }
 
-    [Fact]
-    public void EmptyTest()
+    [Theory]
+    [InlineData("")]
+    [InlineData("", "default")]
+    [InlineData(" ")]
+    [InlineData(" ", "default")]
+    [InlineData("               ")]
+    [InlineData("               ", "default")]
+    public void WhiteTest(string value, string defaultValue = "")
     {
-        string emptyString = "";
-        string notEmpty = "NotEmpty";
-
-        Assert.True(emptyString.IsEmpty());
-        Assert.True(notEmpty.NotEmpty());
-
-        Assert.False(notEmpty.IsEmpty());
-        Assert.False(emptyString.NotEmpty());
-
-        Assert.True(emptyString.IsEmpty("233") == "233");
-        Assert.True(notEmpty.IsEmpty("233") == "NotEmpty");
+        Assert.True(value.IsWhite());
+        Assert.False(value.NotWhite());
+        if (!string.IsNullOrEmpty(defaultValue))
+            Assert.True(value.IsWhite(defaultValue) == defaultValue);
+    }
+    [Theory]
+    [InlineData("123")]
+    public void NotWhiteTest(string value)
+    {
+        Assert.True(value.NotWhite());
+        Assert.False(value.IsWhite());
+    }
+    [Theory]
+    [InlineData("   233", 233, 6)]
+    [InlineData("---233", 233, 6, '-')]
+    [InlineData("@@@233", 233, 6, '@')]
+    public void PadLeftTest(string result, int iValue, int len, char fill = ' ')
+    {
+        Assert.True(iValue.PadLeft(len, fill) == result);
+    }
+    [Theory]
+    [InlineData("233   ", 233, 6)]
+    [InlineData("233---", 233, 6, '-')]
+    [InlineData("233@@@", 233, 6, '@')]
+    public void PadRightTest(string result, int iValue, int len, char fill = ' ')
+    {
+        Assert.True(iValue.PadRight(len, fill) == result);
     }
 
-    [Fact]
-    public void WhiteTest()
+    [Theory]
+    [InlineData("   466", 233, 6)]
+    [InlineData("---466", 233, 6, '-')]
+    [InlineData("@@@466", 233, 6, '@')]
+    public void PadLeftWithFuncTest(string result, int iValue, int len, char fill = ' ')
     {
-        string whiteString = "   ";
-        string notWhite = "NotWhite";
-
-        Assert.True(whiteString.IsWhite());
-        Assert.True(notWhite.NotWhite());
-
-        Assert.False(notWhite.IsWhite());
-        Assert.False(whiteString.NotWhite());
-
-        Assert.True(whiteString.IsWhite("233") == "233");
-        Assert.True(notWhite.IsWhite("233") == "NotWhite");
+        var func = (int item) => (item + item).ToString();
+        Assert.True(iValue.PadLeft(len, func, fill) == result);
+    }
+    [Theory]
+    [InlineData("466   ", 233, 6)]
+    [InlineData("466---", 233, 6, '-')]
+    [InlineData("466@@@", 233, 6, '@')]
+    public void PadRightWithFuncTest(string result, int iValue, int len, char fill = ' ')
+    {
+        var func = (int item) => (item + item).ToString();
+        Assert.True(iValue.PadRight(len, func, fill) == result);
     }
 
-    [Fact]
-    public void PadLeftAndRightTest()
-    {
-        int iValue = 233;
-        double dValue = 2.33;
-        long lValue = 23333;
 
-        Assert.True(iValue.PadLeft(6) == "   233");
-        Assert.True(dValue.PadLeft(6) == "  2.33");
-        Assert.True(lValue.PadLeft(6) == " 23333");
-
-        Assert.True(iValue.PadLeft(6, '-') == "---233");
-        Assert.True(dValue.PadLeft(6, '-') == "--2.33");
-        Assert.True(lValue.PadLeft(6, '-') == "-23333");
-
-        Assert.True(iValue.PadRight(6) == "233   ");
-        Assert.True(dValue.PadRight(6) == "2.33  ");
-        Assert.True(lValue.PadRight(6) == "23333 ");
-
-        Assert.True(iValue.PadRight(6, '-') == "233---");
-        Assert.True(dValue.PadRight(6, '-') == "2.33--");
-        Assert.True(lValue.PadRight(6, '-') == "23333-");
-
-        Assert.True(iValue.PadLeft(6, item => item + 1, '-') == "---234");
-        Assert.True(dValue.PadLeft(6, item => item + 1, '-') == "--3.33");
-        Assert.True(lValue.PadLeft(6, item => item + 1, '-') == "-23334");
-
-        Assert.True(iValue.PadRight(6, item => item + 1, '-') == "234---");
-        Assert.True(dValue.PadRight(6, item => item + 1, '-') == "3.33--");
-        Assert.True(lValue.PadRight(6, item => item + 1, '-') == "23334-");
-    }
 
     [Fact]
     public void GetDomainTest()
