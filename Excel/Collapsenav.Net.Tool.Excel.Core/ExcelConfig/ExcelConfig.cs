@@ -33,7 +33,7 @@ public class ExcelConfig<T, CellConfig> where CellConfig : BaseCellOption<T>
     /// </summary>
     public static IEnumerable<CellConfig> FilterOptionByHeaders(IEnumerable<CellConfig> options, IEnumerable<string> headers)
     {
-        return options.Where(item => headers.Any(head => head == item.ExcelField));
+        return options.Where(item => headers.Where(head => head == item.ExcelField).Any());
     }
     /// <summary>
     /// 添加普通单元格设置

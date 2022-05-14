@@ -64,9 +64,9 @@ public partial class StringExt
     public static bool HasContain(this string origin, IEnumerable<string> keys, bool ignoreCase = false)
     {
 #if NETSTANDARD2_0
-        return keys.Any(key => origin.ToLower().Contains(key.ToLower()));
+        return keys.Where(key => origin.ToLower().Contains(key.ToLower())).Any();
 #else
-        return keys.Any(key => origin.Contains(key, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal));
+        return keys.Where(key => origin.Contains(key, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal)).Any();
 #endif
     }
     /// <summary>
@@ -85,7 +85,7 @@ public partial class StringExt
     /// <param name="keys"></param>
     public static bool HasContain(this string origin, params string[] keys)
     {
-        return keys.Any(key => origin.Contains(key));
+        return keys.Where(key => origin.Contains(key)).Any();
     }
 
     /// <summary>
