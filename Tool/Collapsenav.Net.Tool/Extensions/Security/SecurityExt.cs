@@ -108,4 +108,47 @@ public static partial class SecurityExt
     {
         return TripleDesTool.Decrypt(input, key, mode, padding, level: level);
     }
+    /// <summary>
+    /// HMacMd5加密
+    /// </summary>
+    public static string HMacMd5En(this string input, string key = HMacMd5Tool.DefaultKey)
+    {
+        return HMacMd5Tool.Encrypt(input, key);
+    }
+    /// <summary>
+    /// HMacSha1加密
+    /// </summary>
+    public static string HMacSha1En(this string input, string key = HMacSha1Tool.DefaultKey)
+    {
+        return HMacSha1Tool.Encrypt(input, key);
+    }
+
+    /// <summary>
+    /// HMacSha256加密
+    /// </summary>
+    public static string HMacSha256En(this string input, string key = HMacSha256Tool.DefaultKey)
+    {
+        return HMacSha256Tool.Encrypt(input, key);
+    }
+    /// <summary>
+    /// HMacMd5解密
+    /// </summary>
+    public static string HMacMd5De(this string input, string key = HMacMd5Tool.DefaultKey)
+    {
+        return HMacMd5Tool.Decrypt(input, key);
+    }
+    /// <summary>
+    /// HMacSha1解密
+    /// </summary>
+    public static string HMacSha1De(this string input, string key = HMacSha1Tool.DefaultKey)
+    {
+        return HMacSha1Tool.Decrypt(input, key);
+    }
+    /// <summary>
+    /// HMacSha256解密
+    /// </summary>
+    public static string HMacSha256De(this string input, string key = HMacSha256Tool.DefaultKey)
+    {
+        return HMacSha256Tool.Decrypt(input, key);
+    }
 }
