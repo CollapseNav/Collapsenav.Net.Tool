@@ -9,21 +9,45 @@ public partial class ReadConfig<T>
     /// </summary>
     public async Task<IEnumerable<T>> ToEntityAsync(IExcelReader sheet)
     {
-        ConcurrentBag<T> data = new();
         var header = sheet.HeadersWithIndex;
         var rowCount = sheet.RowCount;
-        await Task.Factory.StartNew(() =>
+        ConcurrentBag<T> data = new();
+        if (IsShuffle)
         {
-            Parallel.For(1, rowCount, index =>
+            await Task.Factory.StartNew(() =>
             {
-                Monitor.Enter(sheet);
+                Parallel.For(1, rowCount, index =>
+                {
+                    Monitor.Enter(sheet);
+                    var dataRow = sheet[index].ToList();
+                    Monitor.Exit(sheet);
+                    // 根据对应传入的设置 为obj赋值
+                    var obj = Activator.CreateInstance<T>();
+                    foreach (var option in FieldOption)
+                    {
+                        if (option.ExcelField.NotNull())
+                        {
+                            var value = dataRow[header[option.ExcelField]];
+                            option.Prop.SetValue(obj, option.Action == null ? value : option.Action(value));
+                        }
+                        else
+                            option.Prop.SetValue(obj, option.Action == null ? null : option.Action(string.Empty));
+                    }
+                    Init?.Invoke(obj);
+                    data.Add(obj);
+                });
+            });
+        }
+        else
+        {
+            for (var index = 1; index < rowCount; index++)
+            {
                 var dataRow = sheet[index].ToList();
-                Monitor.Exit(sheet);
                 // 根据对应传入的设置 为obj赋值
                 var obj = Activator.CreateInstance<T>();
                 foreach (var option in FieldOption)
                 {
-                    if (!option.ExcelField.IsNull())
+                    if (option.ExcelField.NotNull())
                     {
                         var value = dataRow[header[option.ExcelField]];
                         option.Prop.SetValue(obj, option.Action == null ? value : option.Action(value));
@@ -33,8 +57,9 @@ public partial class ReadConfig<T>
                 }
                 Init?.Invoke(obj);
                 data.Add(obj);
-            });
-        });
+            }
+        }
+
         return data;
     }
 

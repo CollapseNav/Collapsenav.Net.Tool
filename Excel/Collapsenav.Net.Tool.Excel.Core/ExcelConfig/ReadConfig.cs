@@ -9,6 +9,7 @@ namespace Collapsenav.Net.Tool.Excel;
 /// </summary>
 public partial class ReadConfig<T> : ExcelConfig<T, ReadCellOption<T>>
 {
+    public bool IsShuffle { get; set; } = true;
     private readonly Stream ExcelStream;
     /// <summary>
     /// 读取成功之后调用的针对T的委托
