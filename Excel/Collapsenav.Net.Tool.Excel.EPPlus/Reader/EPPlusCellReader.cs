@@ -97,16 +97,17 @@ public class EPPlusCellReader : IExcelCellReader
             foreach (var col in HeadersWithIndex)
                 _sheet.Column(col.Value + Zero).AutoFit();
     }
-    public void Save()
+    public void Save(bool autofit = true)
     {
-        SaveTo(_stream);
+        SaveTo(_stream, autofit);
     }
     /// <summary>
     /// 保存到流
     /// </summary>
-    public void SaveTo(Stream stream)
+    public void SaveTo(Stream stream, bool autofit = true)
     {
-        AutoSize();
+        if (autofit)
+            AutoSize();
         stream.SeekToOrigin();
         stream.Clear();
         _pack.SaveAs(stream);
@@ -115,10 +116,10 @@ public class EPPlusCellReader : IExcelCellReader
     /// <summary>
     /// 保存到文件
     /// </summary>
-    public void SaveTo(string path)
+    public void SaveTo(string path, bool autofit = true)
     {
         using var fs = path.OpenCreateReadWriteShareStream();
-        SaveTo(fs);
+        SaveTo(fs, autofit);
     }
     /// <summary>
     /// 获取流

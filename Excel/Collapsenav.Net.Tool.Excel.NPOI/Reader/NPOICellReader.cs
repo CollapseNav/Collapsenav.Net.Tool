@@ -121,18 +121,19 @@ public class NPOICellReader : IExcelCellReader
         return cell;
     }
 
-    public void Save()
+    public void Save(bool autofit = true)
     {
         _stream.Clear();
-        SaveTo(notCloseStream);
+        SaveTo(notCloseStream, autofit);
         notCloseStream.CopyTo(_stream);
     }
     /// <summary>
     /// 保存到流
     /// </summary>
-    public void SaveTo(Stream stream)
+    public void SaveTo(Stream stream, bool autofit = true)
     {
-        AutoSize();
+        if (autofit)
+            AutoSize();
         stream.Clear();
         using var fs = new NPOINotCloseStream();
         _sheet.Workbook.Write(fs);
@@ -144,10 +145,10 @@ public class NPOICellReader : IExcelCellReader
     /// <summary>
     /// 保存到文件
     /// </summary>
-    public void SaveTo(string path)
+    public void SaveTo(string path, bool autofit = true)
     {
         using var fs = path.OpenCreateReadWriteShareStream();
-        SaveTo(fs);
+        SaveTo(fs, autofit);
         fs.Dispose();
     }
 

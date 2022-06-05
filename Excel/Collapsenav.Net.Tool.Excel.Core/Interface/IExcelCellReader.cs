@@ -1,9 +1,9 @@
 namespace Collapsenav.Net.Tool.Excel;
 public interface IExcelCellReader : IExcelContainer<IReadCell>
 {
-    void Save();
-    void SaveTo(Stream stream);
-    void SaveTo(string path);
+    void Save(bool autofit = true);
+    void SaveTo(Stream stream, bool autofit = true);
+    void SaveTo(string path, bool autofit = true);
     Stream GetStream();
 #if NETSTANDARD2_0
 #else

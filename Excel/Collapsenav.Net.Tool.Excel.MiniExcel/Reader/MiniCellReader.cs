@@ -131,7 +131,7 @@ public class MiniCellReader : IExcelCellReader
         _stream.Dispose();
     }
 
-    public void Save()
+    public void Save(bool autofit = true)
     {
         SaveTo(_stream);
     }
@@ -139,7 +139,7 @@ public class MiniCellReader : IExcelCellReader
     /// <summary>
     /// 保存到流
     /// </summary>
-    public void SaveTo(Stream stream)
+    public void SaveTo(Stream stream, bool autofit = true)
     {
         stream.SeekToOrigin();
         stream.Clear();
@@ -149,7 +149,7 @@ public class MiniCellReader : IExcelCellReader
     /// <summary>
     /// 保存到文件
     /// </summary>
-    public void SaveTo(string path)
+    public void SaveTo(string path, bool autofit = true)
     {
         using var fs = path.OpenCreateReadWriteShareStream();
         SaveTo(fs);
