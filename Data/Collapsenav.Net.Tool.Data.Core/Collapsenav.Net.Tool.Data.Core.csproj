@@ -11,4 +11,5 @@ core基础接口
     <ItemGroup>
         <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj"/>
     </ItemGroup>
+    
 </Project>

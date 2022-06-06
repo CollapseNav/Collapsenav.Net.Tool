@@ -13,11 +13,11 @@ public static class DbContextConnExt
                 SqliteConn => (DbContextOptionsBuilder option) => option.UseSqlite(conn.ToString()),
                 SqlServerConn => (DbContextOptionsBuilder option) => option.UseSqlServer(conn.ToString()),
 #if NETSTANDARD2_0
-                MysqlConn =>(DbContextOptionsBuilder option) => option.UseMySql(conn.ToString()),
-                MariaDbConn =>(DbContextOptionsBuilder option) => option.UseMySql(conn.ToString()),
+                // MysqlConn =>(DbContextOptionsBuilder option) => option.UseMySql(conn.ToString()),
+                // MariaDbConn =>(DbContextOptionsBuilder option) => option.UseMySql(conn.ToString()),
 #else
-                MysqlConn => (DbContextOptionsBuilder option) => option.UseMySql(conn.ToString(), new MySqlServerVersion("8.0")),
-                MariaDbConn => (DbContextOptionsBuilder option) => option.UseMySql(conn.ToString(), new MySqlServerVersion("8.0")),
+                // MysqlConn => (DbContextOptionsBuilder option) => option.UseMySql(conn.ToString(), new MySqlServerVersion("8.0")),
+                // MariaDbConn => (DbContextOptionsBuilder option) => option.UseMySql(conn.ToString(), new MySqlServerVersion("8.0")),
 #endif
                 PgsqlConn => (DbContextOptionsBuilder option) => option.UseNpgsql(conn.ToString()),
                 _ => null
@@ -28,11 +28,11 @@ public static class DbContextConnExt
             SqliteConn => (DbContextOptionsBuilder option) => option.UseSqlite(conn.ToString(), o => o.MigrationsAssembly(assName)),
             SqlServerConn => (DbContextOptionsBuilder option) => option.UseSqlServer(conn.ToString(), o => o.MigrationsAssembly(assName)),
 #if NETSTANDARD2_0
-            MysqlConn =>(DbContextOptionsBuilder option) => option.UseMySql(conn.ToString(), o => o.MigrationsAssembly(assName)),
-            MariaDbConn =>(DbContextOptionsBuilder option) => option.UseMySql(conn.ToString(), o => o.MigrationsAssembly(assName)),
+            // MysqlConn =>(DbContextOptionsBuilder option) => option.UseMySql(conn.ToString(), o => o.MigrationsAssembly(assName)),
+            // MariaDbConn =>(DbContextOptionsBuilder option) => option.UseMySql(conn.ToString(), o => o.MigrationsAssembly(assName)),
 #else
-            MysqlConn => (DbContextOptionsBuilder option) => option.UseMySql(conn.ToString(), new MySqlServerVersion("8.0"), o => o.MigrationsAssembly(assName)),
-            MariaDbConn => (DbContextOptionsBuilder option) => option.UseMySql(conn.ToString(), new MySqlServerVersion("8.0"), o => o.MigrationsAssembly(assName)),
+            // MysqlConn => (DbContextOptionsBuilder option) => option.UseMySql(conn.ToString(), new MySqlServerVersion("8.0"), o => o.MigrationsAssembly(assName)),
+            // MariaDbConn => (DbContextOptionsBuilder option) => option.UseMySql(conn.ToString(), new MySqlServerVersion("8.0"), o => o.MigrationsAssembly(assName)),
 #endif
             PgsqlConn => (DbContextOptionsBuilder option) => option.UseNpgsql(conn.ToString(), o => o.MigrationsAssembly(assName)),
             _ => null
@@ -60,14 +60,6 @@ public static class DbContextConnExt
     {
         return services.AddDbContext<T, SqlServerConn>(conn, ass);
     }
-    public static IServiceCollection AddMysql<T>(this IServiceCollection services, MysqlConn conn, Assembly ass = null) where T : DbContext
-    {
-        return services.AddDbContext<T, MysqlConn>(conn, ass);
-    }
-    public static IServiceCollection AddMariaDb<T>(this IServiceCollection services, MariaDbConn conn, Assembly ass = null) where T : DbContext
-    {
-        return services.AddDbContext<T, MariaDbConn>(conn, ass);
-    }
     public static IServiceCollection AddPgSql<T>(this IServiceCollection services, PgsqlConn conn, Assembly ass = null) where T : DbContext
     {
         return services.AddDbContext<T, PgsqlConn>(conn, ass);
@@ -81,14 +73,6 @@ public static class DbContextConnExt
     public static IServiceCollection AddSqlServer<T>(this IServiceCollection services, string source, int? port, string dataBase, string user, string pwd, Assembly ass = null) where T : DbContext
     {
         return services.AddDbContext<T, SqlServerConn>(new SqlServerConn(source, port, dataBase, user, pwd), ass);
-    }
-    public static IServiceCollection AddMysql<T>(this IServiceCollection services, string source, int? port, string dataBase, string user, string pwd, Assembly ass = null) where T : DbContext
-    {
-        return services.AddDbContext<T, MysqlConn>(new MysqlConn(source, port, dataBase, user, pwd), ass);
-    }
-    public static IServiceCollection AddMariaDb<T>(this IServiceCollection services, string source, int? port, string dataBase, string user, string pwd, Assembly ass = null) where T : DbContext
-    {
-        return services.AddDbContext<T, MariaDbConn>(new MariaDbConn(source, port, dataBase, user, pwd), ass);
     }
     public static IServiceCollection AddPgSql<T>(this IServiceCollection services, string source, int? port, string dataBase, string user, string pwd, Assembly ass = null) where T : DbContext
     {
@@ -104,19 +88,10 @@ public static class DbContextConnExt
     {
         return services.AddDbContextPool<T, SqlServerConn>(conn, ass);
     }
-    public static IServiceCollection AddMysqlPool<T>(this IServiceCollection services, MysqlConn conn, Assembly ass = null) where T : DbContext
-    {
-        return services.AddDbContextPool<T, MysqlConn>(conn, ass);
-    }
-    public static IServiceCollection AddMariaDbPool<T>(this IServiceCollection services, MariaDbConn conn, Assembly ass = null) where T : DbContext
-    {
-        return services.AddDbContextPool<T, MariaDbConn>(conn, ass);
-    }
     public static IServiceCollection AddPgSqlPool<T>(this IServiceCollection services, PgsqlConn conn, Assembly ass = null) where T : DbContext
     {
         return services.AddDbContextPool<T, PgsqlConn>(conn, ass);
     }
-
 
     public static IServiceCollection AddSqlitePool<T>(this IServiceCollection services, string db, Assembly ass = null) where T : DbContext
     {
@@ -125,14 +100,6 @@ public static class DbContextConnExt
     public static IServiceCollection AddSqlServerPool<T>(this IServiceCollection services, string source, int? port, string dataBase, string user, string pwd, Assembly ass = null) where T : DbContext
     {
         return services.AddDbContextPool<T, SqlServerConn>(new SqlServerConn(source, port, dataBase, user, pwd), ass);
-    }
-    public static IServiceCollection AddMysqlPool<T>(this IServiceCollection services, string source, int? port, string dataBase, string user, string pwd, Assembly ass = null) where T : DbContext
-    {
-        return services.AddDbContextPool<T, MysqlConn>(new MysqlConn(source, port, dataBase, user, pwd), ass);
-    }
-    public static IServiceCollection AddMariaDbPool<T>(this IServiceCollection services, string source, int? port, string dataBase, string user, string pwd, Assembly ass = null) where T : DbContext
-    {
-        return services.AddDbContextPool<T, MariaDbConn>(new MariaDbConn(source, port, dataBase, user, pwd), ass);
     }
     public static IServiceCollection AddPgSqlPool<T>(this IServiceCollection services, string source, int? port, string dataBase, string user, string pwd, Assembly ass = null) where T : DbContext
     {
