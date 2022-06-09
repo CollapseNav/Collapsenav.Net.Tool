@@ -1,19 +1,10 @@
-﻿using System.Text.Encodings.Web;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
-using System.Text.Unicode;
 
 namespace Collapsenav.Net.Tool;
 public static partial class JsonExt
 {
-    public static JsonSerializerOptions DefaultJsonSerializerOption = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-        ReferenceHandler = ReferenceHandler.IgnoreCycles,
-        Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-    };
+    public static JsonSerializerOptions DefaultJsonSerializerOption = JsonOptions.BetterUseOption;
     /// <summary>
     /// Json字符串转为对象
     /// </summary>
