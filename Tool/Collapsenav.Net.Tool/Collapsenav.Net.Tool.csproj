@@ -7,7 +7,6 @@
         </Description>
         <Product>Collapsenav.Net.Tool</Product>
         <PackageId>Collapsenav.Net.Tool</PackageId>
-        <ProjectUrl>http://doc.collapsenav.cn/docs/Tool/</ProjectUrl>
     </PropertyGroup>
     <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1'">
         <PackageReference Include="System.Text.Json" Version="6.*"/>

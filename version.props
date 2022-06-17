@@ -10,5 +10,7 @@
         <Copyright>CollapseNav</Copyright>
         <RepositoryType>Github</RepositoryType>
         <RepositoryUrl>https://github.com/CollapseNav/Collapsenav.Net.Tool</RepositoryUrl>
+        <PackageProjectUrl>https://doc.collapsenav.cn/</PackageProjectUrl>
+        <PackageLicenseExpression>LGPL-3.0</PackageLicenseExpression>
     </PropertyGroup>
 </Project>
