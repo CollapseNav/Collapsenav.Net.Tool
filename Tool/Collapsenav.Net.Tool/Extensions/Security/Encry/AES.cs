@@ -8,6 +8,7 @@ public partial class AESTool
 {
     public const string DefaultKey = "Collapsenav.Net.Tool";
     public const string DefaultIV = "looT.teN.vanespalloC";
+    private static Aes aes;
     /// <summary>
     /// 解密
     /// </summary>
@@ -20,7 +21,7 @@ public partial class AESTool
     public static string Decrypt(string secmsg, string key = DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, string iv = DefaultIV, int level = 32)
     {
         var decryptMsg = secmsg.FromBase64();
-        using var aes = Aes.Create();
+        aes ??= Aes.Create();
         aes.Mode = mode;
         aes.Padding = padding;
         using var decrypt = aes.CreateDecryptor(GetAesBytes(key, level), GetAesBytes(iv, 16));
@@ -38,7 +39,7 @@ public partial class AESTool
     /// <param name="level">加密级别</param>
     public static string Encrypt(string msg, string key = DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, string iv = DefaultIV, int level = 32)
     {
-        using var aes = Aes.Create();
+        aes ??= Aes.Create();
         aes.Mode = mode;
         aes.Padding = padding;
         using var encrypt = aes.CreateEncryptor(GetAesBytes(key, level), GetAesBytes(iv, 16));

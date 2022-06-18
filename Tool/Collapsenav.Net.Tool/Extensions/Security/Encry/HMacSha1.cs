@@ -7,6 +7,7 @@ namespace Collapsenav.Net.Tool;
 public partial class HMacSha1Tool
 {
     public const string DefaultKey = "Collapsenav.Net.Tool";
+    private static HMACSHA1 sha1;
     /// <summary>
     /// 解密
     /// </summary>
@@ -19,7 +20,7 @@ public partial class HMacSha1Tool
     /// </summary>
     public static string Encrypt(string msg, string key = DefaultKey)
     {
-        using var sha1 = new HMACSHA1(key.ToBytes());
+        sha1 ??= new HMACSHA1(key.ToBytes());
         var result = sha1.ComputeHash(msg.ToBytes());
         return BitConverter.ToString(result).Replace("-", "");
     }
@@ -29,7 +30,7 @@ public partial class HMacSha1Tool
     public static string Encrypt(Stream stream, string key = DefaultKey)
     {
         stream.SeekToOrigin();
-        using var sha1 = new HMACSHA1(key.ToBytes());
+        sha1 ??= new HMACSHA1(key.ToBytes());
         var result = sha1.ComputeHash(stream);
         stream.SeekToOrigin();
         return BitConverter.ToString(result).Replace("-", "");

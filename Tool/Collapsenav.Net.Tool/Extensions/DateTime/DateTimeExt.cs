@@ -11,6 +11,13 @@ public static partial class DateTimeExt
         return new DateTimeOffset(time.ToUniversalTime()).ToUnixTimeMilliseconds();
     }
     /// <summary>
+    /// DateTime转为短时间戳(10位)
+    /// </summary>
+    public static long ToShortTimestamp(this DateTime time)
+    {
+        return new DateTimeOffset(time.ToUniversalTime()).ToUnixTimeSeconds();
+    }
+    /// <summary>
     /// 时间戳转为DateTime
     /// </summary>
     public static DateTime ToDateTime(this long timestamp)

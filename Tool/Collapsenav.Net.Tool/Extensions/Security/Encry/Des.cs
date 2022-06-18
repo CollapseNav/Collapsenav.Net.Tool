@@ -6,6 +6,7 @@ public partial class DesTool
 {
     public const string DefaultKey = "Collapsenav.Net.Tool";
     public const string DefaultIV = "looT.teN.vanespalloC";
+    private static DES des;
     /// <summary>
     /// Des解密
     /// </summary>
@@ -18,7 +19,7 @@ public partial class DesTool
     public static string Decrypt(string sec, string key = DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, string iv = DefaultIV, int level = 8)
     {
         byte[] decryptMsg = sec.FromBase64();
-        using var des = DES.Create();
+        des ??= DES.Create();
         des.Mode = mode;
         des.Padding = padding;
         using var decrypt = des.CreateDecryptor(GetDESBytes(key, level), GetDESBytes(iv, 8));
@@ -36,7 +37,7 @@ public partial class DesTool
     /// <param name="level"></param>
     public static string Encrypt(string msg, string key = DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, string iv = DefaultIV, int level = 8)
     {
-        using var des = DES.Create();
+        des ??= DES.Create();
         des.Mode = mode;
         des.Padding = padding;
         using var encrypt = des.CreateEncryptor(GetDESBytes(key, level), GetDESBytes(iv, 8));

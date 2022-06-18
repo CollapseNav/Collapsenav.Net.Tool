@@ -9,6 +9,7 @@ public partial class TripleDesTool
 {
     public const string DefaultKey = "Collapsenav.Net.Tool";
     public const string DefaultIV = "looT.teN.vanespalloC";
+    private static TripleDES DCSP;
     /// <summary>
     /// Des解密
     /// </summary>
@@ -21,7 +22,7 @@ public partial class TripleDesTool
     public static string Decrypt(string tripleDes, string key = DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, string iv = DefaultIV, int level = 24)
     {
         byte[] decryptMsg = tripleDes.FromBase64();
-        using var DCSP = TripleDES.Create();
+        DCSP ??= TripleDES.Create();
         DCSP.Mode = mode;
         DCSP.Padding = padding;
         using var decrypt = DCSP.CreateDecryptor(GetTripleDESBytes(key, level), GetTripleDESBytes(iv, 8));
@@ -39,7 +40,7 @@ public partial class TripleDesTool
     /// <param name="level"></param>
     public static string Encrypt(string msg, string key = DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, string iv = DefaultIV, int level = 24)
     {
-        using var DCSP = TripleDES.Create();
+        DCSP ??= TripleDES.Create();
         DCSP.Mode = mode;
         DCSP.Padding = padding;
         using var encrypt = DCSP.CreateEncryptor(GetTripleDESBytes(key, level), GetTripleDESBytes(iv, 8));
