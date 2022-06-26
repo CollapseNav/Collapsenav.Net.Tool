@@ -59,6 +59,19 @@ public static partial class JsonExt
     {
         return JsonDocument.Parse(jsonStr).RootElement;
     }
+    public static JsonNode ToJsonNode(this string jsonStr)
+    {
+        return JsonNode.Parse(jsonStr);
+    }
+    public static JsonObject ToJsonObject(this string jsonStr)
+    {
+        return JsonObject.Create(jsonStr.ToJsonElement());
+    }
+    public static JsonArray ToJsonArray(this string jsonStr)
+    {
+        return JsonArray.Create(jsonStr.ToJsonElement());
+    }
     public static JsonObject GetJsonObject(this string path) => JsonObject.Create(path.GetJsonElement());
     public static async ValueTask<JsonObject> GetJsonObjectAsync(this string path) => JsonObject.Create(await path.GetJsonElementAsync());
+
 }
