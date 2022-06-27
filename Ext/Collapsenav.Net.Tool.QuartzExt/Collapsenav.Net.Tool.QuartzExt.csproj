@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="../version.props" />
+    <PropertyGroup>
+        <PackageTags>Quartz</PackageTags>
+        <Description>
+        </Description>
+        <Product>Collapsenav.Net.Tool.Quartz</Product>
+        <PackageId>Collapsenav.Net.Tool.Quartz</PackageId>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Quartz" Version="3.*" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj" />
+    </ItemGroup>
+</Project>

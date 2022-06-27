@@ -10,7 +10,7 @@
         <ProjectUrl>http://doc.collapsenav.cn/docs/Excel/</ProjectUrl>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="MiniExcel" Version="0.21.4"/>
+        <PackageReference Include="MiniExcel" Version="0.21.*"/>
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj" />
