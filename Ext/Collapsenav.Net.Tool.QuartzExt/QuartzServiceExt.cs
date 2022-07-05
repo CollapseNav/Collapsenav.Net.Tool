@@ -18,14 +18,12 @@ public static class QuartzServiceExt
     {
         QuartzNode.Builder ??= new();
         QuartzNode.Builder.AddJob<Job>(len);
-        // return services;
         return services.AddTransient<Job>().AddDIJobFactory();
     }
     public static IServiceCollection AddJob<Job>(this IServiceCollection services, string cron) where Job : class, IJob
     {
         QuartzNode.Builder ??= new();
         QuartzNode.Builder.AddJob<Job>(cron);
-        // return services;
         return services.AddTransient<Job>().AddDIJobFactory();
     }
 

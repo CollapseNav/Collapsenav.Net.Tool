@@ -18,23 +18,6 @@ public static partial class QuartzExt
         foreach (var key in keys)
             await scheduler.DeleteJob(key);
     }
-
-    public static async Task RescheduleJob(this IScheduler scheduler, ITrigger trigger)
-    {
-        await scheduler.RescheduleJob(trigger.Key, trigger);
-    }
-
-    public static async Task RescheduleJob(this IScheduler scheduler, IEnumerable<ITrigger> triggers)
-    {
-        if (triggers.IsEmpty())
-            return;
-        var tkeys = await scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.GroupEquals(triggers.First().Key.Group));
-        foreach (var tkey in tkeys)
-            await scheduler.PauseTrigger(tkey);
-
-        foreach (var trigger in triggers)
-            await scheduler.RescheduleJob(trigger.Key, trigger);
-    }
 }
 
 
