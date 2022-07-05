@@ -150,4 +150,20 @@ public partial class QuartzTool
         return CreateTriggers(type.Name, lens);
     }
 
+    public static IEnumerable<TriggerKey> CreateTriggerKeys(string name, string group, int count)
+    {
+        return count <= 0 ? null : Enumerable.Range(0, count).Select(item => new TriggerKey($"{name}_{item}", $"{group}"));
+    }
+    public static IEnumerable<TriggerKey> CreateTriggerKeys(string name, int count)
+    {
+        return count <= 0 ? null : Enumerable.Range(0, count).Select(item => new TriggerKey($"{name}_{item}", $"{name}"));
+    }
+    public static IEnumerable<TriggerKey> CreateTriggerKeys(Type type, int count)
+    {
+        return CreateTriggerKeys(type.Name, count);
+    }
+    public static IEnumerable<TriggerKey> CreateTriggerKeys<Job>(int count) where Job : IJob
+    {
+        return CreateTriggerKeys(typeof(Job).Name, count);
+    }
 }
