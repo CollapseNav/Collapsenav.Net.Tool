@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="../version.props" />
+    <Import Project="../version.props"/>
     <PropertyGroup>
         <PackageTags>Quartz</PackageTags>
         <Description>
@@ -8,9 +8,9 @@
         <PackageId>Collapsenav.Net.Tool.Quartz</PackageId>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Quartz" Version="3.*" />
-    </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj" />
+        <PackageReference Include="Quartz" Version="3.*"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1"/>
+        <PackageReference Include="Collapsenav.Net.Tool" Version="1.2.0.1"/>
     </ItemGroup>
 </Project>
