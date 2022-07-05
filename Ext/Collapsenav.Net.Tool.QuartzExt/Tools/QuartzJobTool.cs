@@ -72,7 +72,7 @@ public partial class QuartzTool
     }
     public static IEnumerable<JobKey> CreateJobKeys(string name, int count)
     {
-        return count <= 0 ? null : Enumerable.Range(0, count).Select(item => new JobKey($"{name}_{item}", $"{name}"));
+        return CreateJobKeys(name, name, count);
     }
     public static IEnumerable<JobKey> CreateJobKeys(Type type, int count)
     {

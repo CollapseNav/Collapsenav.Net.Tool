@@ -156,7 +156,7 @@ public partial class QuartzTool
     }
     public static IEnumerable<TriggerKey> CreateTriggerKeys(string name, int count)
     {
-        return count <= 0 ? null : Enumerable.Range(0, count).Select(item => new TriggerKey($"{name}_{item}", $"{name}"));
+        return CreateTriggerKeys(name, name, count);
     }
     public static IEnumerable<TriggerKey> CreateTriggerKeys(Type type, int count)
     {
