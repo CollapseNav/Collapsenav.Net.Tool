@@ -30,8 +30,8 @@ public class QuartzJobBuilder
     public async Task Build(IScheduler scheduler)
     {
         foreach (var job in CronJobs)
-            await scheduler.ScheduleJob(job.JobType, job.Cron);
+            await scheduler.ScheduleJob(job.JobType, job.JKey, job.TKey, job.Cron);
         foreach (var job in SimpleJobs)
-            await scheduler.ScheduleJob(job.JobType, job.Len);
+            await scheduler.ScheduleJob(job.JobType, job.JKey, job.TKey, job.Len);
     }
 }

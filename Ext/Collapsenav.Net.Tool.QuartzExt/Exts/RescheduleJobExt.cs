@@ -37,8 +37,8 @@ public partial class QuartzExt
             await scheduler.PauseTrigger(key);
         await scheduler.RescheduleJob(keys.First(), trigger);
     }
-    public static async Task RescheduleJobs(this IScheduler scheduler, Type type, ITrigger trigger)
+    public static async Task RescheduleJob(this IScheduler scheduler, Type type, ITrigger trigger)
     {
-        await scheduler.RescheduleJob(type.FullName, type.Assembly.FullName, trigger);
+        await scheduler.RescheduleJob(type.Name, type.Name, trigger);
     }
 }

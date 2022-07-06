@@ -15,14 +15,6 @@ public static partial class QuartzExt
     /// <summary>
     /// 添加一个Job
     /// </summary>
-    /// <remarks>根据type的name自动生成JobKey和TriggerKey</remarks>
-    public static async Task ScheduleJob(this IScheduler scheduler, Type type, string cron)
-    {
-        await scheduler.ScheduleJob(QuartzTool.CreateJob(type), QuartzTool.CreateTrigger(type, cron));
-    }
-    /// <summary>
-    /// 添加一个Job
-    /// </summary>
     public static async Task ScheduleJob<Job>(this IScheduler scheduler, TriggerKey tkey, string cron) where Job : IJob
     {
         await scheduler.ScheduleJob(QuartzTool.CreateJob<Job>(), QuartzTool.CreateTrigger(tkey, cron));
@@ -61,14 +53,6 @@ public static partial class QuartzExt
     /// <summary>
     /// 添加一个Job
     /// </summary>
-    /// <remarks>根据type的name自动生成JobKey和TriggerKey</remarks>
-    public static async Task ScheduleJob(this IScheduler scheduler, Type type, int len)
-    {
-        await scheduler.ScheduleJob(QuartzTool.CreateJob(type), QuartzTool.CreateTrigger(type, len));
-    }
-    /// <summary>
-    /// 添加一个Job
-    /// </summary>
     public static async Task ScheduleJob<Job>(this IScheduler scheduler, TriggerKey tkey, int len) where Job : IJob
     {
         await scheduler.ScheduleJob(QuartzTool.CreateJob<Job>(), QuartzTool.CreateTrigger(tkey, len));
@@ -96,6 +80,80 @@ public static partial class QuartzExt
     }
 
 
+    /// <summary>
+    /// 添加一个Job
+    /// </summary>
+    /// <remarks>根据Job自动生成JobKey和TriggerKey</remarks>
+    public static async Task ScheduleJob(this IScheduler scheduler, Type type, string cron)
+    {
+        await scheduler.ScheduleJob(QuartzTool.CreateJob(type), QuartzTool.CreateTrigger(type, cron));
+    }
+    /// <summary>
+    /// 添加一个Job
+    /// </summary>
+    public static async Task ScheduleJob(this IScheduler scheduler, Type type, TriggerKey tkey, string cron)
+    {
+        await scheduler.ScheduleJob(QuartzTool.CreateJob(type), QuartzTool.CreateTrigger(tkey, cron));
+    }
+    /// <summary>
+    /// 添加一个Job
+    /// </summary>
+    public static async Task ScheduleJob(this IScheduler scheduler, Type type, JobKey jkey, TriggerKey tkey, string cron)
+    {
+        await scheduler.ScheduleJob(QuartzTool.CreateJob(type, jkey), QuartzTool.CreateTrigger(tkey, cron));
+    }
+    /// <summary>
+    /// 添加一个Job
+    /// </summary>
+    public static async Task ScheduleJob(this IScheduler scheduler, Type type, string name, string group, string cron)
+    {
+        await scheduler.ScheduleJob(QuartzTool.CreateJob(type, name, group), QuartzTool.CreateTrigger(name, group, cron));
+    }
+    /// <summary>
+    /// 添加一个Job
+    /// </summary>
+    public static async Task ScheduleJob(this IScheduler scheduler, Type type, string name, string cron)
+    {
+        await scheduler.ScheduleJob(QuartzTool.CreateJob(type, name), QuartzTool.CreateTrigger(name, cron));
+    }
+
+
+    /// <summary>
+    /// 添加一个Job
+    /// </summary>
+    /// <remarks>根据Job自动生成JobKey和TriggerKey</remarks>
+    public static async Task ScheduleJob(this IScheduler scheduler, Type type, int len)
+    {
+        await scheduler.ScheduleJob(QuartzTool.CreateJob(type), QuartzTool.CreateTrigger(type, len));
+    }
+    /// <summary>
+    /// 添加一个Job
+    /// </summary>
+    public static async Task ScheduleJob(this IScheduler scheduler, Type type, TriggerKey tkey, int len)
+    {
+        await scheduler.ScheduleJob(QuartzTool.CreateJob(type), QuartzTool.CreateTrigger(tkey, len));
+    }
+    /// <summary>
+    /// 添加一个Job
+    /// </summary>
+    public static async Task ScheduleJob(this IScheduler scheduler, Type type, JobKey jkey, TriggerKey tkey, int len)
+    {
+        await scheduler.ScheduleJob(QuartzTool.CreateJob(type, jkey), QuartzTool.CreateTrigger(tkey, len));
+    }
+    /// <summary>
+    /// 添加一个Job
+    /// </summary>
+    public static async Task ScheduleJob(this IScheduler scheduler, Type type, string name, string group, int len)
+    {
+        await scheduler.ScheduleJob(QuartzTool.CreateJob(type, name, group), QuartzTool.CreateTrigger(name, group, len));
+    }
+    /// <summary>
+    /// 添加一个Job
+    /// </summary>
+    public static async Task ScheduleJob(this IScheduler scheduler, Type type, string name, int len)
+    {
+        await scheduler.ScheduleJob(QuartzTool.CreateJob(type, name), QuartzTool.CreateTrigger(name, len));
+    }
 
 
 
@@ -129,6 +187,26 @@ public static partial class QuartzExt
         foreach (var trigger in triggers)
         {
             var job = QuartzTool.CreateJob<Job>(trigger.Key.Name, trigger.Key.Group);
+            await scheduler.ScheduleJob(job, trigger);
+        }
+    }
+
+
+    public static async Task ScheduleJobs(this IScheduler scheduler, Type type, string name, IEnumerable<string> crons)
+    {
+        var triggers = QuartzTool.CreateTriggers(name, crons);
+        foreach (var trigger in triggers)
+        {
+            var job = QuartzTool.CreateJob(type, trigger.Key.Name, trigger.Key.Group);
+            await scheduler.ScheduleJob(job, trigger);
+        }
+    }
+    public static async Task ScheduleJobs(this IScheduler scheduler, Type type, string name, string group, IEnumerable<string> crons)
+    {
+        var triggers = QuartzTool.CreateTriggers(name, group, crons);
+        foreach (var trigger in triggers)
+        {
+            var job = QuartzTool.CreateJob(type, trigger.Key.Name, trigger.Key.Group);
             await scheduler.ScheduleJob(job, trigger);
         }
     }
