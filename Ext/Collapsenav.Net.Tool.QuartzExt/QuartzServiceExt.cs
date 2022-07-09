@@ -26,7 +26,18 @@ public static class QuartzServiceExt
         QuartzNode.Builder.AddJob<Job>(cron);
         return services.AddTransient<Job>().AddDIJobFactory();
     }
-
+    public static IServiceCollection AddJobs<Job>(this IServiceCollection services, params int[] len) where Job : class, IJob
+    {
+        QuartzNode.Builder ??= new();
+        QuartzNode.Builder.AddJob<Job>(len);
+        return services.AddTransient<Job>().AddDIJobFactory();
+    }
+    public static IServiceCollection AddJobs<Job>(this IServiceCollection services, IEnumerable<string> crons) where Job : class, IJob
+    {
+        QuartzNode.Builder ??= new();
+        QuartzNode.Builder.AddJob<Job>(crons);
+        return services.AddTransient<Job>().AddDIJobFactory();
+    }
     public static IServiceCollection AddDefaultQuartzService(this IServiceCollection services)
     {
         return services.AddDIJobFactory().AddHostedService<EasyJobService>();
@@ -36,8 +47,7 @@ public static class QuartzServiceExt
         action?.Invoke(QuartzNode.Builder ??= new());
         services
         .AddDIJobFactory()
-        .AddHostedService<EasyJobService>()
-        ;
+        .AddHostedService<EasyJobService>();
         return services;
     }
 }

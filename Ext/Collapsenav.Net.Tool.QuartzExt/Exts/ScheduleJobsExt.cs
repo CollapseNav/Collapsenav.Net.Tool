@@ -157,6 +157,10 @@ public static partial class QuartzExt
 
 
 
+
+    /// <summary>
+    /// 根据 crons 创建 trigger 添加job
+    /// </summary>
     public static async Task ScheduleJobs<Job>(this IScheduler scheduler, string name, IEnumerable<string> crons) where Job : IJob
     {
         var triggers = QuartzTool.CreateTriggers(name, crons);
@@ -166,6 +170,10 @@ public static partial class QuartzExt
             await scheduler.ScheduleJob(job, trigger);
         }
     }
+
+    /// <summary>
+    /// 根据 crons 创建 trigger 添加job
+    /// </summary>
     public static async Task ScheduleJobs<Job>(this IScheduler scheduler, string name, string group, IEnumerable<string> crons) where Job : IJob
     {
         var triggers = QuartzTool.CreateTriggers(name, group, crons);
@@ -190,8 +198,9 @@ public static partial class QuartzExt
             await scheduler.ScheduleJob(job, trigger);
         }
     }
-
-
+    /// <summary>
+    /// 根据 crons 创建 trigger 添加job
+    /// </summary>
     public static async Task ScheduleJobs(this IScheduler scheduler, Type type, string name, IEnumerable<string> crons)
     {
         var triggers = QuartzTool.CreateTriggers(name, crons);
@@ -201,6 +210,9 @@ public static partial class QuartzExt
             await scheduler.ScheduleJob(job, trigger);
         }
     }
+    /// <summary>
+    /// 根据 crons 创建 trigger 添加job
+    /// </summary>
     public static async Task ScheduleJobs(this IScheduler scheduler, Type type, string name, string group, IEnumerable<string> crons)
     {
         var triggers = QuartzTool.CreateTriggers(name, group, crons);
@@ -219,6 +231,87 @@ public static partial class QuartzExt
     public static async Task ScheduleJobs(this IScheduler scheduler, Type type, IEnumerable<string> crons)
     {
         var triggers = QuartzTool.CreateTriggers(type, crons);
+        foreach (var trigger in triggers)
+        {
+            var job = QuartzTool.CreateJob(type, trigger.Key.Name, trigger.Key.Group);
+            await scheduler.ScheduleJob(job, trigger);
+        }
+    }
+
+
+    /// <summary>
+    /// 根据 lens 创建 trigger 添加job
+    /// </summary>
+    public static async Task ScheduleJobs<Job>(this IScheduler scheduler, string name, IEnumerable<int> lens) where Job : IJob
+    {
+        var triggers = QuartzTool.CreateTriggers(name, lens);
+        foreach (var trigger in triggers)
+        {
+            var job = QuartzTool.CreateJob<Job>(trigger.Key.Name, trigger.Key.Group);
+            await scheduler.ScheduleJob(job, trigger);
+        }
+    }
+
+    /// <summary>
+    /// 根据 lens 创建 trigger 添加job
+    /// </summary>
+    public static async Task ScheduleJobs<Job>(this IScheduler scheduler, string name, string group, IEnumerable<int> lens) where Job : IJob
+    {
+        var triggers = QuartzTool.CreateTriggers(name, group, lens);
+        foreach (var trigger in triggers)
+        {
+            var job = QuartzTool.CreateJob<Job>(trigger.Key.Name, trigger.Key.Group);
+            await scheduler.ScheduleJob(job, trigger);
+        }
+    }
+    /// <summary>
+    /// 不指定任务名称, 使用泛型名称作为任务的name和group
+    /// </summary>
+    /// <remarks>
+    /// 反正就算需要指定名称, 最后和泛型名称也不会有太大区别, 不如干脆放手!
+    /// </remarks>
+    public static async Task ScheduleJobs<Job>(this IScheduler scheduler, IEnumerable<int> lens) where Job : IJob
+    {
+        var triggers = QuartzTool.CreateTriggers(typeof(Job), lens);
+        foreach (var trigger in triggers)
+        {
+            var job = QuartzTool.CreateJob<Job>(trigger.Key.Name, trigger.Key.Group);
+            await scheduler.ScheduleJob(job, trigger);
+        }
+    }
+    /// <summary>
+    /// 根据 lens 创建 trigger 添加job
+    /// </summary>
+    public static async Task ScheduleJobs(this IScheduler scheduler, Type type, string name, IEnumerable<int> lens)
+    {
+        var triggers = QuartzTool.CreateTriggers(name, lens);
+        foreach (var trigger in triggers)
+        {
+            var job = QuartzTool.CreateJob(type, trigger.Key.Name, trigger.Key.Group);
+            await scheduler.ScheduleJob(job, trigger);
+        }
+    }
+    /// <summary>
+    /// 根据 lens 创建 trigger 添加job
+    /// </summary>
+    public static async Task ScheduleJobs(this IScheduler scheduler, Type type, string name, string group, IEnumerable<int> lens)
+    {
+        var triggers = QuartzTool.CreateTriggers(name, group, lens);
+        foreach (var trigger in triggers)
+        {
+            var job = QuartzTool.CreateJob(type, trigger.Key.Name, trigger.Key.Group);
+            await scheduler.ScheduleJob(job, trigger);
+        }
+    }
+    /// <summary>
+    /// 不指定任务名称, 使用泛型名称作为任务的name和group
+    /// </summary>
+    /// <remarks>
+    /// 反正就算需要指定名称, 最后和泛型名称也不会有太大区别, 不如干脆放手!
+    /// </remarks>
+    public static async Task ScheduleJobs(this IScheduler scheduler, Type type, IEnumerable<int> lens)
+    {
+        var triggers = QuartzTool.CreateTriggers(type, lens);
         foreach (var trigger in triggers)
         {
             var job = QuartzTool.CreateJob(type, trigger.Key.Name, trigger.Key.Group);
