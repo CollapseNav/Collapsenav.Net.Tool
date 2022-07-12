@@ -352,3 +352,5 @@ MigrationBackup/
 
 
 *.cobertura.xml
+
+*.Region

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.WebApi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.WebApi.Core", "Collapsenav.Net.Tool.WebApi.Core\Collapsenav.Net.Tool.WebApi.Core.csproj", "{68D1DDB0-338B-43BA-B83F-56776E04E159}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Swagger", "Collapsenav.Net.Tool.Swagger\Collapsenav.Net.Tool.Swagger.csproj", "{569A1DAB-C58E-405C-A1A3-2EE22D12B74A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{68D1DDB0-338B-43BA-B83F-56776E04E159}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68D1DDB0-338B-43BA-B83F-56776E04E159}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68D1DDB0-338B-43BA-B83F-56776E04E159}.Release|Any CPU.Build.0 = Release|Any CPU
+		{569A1DAB-C58E-405C-A1A3-2EE22D12B74A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{569A1DAB-C58E-405C-A1A3-2EE22D12B74A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{569A1DAB-C58E-405C-A1A3-2EE22D12B74A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{569A1DAB-C58E-405C-A1A3-2EE22D12B74A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

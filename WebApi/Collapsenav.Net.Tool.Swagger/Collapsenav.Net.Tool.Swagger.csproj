@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="../version.props"/>
+    <PropertyGroup>
+        <PackageTags>Tools,WebApi</PackageTags>
+        <Description>
+提供一些简单的swagger扩展功能
+        </Description>
+        <Product>Collapsenav.Net.Tool.Swagger</Product>
+        <PackageId>Collapsenav.Net.Tool.Swagger</PackageId>
+        <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
+        <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj"/>
+    </ItemGroup>
+</Project>
