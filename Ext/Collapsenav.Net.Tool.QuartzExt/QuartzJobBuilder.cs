@@ -86,9 +86,10 @@ public class QuartzJobBuilder
     }
     public async Task Build(IScheduler scheduler)
     {
+        var sch = scheduler ?? QuartzNode.Scheduler;
         foreach (var job in CronJobs)
-            await scheduler.ScheduleJob(job.JobType, job.JKey, job.TKey, job.Cron);
+            await sch.ScheduleJob(job.GetJobDetail(), job.GetTrigger());
         foreach (var job in SimpleJobs)
-            await scheduler.ScheduleJob(job.JobType, job.JKey, job.TKey, job.Len);
+            await sch.ScheduleJob(job.GetJobDetail(), job.GetTrigger());
     }
 }
