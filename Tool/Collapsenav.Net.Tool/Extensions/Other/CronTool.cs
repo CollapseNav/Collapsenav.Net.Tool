@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices;
-
 namespace Collapsenav.Net.Tool;
 
 public enum CronEnum
@@ -19,7 +17,11 @@ public class CronTool
         { CronEnum.Day, 30 },
         { CronEnum.Month, 12 },
     };
-    public static IEnumerable<string> CreateCron(int? len = null, CronEnum? cronEnum = CronEnum.Second)
+    public static string CreateCron(int? len = null, CronEnum? cronEnum = CronEnum.Second)
+    {
+        return CreateCrons(len, cronEnum).FirstOrDefault();
+    }
+    public static IEnumerable<string> CreateCrons(int? len = null, CronEnum? cronEnum = CronEnum.Second)
     {
         len ??= 1;
         cronEnum ??= CronEnum.Second;
