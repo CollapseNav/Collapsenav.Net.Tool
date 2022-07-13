@@ -51,6 +51,15 @@ public static class QuartzServiceExt
         QuartzNode.Builder.AddJob<Job>(crons);
         return services.AddTransient<Job>().AddDIJobFactory();
     }
+    /// <summary>
+    /// 从xml配置文件中添加job
+    /// </summary>
+    public static IServiceCollection AddJobsFromXml(this IServiceCollection services, string path)
+    {
+        QuartzNode.Builder ??= new();
+        QuartzNode.Builder.AddXmlConfig(path);
+        return services.AddDIJobFactory();
+    }
 
     /// <summary>
     /// 添加默认的hosted service, 用于初始化quartz

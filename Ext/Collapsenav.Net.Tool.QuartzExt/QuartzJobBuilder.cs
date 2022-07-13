@@ -4,12 +4,28 @@ namespace Collapsenav.Net.Tool.Ext;
 
 public class QuartzJobBuilder
 {
+    /// <summary>
+    /// 使用cron的job
+    /// </summary>
     public List<CronJob> CronJobs { get; set; }
+    /// <summary>
+    /// 使用一般时间间隔的job
+    /// </summary>
     public List<SimpleJob> SimpleJobs { get; set; }
+    /// <summary>
+    /// xml配置文件路径
+    /// </summary>
+    public List<string> XmlConfig { get; set; }
     public QuartzJobBuilder()
     {
         CronJobs = new();
         SimpleJobs = new();
+        XmlConfig = new();
+    }
+    public void AddXmlConfig(string path)
+    {
+        if (path.ToLower().EndsWith(".xml"))
+            XmlConfig.Add(path);
     }
     public void AddJob<Job>(string cron) where Job : IJob
     {
@@ -84,6 +100,10 @@ public class QuartzJobBuilder
             });
         }
     }
+    /// <summary>
+    /// 构建 scheduler 的job
+    /// </summary>
+    /// <remarks>默认情况下会构建 QuartzNode.Scheduler</remarks>
     public async Task Build(IScheduler scheduler)
     {
         var sch = scheduler ?? QuartzNode.Scheduler;
@@ -91,5 +111,7 @@ public class QuartzJobBuilder
             await sch.ScheduleJob(job.GetJobDetail(), job.GetTrigger());
         foreach (var job in SimpleJobs)
             await sch.ScheduleJob(job.GetJobDetail(), job.GetTrigger());
+        foreach (var path in XmlConfig)
+            await sch.LoadXmlConfig(path);
     }
 }

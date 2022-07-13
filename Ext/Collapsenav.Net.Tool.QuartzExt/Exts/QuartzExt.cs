@@ -1,5 +1,7 @@
 using Quartz;
 using Quartz.Impl.Matchers;
+using Quartz.Simpl;
+using Quartz.Xml;
 
 namespace Collapsenav.Net.Tool.Ext;
 
@@ -56,6 +58,14 @@ public static partial class QuartzExt
     public static async Task<IReadOnlyCollection<JobKey>> GetJobKeys(this IScheduler scheduler, string group)
     {
         return await scheduler.GetJobKeys(GroupMatcher<JobKey>.GroupEquals(group));
+    }
+
+    public static async Task LoadXmlConfig(this IScheduler scheduler, string path)
+    {
+        if (!path.ToLower().EndsWith("xml"))
+            throw new Exception("配置文件必须是xml格式");
+        var processor = new XMLSchedulingDataProcessor(new SimpleTypeLoadHelper());
+        await processor.ProcessFileAndScheduleJobs(path, scheduler);
     }
 }
 
