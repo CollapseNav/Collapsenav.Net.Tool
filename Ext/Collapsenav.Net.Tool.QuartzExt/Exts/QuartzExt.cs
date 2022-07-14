@@ -68,5 +68,3 @@ public static partial class QuartzExt
         await processor.ProcessFileAndScheduleJobs(path, scheduler);
     }
 }
-
-

@@ -6,16 +6,15 @@ public class PageData<T>
 {
     public int? Total { get; set; }
     public int? Length { get => Data?.Count(); }
-    public IEnumerable<T> Data { get; set; }
+    public IEnumerable<T> Data { get => _data; set => _data = value; }
+    private IEnumerable<T> _data;
     public PageData() { }
-    public PageData(int? total, IEnumerable<T> data)
+    public PageData(int? total, IEnumerable<T> data) : this(data, total)
     {
-        Total = total;
-        Data = data;
     }
-    public PageData(IEnumerable<T> data)
+    public PageData(IEnumerable<T> data, int? total = null)
     {
-        Total = data.Count();
+        Total = total ?? data?.Count();
         Data = data;
     }
 }

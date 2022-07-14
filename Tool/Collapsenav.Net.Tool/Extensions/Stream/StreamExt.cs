@@ -106,10 +106,8 @@ public static partial class StreamExt
     /// </summary>
     public static void SaveTo(this Stream stream, string path)
     {
-        stream.SeekToOrigin();
         using var fs = path.CreateStream();
-        stream.CopyTo(fs);
-        stream.SeekToOrigin();
+        stream.SeekAndCopyTo(fs);
     }
     /// <summary>
     /// byte[]保存为文件
