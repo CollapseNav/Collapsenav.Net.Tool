@@ -3,7 +3,7 @@
     <PropertyGroup>
         <PackageTags>Excel,EPPlus</PackageTags>
         <Description>
-基于NPOI提供了导出导出功能
+基于EPPlus提供了导出导出功能
         </Description>
         <Product>Collapsenav.Net.Tool.Excel.EPPlus</Product>
         <PackageId>Collapsenav.Net.Tool.Excel.EPPlus</PackageId>

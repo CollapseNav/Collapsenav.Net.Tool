@@ -14,11 +14,12 @@ public class SwaggerBuilder
     /// <summary>
     /// 使用注释
     /// </summary>
-    public bool? UseComments
+    public bool UseComments
     {
-        get => Actions?.ContainsKey(nameof(UseComments)); set
+        get => Actions?.ContainsKey(nameof(UseComments)) ?? false;
+        set
         {
-            if (value.Value)
+            if (value)
                 Actions.AddOrUpdate(nameof(UseComments), options =>
                 {
                     foreach (var dir in new DirectoryInfo(AppContext.BaseDirectory).GetFiles("*.xml"))
@@ -31,11 +32,12 @@ public class SwaggerBuilder
     /// <summary>
     /// 使用jwt
     /// </summary>
-    public bool? UseJwtAuth
+    public bool UseJwtAuth
     {
-        get => Actions?.ContainsKey(nameof(UseJwtAuth)); set
+        get => Actions?.ContainsKey(nameof(UseJwtAuth)) ?? false;
+        set
         {
-            if (value.Value)
+            if (value)
             {
                 Actions.AddOrUpdate(nameof(UseJwtAuth), options =>
                 {
@@ -69,7 +71,8 @@ public class SwaggerBuilder
     }
     public OpenApiInfo Info
     {
-        get => info; set
+        get => info;
+        set
         {
             info = value;
             if (value != null)
@@ -80,6 +83,26 @@ public class SwaggerBuilder
                 Actions.Remove(nameof(Info));
             }
         }
+    }
+
+    public SwaggerBuilder AddInfo(OpenApiInfo openApiInfo)
+    {
+        Info = openApiInfo;
+        return this;
+    }
+    public SwaggerBuilder AddJwtAuth(bool useJwtAuth = true)
+    {
+        if (useJwtAuth && !UseJwtAuth) 
+            UseJwtAuth = true;
+        else UseJwtAuth = false;
+        return this;
+    }
+    public SwaggerBuilder AddComments(bool useComments = true)
+    {
+        if (useComments && !UseComments)
+            UseComments = true;
+        else UseComments = false;
+        return this;
     }
 
     public SwaggerBuilder()

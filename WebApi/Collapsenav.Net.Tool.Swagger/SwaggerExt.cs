@@ -12,6 +12,12 @@ public static class SwaggerExt
     {
         return services.AddSwaggerGen(options => (builder ?? SwaggerBuilder.DefaultBuilder()).BuildGenOptions(options));
     }
+    public static IServiceCollection AddSwaggerGen(this IServiceCollection services, Action<SwaggerBuilder> builder)
+    {
+        var b = new SwaggerBuilder();
+        builder?.Invoke(b);
+        return services.AddSwaggerGen(options => b.BuildGenOptions(options));
+    }
     /// <summary>
     /// 带注释的Swagger
     /// </summary>

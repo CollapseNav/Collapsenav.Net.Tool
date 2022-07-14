@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <Import Project="../version.props" />
     <PropertyGroup>
-        <PackageTags>Tools,EF,Freesql,Data</PackageTags>
+        <PackageTags>Tools,EF,Data,mysql,mariadb</PackageTags>
         <Description>
-提供基于EF orm的仓储类，工具类
+提供基于EF orm的mysql,mariadb实现
         </Description>
         <Product>Collapsenav.Net.Tool.Data.Mysql</Product>
         <PackageId>Collapsenav.Net.Tool.Data.Mysql</PackageId>

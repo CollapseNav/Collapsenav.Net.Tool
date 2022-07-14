@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <Import Project="../version.props"/>
     <PropertyGroup>
-        <PackageTags>Excel,EPPlus</PackageTags>
+        <PackageTags>Excel,MiniExcel</PackageTags>
         <Description>
 基于MiniExcel提供了导出导出功能
         </Description>

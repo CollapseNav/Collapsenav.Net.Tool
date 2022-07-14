@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <Import Project="../version.props"/>
     <PropertyGroup>
-        <PackageTags>Tools,WebApi</PackageTags>
+        <PackageTags>Tools,swagger</PackageTags>
         <Description>
 提供一些简单的swagger扩展功能
         </Description>

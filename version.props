@@ -5,12 +5,12 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <LangVersion>preview</LangVersion>
         <NoWarn>$(NoWarn);1591</NoWarn>
-        <Version>1.3.0-beta</Version>
+        <Version>1.3.0</Version>
         <Authors>CollapseNav</Authors>
         <Copyright>CollapseNav</Copyright>
         <RepositoryType>Github</RepositoryType>
         <RepositoryUrl>https://github.com/CollapseNav/Collapsenav.Net.Tool</RepositoryUrl>
         <PackageProjectUrl>https://doc.collapsenav.cn/</PackageProjectUrl>
-        <PackageLicenseExpression>LGPL-3.0</PackageLicenseExpression>
+        <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
     </PropertyGroup>
 </Project>

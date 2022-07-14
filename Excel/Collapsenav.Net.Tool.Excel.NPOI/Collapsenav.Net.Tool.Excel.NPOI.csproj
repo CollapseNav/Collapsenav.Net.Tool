@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <Import Project="../version.props"/>
     <PropertyGroup>
-        <PackageTags>Excel,EPPlus</PackageTags>
+        <PackageTags>Excel,NPOI</PackageTags>
         <Description>
 基于NPOI提供了导出导出功能
         </Description>
