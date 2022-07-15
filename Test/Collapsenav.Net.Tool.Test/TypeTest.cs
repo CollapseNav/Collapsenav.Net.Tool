@@ -107,8 +107,7 @@ public class TypeTest
     {
         var attrValues = typeof(PropTest1).AttrValues<UnitTestAttribute>();
         Assert.True(attrValues.Count == 2);
-        Assert.True(attrValues.First().Value.Field == "123");
-        Assert.True(attrValues.Last().Value.Field == "233");
+        Assert.True(attrValues.Select(item => item.Value.Field).AllContain("123", "233"));
     }
 
     [Fact]

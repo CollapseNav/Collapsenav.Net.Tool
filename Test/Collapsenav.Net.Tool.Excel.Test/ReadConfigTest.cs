@@ -300,68 +300,68 @@ public class ReadConfigTest
         Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
     }
 
-    /// <summary>
-    /// 从对应的sheet格式读取
-    /// </summary>
-    [Fact]
-    public async Task ReadConfigWithSheetTest()
-    {
-        var path = "./TestExcel.xlsx";
-        var config = new ReadConfig<ExcelTestDto>()
-        .Add("Field0", item => item.Field0)
-        .Add("Field1", item => item.Field1)
-        .Add("Field2", item => item.Field2, item => item == "Male")
-        .Add("Field3", item => item.Field3)
-        ;
-        var epplusSheet = EPPlusTool.EPPlusSheet(path);
-        var data = await config.EPPlusToEntityAsync(epplusSheet);
-        Assert.True(data.Count() == 3000);
-        Assert.True(data.Count(item => item.Field0 == "233") == 1500);
-        Assert.True(data.Count(item => item.Field1 == 23) == 1500);
-        Assert.True(data.Count(item => item.Field2 == true) == 1500);
-        Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
+    // /// <summary>
+    // /// 从对应的sheet格式读取
+    // /// </summary>
+    // [Fact]
+    // public async Task ReadConfigWithSheetTest()
+    // {
+    //     var path = "./TestExcel.xlsx";
+    //     var config = new ReadConfig<ExcelTestDto>()
+    //     .Add("Field0", item => item.Field0)
+    //     .Add("Field1", item => item.Field1)
+    //     .Add("Field2", item => item.Field2, item => item == "Male")
+    //     .Add("Field3", item => item.Field3)
+    //     ;
+    //     var epplusSheet = EPPlusTool.EPPlusSheet(path);
+    //     var data = await config.EPPlusToEntityAsync(epplusSheet);
+    //     Assert.True(data.Count() == 3000);
+    //     Assert.True(data.Count(item => item.Field0 == "233") == 1500);
+    //     Assert.True(data.Count(item => item.Field1 == 23) == 1500);
+    //     Assert.True(data.Count(item => item.Field2 == true) == 1500);
+    //     Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
 
-        var npoiSheet = NPOITool.NPOISheet(path);
-        data = await config.NPOIToEntityAsync(npoiSheet);
-        Assert.True(data.Count() == 3000);
-        Assert.True(data.Count(item => item.Field0 == "233") == 1500);
-        Assert.True(data.Count(item => item.Field1 == 23) == 1500);
-        Assert.True(data.Count(item => item.Field2 == true) == 1500);
-        Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
+    //     var npoiSheet = NPOITool.NPOISheet(path);
+    //     data = await config.NPOIToEntityAsync(npoiSheet);
+    //     Assert.True(data.Count() == 3000);
+    //     Assert.True(data.Count(item => item.Field0 == "233") == 1500);
+    //     Assert.True(data.Count(item => item.Field1 == 23) == 1500);
+    //     Assert.True(data.Count(item => item.Field2 == true) == 1500);
+    //     Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
 
-        var miniSheet = path.OpenReadShareStream();
-        data = await config.MiniToEntityAsync(miniSheet);
-        Assert.True(data.Count() == 3000);
-        Assert.True(data.Count(item => item.Field0 == "233") == 1500);
-        Assert.True(data.Count(item => item.Field1 == 23) == 1500);
-        Assert.True(data.Count(item => item.Field2 == true) == 1500);
-        Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
+    //     var miniSheet = path.OpenReadShareStream();
+    //     data = await config.MiniToEntityAsync(miniSheet);
+    //     Assert.True(data.Count() == 3000);
+    //     Assert.True(data.Count(item => item.Field0 == "233") == 1500);
+    //     Assert.True(data.Count(item => item.Field1 == 23) == 1500);
+    //     Assert.True(data.Count(item => item.Field2 == true) == 1500);
+    //     Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
 
-        try
-        {
-            data = await config.EPPlusToEntityAsync();
-        }
-        catch (Exception ex)
-        {
-            Assert.True(ex.GetType() == typeof(NullReferenceException));
-        }
-        try
-        {
-            data = await config.NPOIToEntityAsync();
-        }
-        catch (Exception ex)
-        {
-            Assert.True(ex.GetType() == typeof(NullReferenceException));
-        }
-        try
-        {
-            data = await config.MiniToEntityAsync();
-        }
-        catch (Exception ex)
-        {
-            Assert.True(ex.GetType() == typeof(NullReferenceException));
-        }
-    }
+    //     try
+    //     {
+    //         data = await config.EPPlusToEntityAsync();
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Assert.True(ex.GetType() == typeof(NullReferenceException));
+    //     }
+    //     try
+    //     {
+    //         data = await config.NPOIToEntityAsync();
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Assert.True(ex.GetType() == typeof(NullReferenceException));
+    //     }
+    //     try
+    //     {
+    //         data = await config.MiniToEntityAsync();
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Assert.True(ex.GetType() == typeof(NullReferenceException));
+    //     }
+    // }
 
     [Fact]
     public async Task StaticReadConfigFuncByPathTest()
