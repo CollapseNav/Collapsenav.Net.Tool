@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\Ext\Collapsenav.Net.Tool.Quartz\Collapsenav.Net.Tool.Quartz.csproj"/>
+    </ItemGroup>
+</Project>

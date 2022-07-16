@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "QuartzDemo", "QuartzDemo", "{2A957A21-AE4A-4C09-8F6E-A010E08C1DC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleQuartzDemo", "QuartzDemo\ConsoleQuartzDemo\ConsoleQuartzDemo.csproj", "{4EDEC0EB-1268-4A0B-92CB-7C77D86BEED2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobLib", "QuartzDemo\JobLib\JobLib.csproj", "{FE10B77F-A949-4883-AA98-267BBEEDD1E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collapsenav.Net.Tool.Quartz", "..\Ext\Collapsenav.Net.Tool.Quartz\Collapsenav.Net.Tool.Quartz.csproj", "{591A7712-55E8-4E53-BB03-3F9A88B85525}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiQuartzDemo", "QuartzDemo\WebApiQuartzDemo\WebApiQuartzDemo.csproj", "{1FA4518B-D620-48BC-807D-BCE8D671C1D2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4EDEC0EB-1268-4A0B-92CB-7C77D86BEED2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EDEC0EB-1268-4A0B-92CB-7C77D86BEED2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EDEC0EB-1268-4A0B-92CB-7C77D86BEED2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EDEC0EB-1268-4A0B-92CB-7C77D86BEED2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE10B77F-A949-4883-AA98-267BBEEDD1E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE10B77F-A949-4883-AA98-267BBEEDD1E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE10B77F-A949-4883-AA98-267BBEEDD1E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE10B77F-A949-4883-AA98-267BBEEDD1E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{591A7712-55E8-4E53-BB03-3F9A88B85525}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{591A7712-55E8-4E53-BB03-3F9A88B85525}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{591A7712-55E8-4E53-BB03-3F9A88B85525}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{591A7712-55E8-4E53-BB03-3F9A88B85525}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FA4518B-D620-48BC-807D-BCE8D671C1D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FA4518B-D620-48BC-807D-BCE8D671C1D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FA4518B-D620-48BC-807D-BCE8D671C1D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FA4518B-D620-48BC-807D-BCE8D671C1D2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4EDEC0EB-1268-4A0B-92CB-7C77D86BEED2} = {2A957A21-AE4A-4C09-8F6E-A010E08C1DC5}
+		{FE10B77F-A949-4883-AA98-267BBEEDD1E8} = {2A957A21-AE4A-4C09-8F6E-A010E08C1DC5}
+		{1FA4518B-D620-48BC-807D-BCE8D671C1D2} = {2A957A21-AE4A-4C09-8F6E-A010E08C1DC5}
+	EndGlobalSection
+EndGlobal
