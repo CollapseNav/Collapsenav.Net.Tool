@@ -45,6 +45,52 @@ public partial class QuartzExt
     {
         await QuartzTool.RescheduleJob(scheduler, type.Name, type.Name, trigger);
     }
+
+    /// <summary>
+    /// 重设trigger
+    /// </summary>
+    public static async Task RescheduleJob(this IScheduler scheduler, string name, string group, int len)
+    {
+        await QuartzTool.RescheduleJob(scheduler, name, group, len);
+    }
+    /// <summary>
+    /// 重设trigger
+    /// </summary>
+    public static async Task RescheduleJob(this IScheduler scheduler, string group, int len)
+    {
+        await QuartzTool.RescheduleJob(scheduler, group, len);
+    }
+    /// <summary>
+    /// 重设trigger
+    /// </summary>
+    public static async Task RescheduleJob(this IScheduler scheduler, string name, string group, string cron)
+    {
+        await QuartzTool.RescheduleJob(scheduler, name, group, cron);
+    }
+    /// <summary>
+    /// 重设trigger
+    /// </summary>
+    public static async Task RescheduleJob(this IScheduler scheduler, string group, string cron)
+    {
+        await QuartzTool.RescheduleJob(scheduler, group, cron);
+    }
+    /// <summary>
+    /// 重设trigger
+    /// </summary>
+    public static async Task RescheduleJob(this IScheduler scheduler, Type type, int len)
+    {
+        await QuartzTool.RescheduleJob(scheduler, type, len);
+    }
+    /// <summary>
+    /// 重设trigger
+    /// </summary>
+    public static async Task RescheduleJob(this IScheduler scheduler, Type type, string cron)
+    {
+        await QuartzTool.RescheduleJob(scheduler, type, cron);
+    }
+
+
+
     /// <summary>
     /// 重设trigger
     /// </summary>
@@ -52,6 +98,7 @@ public partial class QuartzExt
     {
         await QuartzTool.RescheduleJob(scheduler, typeof(Job).Name, trigger);
     }
+
     /// <summary>
     /// 重设trigger
     /// </summary>
@@ -68,4 +115,21 @@ public partial class QuartzExt
     {
         await QuartzTool.RescheduleJob<Job>(scheduler, cron);
     }
+
+    /// <summary>
+    /// 重设trigger(如果没有job,则会自动创建)
+    /// </summary>
+    public static async Task RescheduleJob<Job>(this IScheduler scheduler, TriggerKey key, int len) where Job : IJob
+    {
+        await QuartzTool.RescheduleJob<Job>(scheduler, key, len);
+    }
+    /// <summary>
+    /// 重设trigger(如果没有job,则会自动创建)
+    /// </summary>
+    public static async Task RescheduleJob<Job>(this IScheduler scheduler, TriggerKey key, string cron) where Job : IJob
+    {
+        await QuartzTool.RescheduleJob<Job>(scheduler, key, cron);
+    }
+
+
 }

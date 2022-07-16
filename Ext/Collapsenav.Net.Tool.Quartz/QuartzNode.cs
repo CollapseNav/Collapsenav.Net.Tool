@@ -6,7 +6,7 @@ namespace Collapsenav.Net.Tool.Ext;
 public class QuartzNode
 {
     public static IScheduler Scheduler;
-    public static QuartzJobBuilder Builder;
+    public static QuartzJobBuilder Builder = new();
     public static async Task InitSchedulerAsync()
     {
         Scheduler = await new StdSchedulerFactory().GetScheduler();

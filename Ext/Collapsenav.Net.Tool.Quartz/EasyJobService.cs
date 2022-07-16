@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Hosting;
-using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
 

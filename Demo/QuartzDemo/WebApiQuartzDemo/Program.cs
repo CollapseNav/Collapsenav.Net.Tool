@@ -20,6 +20,7 @@ builder.Services
 .AddJob<DIJob>(3)
 .AddJob<ReJob>(10)
 .AddDefaultQuartzService(builder => builder.AddJob<UseBuilderJob>(1))
+// .AddDefaultQuartzService()
 ;
 
 var app = builder.Build();

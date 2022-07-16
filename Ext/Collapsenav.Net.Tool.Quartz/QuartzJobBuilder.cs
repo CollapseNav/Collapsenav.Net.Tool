@@ -108,10 +108,10 @@ public class QuartzJobBuilder
     {
         var sch = scheduler ?? QuartzNode.Scheduler;
         foreach (var job in CronJobs)
-            await sch.ScheduleJob(job.GetJobDetail(), job.GetTrigger());
+            await sch?.ScheduleJob(job.GetJobDetail(), job.GetTrigger());
         foreach (var job in SimpleJobs)
-            await sch.ScheduleJob(job.GetJobDetail(), job.GetTrigger());
+            await sch?.ScheduleJob(job.GetJobDetail(), job.GetTrigger());
         foreach (var path in XmlConfig)
-            await sch.LoadXmlConfig(path);
+            await sch?.LoadXmlConfig(path);
     }
 }

@@ -1,6 +1,7 @@
 using Collapsenav.Net.Tool.Demo.Quartz;
 using Collapsenav.Net.Tool.Ext;
 using Microsoft.AspNetCore.Mvc;
+using Quartz;
 
 namespace WebApiQuartzDemo.Controllers;
 
@@ -26,7 +27,7 @@ public class WeatherForecastController : ControllerBase
     [HttpGet("ByLen")]
     public async Task ReJobByLen([FromQuery] int second = 1)
     {
-        await QuartzNode.Scheduler.RescheduleJob<ReJob>(second);
+        await QuartzNode.Scheduler.RescheduleJob<ReJob>(new TriggerKey("ReJob123", "ReJob123"), second);
     }
     /// <summary>
     /// 重设 ReJob 的定时
@@ -34,6 +35,6 @@ public class WeatherForecastController : ControllerBase
     [HttpGet("ByCron")]
     public async Task ReJobByCron([FromQuery] string cron = "0/1 * * * * ?")
     {
-        await QuartzNode.Scheduler.RescheduleJob<ReJob>(cron);
+        await QuartzNode.Scheduler.RescheduleJob<ReJob>(new TriggerKey("ReJob123", "ReJob123"), cron);
     }
 }

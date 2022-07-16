@@ -5,6 +5,13 @@ namespace Collapsenav.Net.Tool.Ext;
 public static partial class QuartzExt
 {
     /// <summary>
+    /// 添加一个使用和trigger.Key相同的Job
+    /// </summary>
+    public static async Task ScheduleJob<Job>(this IScheduler scheduler, ITrigger trigger) where Job : IJob
+    {
+        await scheduler.ScheduleJob(QuartzTool.CreateJob<Job>(new JobKey(trigger.Key.Name, trigger.Key.Group)), trigger);
+    }
+    /// <summary>
     /// 添加一个Job
     /// </summary>
     /// <remarks>根据Job自动生成JobKey和TriggerKey</remarks>
