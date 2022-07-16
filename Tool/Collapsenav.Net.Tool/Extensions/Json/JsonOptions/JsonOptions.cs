@@ -8,7 +8,7 @@ namespace Collapsenav.Net.Tool;
 public static class JsonOptions
 {
     /// <summary>
-    /// 大小不敏感, 驼峰命名, 忽略循环引用, Encoder all all 叫
+    /// 大小不敏感, 驼峰命名, 忽略循环引用, Encoder all
     /// </summary>
     public static readonly JsonSerializerOptions BetterUseOption = new()
     {
