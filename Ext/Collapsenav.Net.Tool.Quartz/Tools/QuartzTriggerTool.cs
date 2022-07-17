@@ -118,6 +118,13 @@ public partial class QuartzTool
     {
         return CreateTriggers(type.Name, crons);
     }
+    /// <summary>
+    /// 根据cron的数量生成多个trigger
+    /// </summary>
+    public static IEnumerable<ITrigger> CreateTriggers<Job>(IEnumerable<string> crons) where Job : IJob
+    {
+        return CreateTriggers(typeof(Job), crons);
+    }
 
 
     /// <summary>
@@ -148,6 +155,13 @@ public partial class QuartzTool
     public static IEnumerable<ITrigger> CreateTriggers(Type type, IEnumerable<int> lens)
     {
         return CreateTriggers(type.Name, lens);
+    }
+    /// <summary>
+    /// 根据lens的数量生成多个trigger
+    /// </summary>
+    public static IEnumerable<ITrigger> CreateTriggers<Job>(IEnumerable<int> lens)where Job : IJob
+    {
+        return CreateTriggers(typeof(Job), lens);
     }
 
     public static IEnumerable<TriggerKey> CreateTriggerKeys(string name, string group, int count)

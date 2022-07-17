@@ -113,6 +113,17 @@ public class JsonTest
         Assert.True(temp2.Id == 1);
     }
 
+    [Fact]
+    public void JsonNodeToObjTest()
+    {
+        var obj1 = new TestJsonObj1 { Age = 1, UserName = "1", Id = 1 };
+        var objStr = obj1.ToJson();
+        var sd = objStr.ToJsonNode().ToObj<TestJsonObj1>();
+        Assert.True(sd.Age == 1);
+        Assert.True(sd.UserName == "1");
+        Assert.True(sd.Id == 1);
+    }
+
     public class TestJsonObj1
     {
         public int Id { get; set; }
@@ -122,7 +133,6 @@ public class JsonTest
 
     public class TestJsonObj2
     {
-
         public string UserName { get; set; }
         public int Age { get; set; }
     }

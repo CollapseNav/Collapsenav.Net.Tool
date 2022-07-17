@@ -18,9 +18,7 @@ public partial class QuartzTool
     /// </summary>
     public static IJobDetail CreateJob(Type type)
     {
-        return JobBuilder.Create(type)
-        .WithIdentity(new JobKey(type.Name, type.Name))
-        .Build();
+        return CreateJob(type, new JobKey(type.Name, type.Name));
     }
     /// <summary>
     /// 根据 type 创建 job, 使用传入的 name 作为jobkey
@@ -36,6 +34,8 @@ public partial class QuartzTool
     {
         return CreateJob(type, new JobKey(name, group));
     }
+
+
 
     /// <summary>
     /// 使用传入的泛型类型创建 job
@@ -65,6 +65,8 @@ public partial class QuartzTool
     {
         return CreateJob(typeof(Job), new JobKey(name, group));
     }
+
+
 
     public static IEnumerable<JobKey> CreateJobKeys(string name, string group, int count)
     {

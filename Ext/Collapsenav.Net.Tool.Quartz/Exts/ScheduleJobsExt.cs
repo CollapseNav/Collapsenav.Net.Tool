@@ -90,6 +90,13 @@ public static partial class QuartzExt
     /// <summary>
     /// 添加一个Job
     /// </summary>
+    public static async Task ScheduleJob(this IScheduler scheduler, Type type, ITrigger trigger)
+    {
+        await scheduler.ScheduleJob(QuartzTool.CreateJob(type, new JobKey(trigger.Key.Name, trigger.Key.Group)), trigger);
+    }
+    /// <summary>
+    /// 添加一个Job
+    /// </summary>
     /// <remarks>根据Job自动生成JobKey和TriggerKey</remarks>
     public static async Task ScheduleJob(this IScheduler scheduler, Type type, string cron)
     {

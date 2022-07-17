@@ -21,6 +21,8 @@ public static partial class JsonExt
     /// <param name="options"></param>
     public static string ToJson<T>(this T obj, JsonSerializerOptions options = null) => JsonSerializer.Serialize(obj, options ?? DefaultJsonSerializerOption);
 
+
+
     /// <summary>
     /// 通过json的序列化反序列化map对象
     /// </summary>
@@ -39,18 +41,22 @@ public static partial class JsonExt
         return temp;
     }
 
-    public static JsonElement GetJsonElement(this string path) => path.GetJsonDocument().RootElement;
-    public static async ValueTask<JsonElement> GetJsonElementAsync(this string path) => (await path.GetJsonDocumentAsync()).RootElement;
-    public static JsonDocument GetJsonDocument(this string path)
+
+    public static JsonElement GetJsonElementFromPath(this string path) => path.GetJsonDocumentFromPath().RootElement;
+    public static async ValueTask<JsonElement> GetJsonElementFromPathAsync(this string path) => (await path.GetJsonDocumentFromPathAsync()).RootElement;
+    public static JsonDocument GetJsonDocumentFromPath(this string path)
     {
         using var stream = path.OpenReadWriteShareStream();
         return JsonDocument.Parse(stream);
     }
-    public static async ValueTask<JsonDocument> GetJsonDocumentAsync(this string path)
+    public static async ValueTask<JsonDocument> GetJsonDocumentFromPathAsync(this string path)
     {
         using var stream = path.OpenReadWriteShareStream();
         return await JsonDocument.ParseAsync(stream);
     }
+    public static JsonObject GetJsonObjectFromPath(this string path) => JsonObject.Create(path.GetJsonElementFromPath());
+    public static async ValueTask<JsonObject> GetJsonObjectFromPathAsync(this string path) => JsonObject.Create(await path.GetJsonElementFromPathAsync());
+
     public static JsonDocument ToJsonDocument(this string jsonStr)
     {
         return JsonDocument.Parse(jsonStr);
@@ -71,7 +77,5 @@ public static partial class JsonExt
     {
         return JsonArray.Create(jsonStr.ToJsonElement());
     }
-    public static JsonObject GetJsonObject(this string path) => JsonObject.Create(path.GetJsonElement());
-    public static async ValueTask<JsonObject> GetJsonObjectAsync(this string path) => JsonObject.Create(await path.GetJsonElementAsync());
-
+    public static T ToObj<T>(this JsonNode node, JsonSerializerOptions options = null) => JsonSerializer.Deserialize<T>(node, options ?? DefaultJsonSerializerOption);
 }
