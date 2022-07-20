@@ -90,6 +90,19 @@ public static partial class DictionaryExt
             dict.Remove(key);
         return value;
     }
+    
+    /// <summary>
+    /// 获取值并且移除字典项
+    /// </summary>
+    /// <param name="dict"></param>
+    /// <param name="key"></param>
+    public static V Pop<K, V>(this IDictionary<K, V> dict, K key)
+    {
+        var flag = dict.TryGetValue(key, out V value);
+        if (flag)
+            dict.Remove(key);
+        return value;
+    }
 
     /// <summary>
     /// 字典解构
