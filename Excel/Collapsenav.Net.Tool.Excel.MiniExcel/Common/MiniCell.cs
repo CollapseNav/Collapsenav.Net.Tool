@@ -1,7 +1,21 @@
+using Collapsenav.Net.Tool;
 namespace Collapsenav.Net.Tool.Excel;
 
 public class MiniCell : IReadCell<KeyValuePair<string, object>>
 {
+    private static string[] ScolArray;
+    static MiniCell()
+    {
+        ScolArray = Enumerable.Range(0, 702).ToList().Select(item =>
+        {
+            string scol = string.Empty;
+            var temp = item % 26;
+            item /= 26;
+            if (item > 0)
+                return $"{(char)(item - 1 + 'A')}{(char)(temp + 'A')}";
+            return ((char)(temp + 'A')).ToString();
+        }).ToArray();
+    }
     private KeyValuePair<string, object> cell;
     private IDictionary<string, object> cellRow;
     private readonly int _row;
@@ -19,15 +33,16 @@ public class MiniCell : IReadCell<KeyValuePair<string, object>>
 
     public static string GetSCol(int col)
     {
-        string scol = "";
-        do
-        {
-            var temp = col % 26;
-            scol += (char)(temp + 'A');
-            col -= 26;
-        } while (col >= 0);
-        return scol;
+        if (col > ScolArray.Length)
+            return string.Empty;
+        return ScolArray[col];
     }
+
+    public static string[] GetSCols(int num)
+    {
+        return ScolArray[..num];
+    }
+
 
     public KeyValuePair<string, object> Cell { get => cell; set => cell = value; }
     public int Row { get => _row - ExcelTool.MiniZero; }
@@ -36,7 +51,7 @@ public class MiniCell : IReadCell<KeyValuePair<string, object>>
     public Type ValueType => cell.Value?.GetType();
     public object Value
     {
-        get => cell.Value; set => cellRow.AddOrUpdate(_scol, value);
+        get => cell.Value; set => cellRow[_scol] = value;
     }
     public void CopyCellFrom(IReadCell cell)
     {

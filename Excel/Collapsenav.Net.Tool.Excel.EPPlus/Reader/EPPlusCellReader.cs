@@ -6,19 +6,6 @@ namespace Collapsenav.Net.Tool.Excel;
 /// </summary>
 public class EPPlusCellReader : IExcelCellReader
 {
-    // static EPPlusCellReader()
-    // {
-    //     CellReaderSelector.Add(ExcelType.EPPlus, (obj) =>
-    //     {
-    //         if (obj is ExcelWorksheet sheet)
-    //             return new EPPlusCellReader(sheet);
-    //         return null;
-    //     });
-    //     CellReaderSelector.Add(ExcelType.EPPlus, (stream) =>
-    //     {
-    //         return new EPPlusCellReader(stream);
-    //     });
-    // }
     public int Zero => ExcelTool.EPPlusZero;
     protected ExcelWorksheet _sheet;
     protected ExcelPackage _pack;

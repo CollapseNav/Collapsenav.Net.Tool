@@ -6,19 +6,6 @@ namespace Collapsenav.Net.Tool.Excel;
 /// </summary>
 public class MiniCellReader : IExcelCellReader
 {
-    // static MiniCellReader()
-    // {
-    //     CellReaderSelector.Add(ExcelType.MiniExcel, obj =>
-    //     {
-    //         if (obj is Stream stream)
-    //             return new MiniCellReader(stream);
-    //         return null;
-    //     });
-    //     CellReaderSelector.Add(ExcelType.MiniExcel, stream =>
-    //     {
-    //         return new MiniCellReader(stream);
-    //     });
-    // }
     public int Zero => ExcelTool.MiniZero;
     protected IEnumerable<dynamic> _sheet;
     protected Stream _stream;
@@ -48,7 +35,7 @@ public class MiniCellReader : IExcelCellReader
             var sheetFirst = _sheet.First() as IDictionary<string, object>;
             colCount = sheetFirst.Count;
         }
-        catch (Exception ex)
+        catch
         {
             Init();
             _stream = stream;
@@ -88,9 +75,30 @@ public class MiniCellReader : IExcelCellReader
         }
     }
 
-    public IEnumerable<IReadCell> this[long row] => GetRow((int)row).Select((item, index) => new MiniCell(item, GetRow((int)row), (int)row + Zero, index + Zero));
-    public IReadCell this[long row, long col] => new MiniCell(GetCell((int)row, (int)col + Zero), GetRow((int)row), (int)row + Zero, (int)col + Zero);
-    public IReadCell this[string field, long row] => new MiniCell(GetCell((int)row, HeadersWithIndex[field] + Zero), GetRow((int)row), (int)row, HeadersWithIndex[field] + Zero);
+    public IEnumerable<IReadCell> this[long row]
+    {
+        get
+        {
+            var r = GetRow((int)row);
+            return r.Select((item, index) => new MiniCell(item, r, (int)row + Zero, index + Zero));
+        }
+    }
+    public IReadCell this[long row, long col]
+    {
+        get
+        {
+            var r = GetRow((int)row);
+            return new MiniCell(r.ElementAtOrDefault((int)col), r, (int)row + Zero, (int)col + Zero);
+        }
+    }
+    public IReadCell this[string field, long row]
+    {
+        get
+        {
+            var r = GetRow((int)row);
+            return new MiniCell(r.ElementAt(HeadersWithIndex[field] + Zero), r, (int)row, HeadersWithIndex[field] + Zero);
+        }
+    }
 
     private KeyValuePair<string, object> GetCell(int row, int col)
     {

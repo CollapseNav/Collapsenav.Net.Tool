@@ -4,19 +4,6 @@ namespace Collapsenav.Net.Tool.Excel;
 
 public class MiniExcelReader : IExcelReader
 {
-    // static MiniExcelReader()
-    // {
-    //     ExcelReaderSelector.Add(ExcelType.NPOI, obj =>
-    //     {
-    //         if (obj is Stream stream)
-    //             return new MiniExcelReader(stream);
-    //         return null;
-    //     });
-    //     ExcelReaderSelector.Add(ExcelType.NPOI, stream =>
-    //     {
-    //         return new MiniExcelReader(stream);
-    //     });
-    // }
     public int Zero => ExcelTool.MiniZero;
     protected Stream SheetStream;
     protected IEnumerable<dynamic> sheet;

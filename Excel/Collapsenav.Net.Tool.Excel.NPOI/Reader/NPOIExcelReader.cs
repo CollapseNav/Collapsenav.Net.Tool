@@ -4,19 +4,6 @@ namespace Collapsenav.Net.Tool.Excel;
 
 public class NPOIExcelReader : IExcelReader
 {
-    // static NPOIExcelReader()
-    // {
-    //     ExcelReaderSelector.Add(ExcelType.NPOI, (obj) =>
-    //     {
-    //         if (obj is ISheet sheet)
-    //             return new NPOIExcelReader(sheet);
-    //         return null;
-    //     });
-    //     ExcelReaderSelector.Add(ExcelType.NPOI, (stream) =>
-    //     {
-    //         return new NPOIExcelReader(stream);
-    //     });
-    // }
     public int Zero => ExcelTool.NPOIZero;
     protected ISheet sheet;
     public IDictionary<string, int> HeaderIndex;
