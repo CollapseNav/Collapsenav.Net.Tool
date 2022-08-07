@@ -2,7 +2,7 @@ using Quartz;
 
 namespace Collapsenav.Net.Tool.Ext;
 
-public partial class QuartzTool
+public static partial class QuartzTool
 {
     /// <summary>
     /// 根据间隔的时长(秒位单位)创建 simpletrigger
@@ -159,7 +159,7 @@ public partial class QuartzTool
     /// <summary>
     /// 根据lens的数量生成多个trigger
     /// </summary>
-    public static IEnumerable<ITrigger> CreateTriggers<Job>(IEnumerable<int> lens)where Job : IJob
+    public static IEnumerable<ITrigger> CreateTriggers<Job>(IEnumerable<int> lens) where Job : IJob
     {
         return CreateTriggers(typeof(Job), lens);
     }

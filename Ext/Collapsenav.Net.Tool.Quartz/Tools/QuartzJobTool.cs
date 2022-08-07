@@ -2,7 +2,7 @@ using Quartz;
 
 namespace Collapsenav.Net.Tool.Ext;
 
-public partial class QuartzTool
+public static partial class QuartzTool
 {
     /// <summary>
     /// 根据 type 创建 job

@@ -5,7 +5,7 @@ using Quartz.Xml;
 
 namespace Collapsenav.Net.Tool.Ext;
 
-public static partial class QuartzExt
+public static partial class QuartzTool
 {
     public static async Task DeleteJob(this IScheduler scheduler, JobKey jkey)
     {
