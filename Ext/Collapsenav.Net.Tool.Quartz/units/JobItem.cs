@@ -22,7 +22,7 @@ public class CronJob : JobItem
 
     public override ITrigger GetTrigger()
     {
-        return QuartzTool.CreateTrigger(TKey, Cron);
+        return QuartzTool.CreateTrigger(Cron, TKey);
     }
 }
 public class SimpleJob : JobItem
@@ -31,6 +31,6 @@ public class SimpleJob : JobItem
 
     public override ITrigger GetTrigger()
     {
-        return QuartzTool.CreateTrigger(TKey, Len);
+        return QuartzTool.CreateTrigger(Len, TKey);
     }
 }

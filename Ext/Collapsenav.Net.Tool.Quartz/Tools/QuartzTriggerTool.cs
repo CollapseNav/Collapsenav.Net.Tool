@@ -7,7 +7,7 @@ public static partial class QuartzTool
     /// <summary>
     /// 根据间隔的时长(秒位单位)创建 simpletrigger
     /// </summary>
-    public static ITrigger CreateTrigger(TriggerKey tkey, int len)
+    public static ITrigger CreateTrigger(int len, TriggerKey tkey)
     {
         return TriggerBuilder.Create()
         .WithSimpleSchedule(builder =>
@@ -21,7 +21,7 @@ public static partial class QuartzTool
     /// <summary>
     /// 根据cron表达式创建常见的trigger
     /// </summary>
-    public static ITrigger CreateTrigger(TriggerKey tkey, string cron)
+    public static ITrigger CreateTrigger(string cron, TriggerKey tkey)
     {
         return TriggerBuilder.Create()
         .StartNow()
@@ -30,63 +30,48 @@ public static partial class QuartzTool
         .Build();
     }
 
-
     /// <summary>
-    /// 获取一个trigger, 使用name作为triggerkey
+    /// 获取一个trigger
     /// </summary>
-    public static ITrigger CreateTrigger(string name, string cron)
+    public static ITrigger CreateTrigger(string cron, string name, string group = null)
     {
-        return CreateTrigger(new TriggerKey(name, name), cron);
-    }
-    /// <summary>
-    /// 获取一个simple trigger, 使用name作为triggerkey
-    /// </summary>
-    public static ITrigger CreateTrigger(string name, int len)
-    {
-        return CreateTrigger(new TriggerKey(name, name), len);
+        return CreateTrigger(cron, new TriggerKey(name, group ?? name));
     }
     /// <summary>
     /// 获取一个trigger
     /// </summary>
-    public static ITrigger CreateTrigger(string name, string group, string cron)
+    public static ITrigger CreateTrigger(int len, string name, string group = null)
     {
-        return CreateTrigger(new TriggerKey(name, group), cron);
-    }
-    /// <summary>
-    /// 获取一个trigger
-    /// </summary>
-    public static ITrigger CreateTrigger(string name, string group, int len)
-    {
-        return CreateTrigger(new TriggerKey(name, group), len);
+        return CreateTrigger(len, new TriggerKey(name, group ?? name));
     }
 
     /// <summary>
     /// 使用type的name作为triggerkey创建trigger
     /// </summary>
-    public static ITrigger CreateTrigger(Type type, string cron)
+    public static ITrigger CreateTrigger(string cron, Type type)
     {
-        return CreateTrigger(type.Name, cron);
+        return CreateTrigger(cron, type.Name);
     }
     /// <summary>
     /// 使用type的name作为triggerkey创建trigger
     /// </summary>
-    public static ITrigger CreateTrigger(Type type, int len)
+    public static ITrigger CreateTrigger(int len, Type type)
     {
-        return CreateTrigger(type.Name, len);
+        return CreateTrigger(len, type.Name);
     }
     /// <summary>
     /// 使用泛型类型的name作为triggerkey创建trigger
     /// </summary>
     public static ITrigger CreateTrigger<Job>(string cron) where Job : IJob
     {
-        return CreateTrigger(typeof(Job), cron);
+        return CreateTrigger(cron, typeof(Job));
     }
     /// <summary>
     /// 使用泛型类型的name作为triggerkey创建trigger
     /// </summary>
     public static ITrigger CreateTrigger<Job>(int len) where Job : IJob
     {
-        return CreateTrigger(typeof(Job), len);
+        return CreateTrigger(len, typeof(Job));
     }
 
     /// <summary>
@@ -97,33 +82,26 @@ public static partial class QuartzTool
     /// <para>如: 传入 name,group</para>
     /// <para>则会生成 name_1.group, name_2.group, name_3.group ... 这样的key</para>
     /// </remarks>
-    public static IEnumerable<ITrigger> CreateTriggers(string name, string group, IEnumerable<string> crons)
+    public static IEnumerable<ITrigger> CreateTriggers(IEnumerable<string> crons, string name, string group = null)
     {
         return crons.Select((item, index) =>
         {
-            return CreateTrigger(new TriggerKey($"{name}_{index}", $"{group}"), item);
+            return CreateTrigger(item, new TriggerKey($"{name}_{index}", $"{group ?? name}"));
         });
     }
     /// <summary>
     /// 根据cron的数量生成多个trigger
     /// </summary>
-    public static IEnumerable<ITrigger> CreateTriggers(string name, IEnumerable<string> crons)
+    public static IEnumerable<ITrigger> CreateTriggers(IEnumerable<string> crons, Type type)
     {
-        return CreateTriggers(name, name, crons);
-    }
-    /// <summary>
-    /// 根据cron的数量生成多个trigger
-    /// </summary>
-    public static IEnumerable<ITrigger> CreateTriggers(Type type, IEnumerable<string> crons)
-    {
-        return CreateTriggers(type.Name, crons);
+        return CreateTriggers(crons, type.Name);
     }
     /// <summary>
     /// 根据cron的数量生成多个trigger
     /// </summary>
     public static IEnumerable<ITrigger> CreateTriggers<Job>(IEnumerable<string> crons) where Job : IJob
     {
-        return CreateTriggers(typeof(Job), crons);
+        return CreateTriggers(crons, typeof(Job));
     }
 
 
@@ -135,49 +113,38 @@ public static partial class QuartzTool
     /// <para>如: 传入 name,group</para>
     /// <para>则会生成 name_1.group, name_2.group, name_3.group ... 这样的key</para>
     /// </remarks>
-    public static IEnumerable<ITrigger> CreateTriggers(string name, string group, IEnumerable<int> lens)
+    public static IEnumerable<ITrigger> CreateTriggers(IEnumerable<int> lens, string name, string group = null)
     {
         return lens.Select((item, index) =>
         {
-            return CreateTrigger(new TriggerKey($"{name}_{index}", $"{group}"), item);
+            return CreateTrigger(item, new TriggerKey($"{name}_{index}", $"{group ?? name}"));
         });
     }
     /// <summary>
     /// 根据lens的数量生成多个trigger
     /// </summary>
-    public static IEnumerable<ITrigger> CreateTriggers(string name, IEnumerable<int> lens)
+    public static IEnumerable<ITrigger> CreateTriggers(IEnumerable<int> lens, Type type)
     {
-        return CreateTriggers(name, name, lens);
-    }
-    /// <summary>
-    /// 根据lens的数量生成多个trigger
-    /// </summary>
-    public static IEnumerable<ITrigger> CreateTriggers(Type type, IEnumerable<int> lens)
-    {
-        return CreateTriggers(type.Name, lens);
+        return CreateTriggers(lens, type.Name);
     }
     /// <summary>
     /// 根据lens的数量生成多个trigger
     /// </summary>
     public static IEnumerable<ITrigger> CreateTriggers<Job>(IEnumerable<int> lens) where Job : IJob
     {
-        return CreateTriggers(typeof(Job), lens);
+        return CreateTriggers(lens, typeof(Job));
     }
 
-    public static IEnumerable<TriggerKey> CreateTriggerKeys(string name, string group, int count)
+    public static IEnumerable<TriggerKey> CreateTriggerKeys(int count, string name, string group = null)
     {
-        return count <= 0 ? null : Enumerable.Range(0, count).Select(item => new TriggerKey($"{name}_{item}", $"{group}"));
+        return count <= 0 ? null : Enumerable.Range(0, count).Select(item => new TriggerKey($"{name}_{item}", $"{group ?? name}"));
     }
-    public static IEnumerable<TriggerKey> CreateTriggerKeys(string name, int count)
+    public static IEnumerable<TriggerKey> CreateTriggerKeys(int count, Type type)
     {
-        return CreateTriggerKeys(name, name, count);
-    }
-    public static IEnumerable<TriggerKey> CreateTriggerKeys(Type type, int count)
-    {
-        return CreateTriggerKeys(type.Name, count);
+        return CreateTriggerKeys(count, type.Name);
     }
     public static IEnumerable<TriggerKey> CreateTriggerKeys<Job>(int count) where Job : IJob
     {
-        return CreateTriggerKeys(typeof(Job).Name, count);
+        return CreateTriggerKeys(count, typeof(Job).Name);
     }
 }
