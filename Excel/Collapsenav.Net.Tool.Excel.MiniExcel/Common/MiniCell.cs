@@ -1,4 +1,3 @@
-using Collapsenav.Net.Tool;
 namespace Collapsenav.Net.Tool.Excel;
 
 public class MiniCell : IReadCell<KeyValuePair<string, object>>
@@ -37,13 +36,6 @@ public class MiniCell : IReadCell<KeyValuePair<string, object>>
             return string.Empty;
         return ScolArray[col];
     }
-
-    public static string[] GetSCols(int num)
-    {
-        return ScolArray[..num];
-    }
-
-
     public KeyValuePair<string, object> Cell { get => cell; set => cell = value; }
     public int Row { get => _row - ExcelTool.MiniZero; }
     public int Col { get => _col - ExcelTool.MiniZero; }
