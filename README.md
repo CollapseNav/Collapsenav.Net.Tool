@@ -21,50 +21,7 @@
 
 
 
-## TODO-1.3.*
+## TODO
 
-### Tool
-
-- [ ] 添加一个国内区划信息的包
-- [ ] 优化代码结构(合并tool和ext)
-
-### Excel
-
-- [ ] 优化MiniCellReader的性能
-
-### Ext
-
-- [ ] 优化代码结构
-- [ ] 丰富任务的状态管理功能
-
-### Demo
-
-- [ ] Data包的使用demo
-- [ ] Webapi包的使用demo
-- [ ] Swagger包的单独使用demo
-- [ ] Excel包的使用demo
-
-## TODO-1.4.*
-
-### Tool
-
-- [ ] RSA加解密
-- [ ] 基于httpclient的文件上传下载
-
-### Excel
-
-- [ ] 实现模板导出
-- [ ] 考虑修改 IExcelReader 静态接口方法的选择策略问题
-
-### Data
-
-- [ ] 研究基于 Freesql 的封装
-
-### WebApi
-
-- [ ] 研究动态API
-
-### Ext
-
-- [ ] 可以传参的定时任务
+详情请看 project
 
