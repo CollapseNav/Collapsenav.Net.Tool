@@ -14,76 +14,36 @@ public static partial class QuartzTool
     /// <summary>
     /// 添加一个Job
     /// </summary>
-    /// <remarks>根据Job自动生成JobKey和TriggerKey</remarks>
-    public static async Task ScheduleJob<Job>(this IScheduler scheduler, string cron) where Job : IJob
+    public static async Task ScheduleJob<Job>(this IScheduler scheduler, string cron, JobKey jkey = null, TriggerKey tkey = null) where Job : IJob
     {
-        await scheduler.ScheduleJob(CreateJob<Job>(), CreateTrigger<Job>(cron));
+        var jobDetail = jkey == null ? CreateJob<Job>() : CreateJob<Job>(jkey);
+        var trigger = tkey == null ? CreateTrigger<Job>(cron) : CreateTrigger(cron, tkey);
+        await scheduler.ScheduleJob(jobDetail, trigger);
     }
     /// <summary>
     /// 添加一个Job
     /// </summary>
-    public static async Task ScheduleJob<Job>(this IScheduler scheduler, TriggerKey tkey, string cron) where Job : IJob
+    public static async Task ScheduleJob<Job>(this IScheduler scheduler, int len, JobKey jkey = null, TriggerKey tkey = null) where Job : IJob
     {
-        await scheduler.ScheduleJob(CreateJob<Job>(), CreateTrigger(tkey, cron));
+        var jobDetail = jkey == null ? CreateJob<Job>() : CreateJob<Job>(jkey);
+        var trigger = tkey == null ? CreateTrigger<Job>(len) : CreateTrigger(len, tkey);
+        await scheduler.ScheduleJob(jobDetail, trigger);
     }
     /// <summary>
     /// 添加一个Job
     /// </summary>
-    public static async Task ScheduleJob<Job>(this IScheduler scheduler, JobKey jkey, TriggerKey tkey, string cron) where Job : IJob
+    public static async Task ScheduleJob<Job>(this IScheduler scheduler, string cron, string name, string group = null) where Job : IJob
     {
-        await scheduler.ScheduleJob(CreateJob<Job>(jkey), CreateTrigger(tkey, cron));
-    }
-    /// <summary>
-    /// 添加一个Job
-    /// </summary>
-    public static async Task ScheduleJob<Job>(this IScheduler scheduler, string name, string group, string cron) where Job : IJob
-    {
+        group ??= name;
         await scheduler.ScheduleJob(CreateJob<Job>(name, group), CreateTrigger(name, group, cron));
     }
     /// <summary>
     /// 添加一个Job
     /// </summary>
-    public static async Task ScheduleJob<Job>(this IScheduler scheduler, string name, string cron) where Job : IJob
+    public static async Task ScheduleJob<Job>(this IScheduler scheduler, int len, string name, string group = null) where Job : IJob
     {
-        await scheduler.ScheduleJob(CreateJob<Job>(name), CreateTrigger(name, cron));
-    }
-
-
-    /// <summary>
-    /// 添加一个Job
-    /// </summary>
-    /// <remarks>根据Job自动生成JobKey和TriggerKey</remarks>
-    public static async Task ScheduleJob<Job>(this IScheduler scheduler, int len) where Job : IJob
-    {
-        await scheduler.ScheduleJob(CreateJob<Job>(), CreateTrigger<Job>(len));
-    }
-    /// <summary>
-    /// 添加一个Job
-    /// </summary>
-    public static async Task ScheduleJob<Job>(this IScheduler scheduler, TriggerKey tkey, int len) where Job : IJob
-    {
-        await scheduler.ScheduleJob(CreateJob<Job>(), CreateTrigger(tkey, len));
-    }
-    /// <summary>
-    /// 添加一个Job
-    /// </summary>
-    public static async Task ScheduleJob<Job>(this IScheduler scheduler, JobKey jkey, TriggerKey tkey, int len) where Job : IJob
-    {
-        await scheduler.ScheduleJob(CreateJob<Job>(jkey), CreateTrigger(tkey, len));
-    }
-    /// <summary>
-    /// 添加一个Job
-    /// </summary>
-    public static async Task ScheduleJob<Job>(this IScheduler scheduler, string name, string group, int len) where Job : IJob
-    {
-        await scheduler.ScheduleJob(CreateJob<Job>(name, group), CreateTrigger(name, group, len));
-    }
-    /// <summary>
-    /// 添加一个Job
-    /// </summary>
-    public static async Task ScheduleJob<Job>(this IScheduler scheduler, string name, int len) where Job : IJob
-    {
-        await scheduler.ScheduleJob(CreateJob<Job>(name), CreateTrigger(name, len));
+        group ??= name;
+        await scheduler.ScheduleJob(CreateJob<Job>(name, group), CreateTrigger(len, name, group));
     }
 
 
@@ -97,115 +57,46 @@ public static partial class QuartzTool
     /// <summary>
     /// 添加一个Job
     /// </summary>
-    /// <remarks>根据Job自动生成JobKey和TriggerKey</remarks>
-    public static async Task ScheduleJob(this IScheduler scheduler, Type type, string cron)
+    public static async Task ScheduleJob(this IScheduler scheduler, Type type, string cron, JobKey jkey = null, TriggerKey tkey = null)
     {
-        await scheduler.ScheduleJob(CreateJob(type), CreateTrigger(type, cron));
+        var jobDetail = jkey == null ? CreateJob(type) : CreateJob(type, jkey);
+        var trigger = tkey == null ? CreateTrigger(cron, type) : CreateTrigger(cron, tkey);
+        await scheduler.ScheduleJob(jobDetail, trigger);
     }
     /// <summary>
     /// 添加一个Job
     /// </summary>
-    public static async Task ScheduleJob(this IScheduler scheduler, Type type, TriggerKey tkey, string cron)
+    public static async Task ScheduleJob(this IScheduler scheduler, Type type, int len, JobKey jkey = null, TriggerKey tkey = null)
     {
-        await scheduler.ScheduleJob(CreateJob(type), CreateTrigger(tkey, cron));
+        var jobDetail = jkey == null ? CreateJob(type) : CreateJob(type, jkey);
+        var trigger = tkey == null ? CreateTrigger(len, type) : CreateTrigger(len, tkey);
+        await scheduler.ScheduleJob(jobDetail, trigger);
     }
     /// <summary>
     /// 添加一个Job
     /// </summary>
-    public static async Task ScheduleJob(this IScheduler scheduler, Type type, JobKey jkey, TriggerKey tkey, string cron)
+    public static async Task ScheduleJob(this IScheduler scheduler, Type type, string cron, string name, string group = null)
     {
-        await scheduler.ScheduleJob(CreateJob(type, jkey), CreateTrigger(tkey, cron));
-    }
-    /// <summary>
-    /// 添加一个Job
-    /// </summary>
-    public static async Task ScheduleJob(this IScheduler scheduler, Type type, string name, string group, string cron)
-    {
+        group ??= name;
         await scheduler.ScheduleJob(CreateJob(type, name, group), CreateTrigger(name, group, cron));
     }
     /// <summary>
     /// 添加一个Job
     /// </summary>
-    public static async Task ScheduleJob(this IScheduler scheduler, Type type, string name, string cron)
+    public static async Task ScheduleJob(this IScheduler scheduler, Type type, int len, string name, string group = null)
     {
-        await scheduler.ScheduleJob(CreateJob(type, name), CreateTrigger(name, cron));
-    }
-
-
-    /// <summary>
-    /// 添加一个Job
-    /// </summary>
-    /// <remarks>根据Job自动生成JobKey和TriggerKey</remarks>
-    public static async Task ScheduleJob(this IScheduler scheduler, Type type, int len)
-    {
-        await scheduler.ScheduleJob(CreateJob(type), CreateTrigger(type, len));
-    }
-    /// <summary>
-    /// 添加一个Job
-    /// </summary>
-    public static async Task ScheduleJob(this IScheduler scheduler, Type type, TriggerKey tkey, int len)
-    {
-        await scheduler.ScheduleJob(CreateJob(type), CreateTrigger(tkey, len));
-    }
-    /// <summary>
-    /// 添加一个Job
-    /// </summary>
-    public static async Task ScheduleJob(this IScheduler scheduler, Type type, JobKey jkey, TriggerKey tkey, int len)
-    {
-        await scheduler.ScheduleJob(CreateJob(type, jkey), CreateTrigger(tkey, len));
-    }
-    /// <summary>
-    /// 添加一个Job
-    /// </summary>
-    public static async Task ScheduleJob(this IScheduler scheduler, Type type, string name, string group, int len)
-    {
-        await scheduler.ScheduleJob(CreateJob(type, name, group), CreateTrigger(name, group, len));
-    }
-    /// <summary>
-    /// 添加一个Job
-    /// </summary>
-    public static async Task ScheduleJob(this IScheduler scheduler, Type type, string name, int len)
-    {
-        await scheduler.ScheduleJob(CreateJob(type, name), CreateTrigger(name, len));
-    }
-
-
-
-
-    /// <summary>
-    /// 根据 crons 创建 trigger 添加job
-    /// </summary>
-    public static async Task ScheduleJobs<Job>(this IScheduler scheduler, string name, IEnumerable<string> crons) where Job : IJob
-    {
-        var triggers = CreateTriggers(name, crons);
-        foreach (var trigger in triggers)
-        {
-            var job = CreateJob<Job>(trigger.Key.Name, trigger.Key.Group);
-            await scheduler.ScheduleJob(job, trigger);
-        }
+        group ??= name;
+        await scheduler.ScheduleJob(CreateJob(type, name, group), CreateTrigger(len, name, group));
     }
 
     /// <summary>
     /// 根据 crons 创建 trigger 添加job
     /// </summary>
-    public static async Task ScheduleJobs<Job>(this IScheduler scheduler, string name, string group, IEnumerable<string> crons) where Job : IJob
+    public static async Task ScheduleJobs<Job>(this IScheduler scheduler, IEnumerable<string> crons, string name = null, string group = null) where Job : IJob
     {
-        var triggers = CreateTriggers(name, group, crons);
-        foreach (var trigger in triggers)
-        {
-            var job = CreateJob<Job>(trigger.Key.Name, trigger.Key.Group);
-            await scheduler.ScheduleJob(job, trigger);
-        }
-    }
-    /// <summary>
-    /// 不指定任务名称, 使用泛型名称作为任务的name和group
-    /// </summary>
-    /// <remarks>
-    /// 反正就算需要指定名称, 最后和泛型名称也不会有太大区别, 不如干脆放手!
-    /// </remarks>
-    public static async Task ScheduleJobs<Job>(this IScheduler scheduler, IEnumerable<string> crons) where Job : IJob
-    {
-        var triggers = CreateTriggers(typeof(Job), crons);
+        name ??= typeof(Job).Name;
+        group ??= name;
+        var triggers = CreateTriggers(crons, name, group);
         foreach (var trigger in triggers)
         {
             var job = CreateJob<Job>(trigger.Key.Name, trigger.Key.Group);
@@ -215,39 +106,14 @@ public static partial class QuartzTool
     /// <summary>
     /// 根据 crons 创建 trigger 添加job
     /// </summary>
-    public static async Task ScheduleJobs(this IScheduler scheduler, Type type, string name, IEnumerable<string> crons)
+    public static async Task ScheduleJobs(this IScheduler scheduler, Type type, IEnumerable<string> crons, string name = null, string group = null)
     {
-        var triggers = CreateTriggers(name, crons);
+        name ??= type.Name;
+        group ??= name;
+        var triggers = CreateTriggers(crons, name, group);
         foreach (var trigger in triggers)
         {
-            var job = CreateJob(type, trigger.Key.Name, trigger.Key.Group);
-            await scheduler.ScheduleJob(job, trigger);
-        }
-    }
-    /// <summary>
-    /// 根据 crons 创建 trigger 添加job
-    /// </summary>
-    public static async Task ScheduleJobs(this IScheduler scheduler, Type type, string name, string group, IEnumerable<string> crons)
-    {
-        var triggers = CreateTriggers(name, group, crons);
-        foreach (var trigger in triggers)
-        {
-            var job = CreateJob(type, trigger.Key.Name, trigger.Key.Group);
-            await scheduler.ScheduleJob(job, trigger);
-        }
-    }
-    /// <summary>
-    /// 不指定任务名称, 使用泛型名称作为任务的name和group
-    /// </summary>
-    /// <remarks>
-    /// 反正就算需要指定名称, 最后和泛型名称也不会有太大区别, 不如干脆放手!
-    /// </remarks>
-    public static async Task ScheduleJobs(this IScheduler scheduler, Type type, IEnumerable<string> crons)
-    {
-        var triggers = CreateTriggers(type, crons);
-        foreach (var trigger in triggers)
-        {
-            var job = CreateJob(type, trigger.Key.Name, trigger.Key.Group);
+            var job = CreateJob(type, trigger.Key.Name, group: trigger.Key.Group);
             await scheduler.ScheduleJob(job, trigger);
         }
     }
@@ -256,37 +122,11 @@ public static partial class QuartzTool
     /// <summary>
     /// 根据 lens 创建 trigger 添加job
     /// </summary>
-    public static async Task ScheduleJobs<Job>(this IScheduler scheduler, string name, IEnumerable<int> lens) where Job : IJob
+    public static async Task ScheduleJobs<Job>(this IScheduler scheduler, IEnumerable<int> lens, string name = null, string group = null) where Job : IJob
     {
-        var triggers = CreateTriggers(name, lens);
-        foreach (var trigger in triggers)
-        {
-            var job = CreateJob<Job>(trigger.Key.Name, trigger.Key.Group);
-            await scheduler.ScheduleJob(job, trigger);
-        }
-    }
-
-    /// <summary>
-    /// 根据 lens 创建 trigger 添加job
-    /// </summary>
-    public static async Task ScheduleJobs<Job>(this IScheduler scheduler, string name, string group, IEnumerable<int> lens) where Job : IJob
-    {
-        var triggers = CreateTriggers(name, group, lens);
-        foreach (var trigger in triggers)
-        {
-            var job = CreateJob<Job>(trigger.Key.Name, trigger.Key.Group);
-            await scheduler.ScheduleJob(job, trigger);
-        }
-    }
-    /// <summary>
-    /// 不指定任务名称, 使用泛型名称作为任务的name和group
-    /// </summary>
-    /// <remarks>
-    /// 反正就算需要指定名称, 最后和泛型名称也不会有太大区别, 不如干脆放手!
-    /// </remarks>
-    public static async Task ScheduleJobs<Job>(this IScheduler scheduler, IEnumerable<int> lens) where Job : IJob
-    {
-        var triggers = CreateTriggers(typeof(Job), lens);
+        name ??= typeof(Job).Name;
+        group ??= name;
+        var triggers = CreateTriggers(lens, name, group);
         foreach (var trigger in triggers)
         {
             var job = CreateJob<Job>(trigger.Key.Name, trigger.Key.Group);
@@ -296,36 +136,11 @@ public static partial class QuartzTool
     /// <summary>
     /// 根据 lens 创建 trigger 添加job
     /// </summary>
-    public static async Task ScheduleJobs(this IScheduler scheduler, Type type, string name, IEnumerable<int> lens)
+    public static async Task ScheduleJobs(this IScheduler scheduler, Type type, IEnumerable<int> lens, string name = null, string group = null)
     {
-        var triggers = CreateTriggers(name, lens);
-        foreach (var trigger in triggers)
-        {
-            var job = CreateJob(type, trigger.Key.Name, trigger.Key.Group);
-            await scheduler.ScheduleJob(job, trigger);
-        }
-    }
-    /// <summary>
-    /// 根据 lens 创建 trigger 添加job
-    /// </summary>
-    public static async Task ScheduleJobs(this IScheduler scheduler, Type type, string name, string group, IEnumerable<int> lens)
-    {
-        var triggers = CreateTriggers(name, group, lens);
-        foreach (var trigger in triggers)
-        {
-            var job = CreateJob(type, trigger.Key.Name, trigger.Key.Group);
-            await scheduler.ScheduleJob(job, trigger);
-        }
-    }
-    /// <summary>
-    /// 不指定任务名称, 使用泛型名称作为任务的name和group
-    /// </summary>
-    /// <remarks>
-    /// 反正就算需要指定名称, 最后和泛型名称也不会有太大区别, 不如干脆放手!
-    /// </remarks>
-    public static async Task ScheduleJobs(this IScheduler scheduler, Type type, IEnumerable<int> lens)
-    {
-        var triggers = CreateTriggers(type, lens);
+        name ??= type.Name;
+        group ??= name;
+        var triggers = CreateTriggers(lens, name, group);
         foreach (var trigger in triggers)
         {
             var job = CreateJob(type, trigger.Key.Name, trigger.Key.Group);
