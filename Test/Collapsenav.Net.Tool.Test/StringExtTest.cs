@@ -377,40 +377,48 @@ public class StringExtTest
         Assert.True(value.EndTo('.') == "2333");
     }
 
-    [Fact]
-    public void ToUpperFirstTest()
+    [Theory]
+    [InlineData("collapsenav.net.tool", "Collapsenav.net.tool", "COLlapsenav.net.tool", "COLLAPSENAV.NET.TOOL")]
+    [InlineData("abcde", "Abcde", "ABCde", "ABCDE")]
+    [InlineData("ab.de", "Ab.de", "AB.de", "AB.DE")]
+    public void ToUpperFirstTest(string origin, string upperFirst, string upperFirst3, string upperFirstAll)
     {
-        string data = "collapsenav.net.tool";
-        Assert.True(data.ToUpperFirst() == "Collapsenav.net.tool");
-        Assert.True(data.ToUpperFirst(3) == "COLlapsenav.net.tool");
-        Assert.True(data.ToUpperFirst(data.Length) == "COLLAPSENAV.NET.TOOL");
+        Assert.True(origin.ToUpperFirst() == upperFirst);
+        Assert.True(origin.ToUpperFirst(3) == upperFirst3);
+        Assert.True(origin.ToUpperFirst(origin.Length) == upperFirstAll);
     }
 
-    [Fact]
-    public void ToLowerFirstTest()
+    [Theory]
+    [InlineData("COLLAPSENAV.NET.TOOL", "cOLLAPSENAV.NET.TOOL", "colLAPSENAV.NET.TOOL", "collapsenav.net.tool")]
+    [InlineData("ABCDE", "aBCDE", "abcDE", "abcde")]
+    [InlineData("AB.DE", "aB.DE", "ab.DE", "ab.de")]
+    public void ToLowerFirstTest(string origin, string lowerFirst, string lowerFirst3, string lowerFirstAll)
     {
-        string data = "COLLAPSENAV.NET.TOOL";
-        Assert.True(data.ToLowerFirst() == "cOLLAPSENAV.NET.TOOL");
-        Assert.True(data.ToLowerFirst(3) == "colLAPSENAV.NET.TOOL");
-        Assert.True(data.ToLowerFirst(data.Length) == "collapsenav.net.tool");
+        Assert.True(origin.ToLowerFirst() == lowerFirst);
+        Assert.True(origin.ToLowerFirst(3) == lowerFirst3);
+        Assert.True(origin.ToLowerFirst(origin.Length) == lowerFirstAll);
     }
 
-    [Fact]
-    public void ToUpperEndTest()
+    [Theory]
+    [InlineData("collapsenav.net.tool", "collapsenav.net.tooL", "collapsenav.net.tOOL", "COLLAPSENAV.NET.TOOL")]
+    [InlineData("abcde", "abcdE", "abCDE", "ABCDE")]
+    [InlineData("ab.de", "ab.dE", "ab.DE", "AB.DE")]
+    public void ToUpperEndTest(string origin, string upperEnd, string upperEnd3, string upperEndAll)
     {
-        string data = "collapsenav.net.tool";
-        Assert.True(data.ToUpperEnd() == "collapsenav.net.tooL");
-        Assert.True(data.ToUpperEnd(3) == "collapsenav.net.tOOL");
-        Assert.True(data.ToUpperEnd(data.Length) == "COLLAPSENAV.NET.TOOL");
+        Assert.True(origin.ToUpperEnd() == upperEnd);
+        Assert.True(origin.ToUpperEnd(3) == upperEnd3);
+        Assert.True(origin.ToUpperEnd(origin.Length) == upperEndAll);
     }
 
-    [Fact]
-    public void ToLowerEndTest()
+    [Theory]
+    [InlineData("COLLAPSENAV.NET.TOOL", "COLLAPSENAV.NET.TOOl", "COLLAPSENAV.NET.Tool", "collapsenav.net.tool")]
+    [InlineData("ABCDE", "ABCDe", "ABcde", "abcde")]
+    [InlineData("AB.DE", "AB.De", "AB.de", "ab.de")]
+    public void ToLowerEndTest(string origin, string lowerEnd, string lowerEnd3, string lowerEndAll)
     {
-        string data = "COLLAPSENAV.NET.TOOL";
-        Assert.True(data.ToLowerEnd() == "COLLAPSENAV.NET.TOOl");
-        Assert.True(data.ToLowerEnd(3) == "COLLAPSENAV.NET.Tool");
-        Assert.True(data.ToLowerEnd(data.Length) == "collapsenav.net.tool");
+        Assert.True(origin.ToLowerEnd() == lowerEnd);
+        Assert.True(origin.ToLowerEnd(3) == lowerEnd3);
+        Assert.True(origin.ToLowerEnd(origin.Length) == lowerEndAll);
     }
 
     [Theory]

@@ -32,15 +32,10 @@ public class PropTest0
 }
 public class TypeTest
 {
-    [Fact]
-    public void CheckBaseTypeTest()
+    [Theory]
+    [InlineData(2333, 2333, 2333.2333, "2333", true)]
+    public void CheckBaseTypeTest(int intValue, long longValue, double doubleValue, string stringValue, bool boolValue)
     {
-        int intValue = 2333;
-        long longValue = 2333;
-        double doubleValue = 2333.2333;
-        string stringValue = "23333";
-        bool boolValue = true;
-
         Assert.True(intValue.IsBuildInType());
         Assert.True(longValue.IsBuildInType());
         Assert.True(doubleValue.IsBuildInType());
