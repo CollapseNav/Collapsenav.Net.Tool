@@ -4,145 +4,103 @@ using Xunit;
 namespace Collapsenav.Net.Tool.Test;
 public class SecurityTest
 {
-    [Fact]
-    public void AesTest()
+    [Theory]
+    [InlineData("123", "123123123123", "123123123123", "1231231231233")]
+    [InlineData("WTFWTFWTF", "123", "123", "1234")]
+    public void AesTest(string key, string origin, string same, string different)
     {
-        var msg = "123123123";
-        var msg2 = "123123123";
-        var msg3 = "123123123123";
-        var key = "23333";
-        Assert.True(msg.AesEn() == msg2.AesEn());
-        Assert.False(msg.AesEn() == msg3.AesEn());
+        Assert.Equal(origin.AesEn(), same.AesEn());
+        Assert.NotEqual(origin.AesEn(), different.AesEn());
+        Assert.NotEqual(same.AesEn(), different.AesEn());
 
-        Assert.True(msg.AesEn(key) == msg2.AesEn(key));
-        Assert.False(msg.AesEn(key) == msg3.AesEn(key));
+        Assert.Equal(origin.AesEn(key), same.AesEn(key));
+        Assert.NotEqual(origin.AesEn(key), different.AesEn(key));
+        Assert.NotEqual(same.AesEn(key), different.AesEn(key));
 
-        Assert.True(msg.AesEn(key).AesDe(key) == msg);
-        Assert.True(msg2.AesEn(key).AesDe(key) == msg2);
-        Assert.True(msg3.AesEn(key).AesDe(key) == msg3);
+        Assert.NotEqual(origin.AesEn(key), same.AesEn(key + Guid.NewGuid().ToString()));
 
-        Assert.True(msg.AesEn(key).AesDe(key) == msg);
-        Assert.True(msg2.AesEn(key).AesDe(key) == msg2);
-        Assert.True(msg3.AesEn(key).AesDe(key) == msg3);
 
-        key = Guid.NewGuid().ToString();
+        Assert.Equal(origin.AesEn().AesDe(), same);
+        Assert.NotEqual(origin.AesEn().AesDe(), different);
 
-        Assert.True(msg.AesEn(key) == msg2.AesEn(key));
-        Assert.False(msg.AesEn(key) == msg3.AesEn(key));
-
-        Assert.True(msg.AesEn(key).AesDe(key) == msg);
-        Assert.True(msg2.AesEn(key).AesDe(key) == msg2);
-        Assert.True(msg3.AesEn(key).AesDe(key) == msg3);
-
-        Assert.True(msg.AesEn(key).AesDe(key) == msg);
-        Assert.True(msg2.AesEn(key).AesDe(key) == msg2);
-        Assert.True(msg3.AesEn(key).AesDe(key) == msg3);
+        Assert.Equal(origin.AesEn(key).AesDe(key), same);
+        Assert.NotEqual(origin.AesEn(key).AesDe(key), different);
+        Assert.ThrowsAny<Exception>(() => origin.AesEn(key).AesDe());
     }
 
-    [Fact]
-    public void DesTest()
+    [Theory]
+    [InlineData("123", "123123123123", "123123123123", "1231231231233")]
+    [InlineData("WTF", "123", "123", "1234")]
+    public void DesTest(string key, string origin, string same, string different)
     {
-        var msg = "123123123";
-        var msg2 = "123123123";
-        var msg3 = "123123123123";
-        var key = "23333";
-        Assert.True(msg.DesEn() == msg2.DesEn());
-        Assert.False(msg.DesEn() == msg3.DesEn());
+        Assert.Equal(origin.DesEn(), same.DesEn());
+        Assert.NotEqual(origin.DesEn(), different.DesEn());
+        Assert.NotEqual(same.DesEn(), different.DesEn());
 
-        Assert.True(msg.DesEn(key) == msg2.DesEn(key));
-        Assert.False(msg.DesEn(key) == msg3.DesEn(key));
+        Assert.Equal(origin.DesEn(key), same.DesEn(key));
+        Assert.NotEqual(origin.DesEn(key), different.DesEn(key));
+        Assert.NotEqual(same.DesEn(key), different.DesEn(key));
 
-        Assert.True(msg.DesEn(key).DesDe(key) == msg);
-        Assert.True(msg2.DesEn(key).DesDe(key) == msg2);
-        Assert.True(msg3.DesEn(key).DesDe(key) == msg3);
+        Assert.NotEqual(origin.DesEn(key), same.DesEn(key + Guid.NewGuid().ToString()));
 
-        Assert.True(msg.DesEn(key).DesDe(key) == msg);
-        Assert.True(msg2.DesEn(key).DesDe(key) == msg2);
-        Assert.True(msg3.DesEn(key).DesDe(key) == msg3);
 
-        key = Guid.NewGuid().ToString();
+        Assert.Equal(origin.DesEn().DesDe(), same);
+        Assert.NotEqual(origin.DesEn().DesDe(), different);
 
-        Assert.True(msg.DesEn(key) == msg2.DesEn(key));
-        Assert.False(msg.DesEn(key) == msg3.DesEn(key));
-
-        Assert.True(msg.DesEn(key).DesDe(key) == msg);
-        Assert.True(msg2.DesEn(key).DesDe(key) == msg2);
-        Assert.True(msg3.DesEn(key).DesDe(key) == msg3);
-
-        Assert.True(msg.DesEn(key).DesDe(key) == msg);
-        Assert.True(msg2.DesEn(key).DesDe(key) == msg2);
-        Assert.True(msg3.DesEn(key).DesDe(key) == msg3);
+        Assert.Equal(origin.DesEn(key).DesDe(key), same);
+        Assert.NotEqual(origin.DesEn(key).DesDe(key), different);
+        Assert.ThrowsAny<Exception>(() => origin.DesEn(key).DesDe());
     }
 
 
-    [Fact]
-    public void TripleDesTest()
+    [Theory]
+    [InlineData("123", "123123123123", "123123123123", "1231231231233")]
+    [InlineData("WTF", "123", "123", "1234")]
+    public void TripleDesTest(string key, string origin, string same, string different)
     {
-        var msg = "123123123";
-        var msg2 = "123123123";
-        var msg3 = "123123123123";
-        var key = "23333";
-        Assert.True(msg.TripleDesEn() == msg2.TripleDesEn());
-        Assert.False(msg.TripleDesEn() == msg3.TripleDesEn());
+        Assert.Equal(origin.TripleDesEn(), same.TripleDesEn());
+        Assert.NotEqual(origin.TripleDesEn(), different.TripleDesEn());
+        Assert.NotEqual(same.TripleDesEn(), different.TripleDesEn());
 
-        Assert.True(msg.TripleDesEn(key) == msg2.TripleDesEn(key));
-        Assert.False(msg.TripleDesEn(key) == msg3.TripleDesEn(key));
+        Assert.Equal(origin.TripleDesEn(key), same.TripleDesEn(key));
+        Assert.NotEqual(origin.TripleDesEn(key), different.TripleDesEn(key));
+        Assert.NotEqual(same.TripleDesEn(key), different.TripleDesEn(key));
 
-        Assert.True(msg.TripleDesEn(key).TripleDesDe(key) == msg);
-        Assert.True(msg2.TripleDesEn(key).TripleDesDe(key) == msg2);
-        Assert.True(msg3.TripleDesEn(key).TripleDesDe(key) == msg3);
+        Assert.NotEqual(origin.TripleDesEn(key), same.TripleDesEn(key + Guid.NewGuid().ToString()));
 
-        Assert.True(msg.TripleDesEn(key).TripleDesDe(key) == msg);
-        Assert.True(msg2.TripleDesEn(key).TripleDesDe(key) == msg2);
-        Assert.True(msg3.TripleDesEn(key).TripleDesDe(key) == msg3);
 
-        key = Guid.NewGuid().ToString();
+        Assert.Equal(origin.TripleDesEn().TripleDesDe(), same);
+        Assert.NotEqual(origin.TripleDesEn().TripleDesDe(), different);
 
-        Assert.True(msg.TripleDesEn(key) == msg2.TripleDesEn(key));
-        Assert.False(msg.TripleDesEn(key) == msg3.TripleDesEn(key));
-
-        Assert.True(msg.TripleDesEn(key).TripleDesDe(key) == msg);
-        Assert.True(msg2.TripleDesEn(key).TripleDesDe(key) == msg2);
-        Assert.True(msg3.TripleDesEn(key).TripleDesDe(key) == msg3);
-
-        Assert.True(msg.TripleDesEn(key).TripleDesDe(key) == msg);
-        Assert.True(msg2.TripleDesEn(key).TripleDesDe(key) == msg2);
-        Assert.True(msg3.TripleDesEn(key).TripleDesDe(key) == msg3);
+        Assert.Equal(origin.TripleDesEn(key).TripleDesDe(key), same);
+        Assert.NotEqual(origin.TripleDesEn(key).TripleDesDe(key), different);
+        Assert.ThrowsAny<Exception>(() => origin.TripleDesEn(key).TripleDesDe());
     }
 
-    [Fact]
-    public void Md5Test()
+    [Theory]
+    [InlineData("123123123123", "123123123123", "1231231231233")]
+    [InlineData("123", "123", "1234")]
+    public void Md5Test(string origin, string same, string different)
     {
-        var msg = "123123123";
-        var msg2 = "123123123";
-        var msg3 = "233333";
-        var msg21 = "233333";
-        Assert.True(msg.Md5En() == msg2.Md5En());
-        Assert.True(msg3.Md5En() == msg21.Md5En());
-        Assert.False(msg.Md5En() == msg3.Md5En());
+        Assert.Equal(origin.Md5En(), same.Md5En());
+        Assert.NotEqual(same.Md5En(), different.Md5En());
     }
 
-    [Fact]
-    public void Sha1Test()
+    [Theory]
+    [InlineData("123123123123", "123123123123", "1231231231233")]
+    [InlineData("123", "123", "1234")]
+    public void Sha1Test(string origin, string same, string different)
     {
-        var msg = "123123123";
-        var msg2 = "123123123";
-        var msg3 = "233333";
-        var msg21 = "233333";
-        Assert.True(msg.Sha1En() == msg2.Sha1En());
-        Assert.True(msg3.Sha1En() == msg21.Sha1En());
-        Assert.False(msg.Sha1En() == msg3.Sha1En());
+        Assert.Equal(origin.Sha1En(), same.Sha1En());
+        Assert.NotEqual(same.Sha1En(), different.Sha1En());
     }
 
-    [Fact]
-    public void Sha256Test()
+    [Theory]
+    [InlineData("123123123123", "123123123123", "1231231231233")]
+    [InlineData("123", "123", "1234")]
+    public void Sha256Test(string origin, string same, string different)
     {
-        var msg = "123123123";
-        var msg2 = "123123123";
-        var msg3 = "233333";
-        var msg21 = "233333";
-        Assert.True(msg.Sha256En() == msg2.Sha256En());
-        Assert.True(msg3.Sha256En() == msg21.Sha256En());
-        Assert.False(msg.Sha256En() == msg3.Sha256En());
+        Assert.Equal(origin.Sha256En(), same.Sha256En());
+        Assert.NotEqual(same.Sha256En(), different.Sha256En());
     }
 }

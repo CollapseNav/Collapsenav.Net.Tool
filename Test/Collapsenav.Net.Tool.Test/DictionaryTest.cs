@@ -71,6 +71,19 @@ public class DictionaryTest
         Assert.True(value == "1");
         Assert.True(dict.Count == 2);
     }
+    [Fact]
+    public void PopTest()
+    {
+        var dict = new Dictionary<int, string>()
+        .AddOrUpdate(1, "1")
+        .AddOrUpdate(2, "2")
+        .AddOrUpdate(3, "4")
+        ;
+
+        var value = dict.Pop(1);
+        Assert.True(value == "1");
+        Assert.True(dict.Count == 2);
+    }
 
     [Fact]
     public void DeconstructTest()

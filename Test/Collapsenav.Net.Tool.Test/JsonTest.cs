@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using Xunit;
 
 namespace Collapsenav.Net.Tool.Test;
@@ -122,6 +124,96 @@ public class JsonTest
         Assert.True(sd.Age == 1);
         Assert.True(sd.UserName == "1");
         Assert.True(sd.Id == 1);
+    }
+
+    [Fact]
+    public void DateConverterTest()
+    {
+        var obj = new DateConverterTestModel
+        {
+            Date = new DateTime(2022, 12, 12, 12, 12, 12)
+        };
+        var jsonString = obj.ToJson();
+        Assert.True(jsonString.Contains("2022-12-12"));
+        obj = jsonString.ToObj<DateConverterTestModel>();
+        Assert.Equal(obj.Date.Year, 2022);
+        Assert.Equal(obj.Date.Month, 12);
+        Assert.Equal(obj.Date.Day, 12);
+        Assert.Equal(obj.Date.Hour, 0);
+        Assert.Equal(obj.Date.Minute, 0);
+        Assert.Equal(obj.Date.Second, 0);
+    }
+    [Fact]
+    public void DateTimeConverterTest()
+    {
+        var obj = new DateTimeConverterTestModel
+        {
+            Date = new DateTime(2022, 12, 12, 12, 12, 12)
+        };
+        var jsonString = obj.ToJson();
+        Assert.True(jsonString.Contains("2022-12-12 12:12:12"));
+        obj = jsonString.ToObj<DateTimeConverterTestModel>();
+        Assert.Equal(obj.Date.Year, 2022);
+        Assert.Equal(obj.Date.Month, 12);
+        Assert.Equal(obj.Date.Day, 12);
+        Assert.Equal(obj.Date.Hour, 12);
+        Assert.Equal(obj.Date.Minute, 12);
+        Assert.Equal(obj.Date.Second, 12);
+    }
+    [Fact]
+    public void DateMilliTimeConverterTest()
+    {
+        var obj = new DateMilliTimeConverterTestModel
+        {
+            Date = new DateTime(2022, 12, 12, 12, 12, 12, 233)
+        };
+        var jsonString = obj.ToJson();
+        Assert.True(jsonString.Contains("2022-12-12 12:12:12.233"));
+        obj = jsonString.ToObj<DateMilliTimeConverterTestModel>();
+        Assert.Equal(obj.Date.Year, 2022);
+        Assert.Equal(obj.Date.Month, 12);
+        Assert.Equal(obj.Date.Day, 12);
+        Assert.Equal(obj.Date.Hour, 12);
+        Assert.Equal(obj.Date.Minute, 12);
+        Assert.Equal(obj.Date.Second, 12);
+        Assert.Equal(obj.Date.Millisecond, 233);
+    }
+
+    [Fact]
+    public void SnowflakeConverterTest()
+    {
+        var id = SnowFlake.NextId();
+        var obj = new SnowflakeConverterTestModel
+        {
+            Id = id
+        };
+        var jsonString = obj.ToJson();
+        Assert.True(jsonString.Contains($"\"{obj.Id}\""));
+        obj = jsonString.ToObj<SnowflakeConverterTestModel>();
+        Assert.True(obj.Id == id);
+    }
+
+    public class DateConverterTestModel
+    {
+        [JsonConverter(typeof(DateConverter))]
+        public DateTime Date { get; set; }
+    }
+
+    public class DateTimeConverterTestModel
+    {
+        [JsonConverter(typeof(DateTimeConverter))]
+        public DateTime Date { get; set; }
+    }
+    public class DateMilliTimeConverterTestModel
+    {
+        [JsonConverter(typeof(DateMilliTimeConverter))]
+        public DateTime Date { get; set; }
+    }
+
+    public class SnowflakeConverterTestModel
+    {
+        [JsonConverter(typeof(SnowflakeConverter))]
+        public long Id { get; set; }
     }
 
     public class TestJsonObj1
