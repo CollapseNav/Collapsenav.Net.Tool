@@ -234,4 +234,17 @@ public class TypeTest
         Assert.True((int)data.GetValue("Index") == 233);
         Assert.True((int)data.GetValue("Item.I_Index") == 233);
     }
+
+    [Fact]
+    public void ObjDifferentTest()
+    {
+        PropTest1 obj1 = new() { Prop1 = "1", Prop2 = "2", Prop3 = "3" };
+        PropTest1 obj2 = new() { Prop1 = "1", Prop2 = "2", Prop3 = "33" };
+        var difference = obj1.Difference(obj2);
+        Assert.Equal(1, difference.Diffs.Count());
+        var item = difference.GetDiff("Prop3");
+        Assert.Equal("3", item.Bvalue);
+        item = difference.GetDiff(typeof(PropTest1).GetProperty("Prop3"));
+        Assert.Equal("33", item.Evalue);
+    }
 }

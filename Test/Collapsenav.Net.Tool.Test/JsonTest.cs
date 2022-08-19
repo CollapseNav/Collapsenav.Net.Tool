@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Collapsenav.Net.Tool.Test;
@@ -134,14 +135,14 @@ public class JsonTest
             Date = new DateTime(2022, 12, 12, 12, 12, 12)
         };
         var jsonString = obj.ToJson();
-        Assert.True(jsonString.Contains("2022-12-12"));
+        Assert.Contains("2022-12-12", jsonString);
         obj = jsonString.ToObj<DateConverterTestModel>();
-        Assert.Equal(obj.Date.Year, 2022);
-        Assert.Equal(obj.Date.Month, 12);
-        Assert.Equal(obj.Date.Day, 12);
-        Assert.Equal(obj.Date.Hour, 0);
-        Assert.Equal(obj.Date.Minute, 0);
-        Assert.Equal(obj.Date.Second, 0);
+        Assert.Equal(2022, obj.Date.Year);
+        Assert.Equal(12, obj.Date.Month);
+        Assert.Equal(12, obj.Date.Day);
+        Assert.Equal(0, obj.Date.Hour);
+        Assert.Equal(0, obj.Date.Minute);
+        Assert.Equal(0, obj.Date.Second);
     }
     [Fact]
     public void DateTimeConverterTest()
@@ -151,14 +152,18 @@ public class JsonTest
             Date = new DateTime(2022, 12, 12, 12, 12, 12)
         };
         var jsonString = obj.ToJson();
-        Assert.True(jsonString.Contains("2022-12-12 12:12:12"));
+        Assert.Contains("2022-12-12 12:12:12", jsonString);
         obj = jsonString.ToObj<DateTimeConverterTestModel>();
-        Assert.Equal(obj.Date.Year, 2022);
-        Assert.Equal(obj.Date.Month, 12);
-        Assert.Equal(obj.Date.Day, 12);
-        Assert.Equal(obj.Date.Hour, 12);
-        Assert.Equal(obj.Date.Minute, 12);
-        Assert.Equal(obj.Date.Second, 12);
+        Assert.Equal(2022, obj.Date.Year);
+        Assert.Equal(12, obj.Date.Month);
+        Assert.Equal(12, obj.Date.Day);
+        Assert.Equal(12, obj.Date.Hour);
+        Assert.Equal(12, obj.Date.Minute);
+        Assert.Equal(12, obj.Date.Second);
+
+        jsonString = @"{""Date"":null}";
+        obj = jsonString.ToObj<DateTimeConverterTestModel>();
+        Assert.Equal(default, obj.Date);
     }
     [Fact]
     public void DateMilliTimeConverterTest()
@@ -168,15 +173,18 @@ public class JsonTest
             Date = new DateTime(2022, 12, 12, 12, 12, 12, 233)
         };
         var jsonString = obj.ToJson();
-        Assert.True(jsonString.Contains("2022-12-12 12:12:12.233"));
+        Assert.Contains("2022-12-12 12:12:12.233", jsonString);
         obj = jsonString.ToObj<DateMilliTimeConverterTestModel>();
-        Assert.Equal(obj.Date.Year, 2022);
-        Assert.Equal(obj.Date.Month, 12);
-        Assert.Equal(obj.Date.Day, 12);
-        Assert.Equal(obj.Date.Hour, 12);
-        Assert.Equal(obj.Date.Minute, 12);
-        Assert.Equal(obj.Date.Second, 12);
-        Assert.Equal(obj.Date.Millisecond, 233);
+        Assert.Equal(2022, obj.Date.Year);
+        Assert.Equal(12, obj.Date.Month);
+        Assert.Equal(12, obj.Date.Day);
+        Assert.Equal(12, obj.Date.Hour);
+        Assert.Equal(12, obj.Date.Minute);
+        Assert.Equal(12, obj.Date.Second);
+        Assert.Equal(233, obj.Date.Millisecond);
+        jsonString = @"{""Date"":null}";
+        obj = jsonString.ToObj<DateMilliTimeConverterTestModel>();
+        Assert.Equal(default, obj.Date);
     }
 
     [Fact]
@@ -188,9 +196,12 @@ public class JsonTest
             Id = id
         };
         var jsonString = obj.ToJson();
-        Assert.True(jsonString.Contains($"\"{obj.Id}\""));
+        Assert.Contains($"\"{obj.Id}\"", jsonString);
         obj = jsonString.ToObj<SnowflakeConverterTestModel>();
         Assert.True(obj.Id == id);
+        jsonString = @"{""Id"":null}";
+        obj = jsonString.ToObj<SnowflakeConverterTestModel>();
+        Assert.Equal(default, obj.Id);
     }
 
     public class DateConverterTestModel
@@ -227,6 +238,37 @@ public class JsonTest
     {
         public string UserName { get; set; }
         public int Age { get; set; }
+    }
+
+
+    [Theory]
+    [InlineData("./JsonTest.json", "Name", "JsonTestName")]
+    [InlineData("./JsonTest.json", "Age", 233)]
+    public async Task GetJsonObjectFromPathTest(string path, string field, object value)
+    {
+        var jobj = path.GetJsonObjectFromPath();
+        Assert.Equal(jobj[field].ToString(), value.ToString());
+        jobj = await path.GetJsonObjectFromPathAsync();
+        Assert.Equal(jobj[field].ToString(), value.ToString());
+    }
+
+    [Fact]
+    public void JsonNodeTest()
+    {
+        var infos = new UserInfo[]{
+            new UserInfo() { Age = 233, UserName = "Name" },
+            new UserInfo() { Age = 2333, UserName = "Namee" },
+        };
+        var info = infos.First();
+        var jsonString = info.ToJson();
+        var jobj = jsonString.ToJsonObject().ToObj<UserInfo>();
+        Assert.Equal(233, jobj.Age);
+        Assert.Equal("Name", jobj.UserName);
+
+        jsonString = infos.ToJson();
+        var jarray = jsonString.ToJsonArray();
+        Assert.Equal("Namee", jarray.Skip(1).First()["userName"].ToString());
+        Assert.Equal("2333", actual: jarray.Skip(1).First()["age"].ToString());
     }
 }
 

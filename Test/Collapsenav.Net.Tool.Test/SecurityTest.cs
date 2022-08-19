@@ -84,6 +84,7 @@ public class SecurityTest
     {
         Assert.Equal(origin.Md5En(), same.Md5En());
         Assert.NotEqual(same.Md5En(), different.Md5En());
+        Assert.ThrowsAny<Exception>(() => origin.Md5En().Md5De());
     }
 
     [Theory]
@@ -93,6 +94,7 @@ public class SecurityTest
     {
         Assert.Equal(origin.Sha1En(), same.Sha1En());
         Assert.NotEqual(same.Sha1En(), different.Sha1En());
+        Assert.ThrowsAny<Exception>(() => origin.Sha1En().Sha1De());
     }
 
     [Theory]
@@ -102,5 +104,49 @@ public class SecurityTest
     {
         Assert.Equal(origin.Sha256En(), same.Sha256En());
         Assert.NotEqual(same.Sha256En(), different.Sha256En());
+        Assert.ThrowsAny<Exception>(() => origin.Sha256En().Sha256De());
+    }
+    [Theory]
+    [InlineData("123", "123123123123", "123123123123", "1231231231233")]
+    [InlineData("123123", "123123123123", "123123123123", "1231231231233")]
+    public void HMacMd5Test(string key, string origin, string same, string different)
+    {
+        Assert.Equal(origin.HMacMd5En(key), same.HMacMd5En(key));
+        Assert.NotEqual(same.HMacMd5En(key), different.HMacMd5En(key));
+        Assert.ThrowsAny<Exception>(() => origin.HMacMd5En().HMacMd5De());
+    }
+
+    [Theory]
+    [InlineData("123", "123123123123", "123123123123", "1231231231233")]
+    [InlineData("123123", "123123123123", "123123123123", "1231231231233")]
+    public void HMacSha1Test(string key, string origin, string same, string different)
+    {
+        Assert.Equal(origin.HMacSha1En(key), same.HMacSha1En(key));
+        Assert.NotEqual(same.HMacSha1En(key), different.HMacSha1En(key));
+        Assert.ThrowsAny<Exception>(() => origin.HMacSha1En().HMacSha1De());
+    }
+
+    [Theory]
+    [InlineData("123", "123123123123", "123123123123", "1231231231233")]
+    [InlineData("123123", "123123123123", "123123123123", "1231231231233")]
+    public void HMacSha256Test(string key, string origin, string same, string different)
+    {
+        Assert.Equal(origin.HMacSha256En(key), same.HMacSha256En(key));
+        Assert.NotEqual(same.HMacSha256En(key), different.HMacSha256En(key));
+        Assert.ThrowsAny<Exception>(() => origin.HMacSha256En().HMacSha256De());
+    }
+
+    [Theory]
+    [InlineData("./vscode.png", "./vscode2.png", "123123")]
+    public void StreamHashTest(string path1, string path2, string key)
+    {
+        using var fs1 = path1.OpenReadWriteShareStream();
+        using var fs2 = path2.OpenReadWriteShareStream();
+        Assert.Equal(fs1.Md5En(), fs2.Md5En());
+        Assert.Equal(fs1.Sha1En(), fs2.Sha1En());
+        Assert.Equal(fs1.Sha256En(), fs2.Sha256En());
+        Assert.Equal(fs1.HMacMd5En(key), fs2.HMacMd5En(key));
+        Assert.Equal(fs1.HMacSha1En(key), fs2.HMacSha1En(key));
+        Assert.Equal(fs1.HMacSha256En(key), fs2.HMacSha256En(key));
     }
 }
