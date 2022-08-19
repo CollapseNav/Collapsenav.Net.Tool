@@ -24,6 +24,13 @@ public static partial class DateTimeExt
     {
         return timestamp <= 0 ? DateTime.Now : DateTimeOffset.FromUnixTimeMilliseconds(timestamp).UtcDateTime;
     }
+    /// <summary>
+    /// 时间戳转为DateTime
+    /// </summary>
+    public static DateTime ToShortDateTime(this long timestamp)
+    {
+        return timestamp <= 0 ? DateTime.Now : DateTimeOffset.FromUnixTimeSeconds(timestamp).UtcDateTime;
+    }
 
 
     /// <summary>

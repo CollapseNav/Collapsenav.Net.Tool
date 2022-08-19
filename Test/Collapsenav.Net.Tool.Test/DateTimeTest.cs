@@ -9,6 +9,8 @@ public class DateTimeTest
     {
         DateTime now = DateTime.Now.ToUniversalTime();
         Assert.True(now.ToString() == now.ToTimestamp().ToDateTime().ToString());
+        now = now.AddMilliseconds(-now.Millisecond);
+        Assert.True(now.ToString() == now.ToShortTimestamp().ToShortDateTime().ToString());
     }
 
     [Fact]

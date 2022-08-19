@@ -131,6 +131,28 @@ public static partial class SecurityExt
         return HMacSha256Tool.Encrypt(input, key);
     }
     /// <summary>
+    /// HMacMd5加密
+    /// </summary>
+    public static string HMacMd5En(this Stream input, string key = HMacMd5Tool.DefaultKey)
+    {
+        return HMacMd5Tool.Encrypt(input, key);
+    }
+    /// <summary>
+    /// HMacSha1加密
+    /// </summary>
+    public static string HMacSha1En(this Stream input, string key = HMacSha1Tool.DefaultKey)
+    {
+        return HMacSha1Tool.Encrypt(input, key);
+    }
+
+    /// <summary>
+    /// HMacSha256加密
+    /// </summary>
+    public static string HMacSha256En(this Stream input, string key = HMacSha256Tool.DefaultKey)
+    {
+        return HMacSha256Tool.Encrypt(input, key);
+    }
+    /// <summary>
     /// HMacMd5解密
     /// </summary>
     public static string HMacMd5De(this string input, string key = HMacMd5Tool.DefaultKey)
