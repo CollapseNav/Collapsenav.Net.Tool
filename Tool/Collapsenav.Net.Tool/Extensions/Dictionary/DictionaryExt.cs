@@ -8,15 +8,10 @@ public static partial class DictionaryExt
     /// <param name="item">键值对</param>
     public static IDictionary<K, V> AddOrUpdate<K, V>(this IDictionary<K, V> dict, KeyValuePair<K, V> item)
     {
-#if NETSTANDARD2_0
         if (dict.ContainsKey(item.Key))
             dict[item.Key] = item.Value;
         else
             dict.Add(item.Key, item.Value);
-#else
-        if (!dict.TryAdd(item.Key, item.Value))
-            dict[item.Key] = item.Value;
-#endif
         return dict;
     }
     /// <summary>
@@ -27,16 +22,10 @@ public static partial class DictionaryExt
     /// <param name="value"></param>
     public static IDictionary<K, V> AddOrUpdate<K, V>(this IDictionary<K, V> dict, K key, V value)
     {
-#if NETSTANDARD2_0
         if (dict.ContainsKey(key))
             dict[key] = value;
         else
             dict.Add(key, value);
-#else
-        if (!dict.TryAdd(key, value))
-            dict[key] = value;
-#endif
-
         return dict;
     }
     /// <summary>

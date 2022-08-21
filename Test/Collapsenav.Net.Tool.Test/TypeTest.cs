@@ -247,4 +247,19 @@ public class TypeTest
         item = difference.GetDiff(typeof(PropTest1).GetProperty("Prop3"));
         Assert.Equal("33", item.Evalue);
     }
+
+    public interface ITestInterface { }
+    public interface ITestInterface<T> : ITestInterface { }
+    public class InterfaceTestClass : ITestInterface { }
+    public class InterfaceTestClass2 : InterfaceTestClass { }
+    public class InterfaceTestClass3 : ITestInterface<PropTest1> { }
+
+    [Fact]
+    public void HasInterfaceTest()
+    {
+        Assert.True(typeof(InterfaceTestClass).HasInterface(typeof(ITestInterface)));
+        Assert.True(typeof(InterfaceTestClass2).HasInterface(typeof(ITestInterface)));
+        Assert.True(typeof(InterfaceTestClass3).HasInterface(typeof(ITestInterface)));
+        Assert.True(typeof(InterfaceTestClass3).HasGenericInterface(typeof(ITestInterface<>)));
+    }
 }

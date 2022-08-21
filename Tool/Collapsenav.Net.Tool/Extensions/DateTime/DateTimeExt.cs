@@ -8,28 +8,28 @@ public static partial class DateTimeExt
     /// </summary>
     public static long ToTimestamp(this DateTime time)
     {
-        return new DateTimeOffset(time.ToUniversalTime()).ToUnixTimeMilliseconds();
+        return new DateTimeOffset(time).ToUnixTimeMilliseconds();
     }
     /// <summary>
     /// DateTime转为短时间戳(10位)
     /// </summary>
     public static long ToShortTimestamp(this DateTime time)
     {
-        return new DateTimeOffset(time.ToUniversalTime()).ToUnixTimeSeconds();
+        return new DateTimeOffset(time).ToUnixTimeSeconds();
     }
     /// <summary>
     /// 时间戳转为DateTime
     /// </summary>
     public static DateTime ToDateTime(this long timestamp)
     {
-        return timestamp <= 0 ? DateTime.Now : DateTimeOffset.FromUnixTimeMilliseconds(timestamp).UtcDateTime;
+        return timestamp <= 0 ? DateTime.Now : DateTimeOffset.FromUnixTimeMilliseconds(timestamp).DateTime;
     }
     /// <summary>
     /// 时间戳转为DateTime
     /// </summary>
     public static DateTime ToShortDateTime(this long timestamp)
     {
-        return timestamp <= 0 ? DateTime.Now : DateTimeOffset.FromUnixTimeSeconds(timestamp).UtcDateTime;
+        return timestamp <= 0 ? DateTime.Now : DateTimeOffset.FromUnixTimeSeconds(timestamp).DateTime;
     }
 
 
