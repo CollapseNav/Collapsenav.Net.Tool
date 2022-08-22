@@ -1,6 +1,6 @@
 namespace Collapsenav.Net.Tool.Data;
 #nullable enable
-public interface IBaseEntity
+public interface IBaseEntity : IEntity
 {
     bool? IsDeleted { get; set; }
     DateTime? CreationTime { get; set; }

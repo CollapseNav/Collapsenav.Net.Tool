@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 namespace Collapsenav.Net.Tool.Data;
 
-public partial class BaseEntity : IBaseEntity
+public partial class BaseEntity : Entity
 {
     public bool? IsDeleted { get; set; }
     public DateTime? CreationTime { get; set; }
@@ -17,7 +17,7 @@ public partial class BaseEntity<TKey> : BaseEntity, IBaseEntity<TKey>
     public TKey Id { get; set; }
     public TKey CreatorId { get; set; }
     public TKey LastModifierId { get; set; }
-    public virtual void Init()
+    public new virtual void Init()
     {
         if (GetKey != null)
             Id = GetKey();
@@ -31,21 +31,21 @@ public partial class BaseEntity<TKey> : BaseEntity, IBaseEntity<TKey>
     /// </summary>
     public static Func<TKey> GetKey = null;
 
-    public virtual void InitModifyId()
+    public new virtual void InitModifyId()
     {
     }
-    public virtual void SoftDelete()
+    public new virtual void SoftDelete()
     {
         IsDeleted = true;
         InitModifyId();
     }
-    public virtual void Update()
+    public new virtual void Update()
     {
         LastModificationTime = GetNow();
         InitModifyId();
     }
 
-    public Type KeyType()
+    public new Type KeyType()
     {
         return typeof(TKey);
     }
