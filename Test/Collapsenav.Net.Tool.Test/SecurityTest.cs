@@ -137,7 +137,7 @@ public class SecurityTest
     }
 
     [Theory]
-    [InlineData("./vscode.png", "./vscode2.png", "123123")]
+    [InlineData("./vscode3.png", "./vscode4.png", "123123")]
     public void StreamHashTest(string path1, string path2, string key)
     {
         using var fs1 = path1.OpenReadWriteShareStream();

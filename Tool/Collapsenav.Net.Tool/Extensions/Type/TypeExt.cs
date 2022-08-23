@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Reflection;
 
 namespace Collapsenav.Net.Tool;
@@ -217,11 +218,42 @@ public static partial class TypeExt
 
     public static bool HasInterface(this Type type, Type interfaceType)
     {
-        return type.GetTypeInfo().ImplementedInterfaces.Any(item => item == interfaceType);
+        return interfaceType.IsAssignableFrom(type);
+    }
+    public static bool HasInterface<T>(this Type type)
+    {
+        return type.HasInterface(typeof(T));
     }
 
     public static bool HasGenericInterface(this Type type, Type interfaceType)
     {
         return type.GetTypeInfo().ImplementedInterfaces.Any(item => (item.IsGenericType ? item.GetGenericTypeDefinition() : item) == interfaceType);
+    }
+
+    public static bool HasParameter(this MethodInfo method, Type type)
+    {
+        var pas = method.GetParameters();
+        if (pas.Any(item => item.ParameterType == type))
+            return true;
+        if (type.IsInterface)
+            return pas.Any(item => item.ParameterType.HasInterface(type));
+        else return pas.Any(item => item.ParameterType.IsSubclassOf(type));
+    }
+    public static bool HasParameter<T>(this MethodInfo method)
+    {
+        return method.HasParameter(typeof(T));
+    }
+
+    public static bool HasGenericParamter(this MethodInfo method, Type type)
+    {
+        if (!type.IsGenericType)
+            return false;
+        var pas = method.GetParameters().Where(item => item.ParameterType.IsGenericType);
+        if (type.IsInterface)
+            if (pas.Any(item => item.ParameterType.GetGenericTypeDefinition() == type))
+                return true;
+            else
+                return pas.Any(item => item.ParameterType.GetGenericTypeDefinition().HasGenericInterface(type));
+        return pas.Any(item => item.ParameterType.GetGenericTypeDefinition() == type);
     }
 }

@@ -248,18 +248,98 @@ public class TypeTest
         Assert.Equal("33", item.Evalue);
     }
 
-    public interface ITestInterface { }
-    public interface ITestInterface<T> : ITestInterface { }
-    public class InterfaceTestClass : ITestInterface { }
+    public interface ITestInterface
+    {
+        void Test();
+        void Test(string input);
+        void Test(ITestInterface input);
+    }
+    public interface ITestInterface<T> : ITestInterface
+    {
+        void Test(ITestInterface<T> input);
+    }
+    public interface ITestInterface<T, TT> : ITestInterface<T>
+    {
+        void Test(ITestInterface<T, TT> input);
+    }
+    public class InterfaceTestClass : ITestInterface
+    {
+        public void Test()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Test(string input)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Test(ITestInterface input)
+        {
+            throw new NotImplementedException();
+        }
+    }
     public class InterfaceTestClass2 : InterfaceTestClass { }
-    public class InterfaceTestClass3 : ITestInterface<PropTest1> { }
+    public class InterfaceTestClass3 : InterfaceTestClass2, ITestInterface<PropTest1>
+    {
+        public void Test(ITestInterface<PropTest1> input)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class InterfaceTestClass4<T> : ITestInterface<T>
+    {
+        public void Test(ITestInterface<T> input)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Test()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Test(string input)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Test(ITestInterface input)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class InterfaceTestClass5 : InterfaceTestClass4<PropTest1>, ITestInterface<PropTest1, PropTest0>
+    {
+        public void Test(ITestInterface<PropTest1, PropTest0> input)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
     [Fact]
     public void HasInterfaceTest()
     {
         Assert.True(typeof(InterfaceTestClass).HasInterface(typeof(ITestInterface)));
+        Assert.True(typeof(InterfaceTestClass).HasInterface<ITestInterface>());
         Assert.True(typeof(InterfaceTestClass2).HasInterface(typeof(ITestInterface)));
         Assert.True(typeof(InterfaceTestClass3).HasInterface(typeof(ITestInterface)));
         Assert.True(typeof(InterfaceTestClass3).HasGenericInterface(typeof(ITestInterface<>)));
+    }
+
+    [Fact]
+    public void HasParameterTest()
+    {
+        Assert.Contains(typeof(InterfaceTestClass).GetMethods(), item => item.HasParameter<string>());
+        Assert.Contains(typeof(InterfaceTestClass2).GetMethods(), item => item.HasParameter(typeof(ITestInterface)));
+        Assert.Contains(typeof(InterfaceTestClass3).GetMethods(), item => item.HasParameter(typeof(ITestInterface<PropTest1>)));
+
+        Assert.Contains(typeof(InterfaceTestClass3).GetMethods(), item => item.HasGenericParamter(typeof(ITestInterface<>)));
+        Assert.DoesNotContain(typeof(InterfaceTestClass3).GetMethods(), item => item.HasGenericParamter(typeof(ITestInterface)));
+
+        Assert.Equal(2, typeof(InterfaceTestClass5).GetMethods().Count(item => item.HasGenericParamter(typeof(ITestInterface<>))));
+        Assert.Equal(2, typeof(InterfaceTestClass3).GetMethods().Count(item => item.HasParameter<ITestInterface>()));
     }
 }
