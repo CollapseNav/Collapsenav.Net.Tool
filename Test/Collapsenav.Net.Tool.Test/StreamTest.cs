@@ -145,7 +145,7 @@ public class StreamTest
     [Fact]
     public void CreateFileStreamTest()
     {
-        var path = "./vscode3.png";
+        var path = "./vscode5.png";
         Assert.False(File.Exists(path));
         var fs = path.CreateWriteStream();
         Assert.True(File.Exists(path));
@@ -194,7 +194,7 @@ public class StreamTest
     [Fact]
     public void OpenCreateFileStreamTest()
     {
-        var path = "./vscode4.png";
+        var path = "./vscode6.png";
         Assert.False(File.Exists(path));
         var fs = path.OpenCreateStream();
         Assert.True(File.Exists(path));

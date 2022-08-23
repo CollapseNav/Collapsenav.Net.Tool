@@ -20,8 +20,7 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj"/>
-        <None Include="./vscode.png" CopyToOutputDirectory="Always"/>
-        <None Include="./vscode2.png" CopyToOutputDirectory="Always"/>
+        <None Include="./*.png" CopyToOutputDirectory="Always"/>
         <None Include="./JsonTest.json" CopyToOutputDirectory="Always"/>
         <None Include="./streamtest.txt" CopyToOutputDirectory="Always"/>
     </ItemGroup>
