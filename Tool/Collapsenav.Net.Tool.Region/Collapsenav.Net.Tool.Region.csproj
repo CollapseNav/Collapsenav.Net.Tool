@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="../version.props"/>
+    <PropertyGroup>
+        <PackageTags>Tools,Utility,Extensions,ClassLibrary</PackageTags>
+        <Description>
+中国行政区划
+        </Description>
+        <Product>Collapsenav.Net.Tool.Region</Product>
+        <PackageId>Collapsenav.Net.Tool.Region</PackageId>
+        <ProjectUrl>http://doc.collapsenav.cn/docs/Tool/</ProjectUrl>
+    </PropertyGroup>
+</Project>
