@@ -353,5 +353,4 @@ MigrationBackup/
 
 *.cobertura.xml
 
-*.Region
 PackBenchmark
