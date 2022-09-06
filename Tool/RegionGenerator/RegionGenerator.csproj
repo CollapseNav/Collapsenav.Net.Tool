@@ -7,5 +7,6 @@
   <ItemGroup>
     <ProjectReference Include="../Collapsenav.Net.Tool.Region/Collapsenav.Net.Tool.Region.csproj" />
     <PackageReference Include="Collapsenav.Net.Tool" Version="1.3.0" />
+    <None Include="./region-tree.json" CopyToOutputDirectory="always" />
   </ItemGroup>
 </Project>

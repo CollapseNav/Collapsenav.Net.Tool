@@ -9,4 +9,8 @@
         <PackageId>Collapsenav.Net.Tool.Region</PackageId>
         <ProjectUrl>http://doc.collapsenav.cn/docs/Tool/</ProjectUrl>
     </PropertyGroup>
+    <ItemGroup>
+        <None Include="./region-tree.json" CopyToOutputDirectory="always" />
+        <PackageReference Include="System.Text.Json" Version="6.*"/>
+    </ItemGroup>
 </Project>

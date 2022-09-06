@@ -1,7 +1,5 @@
 namespace Collapsenav.Net.Tool.Region;
 
-
-
 public static class RegionTool
 {
     public static string[] Levels = new[] { "provincetr", "citytr", "countytr", "towntr", "villagetr" };
@@ -11,7 +9,7 @@ public static class RegionTool
     {
         return new RegionGeneratorNode
         {
-            Name = "",
+            Name = "中国",
             Url = DataSourceUrl + "/index.html"
         };
     }
