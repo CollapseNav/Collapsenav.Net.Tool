@@ -1,5 +1,5 @@
 ﻿namespace Collapsenav.Net.Tool.Region;
-public class RegionGeneratorNode
+public class RegionGeneratorNode : RegionNode
 {
     public RegionGeneratorNode() { }
     public RegionGeneratorNode(RegionGeneratorNode parent)
@@ -7,8 +7,6 @@ public class RegionGeneratorNode
         ParentNode = parent;
     }
 
-    public string Name { get; set; }
-    public string Code { get; set; }
     public string ParentCode { get => ParentNode?.Code; }
     public RegionGeneratorNode ParentNode { get; set; }
     public string Url
@@ -33,14 +31,15 @@ public class RegionGeneratorNode
     public int? ChildNum { get; set; }
 
 
-    public RegionTreeNode ToTreeNode()
+    public RegionTreeNode ToTreeNode(RegionTreeNode parent = null)
     {
         RegionTreeNode node = new()
         {
             Name = Name,
             Code = Code,
-            Child = ChildNode?.Select(item => item.ToTreeNode()).ToList()
         };
+        node.Child = ChildNode?.Select(item => item.ToTreeNode(node)).ToList();
+        node.Parent = parent;
         return node;
     }
 }

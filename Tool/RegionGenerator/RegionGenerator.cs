@@ -2,20 +2,6 @@ using System.Text.RegularExpressions;
 
 namespace Collapsenav.Net.Tool.Region;
 
-#if NETSTANDARD2_0
-internal static class RegexExt
-{
-    public static List<Match> ToList(this MatchCollection collection)
-    {
-        List<Match> matches = new();
-        var enumerator = collection.GetEnumerator();
-        while (enumerator.MoveNext())
-            matches.Add(enumerator.Current as Match);
-        return matches;
-    }
-}
-#endif
-
 /// <summary>
 /// 瞎做的
 /// </summary>
