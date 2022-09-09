@@ -317,4 +317,52 @@ public class CollectionTest
         Assert.True(array.Count == 233);
         Assert.True(array.All(item => item == 233));
     }
+
+    [Fact]
+    public void InTest()
+    {
+        int[] items = new[] { 1, 2, 3, 4, 5 };
+        Assert.True(1.In(items));
+        Assert.True(4.In(items));
+        Assert.False(6.In(items));
+
+        Assert.True(1.In(1, 2, 3, 4, 5));
+        Assert.True(4.In(1, 2, 3, 4, 5));
+        Assert.False(6.In(1, 2, 3, 4, 5));
+    }
+
+    [Fact]
+    public void HasComparerInTest()
+    {
+        var items = new List<UniqueTestModel>{
+            new UniqueTestModel{Index = 0 },
+            new UniqueTestModel{Index = 1 },
+            new UniqueTestModel{Index = 2 },
+            new UniqueTestModel{Index = 3 },
+            new UniqueTestModel{Index = 4 },
+        };
+        Assert.False(new UniqueTestModel { Index = 1 }.In(items));
+        Assert.True(new UniqueTestModel { Index = 1 }.In(items, (x, y) => x.Index == y.Index));
+        Assert.True(new UniqueTestModel { Index = 3 }.In(items, (x, y) => x.Index == y.Index));
+        Assert.False(new UniqueTestModel { Index = 5 }.In(items, (x, y) => x.Index == y.Index));
+
+        Assert.True(new UniqueTestModel { Index = 1 }.In((x, y) => x.Index == y.Index,
+            new UniqueTestModel { Index = 0 },
+            new UniqueTestModel { Index = 1 },
+            new UniqueTestModel { Index = 2 },
+            new UniqueTestModel { Index = 3 },
+            new UniqueTestModel { Index = 4 }));
+        Assert.True(new UniqueTestModel { Index = 3 }.In((x, y) => x.Index == y.Index,
+            new UniqueTestModel { Index = 0 },
+            new UniqueTestModel { Index = 1 },
+            new UniqueTestModel { Index = 2 },
+            new UniqueTestModel { Index = 3 },
+            new UniqueTestModel { Index = 4 }));
+        Assert.False(new UniqueTestModel { Index = 5 }.In((x, y) => x.Index == y.Index,
+            new UniqueTestModel { Index = 0 },
+            new UniqueTestModel { Index = 1 },
+            new UniqueTestModel { Index = 2 },
+            new UniqueTestModel { Index = 3 },
+            new UniqueTestModel { Index = 4 }));
+    }
 }

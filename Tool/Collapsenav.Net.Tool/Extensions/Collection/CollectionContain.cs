@@ -72,4 +72,18 @@ public static partial class CollectionExt
     {
         return query.HasContain(comparer, filters.ToArray());
     }
+
+    public static bool In<T>(this T origin, IEnumerable<T> items, Func<T, T, bool> comparer = null)
+    {
+        return comparer == null ? items.Contains(origin) : items.Contains(origin, new CollapseNavEqualityComparer<T>(comparer));
+    }
+
+    public static bool In<T>(this T origin, Func<T, T, bool> comparer, params T[] items)
+    {
+        return items.Contains(origin, new CollapseNavEqualityComparer<T>(comparer));
+    }
+    public static bool In<T>(this T origin, params T[] items)
+    {
+        return items.Contains(origin);
+    }
 }
