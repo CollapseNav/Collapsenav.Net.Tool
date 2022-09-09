@@ -5,10 +5,7 @@ public static class Region
     static Region()
     {
         Tree = LoadRegionNodeTool.LoadTreeNodeAsync().Result;
-        AllTreeProvinces = Tree.Child.ToList();
-        AllProvinces = AllTreeProvinces.Select(item => item.ToNode()).ToList();
-        AllTreeCities = AllTreeProvinces.SelectMany(item => item.Child).ToList();
-        AllCities = AllTreeCities.Select(item => item.ToNode()).ToList();
+        InitByProvince();
     }
     public static RegionTreeNode Tree { get; set; }
     /// <summary>
@@ -82,5 +79,27 @@ public static class Region
     public static RegionTreeNode GetTreeCity(string code)
     {
         return GetTreeProvince(code)?.Child.FirstOrDefault(item => item.Code == code.Substring(0, 4)); ;
+    }
+
+    /// <summary>
+    /// 根据传入的省 code 初始化
+    /// </summary>
+    /// <remarks>如果传入了32, 则 AllProvinces 和 AllCities 只会保存江苏的 省,市</remarks>
+    public static void InitByProvince(params string[] provinces)
+    {
+        if (provinces == null || provinces.Length == 0)
+        {
+            AllTreeProvinces = Tree.Child.ToList();
+            AllProvinces = AllTreeProvinces.Select(item => item.ToNode()).ToList();
+            AllTreeCities = AllTreeProvinces.SelectMany(item => item.Child).ToList();
+            AllCities = AllTreeCities.Select(item => item.ToNode()).ToList();
+        }
+        else
+        {
+            AllTreeProvinces = Tree.Child.Where(item => provinces.Contains(item.Code)).ToList();
+            AllProvinces = AllTreeProvinces.Select(item => item.ToNode()).ToList();
+            AllTreeCities = AllTreeProvinces.SelectMany(item => item.Child).ToList();
+            AllCities = AllTreeCities.Select(item => item.ToNode()).ToList();
+        }
     }
 }
