@@ -1,4 +1,4 @@
-namespace AspnetDbDemo;
+namespace SimpleWebApiDemo;
 
 public class WeatherForecast
 {
