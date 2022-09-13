@@ -67,7 +67,7 @@ public class QuartzJobBuilder
     {
         if (len.IsEmpty())
             return;
-        var keys = QuartzTool.CreateJobKeyAndTriggerKey(type, len.Length).ToArray();
+        var keys = QuartzTool.CreateJobKeyAndTriggerKey(len.Length, type).ToArray();
         for (var i = 0; i < len.Length; i++)
         {
             SimpleJobs.Add(new SimpleJob
@@ -88,7 +88,7 @@ public class QuartzJobBuilder
         if (crons.IsEmpty())
             return;
         var list = crons.ToArray();
-        var keys = QuartzTool.CreateJobKeyAndTriggerKey(type, list.Length).ToArray();
+        var keys = QuartzTool.CreateJobKeyAndTriggerKey(list.Length, type).ToArray();
         for (var i = 0; i < list.Length; i++)
         {
             CronJobs.Add(new CronJob

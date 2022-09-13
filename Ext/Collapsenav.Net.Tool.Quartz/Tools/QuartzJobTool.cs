@@ -48,12 +48,12 @@ public static partial class QuartzTool
         group ??= name;
         return count <= 0 ? null : Enumerable.Range(0, count).Select(item => new JobKey($"{name}_{item}", $"{group}"));
     }
-    public static IEnumerable<JobKey> CreateJobKeys(int count, Type type)
+    public static IEnumerable<JobKey> CreateJobKeys(int count, Type type, string group = null)
     {
-        return CreateJobKeys(count, type.Name);
+        return CreateJobKeys(count, type.Name, group);
     }
-    public static IEnumerable<JobKey> CreateJobKeys<Job>(int count) where Job : IJob
+    public static IEnumerable<JobKey> CreateJobKeys<Job>(int count, string group = null) where Job : IJob
     {
-        return CreateJobKeys(count, typeof(Job).Name);
+        return CreateJobKeys(count, typeof(Job).Name, group);
     }
 }

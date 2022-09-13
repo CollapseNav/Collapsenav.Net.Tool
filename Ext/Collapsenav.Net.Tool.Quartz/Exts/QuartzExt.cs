@@ -21,6 +21,16 @@ public static partial class QuartzTool
             await scheduler.DeleteJob(key);
     }
 
+    public static async Task DeleteAllJobs(this IScheduler scheduler)
+    {
+        var triggerKeys = await scheduler.GetTriggerKeys();
+        var jobKeys = await scheduler.GetJobKeys();
+        foreach (var key in triggerKeys)
+            await scheduler.PauseTrigger(key);
+        foreach (var key in jobKeys)
+            await scheduler.DeleteJob(key);
+    }
+
     public static async Task PauseJob(this IScheduler scheduler, JobKey jkey)
     {
         await scheduler.PauseJob(jkey);
@@ -50,14 +60,16 @@ public static partial class QuartzTool
     }
 
 
-    public static async Task<IReadOnlyCollection<TriggerKey>> GetTriggerKeys(this IScheduler scheduler, string group)
+    public static async Task<IReadOnlyCollection<TriggerKey>> GetTriggerKeys(this IScheduler scheduler, string group = null)
     {
-        return await scheduler.GetTriggerKeys(GroupMatcher<TriggerKey>.GroupEquals(group));
+        var matches = group.IsEmpty() ? GroupMatcher<TriggerKey>.AnyGroup() : GroupMatcher<TriggerKey>.GroupEquals(group);
+        return await scheduler.GetTriggerKeys(matches);
     }
 
-    public static async Task<IReadOnlyCollection<JobKey>> GetJobKeys(this IScheduler scheduler, string group)
+    public static async Task<IReadOnlyCollection<JobKey>> GetJobKeys(this IScheduler scheduler, string group = null)
     {
-        return await scheduler.GetJobKeys(GroupMatcher<JobKey>.GroupEquals(group));
+        var matches = group.IsEmpty() ? GroupMatcher<JobKey>.AnyGroup() : GroupMatcher<JobKey>.GroupEquals(group);
+        return await scheduler.GetJobKeys(matches);
     }
 
     public static async Task LoadXmlConfig(this IScheduler scheduler, string path)
@@ -66,5 +78,23 @@ public static partial class QuartzTool
             throw new Exception("配置文件必须是xml格式");
         var processor = new XMLSchedulingDataProcessor(new SimpleTypeLoadHelper());
         await processor.ProcessFileAndScheduleJobs(path, scheduler);
+    }
+
+
+    public static async Task<IReadOnlyCollection<IJobDetail>> GetJobDetails(this IScheduler scheduler, string group = null)
+    {
+        var jobKeys = await scheduler.GetJobKeys(group);
+        List<IJobDetail> details = new();
+        foreach (var key in jobKeys)
+            details.Add(await scheduler.GetJobDetail(key));
+        return details;
+    }
+    public static async Task<IReadOnlyCollection<ITrigger>> GetTriggers(this IScheduler scheduler, string group = null)
+    {
+        var jobKeys = await scheduler.GetTriggerKeys(group);
+        List<ITrigger> triggers = new();
+        foreach (var key in jobKeys)
+            triggers.Add(await scheduler.GetTrigger(key));
+        return triggers;
     }
 }

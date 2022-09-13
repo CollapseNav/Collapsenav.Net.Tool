@@ -13,13 +13,13 @@ public static partial class QuartzTool
             TKey = new TriggerKey($"{name}_{item}", $"{group}"),
         });
     }
-    public static IEnumerable<JobTriggerKey> CreateJobKeyAndTriggerKey(Type type, int count)
+    public static IEnumerable<JobTriggerKey> CreateJobKeyAndTriggerKey(int count, Type type, string group = null)
     {
-        return CreateJobKeyAndTriggerKey(count, type.Name);
+        return CreateJobKeyAndTriggerKey(count, type.Name, group);
     }
-    public static IEnumerable<JobTriggerKey> CreateJobKeyAndTriggerKey<Job>(int count) where Job : IJob
+    public static IEnumerable<JobTriggerKey> CreateJobKeyAndTriggerKey<Job>(int count, string group = null) where Job : IJob
     {
-        return CreateJobKeyAndTriggerKey(count, typeof(Job).Name);
+        return CreateJobKeyAndTriggerKey(count, typeof(Job).Name, group);
     }
 
 

@@ -44,35 +44,21 @@ public static partial class QuartzTool
         else
             await scheduler.RescheduleJob(trigger, new TriggerKey(name, group));
     }
+
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, int len, TriggerKey key)
-    {
-        await scheduler.RescheduleJob(key, CreateTrigger(len, key));
-    }
-    /// <summary>
-    /// 重设trigger
-    /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, string cron, TriggerKey key)
+    public static async Task RescheduleJob(this IScheduler scheduler, object cron, TriggerKey key)
     {
         await scheduler.RescheduleJob(key, CreateTrigger(cron, key));
     }
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, int len, string name, string group = null)
-    {
-        await scheduler.RescheduleJob(CreateTrigger(len, name, group), name, group);
-    }
-    /// <summary>
-    /// 重设trigger
-    /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, string cron, string name, string group = null)
+    public static async Task RescheduleJob(this IScheduler scheduler, object cron, string name, string group = null)
     {
         await scheduler.RescheduleJob(CreateTrigger(cron, name, group), name, group);
     }
-
 
 
     /// <summary>
@@ -119,29 +105,14 @@ public static partial class QuartzTool
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, Type type, int len, TriggerKey key)
-    {
-        await scheduler.RescheduleJob(type, CreateTrigger(len, key), key);
-    }
-    /// <summary>
-    /// 重设trigger
-    /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, Type type, string cron, TriggerKey key)
+    public static async Task RescheduleJob(this IScheduler scheduler, Type type, object cron, TriggerKey key)
     {
         await scheduler.RescheduleJob(type, CreateTrigger(cron, key), key);
     }
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, Type type, int len, string name = null, string group = null)
-    {
-        name ??= type.Name;
-        await scheduler.RescheduleJob(type, CreateTrigger(len, name, group), name, group);
-    }
-    /// <summary>
-    /// 重设trigger
-    /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, Type type, string cron, string name = null, string group = null)
+    public static async Task RescheduleJob(this IScheduler scheduler, Type type, object cron, string name = null, string group = null)
     {
         name ??= type.Name;
         await scheduler.RescheduleJob(type, CreateTrigger(cron, name, group), name, group);
@@ -149,16 +120,9 @@ public static partial class QuartzTool
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, Type type, IEnumerable<string> crons)
+    public static async Task RescheduleJob(this IScheduler scheduler, Type type, params object[] lens)
     {
-        await scheduler.RescheduleJobs(type, CreateTriggers(crons, type));
-    }
-    /// <summary>
-    /// 重设trigger
-    /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, Type type, params int[] lens)
-    {
-        await scheduler.RescheduleJobs(type, CreateTriggers(lens, type));
+        await scheduler.RescheduleJobs(type, CreateTriggers(type, lens));
     }
 
 
@@ -193,29 +157,14 @@ public static partial class QuartzTool
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob<Job>(this IScheduler scheduler, int len, TriggerKey key) where Job : IJob
-    {
-        await RescheduleJob<Job>(scheduler, CreateTrigger(len, key), key);
-    }
-    /// <summary>
-    /// 重设trigger
-    /// </summary>
-    public static async Task RescheduleJob<Job>(this IScheduler scheduler, string cron, TriggerKey key) where Job : IJob
+    public static async Task RescheduleJob<Job>(this IScheduler scheduler, object cron, TriggerKey key) where Job : IJob
     {
         await RescheduleJob<Job>(scheduler, CreateTrigger(cron, key), key);
     }
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob<Job>(this IScheduler scheduler, int len, string name = null, string group = null) where Job : IJob
-    {
-        name ??= typeof(Job).Name;
-        await RescheduleJob<Job>(scheduler, CreateTrigger(len, name, group), name, group);
-    }
-    /// <summary>
-    /// 重设trigger
-    /// </summary>
-    public static async Task RescheduleJob<Job>(this IScheduler scheduler, string name, string group = null, string cron = null) where Job : IJob
+    public static async Task RescheduleJob<Job>(this IScheduler scheduler, object cron, string name = null, string group = null) where Job : IJob
     {
         name ??= typeof(Job).Name;
         await RescheduleJob<Job>(scheduler, CreateTrigger(cron, name, group), name, group);
@@ -223,14 +172,7 @@ public static partial class QuartzTool
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob<Job>(this IScheduler scheduler, IEnumerable<string> crons) where Job : IJob
-    {
-        await scheduler.RescheduleJobs<Job>(CreateTriggers<Job>(crons));
-    }
-    /// <summary>
-    /// 重设trigger
-    /// </summary>
-    public static async Task RescheduleJob<Job>(this IScheduler scheduler, params int[] lens) where Job : IJob
+    public static async Task RescheduleJob<Job>(this IScheduler scheduler, params object[] lens) where Job : IJob
     {
         await scheduler.RescheduleJobs<Job>(CreateTriggers<Job>(lens));
     }
