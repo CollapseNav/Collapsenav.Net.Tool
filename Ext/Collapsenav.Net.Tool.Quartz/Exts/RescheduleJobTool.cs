@@ -120,7 +120,7 @@ public static partial class QuartzTool
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob(this IScheduler scheduler, Type type, params object[] lens)
+    public static async Task RescheduleJobs(this IScheduler scheduler, Type type, params object[] lens)
     {
         await scheduler.RescheduleJobs(type, CreateTriggers(type, lens));
     }
@@ -172,7 +172,7 @@ public static partial class QuartzTool
     /// <summary>
     /// 重设trigger
     /// </summary>
-    public static async Task RescheduleJob<Job>(this IScheduler scheduler, params object[] lens) where Job : IJob
+    public static async Task RescheduleJobs<Job>(this IScheduler scheduler, params object[] lens) where Job : IJob
     {
         await scheduler.RescheduleJobs<Job>(CreateTriggers<Job>(lens));
     }
