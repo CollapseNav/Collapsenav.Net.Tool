@@ -46,6 +46,12 @@ public static partial class ExpressionExt
         var sum = Expression.And(origin.Body, Expression.Invoke(exp, origin.Parameters[0]));
         return Expression.Lambda<Func<T, bool>>(sum, origin.Parameters);
     }
+    public static Expression<Func<T, bool>> AndIf<T, N>(this Expression<Func<T, bool>> origin, N? flag, Expression<Func<T, bool>> exp) where N : struct
+    {
+        if (!flag.HasValue)
+            return origin;
+        return origin.AndIf(true, exp);
+    }
     public static Expression<Func<T, bool>> OrIf<T>(this Expression<Func<T, bool>> origin, bool flag, Expression<Func<T, bool>> exp)
     {
         if (!flag)
