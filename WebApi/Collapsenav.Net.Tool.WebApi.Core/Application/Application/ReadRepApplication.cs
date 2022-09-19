@@ -10,7 +10,6 @@ public class ReadRepApplication<T> : Application<T>, IReadApplication<T>
         Repo = repository;
     }
     public virtual async Task<T> QueryByStringIdAsync(string id) => await Repo.GetByIdAsync(id);
-
 }
 public class ReadRepApplication<TKey, T> : ReadRepApplication<T>, IReadApplication<TKey, T>
     where T : class, IEntity<TKey>

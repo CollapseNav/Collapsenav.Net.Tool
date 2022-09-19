@@ -19,35 +19,19 @@ public class ModifyRepController<T, CreateT> : ControllerBase, IModifyController
     /// 添加(单个)
     /// </summary>
     [HttpPost]
-    public virtual async Task<T> AddAsync([FromBody] CreateT entity)
-    {
-        var data = Mapper.Map<T>(entity);
-        var result = await Repository.AddAsync(data);
-        return result;
-    }
+    public virtual async Task<T> AddAsync([FromBody] CreateT entity) => await Repository.AddAsync(Mapper.Map<T>(entity));
     /// <summary>
     /// 添加(多个)
     /// </summary>
     [HttpPost, Route("AddRange")]
-    public virtual async Task<int> AddRangeAsync(IEnumerable<CreateT> entitys)
-    {
-        var result = await Repository.AddAsync(entitys.Select(item => Mapper.Map<T>(item)));
-        return result;
-    }
+    public virtual async Task<int> AddRangeAsync(IEnumerable<CreateT> entitys) => await Repository.AddAsync(entitys.Select(item => Mapper.Map<T>(item)));
     /// <summary>
     /// 删除(单个 id)
     /// </summary>
     [HttpDelete, Route("{id}")]
-    public virtual async Task DeleteAsync(string id, [FromQuery] bool isTrue = false)
-    {
-        await Repository.DeleteAsync(id, isTrue);
-    }
-
+    public virtual async Task DeleteAsync(string id, [FromQuery] bool isTrue = false) => await Repository.DeleteAsync(id, isTrue);
     [NonAction]
-    public void Dispose()
-    {
-        Repository.Save();
-    }
+    public void Dispose() => Repository.Save();
 
 }
 public class ModifyRepController<TKey, T, CreateT> : ModifyRepController<T, CreateT>, IModifyController<TKey, T, CreateT>
@@ -61,31 +45,18 @@ public class ModifyRepController<TKey, T, CreateT> : ModifyRepController<T, Crea
         Repository = repository;
         Mapper = mapper;
     }
-
     [NonAction]
-    public override Task DeleteAsync(string id, [FromQuery] bool isTrue = false)
-    {
-        return base.DeleteAsync(id, isTrue);
-    }
+    public override Task DeleteAsync(string id, [FromQuery] bool isTrue = false) => base.DeleteAsync(id, isTrue);
     /// <summary>
     /// 删除(单个 id)
     /// </summary>
     [HttpDelete, Route("{id}")]
-    public virtual async Task DeleteAsync(TKey id, [FromQuery] bool isTrue = false)
-    {
-        await Repository.DeleteAsync(id, isTrue);
-    }
-
+    public virtual async Task DeleteAsync(TKey id, [FromQuery] bool isTrue = false) => await Repository.DeleteAsync(id, isTrue);
     /// <summary>
     /// 删除(多个 id)
     /// </summary>
     [HttpDelete]
-    public virtual async Task<int> DeleteRangeAsync([FromQuery] IEnumerable<TKey> id, [FromQuery] bool isTrue = false)
-    {
-        var result = await Repository.DeleteAsync(id, isTrue);
-        return result;
-    }
-
+    public virtual async Task<int> DeleteRangeAsync([FromQuery] IEnumerable<TKey> id, [FromQuery] bool isTrue = false) => await Repository.DeleteAsync(id, isTrue);
     /// <summary>
     /// 更新
     /// </summary>

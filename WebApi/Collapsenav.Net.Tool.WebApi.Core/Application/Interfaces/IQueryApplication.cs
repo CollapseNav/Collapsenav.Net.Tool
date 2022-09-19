@@ -9,6 +9,7 @@ public interface IQueryApplication<T, GetT> : IReadApplication<T>
     /// 获取query
     /// </summary>
     IQueryable<T> GetQuery(GetT input);
+    IQueryable<T> GetQuery<NewGetT>(NewGetT input) where NewGetT : IBaseGet<T>;
     /// <summary>
     /// 分页查询
     /// </summary>

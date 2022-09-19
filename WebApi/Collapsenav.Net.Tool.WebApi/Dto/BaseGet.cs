@@ -7,21 +7,13 @@ public class BaseGet : IBaseGet
     {
         return exp;
     }
-
-    public virtual IQueryable GetQuery(IQueryable query)
-    {
-        return query;
-    }
 }
 public class BaseGet<T> : IBaseGet<T>
 {
-    public virtual Expression<Func<T, bool>> GetExpression(Expression<Func<T, bool>> exp)
+    public virtual Expression<Func<T, bool>> GetExpression(Expression<Func<T, bool>> exp = null)
     {
+        exp ??= item => true;
         return exp;
     }
 
-    public virtual IQueryable<T> GetQuery(IQueryable<T> query)
-    {
-        return query.Where(GetExpression(item => true));
-    }
 }

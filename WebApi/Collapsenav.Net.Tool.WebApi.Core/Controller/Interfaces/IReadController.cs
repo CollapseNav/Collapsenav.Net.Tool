@@ -6,8 +6,6 @@ public interface IReadController<T, GetT> : IController
     where T : IEntity
     where GetT : IBaseGet<T>
 {
-    [NonAction]
-    IQueryable<T> GetQuery(GetT input);
     /// <summary>
     /// 查找(单个 id)
     /// </summary>
@@ -28,8 +26,6 @@ public interface IReadController<TKey, T, GetT> : IReadController<T, GetT>
 #region 无泛型约束
 public interface INoConstraintsReadController<T, GetT> : IController
 {
-    [NonAction]
-    IQueryable<T> GetQuery(GetT input);
     /// <summary>
     /// 查找(单个 id)
     /// </summary>
