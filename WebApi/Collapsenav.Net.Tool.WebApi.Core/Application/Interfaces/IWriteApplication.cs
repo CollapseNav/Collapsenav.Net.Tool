@@ -16,6 +16,8 @@ public interface IWriteApplication<T> : IApplication<T>, IDisposable
     /// 修改
     /// </summary>
     Task<int> UpdateAsync(string id, T entity);
+    void Save();
+    Task SaveAsync();
 }
 public interface IWriteApplication<TKey, T> : IWriteApplication<T>
     where T : IEntity<TKey>
@@ -41,6 +43,8 @@ public interface INoConstraintsWriteApplication<T> : INoConstraintsApplication<T
     /// 修改
     /// </summary>
     Task<int> UpdateAsync(string id, T entity);
+    void Save();
+    Task SaveAsync();
 }
 public interface INoConstraintsWriteApplication<TKey, T> : INoConstraintsWriteApplication<T>
 {

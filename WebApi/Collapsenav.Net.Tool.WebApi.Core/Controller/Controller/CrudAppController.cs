@@ -23,61 +23,34 @@ public class CrudAppController<T, CreateT, GetT> : ControllerBase, ICrudControll
     /// 添加(单个)
     /// </summary>
     [HttpPost]
-    public virtual async Task<T> AddAsync([FromBody] CreateT entity)
-    {
-        return await Write.AddAsync(entity);
-    }
-
+    public virtual async Task<T> AddAsync([FromBody] CreateT entity) => await Write.AddAsync(entity);
     /// <summary>
     /// 添加(多个)
     /// </summary>
     [HttpPost, Route("AddRange")]
-    public virtual async Task<int> AddRangeAsync(IEnumerable<CreateT> entitys)
-    {
-        return await Write.AddRangeAsync(entitys);
-    }
+    public virtual async Task<int> AddRangeAsync(IEnumerable<CreateT> entitys) => await Write.AddRangeAsync(entitys);
     /// <summary>
     /// 带条件分页
     /// </summary>
     [HttpGet]
-    public virtual async Task<PageData<T>> QueryPageAsync([FromQuery] GetT input, [FromQuery] PageRequest page = null)
-    {
-        return await Read.QueryPageAsync(input, page);
-    }
+    public virtual async Task<PageData<T>> QueryPageAsync([FromQuery] GetT input, [FromQuery] PageRequest page = null) => await Read.QueryPageAsync(input, page);
     /// <summary>
     /// 带条件查询(不分页)
     /// </summary>
     [HttpGet, Route("Query")]
-    public virtual async Task<IEnumerable<T>> QueryAsync([FromQuery] GetT input)
-    {
-        return await Read.QueryAsync(input);
-    }
+    public virtual async Task<IEnumerable<T>> QueryAsync([FromQuery] GetT input) => await Read.QueryAsync(input);
     [NonAction]
-    public virtual void Dispose()
-    {
-        Write.Dispose();
-    }
-    [NonAction]
-    public virtual IQueryable<T> GetQuery(GetT input)
-    {
-        return Read.GetQuery(input);
-    }
+    public virtual void Dispose() => Write.Dispose();
     /// <summary>
     /// 查找(单个 id)
     /// </summary>
     [HttpGet, Route("{id}")]
-    public virtual async Task<T> QueryAsync(string id)
-    {
-        return await Read.QueryAsync(id);
-    }
+    public virtual async Task<T> QueryAsync(string id) => await Read.QueryAsync(id);
     /// <summary>
     /// 查找(单个 id)
     /// </summary>
     [HttpDelete, Route("{id}")]
-    public virtual async Task DeleteAsync(string id, [FromQuery] bool isTrue = false)
-    {
-        await Write.DeleteAsync(id, isTrue);
-    }
+    public virtual async Task DeleteAsync(string id, [FromQuery] bool isTrue = false) => await Write.DeleteAsync(id, isTrue);
 }
 [ApiController]
 [Route("[controller]")]
@@ -100,60 +73,34 @@ public class CrudAppController<TKey, T, CreateT, GetT> : CrudAppController<T, Cr
     /// 删除(单个 id)
     /// </summary>
     [HttpDelete, Route("{id}")]
-    public virtual async Task DeleteAsync(TKey id, [FromQuery] bool isTrue = false)
-    {
-        await Write.DeleteAsync(id, isTrue);
-    }
+    public virtual async Task DeleteAsync(TKey id, [FromQuery] bool isTrue = false) => await Write.DeleteAsync(id, isTrue);
     [NonAction]
-    public override Task DeleteAsync(string id, [FromQuery] bool isTrue = false)
-    {
-        return base.DeleteAsync(id, isTrue);
-    }
-
+    public override Task DeleteAsync(string id, [FromQuery] bool isTrue = false) => base.DeleteAsync(id, isTrue);
     /// <summary>
     /// 删除(多个 id)
     /// </summary>
     [HttpDelete]
-    public virtual async Task<int> DeleteRangeAsync(IEnumerable<TKey> id, [FromQuery] bool isTrue = false)
-    {
-        return await Write.DeleteRangeAsync(id, isTrue);
-    }
+    public virtual async Task<int> DeleteRangeAsync(IEnumerable<TKey> id, [FromQuery] bool isTrue = false) => await Write.DeleteRangeAsync(id, isTrue);
     /// <summary>
     /// 更新
     /// </summary>
     [HttpPut, Route("{id}")]
-    public virtual async Task UpdateAsync(TKey id, CreateT entity)
-    {
-        await Write.UpdateAsync(id, entity);
-    }
-
+    public virtual async Task UpdateAsync(TKey id, CreateT entity) => await Write.UpdateAsync(id, entity);
     /// <summary>
     /// 查找(单个 id)
     /// </summary>
     [HttpGet, Route("{id}")]
-    public virtual async Task<T> QueryAsync(TKey id)
-    {
-        return await Read.QueryAsync(id);
-    }
+    public virtual async Task<T> QueryAsync(TKey id) => await Read.QueryAsync(id);
     [NonAction]
-    public override Task<T> QueryAsync(string id)
-    {
-        return base.QueryAsync(id);
-    }
+    public override Task<T> QueryAsync(string id) => base.QueryAsync(id);
     /// <summary>
     /// 根据Ids查询
     /// </summary>
     [HttpGet, Route("ByIds")]
-    public virtual async Task<IEnumerable<T>> QueryByIdsAsync([FromQuery] IEnumerable<TKey> ids)
-    {
-        return await Read.QueryByIdsAsync(ids);
-    }
+    public virtual async Task<IEnumerable<T>> QueryByIdsAsync([FromQuery] IEnumerable<TKey> ids) => await Read.QueryByIdsAsync(ids);
     /// <summary>
     /// 根据Ids查询
     /// </summary>
     [HttpPost, Route("ByIds")]
-    public virtual async Task<IEnumerable<T>> QueryByIdsPostAsync(IEnumerable<TKey> ids)
-    {
-        return await Read.QueryByIdsPostAsync(ids);
-    }
+    public virtual async Task<IEnumerable<T>> QueryByIdsPostAsync(IEnumerable<TKey> ids) => await Read.QueryByIdsPostAsync(ids);
 }

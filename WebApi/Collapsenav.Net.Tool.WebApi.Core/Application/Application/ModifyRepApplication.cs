@@ -12,17 +12,8 @@ public class ModifyRepApplication<T, CreateT> : WriteRepApplication<T>, IModifyA
         Repo = repository;
         Mapper = mapper;
     }
-    public virtual async Task<T> AddAsync(CreateT entity)
-    {
-        var data = Mapper.Map<T>(entity);
-        var result = await Repo.AddAsync(data);
-        return result;
-    }
-    public virtual async Task<int> AddRangeAsync(IEnumerable<CreateT> entitys)
-    {
-        var result = await Repo.AddAsync(entitys.Select(item => Mapper.Map<T>(item)));
-        return result;
-    }
+    public virtual async Task<T> AddAsync(CreateT entity) => await Repo.AddAsync(Mapper.Map<T>(entity));
+    public virtual async Task<int> AddRangeAsync(IEnumerable<CreateT> entitys) => await Repo.AddAsync(entitys.Select(item => Mapper.Map<T>(item)));
 }
 public class ModifyRepApplication<TKey, T, CreateT> : WriteRepApplication<TKey, T>, IModifyApplication<TKey, T, CreateT>
     where T : class, IEntity<TKey>
@@ -38,26 +29,11 @@ public class ModifyRepApplication<TKey, T, CreateT> : WriteRepApplication<TKey, 
         App = new ModifyRepApplication<T, CreateT>(repository, mapper);
     }
 
-    public virtual async Task<T> AddAsync(CreateT entity)
-    {
-        return await App.AddAsync(entity);
-    }
+    public virtual async Task<T> AddAsync(CreateT entity) => await App.AddAsync(entity);
+    public virtual async Task<int> AddRangeAsync(IEnumerable<CreateT> entitys) => await App.AddRangeAsync(entitys);
 
-    public virtual async Task<int> AddRangeAsync(IEnumerable<CreateT> entitys)
-    {
-        return await App.AddRangeAsync(entitys);
-    }
-
-    public override Task<bool> DeleteAsync(string id, bool isTrue = false)
-    {
-        return base.DeleteAsync(id, isTrue);
-    }
-
-    public virtual async Task<int> DeleteRangeAsync(IEnumerable<TKey> id, bool isTrue = false)
-    {
-        var result = await Repo.DeleteAsync(id, isTrue);
-        return result;
-    }
+    public override Task<bool> DeleteAsync(string id, bool isTrue = false) => base.DeleteAsync(id, isTrue);
+    public virtual async Task<int> DeleteRangeAsync(IEnumerable<TKey> id, bool isTrue = false) => await Repo.DeleteAsync(id, isTrue);
     public virtual async Task<int> UpdateAsync(TKey id, CreateT entity)
     {
         var data = Mapper.Map<T>(entity);

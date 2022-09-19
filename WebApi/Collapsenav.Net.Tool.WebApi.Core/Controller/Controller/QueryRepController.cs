@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using Collapsenav.Net.Tool.Data;
 using Microsoft.AspNetCore.Mvc;
 namespace Collapsenav.Net.Tool.WebApi;
@@ -18,17 +17,12 @@ public class QueryRepController<T, GetT> : ControllerBase, IQueryController<T, G
     /// 带条件分页
     /// </summary>
     [HttpGet]
-    public virtual async Task<PageData<T>> QueryPageAsync([FromQuery] GetT input, [FromQuery] PageRequest page = null) => await Repository.QueryPageAsync(GetExpression(input), page);
+    public virtual async Task<PageData<T>> QueryPageAsync([FromQuery] GetT input, [FromQuery] PageRequest page = null) => await Repository.QueryPageAsync(input.GetExpression(), page);
     /// <summary>
     /// 带条件查询(不分页)
     /// </summary>
     [HttpGet, Route("Query")]
-    public virtual async Task<IEnumerable<T>> QueryAsync([FromQuery] GetT input) => await Repository.QueryDataAsync(GetQuery(input));
-    [NonAction]
-    public virtual IQueryable<T> GetQuery(GetT input) => input.GetQuery(Repository.Query(item => true));
-    [NonAction]
-    public virtual Expression<Func<T, bool>> GetExpression(GetT input) => input.GetExpression(item => true);
-
+    public virtual async Task<IEnumerable<T>> QueryAsync([FromQuery] GetT input) => await Repository.QueryDataAsync(Repository.Query(input.GetExpression()));
     /// <summary>
     /// 查找(单个 id)
     /// </summary>
@@ -46,13 +40,8 @@ public class QueryRepController<TKey, T, GetT> : QueryRepController<T, GetT>, IQ
     {
         Repository = repository;
     }
-
     [NonAction]
-    public override Task<T> QueryAsync(string id)
-    {
-        return base.QueryAsync(id);
-    }
-
+    public new Task<T> QueryAsync(string id) => base.QueryAsync(id);
     /// <summary>
     /// 查找(单个 id)
     /// </summary>
@@ -68,6 +57,5 @@ public class QueryRepController<TKey, T, GetT> : QueryRepController<T, GetT>, IQ
     /// </summary>
     [HttpPost, Route("ByIds")]
     public virtual async Task<IEnumerable<T>> QueryByIdsPostAsync(IEnumerable<TKey> ids) => await Repository.QueryAsync(ids);
-
 }
 
