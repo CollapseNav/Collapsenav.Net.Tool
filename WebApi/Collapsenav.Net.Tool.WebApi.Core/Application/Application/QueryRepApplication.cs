@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using Collapsenav.Net.Tool.Data;
 namespace Collapsenav.Net.Tool.WebApi;
 
-public class QueryRepApplication<T, GetT> : ReadRepApplication<T, GetT>, IQueryApplication<T, GetT>,
+public class QueryRepApplication<T, GetT> : ReadRepApplication<T>, IQueryApplication<T, GetT>,
 ICountApplication<T>, ICheckExistApplication<T>
     where T : class, IEntity
     where GetT : IBaseGet<T>
@@ -43,7 +43,7 @@ ICountApplication<T>, ICheckExistApplication<T>
         return await Repo.CountAsync(exp);
     }
 }
-public class QueryRepApplication<TKey, T, GetT> : ReadRepApplication<T, GetT>, IQueryApplication<TKey, T, GetT>
+public class QueryRepApplication<TKey, T, GetT> : ReadRepApplication<T>, IQueryApplication<TKey, T, GetT>
     where T : class, IEntity<TKey>
     where GetT : IBaseGet<T>
 {
