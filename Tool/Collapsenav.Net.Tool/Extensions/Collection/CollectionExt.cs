@@ -114,7 +114,7 @@ public static partial class CollectionExt
     /// <param name="query">query</param>
     /// <param name="flag">bool 作为标记，true则应用 filter</param>
     /// <param name="filter">筛选条件</param>
-    public static IEnumerable<T> WhereIf<T>(this IEnumerable<T> query, T? flag, Func<T, bool> filter) where T : struct
+    public static IEnumerable<T> WhereIf<T, N>(this IEnumerable<T> query, N? flag, Func<T, bool> filter) where N : struct
     {
         return flag.HasValue ? query.Where(filter) : query;
     }
