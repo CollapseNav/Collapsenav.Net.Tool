@@ -43,6 +43,7 @@ public class ModifyAppControllerTest
         using var app = GetService<IModifyApplication<int, TestModifyEntity, TestModifyEntityCreate>>();
         await app.UpdateAsync(1, new TestModifyEntityCreate("", 123456, false));
         await app.SaveAsync();
+        app.Save();
         queryController = GetService<IQueryController<int, TestModifyEntity, TestModifyEntityGet>>();
         data = await queryController.QueryAsync(new TestModifyEntityGet { IsTest = false, Number = 100000 });
         Assert.True(data.Count() == 1);

@@ -115,6 +115,16 @@ public class CollectionTest
         Assert.True(intList.SequenceEqual(new[] { 2, 2, 3, 3, 4 }));
         Assert.False(new[] { 2, 2, 3, 3, 4 }.Except(intList).Any());
         Assert.True(intList.Length == 5);
+        int? input = null;
+        intList = intList.WhereIf(input, item => item > input).ToArray();
+        Assert.True(intList.SequenceEqual(new[] { 2, 2, 3, 3, 4 }));
+        Assert.False(new[] { 2, 2, 3, 3, 4 }.Except(intList).Any());
+        Assert.True(intList.Length == 5);
+        input = 2;
+        intList = intList.WhereIf(input, item => item > input).ToArray();
+        Assert.True(intList.SequenceEqual(new[] { 3, 3, 4 }));
+        Assert.False(new[] { 3, 3, 4 }.Except(intList).Any());
+        Assert.True(intList.Length == 3);
     }
 
     [Fact]

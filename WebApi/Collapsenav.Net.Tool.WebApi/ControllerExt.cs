@@ -65,6 +65,8 @@ public static class ControllerExt
         .AddRepository()
         .AddTransient(typeof(IModifyApplication<,>), typeof(ModifyRepApplication<,>))
         .AddTransient(typeof(IQueryApplication<,>), typeof(QueryRepApplication<,>))
+        .AddTransient(typeof(ICheckExistApplication<>), typeof(ReadRepApplication<>))
+        .AddTransient(typeof(ICountApplication<>), typeof(ReadRepApplication<>))
         .AddTransient(typeof(ICrudApplication<,,>), typeof(CrudRepApplication<,,>))
         .AddTransient(typeof(IModifyApplication<,,>), typeof(ModifyRepApplication<,,>))
         .AddTransient(typeof(IQueryApplication<,,>), typeof(QueryRepApplication<,,>))

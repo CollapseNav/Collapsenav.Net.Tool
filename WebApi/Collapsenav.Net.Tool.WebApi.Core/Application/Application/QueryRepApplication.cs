@@ -2,8 +2,7 @@ using System.Linq.Expressions;
 using Collapsenav.Net.Tool.Data;
 namespace Collapsenav.Net.Tool.WebApi;
 
-public class QueryRepApplication<T, GetT> : ReadRepApplication<T>, IQueryApplication<T, GetT>,
-ICountApplication<T>, ICheckExistApplication<T>
+public class QueryRepApplication<T, GetT> : ReadRepApplication<T>, IQueryApplication<T, GetT>
     where T : class, IEntity
     where GetT : IBaseGet<T>
 {
@@ -21,8 +20,6 @@ ICountApplication<T>, ICheckExistApplication<T>
     public virtual async Task<IEnumerable<T>> QueryAsync<NewGetT>(NewGetT input) where NewGetT : class, IBaseGet<T> => await Repo.QueryDataAsync(GetQuery(input));
     public virtual async Task<IEnumerable<ReturnT>> QueryAsync<ReturnT>(GetT input) => Mapper.Map<IEnumerable<ReturnT>>(await Repo.QueryDataAsync(GetQuery(input)));
     public virtual async Task<IEnumerable<ReturnT>> QueryAsync<NewGetT, ReturnT>(NewGetT input) where NewGetT : class, IBaseGet<T> => Mapper.Map<IEnumerable<ReturnT>>(await Repo.QueryDataAsync(GetQuery(input)));
-    public virtual async Task<bool> IsExistAsync(Expression<Func<T, bool>> exp) => await Repo.IsExistAsync(exp);
-    public virtual async Task<int> CountAsync(Expression<Func<T, bool>> exp = null) => await Repo.CountAsync(exp);
 }
 public class QueryRepApplication<TKey, T, GetT> : QueryRepApplication<T, GetT>, IQueryApplication<TKey, T, GetT>
     where T : class, IEntity<TKey>

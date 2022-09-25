@@ -1,7 +1,18 @@
 using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using Collapsenav.Net.Tool.Data;
 
 namespace Collapsenav.Net.Tool.WebApi.Test;
+
+public class MapProfile : Profile
+{
+    public MapProfile()
+    {
+        CreateMap<TestEntity, TestEntityCreate>().ReverseMap();
+        CreateMap<TestQueryEntity, TestQueryEntityCreate>().ReverseMap();
+        CreateMap<TestModifyEntity, TestModifyEntityCreate>().ReverseMap();
+    }
+}
 public class TestEntity : BaseEntity<int>
 {
     public TestEntity() { }
