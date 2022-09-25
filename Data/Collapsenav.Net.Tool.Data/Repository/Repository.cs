@@ -31,7 +31,12 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
     public int Save()
     {
         var count = _db.SaveChanges();
+#if NET6_0_OR_GREATER
         _db.ChangeTracker.Clear();
+#else
+        var entries = _db.ChangeTracker.Entries();
+        entries.ForEach(item => item.State = EntityState.Detached);
+#endif
         return count;
     }
     /// <summary>
@@ -40,7 +45,12 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
     public async Task<int> SaveAsync()
     {
         var count = await _db.SaveChangesAsync();
+#if NET6_0_OR_GREATER
         _db.ChangeTracker.Clear();
+#else
+        var entries = _db.ChangeTracker.Entries();
+        entries.ForEach(item => item.State = EntityState.Detached);
+#endif
         return count;
     }
     /// <summary>
