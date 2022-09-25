@@ -60,7 +60,7 @@ public static partial class TypeExt
     /// </summary>
     public static IEnumerable<string> PropNames<T>(this T obj)
     {
-        return typeof(T).PropNames();
+        return obj.GetType().PropNames();
     }
     /// <summary>
     /// 获取属性名称
@@ -74,7 +74,7 @@ public static partial class TypeExt
     /// </summary>
     public static IEnumerable<string> PropNames<T>(this T obj, int depth)
     {
-        return typeof(T).PropNames(depth);
+        return obj.GetType().PropNames(depth);
     }
     /// <summary>
     /// 获取属性名称
@@ -95,7 +95,7 @@ public static partial class TypeExt
     /// </summary>
     public static IEnumerable<string> BuildInTypePropNames<T>(this T obj)
     {
-        var nameProps = typeof(T).BuildInTypeProps();
+        var nameProps = obj.GetType().BuildInTypeProps();
         return nameProps.Select(item => item.Name);
     }
     /// <summary>
@@ -132,7 +132,7 @@ public static partial class TypeExt
     /// </summary>
     public static Dictionary<PropertyInfo, object> BuildInTypeValues<T>(this T obj)
     {
-        var propDict = typeof(T).BuildInTypeProps()
+        var propDict = obj.GetType().BuildInTypeProps()
         .Select(item => new KeyValuePair<PropertyInfo, object>(item, obj.GetValue(item.Name)))
         .ToDictionary(item => item.Key, item => item.Value);
         return propDict;
@@ -187,7 +187,7 @@ public static partial class TypeExt
     /// </summary>
     public static IEnumerable<PropertyInfo> Props<T>(this T obj)
     {
-        return typeof(T).GetProperties();
+        return obj.GetType().GetProperties();
     }
 
     /// <summary>
@@ -216,20 +216,31 @@ public static partial class TypeExt
         return new Difference<T>(before, end);
     }
 
+    /// <summary>
+    /// 判断是否有接口约束
+    /// </summary>
     public static bool HasInterface(this Type type, Type interfaceType)
     {
         return interfaceType.IsAssignableFrom(type);
     }
+    /// <summary>
+    /// 判断是否有接口约束
+    /// </summary>
     public static bool HasInterface<T>(this Type type)
     {
         return type.HasInterface(typeof(T));
     }
 
+    /// <summary>
+    /// 判断是否有泛型接口约束
+    /// </summary>
     public static bool HasGenericInterface(this Type type, Type interfaceType)
     {
         return type.GetTypeInfo().ImplementedInterfaces.Any(item => (item.IsGenericType ? item.GetGenericTypeDefinition() : item) == interfaceType);
     }
-
+    /// <summary>
+    /// 方法是否包含参数类型
+    /// </summary>
     public static bool HasParameter(this MethodInfo method, Type type)
     {
         var pas = method.GetParameters();
@@ -239,11 +250,17 @@ public static partial class TypeExt
             return pas.Any(item => item.ParameterType.HasInterface(type));
         else return pas.Any(item => item.ParameterType.IsSubclassOf(type));
     }
+    /// <summary>
+    /// 方法是否包含参数类型
+    /// </summary>
     public static bool HasParameter<T>(this MethodInfo method)
     {
         return method.HasParameter(typeof(T));
     }
 
+    /// <summary>
+    /// 方法是否包含泛型参数类型
+    /// </summary>
     public static bool HasGenericParamter(this MethodInfo method, Type type)
     {
         if (!type.IsGenericType)
@@ -255,5 +272,14 @@ public static partial class TypeExt
             else
                 return pas.Any(item => item.ParameterType.GetGenericTypeDefinition().HasGenericInterface(type));
         return pas.Any(item => item.ParameterType.GetGenericTypeDefinition() == type);
+    }
+
+    /// <summary>
+    /// 类型中是否包含该名称的方法
+    /// </summary>
+    public static bool HasMethod(this Type type, string methodName)
+    {
+        var methods = type.GetMethods();
+        return methods.Any(item => item.Name == methodName);
     }
 }

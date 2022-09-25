@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace Collapsenav.Net.Tool.Data;
 public interface IEntity
 {
@@ -6,6 +8,7 @@ public interface IEntity
     void SoftDelete();
     void Update();
     Type KeyType();
+    PropertyInfo KeyProp();
 }
 public interface IEntity<TKey> : IEntity
 {

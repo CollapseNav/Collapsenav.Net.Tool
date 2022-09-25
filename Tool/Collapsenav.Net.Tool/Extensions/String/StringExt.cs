@@ -66,6 +66,17 @@ public static partial class StringExt
     public static Guid? ToGuid(this string input) => Guid.TryParse(input, out Guid result) ? result : null;
     public static long? ToLong(this string input) => long.TryParse(input, out long result) ? result : null;
 
+    public static object ToValue(this string input, Type type)
+    {
+        var flag = type.HasMethod("Parse");
+        if (flag)
+        {
+            var method = type.GetMethods().FirstOrDefault(item => item.Name == "Parse");
+            return method?.Invoke(null, new[] { input });
+        }
+        return null;
+    }
+
     /// <summary>
     /// 拼!
     /// </summary>

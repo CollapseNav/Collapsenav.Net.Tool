@@ -8,11 +8,16 @@ public static class RepositoryExt
         services
         .AddTransient(typeof(IRepository<>), typeof(Repository<>))
         .AddTransient(typeof(IQueryRepository<>), typeof(QueryRepository<>))
-        .AddTransient(typeof(ICheckExistRepository<>), typeof(QueryRepository<>))
-        .AddTransient(typeof(ICountRepository<>), typeof(QueryRepository<>))
+        .AddTransient(typeof(ICheckExistRepository<>), typeof(ReadRepository<>))
+        .AddTransient(typeof(ICountRepository<>), typeof(ReadRepository<>))
         .AddTransient(typeof(IModifyRepository<>), typeof(ModifyRepository<>))
         .AddTransient(typeof(ICrudRepository<>), typeof(CrudRepository<>))
+        .AddTransient(typeof(IReadRepository<>), typeof(ReadRepository<>))
+
+
+
         .AddTransient(typeof(IRepository<,>), typeof(Repository<,>))
+        .AddTransient(typeof(IReadRepository<,>), typeof(ReadRepository<,>))
         .AddTransient(typeof(IQueryRepository<,>), typeof(QueryRepository<,>))
         .AddTransient(typeof(IModifyRepository<,>), typeof(ModifyRepository<,>))
         .AddTransient(typeof(ICrudRepository<,>), typeof(CrudRepository<,>))

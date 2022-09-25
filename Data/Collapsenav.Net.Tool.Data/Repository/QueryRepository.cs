@@ -6,20 +6,6 @@ namespace Collapsenav.Net.Tool.Data;
 public class QueryRepository<T> : ReadRepository<T>, IQueryRepository<T> where T : class, IEntity
 {
     public QueryRepository(DbContext db) : base(db) { }
-    /// <summary>
-    /// 判断是否有符合条件的数据
-    /// </summary>
-    public virtual async Task<bool> IsExistAsync(Expression<Func<T, bool>> exp)
-    {
-        return await dbSet.AnyAsync(exp);
-    }
-    /// <summary>
-    /// 计算符合条件的数据数量
-    /// </summary>
-    public virtual async Task<int> CountAsync(Expression<Func<T, bool>> exp = null)
-    {
-        return await Query(exp).CountAsync();
-    }
 
     /// <summary>
     /// 查询数据
