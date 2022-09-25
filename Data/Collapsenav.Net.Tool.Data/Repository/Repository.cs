@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq.Expressions;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 
 namespace Collapsenav.Net.Tool.Data;
@@ -29,27 +30,39 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
     /// </summary>
     public int Save()
     {
-        return _db.SaveChanges();
+        var count = _db.SaveChanges();
+        _db.ChangeTracker.Clear();
+        return count;
     }
     /// <summary>
     /// 保存修改
     /// </summary>
     public async Task<int> SaveAsync()
     {
-        return await _db.SaveChangesAsync();
+        var count = await _db.SaveChangesAsync();
+        _db.ChangeTracker.Clear();
+        return count;
     }
     /// <summary>
     /// 获取主键
     /// </summary>
     public Type KeyType()
     {
+        var prop = KeyProp();
+        if (prop == null)
+            throw new Exception("");
+        if (prop.PropertyType.IsGenericType)
+            return prop.PropertyType.GenericTypeArguments.First();
+        return prop.PropertyType;
+    }
+
+    public PropertyInfo KeyProp()
+    {
         var types = typeof(T).AttrValues<KeyAttribute>();
         if (types.IsEmpty())
             throw new Exception("");
-        var type = types.First().Key.PropertyType;
-        if (type.IsGenericType)
-            return type.GenericTypeArguments.First();
-        return type;
+        var prop = types.First().Key;
+        return prop;
     }
 }
 public class Repository<TKey, T> : Repository<T>, IRepository<TKey, T> where T : class, IEntity<TKey>

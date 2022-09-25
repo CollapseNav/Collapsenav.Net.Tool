@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Collapsenav.Net.Tool.Data;
 public interface IRepository<T> where T : IEntity
@@ -19,6 +20,7 @@ public interface IRepository<T> where T : IEntity
     /// 获取主键type
     /// </summary>
     Type KeyType();
+    PropertyInfo KeyProp();
 }
 public interface IRepository<TKey, T> : IRepository<T> where T : IEntity<TKey>
 {
@@ -44,6 +46,7 @@ public interface INoConstraintsRepository<T>
     /// 获取主键type
     /// </summary>
     Type KeyType();
+    PropertyInfo KeyProp();
 }
 public interface INoConstraintsRepository<TKey, T> : INoConstraintsRepository<T>
 {

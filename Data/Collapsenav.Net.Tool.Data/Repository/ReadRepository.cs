@@ -23,6 +23,20 @@ public class ReadRepository<T> : Repository<T>, IReadRepository<T> where T : cla
     {
         return await query.ToListAsync();
     }
+    /// <summary>
+    /// 判断是否有符合条件的数据
+    /// </summary>
+    public virtual async Task<bool> IsExistAsync(Expression<Func<T, bool>> exp)
+    {
+        return await dbSet.AnyAsync(exp);
+    }
+    /// <summary>
+    /// 计算符合条件的数据数量
+    /// </summary>
+    public virtual async Task<int> CountAsync(Expression<Func<T, bool>> exp = null)
+    {
+        return await Query(exp).CountAsync();
+    }
 }
 public class ReadRepository<TKey, T> : ReadRepository<T>, IReadRepository<TKey, T> where T : class, IBaseEntity<TKey>
 {

@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 namespace Collapsenav.Net.Tool.Data;
 
-public interface IQueryRepository<T> : IReadRepository<T>, ICountRepository<T>, ICheckExistRepository<T> where T : class, IEntity
+public interface IQueryRepository<T> : IReadRepository<T> where T : class, IEntity
 {
     /// <summary>
     /// 列表查询
@@ -26,7 +26,7 @@ public interface IQueryRepository<TKey, T> : IQueryRepository<T>, IReadRepositor
 }
 
 #region 无泛型约束
-public interface INoConstraintsQueryRepository<T> : INoConstraintsReadRepository<T>, INoConstraintsCountRepository<T>, INoConstraintsCheckExistRepository<T>
+public interface INoConstraintsQueryRepository<T> : INoConstraintsReadRepository<T>
 {
     /// <summary>
     /// 列表查询

@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+
 namespace Collapsenav.Net.Tool.Data;
 public partial class Entity : IEntity
 {
@@ -10,10 +12,15 @@ public partial class Entity : IEntity
     {
     }
 
-    public Type KeyType()
+    public PropertyInfo KeyProp()
     {
         var prop = GetType().AttrValues<KeyAttribute>().First().Key;
-        return prop.PropertyType;
+        return prop;
+    }
+
+    public Type KeyType()
+    {
+        return KeyProp().PropertyType;
     }
 
     public virtual void SoftDelete()

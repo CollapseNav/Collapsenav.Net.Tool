@@ -1,6 +1,6 @@
 namespace Collapsenav.Net.Tool.Data;
 
-public interface IReadRepository<T> : IRepository<T> where T : class, IEntity
+public interface IReadRepository<T> : IRepository<T>, ICountRepository<T>, ICheckExistRepository<T> where T : class, IEntity
 {
     /// <summary>
     /// 根据Id查询
@@ -18,7 +18,7 @@ public interface IReadRepository<TKey, T> : IReadRepository<T>, IRepository<TKey
 
 #region 无泛型约束
 
-public interface INoConstraintsReadRepository<T> : INoConstraintsRepository<T>
+public interface INoConstraintsReadRepository<T> : INoConstraintsRepository<T>, INoConstraintsCountRepository<T>, INoConstraintsCheckExistRepository<T>
 {
     /// <summary>
     /// 根据Id查询
