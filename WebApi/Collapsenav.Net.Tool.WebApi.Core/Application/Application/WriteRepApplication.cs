@@ -20,7 +20,8 @@ public class WriteRepApplication<T> : Application<T>, IWriteApplication<T>
 
     public virtual async Task<int> UpdateAsync(string id, T entity)
     {
-        entity.SetValue(Repo.KeyType().Name, id);
+        var tid = id.ToValue(Repo.KeyType());
+        entity.SetValue(Repo.KeyProp().Name, tid);
         return await Repo.UpdateAsync(entity);
     }
 }

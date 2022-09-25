@@ -10,6 +10,7 @@ public class DIConfig
         .AddSqlite<TestDbContext>("Test.db")
         .AddDefaultDbContext<TestDbContext>()
         .AddRepController()
+        .AddMap<MapProfile>()
         .BuildServiceProvider();
     }
     public static ServiceProvider GetNotBaseProvider()
