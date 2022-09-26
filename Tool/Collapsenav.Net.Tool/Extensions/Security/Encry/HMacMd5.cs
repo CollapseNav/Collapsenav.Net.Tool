@@ -4,7 +4,8 @@ namespace Collapsenav.Net.Tool;
 public partial class HMacMd5Tool
 {
     public const string DefaultKey = "Collapsenav.Net.Tool";
-    private static HMACMD5 md5;
+    private static HMACMD5 Algorithm;
+    public static void Clear() => Algorithm = null;
     /// <summary>
     /// 解密
     /// </summary>
@@ -17,8 +18,8 @@ public partial class HMacMd5Tool
     /// </summary>
     public static string Encrypt(string msg, string key = DefaultKey)
     {
-        md5 ??= new HMACMD5(key.ToBytes());
-        var result = md5.ComputeHash(msg.ToBytes());
+        Algorithm ??= new HMACMD5(key.ToBytes());
+        var result = Algorithm.ComputeHash(msg.ToBytes());
         return BitConverter.ToString(result).Replace("-", "");
     }
     /// <summary>
@@ -27,8 +28,8 @@ public partial class HMacMd5Tool
     public static string Encrypt(Stream stream, string key = DefaultKey)
     {
         stream.SeekToOrigin();
-        md5 ??= new HMACMD5(key.ToBytes());
-        var result = md5.ComputeHash(stream);
+        Algorithm ??= new HMACMD5(key.ToBytes());
+        var result = Algorithm.ComputeHash(stream);
         stream.SeekToOrigin();
         return BitConverter.ToString(result).Replace("-", "");
     }

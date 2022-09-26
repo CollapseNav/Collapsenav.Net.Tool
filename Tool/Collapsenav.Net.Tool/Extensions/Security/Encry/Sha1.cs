@@ -6,7 +6,8 @@ namespace Collapsenav.Net.Tool;
 /// </summary>
 public partial class Sha1Tool
 {
-    private static SHA1 sha1;
+    private static SHA1 Algorithm;
+    public static void Clear() => Algorithm = null;
     /// <summary>
     /// 解密
     /// </summary>
@@ -19,8 +20,8 @@ public partial class Sha1Tool
     /// </summary>
     public static string Encrypt(string msg)
     {
-        sha1 ??= SHA1.Create();
-        var result = sha1.ComputeHash(msg.ToBytes());
+        Algorithm ??= SHA1.Create();
+        var result = Algorithm.ComputeHash(msg.ToBytes());
         return BitConverter.ToString(result).Replace("-", "");
     }
     /// <summary>
@@ -29,8 +30,8 @@ public partial class Sha1Tool
     public static string Encrypt(Stream stream)
     {
         stream.SeekToOrigin();
-        sha1 ??= SHA1.Create();
-        var result = sha1.ComputeHash(stream);
+        Algorithm ??= SHA1.Create();
+        var result = Algorithm.ComputeHash(stream);
         stream.SeekToOrigin();
         return BitConverter.ToString(result).Replace("-", "");
     }
