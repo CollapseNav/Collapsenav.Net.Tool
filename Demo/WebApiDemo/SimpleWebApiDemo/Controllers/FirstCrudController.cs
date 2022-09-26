@@ -1,6 +1,5 @@
 using Collapsenav.Net.Tool.WebApi;
 using DataDemo.EntityLib;
-using Microsoft.AspNetCore.Mvc;
 
 namespace SimpleWebApiDemo.Controllers;
 

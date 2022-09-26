@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using Collapsenav.Net.Tool.Data;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,10 +24,6 @@ public class QueryAppController<T, GetT> : ControllerBase, IQueryController<T, G
     /// </summary>
     [HttpGet, Route("Query")]
     public virtual async Task<IEnumerable<T>> QueryAsync([FromQuery] GetT input) => await App.QueryAsync(input);
-    [NonAction]
-    public virtual IQueryable<T> GetQuery(GetT input) => App.GetQuery(input);
-    [NonAction]
-    public virtual Expression<Func<T, bool>> GetExpression(GetT input) => input.GetExpression(item => true);
 
     /// <summary>
     /// 查找(单个 id)
@@ -47,13 +42,6 @@ public class QueryAppController<TKey, T, GetT> : QueryAppController<T, GetT>, IQ
     {
         App = app;
     }
-
-    [NonAction]
-    public override Task<T> QueryAsync(string id)
-    {
-        return base.QueryAsync(id);
-    }
-
     /// <summary>
     /// 查找(单个 id)
     /// </summary>

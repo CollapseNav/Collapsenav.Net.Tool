@@ -1,12 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Collapsenav.Net.Tool.WebApi" Version="1.3.0" />
+    <!-- <PackageReference Include="Collapsenav.Net.Tool.WebApi" Version="1.3.0" /> -->
     <ProjectReference Include="..\..\DataDemo\EntityLib\EntityLib.csproj" />
+    <ProjectReference Include="../../../WebApi/Collapsenav.Net.Tool.WebApi/Collapsenav.Net.Tool.WebApi.csproj" />
   </ItemGroup>
-
 </Project>

@@ -56,7 +56,7 @@ public partial class WriteRepository<T> : Repository<T>, IWriteRepository<T>
     }
 }
 public partial class WriteRepository<TKey, T> : WriteRepository<T>, IWriteRepository<TKey, T>
-    where T : class, IBaseEntity<TKey>, new()
+    where T : class, IEntity<TKey>, new()
 {
     public WriteRepository(DbContext db) : base(db) { }
     /// <summary>
