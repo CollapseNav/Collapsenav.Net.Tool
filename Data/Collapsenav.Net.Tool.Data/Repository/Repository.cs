@@ -19,12 +19,7 @@ public class Repository<T> : IRepository<T> where T : class, IEntity
     /// <param name="exp">筛选条件
     /// PS:若使用默认的NULL，则返回所有数据
     /// </param>
-    public virtual IQueryable<T> Query(Expression<Func<T, bool>> exp)
-    {
-        if (exp == null)
-            return dbSet.AsNoTracking().AsQueryable();
-        return dbSet.AsNoTracking().Where(exp);
-    }
+    public virtual IQueryable<T> Query(Expression<Func<T, bool>> exp) => exp == null ? dbSet.AsNoTracking().AsQueryable() : dbSet.AsNoTracking().Where(exp);
     /// <summary>
     /// 保存修改
     /// </summary>

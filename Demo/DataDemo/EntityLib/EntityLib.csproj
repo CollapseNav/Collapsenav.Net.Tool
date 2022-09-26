@@ -4,6 +4,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Collapsenav.Net.Tool.Data" Version="1.3.0"/>
+    <!-- <PackageReference Include="Collapsenav.Net.Tool.Data" Version="1.3.0"/> -->
+    <ProjectReference Include="../../../Data/Collapsenav.Net.Tool.Data/Collapsenav.Net.Tool.Data.csproj" />
   </ItemGroup>
 </Project>

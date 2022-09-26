@@ -8,7 +8,6 @@ public interface IBaseEntity : IEntity
 }
 public interface IBaseEntity<TKey> : IBaseEntity, IEntity<TKey>
 {
-    TKey? Id { get; set; }
     TKey? CreatorId { get; set; }
     TKey? LastModifierId { get; set; }
 }

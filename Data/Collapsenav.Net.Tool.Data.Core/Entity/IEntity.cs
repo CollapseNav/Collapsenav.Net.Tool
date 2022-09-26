@@ -1,5 +1,5 @@
 using System.Reflection;
-
+#nullable enable
 namespace Collapsenav.Net.Tool.Data;
 public interface IEntity
 {
@@ -12,4 +12,5 @@ public interface IEntity
 }
 public interface IEntity<TKey> : IEntity
 {
+    TKey? Id { get; set; }
 }

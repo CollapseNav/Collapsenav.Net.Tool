@@ -10,11 +10,7 @@ public class QueryRepository<T> : ReadRepository<T>, IQueryRepository<T> where T
     /// <summary>
     /// 查询数据
     /// </summary>
-    public virtual async Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>> exp = null)
-    {
-        return await Query(exp)?.ToListAsync();
-    }
-
+    public virtual async Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>> exp = null) => await Query(exp)?.ToListAsync();
     public virtual async Task<PageData<T>> QueryPageAsync(Expression<Func<T, bool>> exp, PageRequest page = null)
     {
         var query = Query(exp);
@@ -41,41 +37,15 @@ public class QueryRepository<T> : ReadRepository<T>, IQueryRepository<T> where T
         };
     }
 }
-public class QueryRepository<TKey, T> : ReadRepository<TKey, T>, IQueryRepository<TKey, T> where T : class, IBaseEntity<TKey>
+public class QueryRepository<TKey, T> : ReadRepository<TKey, T>, IQueryRepository<TKey, T> where T : class, IEntity<TKey>
 {
     protected IQueryRepository<T> Repo;
     public QueryRepository(DbContext db) : base(db)
     {
         Repo = new QueryRepository<T>(db);
     }
-
-    public virtual async Task<int> CountAsync(Expression<Func<T, bool>> exp = null)
-    {
-        return await Repo.CountAsync(exp);
-    }
-
-    public virtual async Task<bool> IsExistAsync(Expression<Func<T, bool>> exp)
-    {
-        return await Repo.IsExistAsync(exp);
-    }
-
-    public virtual async Task<IEnumerable<T>> QueryAsync(IEnumerable<TKey> ids)
-    {
-        return await dbSet.Where(item => ids.Contains(item.Id)).ToListAsync();
-    }
-
-    public virtual async Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>> exp = null)
-    {
-        return await Repo.QueryAsync(exp);
-    }
-
-    public virtual async Task<PageData<T>> QueryPageAsync(Expression<Func<T, bool>> exp, PageRequest page = null)
-    {
-        return await Repo.QueryPageAsync(exp, page);
-    }
-
-    public virtual async Task<PageData<T>> QueryPageAsync<E>(Expression<Func<T, bool>> exp, Expression<Func<T, E>> orderBy, bool isAsc = true, PageRequest page = null)
-    {
-        return await Repo.QueryPageAsync(exp, orderBy, isAsc, page);
-    }
+    public virtual async Task<IEnumerable<T>> QueryAsync(IEnumerable<TKey> ids) => await dbSet.Where(item => ids.Contains(item.Id)).ToListAsync();
+    public virtual async Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>> exp = null) => await Repo.QueryAsync(exp);
+    public virtual async Task<PageData<T>> QueryPageAsync(Expression<Func<T, bool>> exp, PageRequest page = null) => await Repo.QueryPageAsync(exp, page);
+    public virtual async Task<PageData<T>> QueryPageAsync<E>(Expression<Func<T, bool>> exp, Expression<Func<T, E>> orderBy, bool isAsc = true, PageRequest page = null) => await Repo.QueryPageAsync(exp, orderBy, isAsc, page);
 }
