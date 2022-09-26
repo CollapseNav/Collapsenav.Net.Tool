@@ -6,7 +6,8 @@ public partial class DesTool
 {
     public const string DefaultKey = "Collapsenav.Net.Tool";
     public const string DefaultIV = "looT.teN.vanespalloC";
-    private static DES des;
+    private static DES Algorithm;
+    public static void Clear() => Algorithm = null;
     /// <summary>
     /// Des解密
     /// </summary>
@@ -19,10 +20,10 @@ public partial class DesTool
     public static string Decrypt(string sec, string key = DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, string iv = DefaultIV, int level = 8)
     {
         byte[] decryptMsg = sec.FromBase64();
-        des ??= DES.Create();
-        des.Mode = mode;
-        des.Padding = padding;
-        using var decrypt = des.CreateDecryptor(GetDESBytes(key, level), GetDESBytes(iv, 8));
+        Algorithm ??= DES.Create();
+        Algorithm.Mode = mode;
+        Algorithm.Padding = padding;
+        using var decrypt = Algorithm.CreateDecryptor(GetDESBytes(key, level), GetDESBytes(iv, 8));
         var result = decrypt.TransformFinalBlock(decryptMsg, 0, decryptMsg.Length);
         return result.BytesToString();
     }
@@ -37,10 +38,10 @@ public partial class DesTool
     /// <param name="level"></param>
     public static string Encrypt(string msg, string key = DefaultKey, CipherMode mode = CipherMode.ECB, PaddingMode padding = PaddingMode.PKCS7, string iv = DefaultIV, int level = 8)
     {
-        des ??= DES.Create();
-        des.Mode = mode;
-        des.Padding = padding;
-        using var encrypt = des.CreateEncryptor(GetDESBytes(key, level), GetDESBytes(iv, 8));
+        Algorithm ??= DES.Create();
+        Algorithm.Mode = mode;
+        Algorithm.Padding = padding;
+        using var encrypt = Algorithm.CreateEncryptor(GetDESBytes(key, level), GetDESBytes(iv, 8));
         var result = encrypt.TransformFinalBlock(msg.ToBytes(), 0, msg.Length);
         return result.ToBase64();
     }
