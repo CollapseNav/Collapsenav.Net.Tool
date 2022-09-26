@@ -25,24 +25,15 @@ public partial class ModifyRepository<T> : WriteRepository<T>, IModifyRepository
     /// </summary>
     /// <param name="exp">筛选条件</param>
     /// <param name="isTrue">是否真删</param>
-    public virtual async Task<int> DeleteAsync(Expression<Func<T, bool>> exp, bool isTrue = false)
-    {
-        if (isTrue)
-            return await dbSet.Where(exp).DeleteAsync();
-        return 0;
-    }
+    public virtual async Task<int> DeleteAsync(Expression<Func<T, bool>> exp, bool isTrue = false) => isTrue ? await dbSet.Where(exp).DeleteAsync() : 0;
     /// <summary>
     /// 实现按需要只更新部分更新
     /// <para>如：Update(u =>u.Id==1,u =>new User{Name="ok"});</para>
     /// </summary>
-    public virtual async Task<int> UpdateAsync(Expression<Func<T, bool>> where, Expression<Func<T, T>> entity)
-    {
-        return await dbSet.Where(where).UpdateAsync(entity);
-    }
-
+    public virtual async Task<int> UpdateAsync(Expression<Func<T, bool>> where, Expression<Func<T, T>> entity) => await dbSet.Where(where).UpdateAsync(entity);
 }
 public partial class ModifyRepository<TKey, T> : WriteRepository<TKey, T>, IModifyRepository<TKey, T>
-    where T : class, IBaseEntity<TKey>, new()
+    where T : class, IEntity<TKey>, new()
 {
     protected IModifyRepository<T> Repo;
     public ModifyRepository(DbContext db) : base(db)
@@ -50,10 +41,7 @@ public partial class ModifyRepository<TKey, T> : WriteRepository<TKey, T>, IModi
         Repo = new ModifyRepository<T>(db);
     }
 
-    public virtual async Task<int> AddAsync(IEnumerable<T> entityList)
-    {
-        return await Repo.AddAsync(entityList);
-    }
+    public virtual async Task<int> AddAsync(IEnumerable<T> entityList) => await Repo.AddAsync(entityList);
 
     /// <summary>
     /// 根据id删除数据
@@ -75,15 +63,9 @@ public partial class ModifyRepository<TKey, T> : WriteRepository<TKey, T>, IModi
     /// </summary>
     /// <param name="exp">筛选条件</param>
     /// <param name="isTrue">是否真删</param>
-    public virtual async Task<int> DeleteAsync(Expression<Func<T, bool>> exp, bool isTrue = false)
-    {
-        if (isTrue)
-            return await dbSet.Where(exp).DeleteAsync();
-        return await dbSet.Where(exp).UpdateAsync(entity => new { IsDeleted = true, LastModificationTime = DateTime.Now });
-    }
+    public virtual async Task<int> DeleteAsync(Expression<Func<T, bool>> exp, bool isTrue = false) => isTrue ?
+    await dbSet.Where(exp).DeleteAsync()
+    : await dbSet.Where(exp).UpdateAsync(entity => new { IsDeleted = true, LastModificationTime = DateTime.Now });
 
-    public virtual async Task<int> UpdateAsync(Expression<Func<T, bool>> where, Expression<Func<T, T>> entity)
-    {
-        return await Repo.UpdateAsync(where, entity);
-    }
+    public virtual async Task<int> UpdateAsync(Expression<Func<T, bool>> where, Expression<Func<T, T>> entity) => await Repo.UpdateAsync(where, entity);
 }

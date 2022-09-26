@@ -34,4 +34,6 @@ public partial class Entity : IEntity
 }
 public partial class Entity<TKey> : Entity, IEntity<TKey>
 {
+    [Key]
+    public TKey Id { get; set; }
 }

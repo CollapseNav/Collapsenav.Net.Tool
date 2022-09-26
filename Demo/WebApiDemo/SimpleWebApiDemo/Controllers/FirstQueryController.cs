@@ -6,9 +6,9 @@ namespace SimpleWebApiDemo.Controllers;
 /// <summary>
 /// 简单建一个只能查询的 controller
 /// </summary>
-public class FirstQueryController : QueryAppController<FirstEntity, FirstGetDto>
+public class FirstQueryController : QueryAppController<long, FirstEntity, FirstGetDto>
 {
-    public FirstQueryController(IQueryApplication<FirstEntity, FirstGetDto> app) : base(app)
+    public FirstQueryController(IQueryApplication<long, FirstEntity, FirstGetDto> app) : base(app)
     {
     }
 }

@@ -13,7 +13,7 @@ public class FirstGetDto : BaseGet<FirstEntity>
     public override Expression<Func<FirstEntity, bool>> GetExpression(Expression<Func<FirstEntity, bool>> exp)
     {
         return base.GetExpression(exp)
-        .AndIf(Id.HasValue, item => item.Id == Id)
+        .AndIf(Id, item => item.Id == Id)
         .AndIf(Name, item => item.Name == Name)
         .AndIf(Description, item => item.Description == Description)
         ;
