@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Reflection;
 
 namespace Collapsenav.Net.Tool;

@@ -35,6 +35,14 @@ public static partial class QuartzTool
             await scheduler.PauseJob(key);
     }
 
+    public static async Task PauseJobs(this IScheduler scheduler, IEnumerable<JobKey> keys)
+    {
+        if (keys.IsEmpty())
+            return;
+        foreach (var key in keys)
+            await scheduler.PauseJob(key);
+    }
+
     public static async Task PauseTriggers(this IScheduler scheduler, string group)
     {
         var keys = await scheduler.GetTriggerKeys(group);
@@ -65,7 +73,6 @@ public static partial class QuartzTool
         await processor.ProcessFileAndScheduleJobs(path, scheduler);
     }
 
-
     public static async Task<IReadOnlyCollection<IJobDetail>> GetJobDetails(this IScheduler scheduler, string group = null)
     {
         var jobKeys = await scheduler.GetJobKeys(group);
@@ -76,10 +83,24 @@ public static partial class QuartzTool
     }
     public static async Task<IReadOnlyCollection<ITrigger>> GetTriggers(this IScheduler scheduler, string group = null)
     {
-        var jobKeys = await scheduler.GetTriggerKeys(group);
+        var triggerKeys = await scheduler.GetTriggerKeys(group);
         List<ITrigger> triggers = new();
-        foreach (var key in jobKeys)
+        foreach (var key in triggerKeys)
             triggers.Add(await scheduler.GetTrigger(key));
         return triggers;
+    }
+
+    public static async Task<IReadOnlyCollection<JobStatus>> GetJobStatus(this IScheduler scheduler)
+    {
+        var details = await scheduler.GetJobDetails();
+        var triggers = await scheduler.GetTriggers();
+        List<JobStatus> list = new();
+        foreach (var detail in details)
+        {
+            var jobTriggers = triggers.Where(item => item.JobKey.Name == detail.Key.Name && item.JobKey.Group == detail.Key.Group);
+            if (jobTriggers.NotEmpty())
+                list.Add(JobStatus.GenJobStatus(detail, jobTriggers.ToList()));
+        }
+        return list;
     }
 }
