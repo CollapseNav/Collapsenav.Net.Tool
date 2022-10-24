@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../version.props" />
+  <PropertyGroup>
+    <PackageTags>Tool,DI,AutoInject</PackageTags>
+    <Description>
+为 Controller 提供一些自动注入的功能, 比如 属性注入
+    </Description>
+    <Product>Collapsenav.Net.Tool.AutoInject.Controller</Product>
+    <PackageId>Collapsenav.Net.Tool.AutoInject.Controller</PackageId>
+    <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool.AutoInject\Collapsenav.Net.Tool.AutoInject.csproj" />
+  </ItemGroup>
+</Project>
