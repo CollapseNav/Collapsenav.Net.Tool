@@ -27,7 +27,7 @@ public class WeatherForecastController : ControllerBase
     [HttpGet("ByLen")]
     public async Task ReJobByLen([FromQuery] int second = 1)
     {
-        await QuartzNode.Scheduler.RescheduleJob<ReJob>(new TriggerKey("ReJob123", "ReJob123"), second);
+        await QuartzNode.Scheduler.RescheduleJob<ReJob>(second, new TriggerKey("ReJob123", "ReJob123"));
     }
     /// <summary>
     /// 重设 ReJob 的定时
@@ -35,6 +35,13 @@ public class WeatherForecastController : ControllerBase
     [HttpGet("ByCron")]
     public async Task ReJobByCron([FromQuery] string cron = "0/1 * * * * ?")
     {
-        await QuartzNode.Scheduler.RescheduleJob<ReJob>(new TriggerKey("ReJob123", "ReJob123"), cron);
+        await QuartzNode.Scheduler.RescheduleJob<ReJob>(cron, new TriggerKey("ReJob123", "ReJob123"));
+    }
+
+    [HttpGet("TestQuartzStatus")]
+    public async Task<IReadOnlyCollection<JobStatus>> TestQuartzStatus()
+    {
+        var status = await QuartzNode.Scheduler.GetJobStatus();
+        return status;
     }
 }
