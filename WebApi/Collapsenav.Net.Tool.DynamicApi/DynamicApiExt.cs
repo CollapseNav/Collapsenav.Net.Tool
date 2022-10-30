@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,7 +29,9 @@ public static class DynamicApiExt
         });
         return builder;
     }
-
+    /// <summary>
+    /// 移除空的selector
+    /// </summary>
     public static void RemoveEmptySelector(this IList<SelectorModel> selectors)
     {
         // 由于执行过程中需要移除元素, 为了处理方便, 从末尾向前遍历比较好
@@ -38,5 +41,27 @@ public static class DynamicApiExt
             if (item.AttributeRouteModel == null && item.ActionConstraints.IsEmpty() && item.EndpointMetadata.IsEmpty())
                 selectors.Remove(item);
         }
+    }
+    /// <summary>
+    /// 判断是否有自定义的 route
+    /// </summary>
+    public static bool HasRouteAttribute(this IList<SelectorModel> selectors)
+    {
+        return selectors.Any(item => item.AttributeRouteModel != null);
+    }
+
+    public static SelectorModel GetRouteSelector(this IList<SelectorModel> selectors)
+    {
+        return selectors.FirstOrDefault(item => item.AttributeRouteModel != null);
+    }
+
+    public static bool HasActionAttribute(this IList<SelectorModel> selectors)
+    {
+        return selectors.Any(item => item.ActionConstraints.OfType<HttpMethodActionConstraint>().FirstOrDefault()?.HttpMethods?.FirstOrDefault() != null);
+    }
+
+    public static SelectorModel GetActionSelector(this IList<SelectorModel> selectors)
+    {
+        return selectors.FirstOrDefault(item => item.ActionConstraints.OfType<HttpMethodActionConstraint>().FirstOrDefault()?.HttpMethods?.FirstOrDefault() != null);
     }
 }
