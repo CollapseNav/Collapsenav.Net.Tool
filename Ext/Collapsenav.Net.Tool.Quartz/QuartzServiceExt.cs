@@ -1,3 +1,5 @@
+using System.Reflection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Spi;
@@ -66,7 +68,7 @@ public static class QuartzServiceExt
     /// </summary>
     public static IServiceCollection AddDefaultQuartzService(this IServiceCollection services)
     {
-        return services.AddDIJobFactory().AddHostedService<EasyJobService>();
+        return services.AddScheduler().AddDIJobFactory().AddHostedService<EasyJobService>();
     }
     /// <summary>
     /// 添加默认的hosted service, 用于初始化quartz
@@ -77,6 +79,68 @@ public static class QuartzServiceExt
         services
         .AddDIJobFactory()
         .AddHostedService<EasyJobService>();
+        return services;
+    }
+
+    public static IServiceCollection AddScheduler(this IServiceCollection services, IScheduler scheduler = null)
+    {
+        if (scheduler == null)
+        {
+            if (QuartzNode.Scheduler == null)
+                QuartzNode.InitSchedulerAsync().Wait();
+            scheduler = QuartzNode.Scheduler;
+            QuartzNode.SetService(services);
+        }
+        return services.AddSingleton(scheduler);
+    }
+
+    public static IServiceCollection AddQuartzJsonConfig(this IServiceCollection services, IConfigurationSection section)
+    {
+        IEnumerable<IQuartzJsonConfig> configs = null;
+        // 尝试转为简单的 keyvalue 配置
+        try
+        {
+            var dicts = section.Get<IDictionary<string, string>>();
+            if (dicts.NotEmpty() && dicts.First().Key.NotEmpty())
+                configs ??= dicts.Select(item => QuartzConfigNode.ConvertFromKeyValue(item.Key, item.Value));
+        }
+        catch { }
+
+        // 当上一种没有转换成功时尝试直接转为 QuartzConfigNode 格式
+        try
+        {
+            configs ??= section.Get<IEnumerable<QuartzConfigNode>>();
+        }
+        catch { }
+        // 如果两种转化都失效, 那就抛出异常让他们感受到第三方包的险恶
+        if (configs.IsEmpty())
+            throw new ArgumentNullException(section.Key);
+        return services.AddQuartzJsonConfig(configs);
+    }
+    public static IServiceCollection AddQuartzJsonConfig(this IServiceCollection services, IEnumerable<IQuartzJsonConfig> configs)
+    {
+        QuartzNode.Builder.AddQuartzJsonConfig(configs);
+        return services;
+    }
+    /// <summary>
+    /// 注册所有Job
+    /// </summary>
+    public static IServiceCollection AddAllJob(this IServiceCollection services, bool scanAll = false)
+    {
+        var assNames = Assembly.GetEntryAssembly().GetCustomerAssemblies(scanAll)
+        .Where(item => !AppDomain.CurrentDomain.GetAssemblies().Any(aa => aa.FullName == item.FullName));
+
+        foreach (var assName in assNames)
+            Assembly.Load(assName);
+        var domainAsses = AppDomain.CurrentDomain.GetCustomerAssemblies().ToList();
+        foreach (var ass in domainAsses)
+        {
+            var jobs = ass.GetTypes().Where(item => item.HasInterface<IJob>() && !item.IsInterface && !item.IsAbstract);
+            if (jobs.NotEmpty())
+            {
+                jobs.ForEach(job => services.AddTransient(job));
+            }
+        }
         return services;
     }
 }
