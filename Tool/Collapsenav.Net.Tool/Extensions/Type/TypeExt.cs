@@ -221,7 +221,18 @@ public static partial class TypeExt
     /// </summary>
     public static bool HasInterface(this Type type, Type interfaceType)
     {
+        if (!interfaceType.IsInterface)
+            return false;
         return interfaceType.IsAssignableFrom(type);
+    }
+
+    public static bool IsType<T>(this Type type)
+    {
+        return type.IsType(typeof(T));
+    }
+    public static bool IsType(this Type type, Type baseType)
+    {
+        return baseType.IsAssignableFrom(type);
     }
     /// <summary>
     /// 判断是否有接口约束
