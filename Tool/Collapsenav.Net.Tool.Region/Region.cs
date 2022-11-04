@@ -7,23 +7,23 @@ public static class Region
         Tree = LoadRegionNodeTool.LoadTreeNodeAsync().Result;
         InitByProvince();
     }
-    public static RegionTreeNode Tree { get; set; }
+    public static RegionTreeNode Tree { get; private set; }
     /// <summary>
     /// 所有省份
     /// </summary>
-    public static IReadOnlyCollection<RegionNode> AllProvinces { get; set; }
+    public static IReadOnlyCollection<RegionNode> AllProvinces { get; private set; }
     /// <summary>
     /// 所有省份(树节点)
     /// </summary>
-    public static IReadOnlyCollection<RegionTreeNode> AllTreeProvinces { get; set; }
+    public static IReadOnlyCollection<RegionTreeNode> AllTreeProvinces { get; private set; }
     /// <summary>
     /// 所有城市
     /// </summary>
-    public static IReadOnlyCollection<RegionNode> AllCities { get; set; }
+    public static IReadOnlyCollection<RegionNode> AllCities { get; private set; }
     /// <summary>
     /// 所有城市(树节点)
     /// </summary>
-    public static IReadOnlyCollection<RegionTreeNode> AllTreeCities { get; set; }
+    public static IReadOnlyCollection<RegionTreeNode> AllTreeCities { get; private set; }
     /// <summary>
     /// 尝试获取省
     /// </summary>

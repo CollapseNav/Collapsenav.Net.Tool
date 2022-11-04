@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <Import Project="../version.props"/>
     <PropertyGroup>
+        <Version>0.0.3</Version>
         <PackageTags>Tools,Utility,Extensions,ClassLibrary</PackageTags>
         <Description>
 中国行政区划
@@ -10,7 +11,7 @@
         <ProjectUrl>http://doc.collapsenav.cn/docs/Tool/</ProjectUrl>
     </PropertyGroup>
     <ItemGroup>
-        <None Include="./region-tree.json" CopyToOutputDirectory="always" />
+        <None Include="region-tree.json" CopyToOutputDirectory="always" PackageCopyToOutput="true" Pack="true"/>
         <PackageReference Include="System.Text.Json" Version="6.*"/>
     </ItemGroup>
 </Project>
