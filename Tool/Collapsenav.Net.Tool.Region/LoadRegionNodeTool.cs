@@ -2,15 +2,15 @@ using System.Text.Json;
 
 namespace Collapsenav.Net.Tool.Region;
 
-public static class LoadRegionNodeTool
+internal static class LoadRegionNodeTool
 {
-    public const string TreeNodeName = "region-tree.json";
-    public static async Task<RegionTreeNode> LoadTreeNodeAsync()
+    internal const string TreeNodeName = "region-tree.json";
+    internal static RegionTreeNode LoadTreeNode()
     {
 #if NETSTANDARD2_0
         var str = File.ReadAllText($"{AppContext.BaseDirectory}/{TreeNodeName}");
 #else
-        var str = await File.ReadAllTextAsync($"{AppContext.BaseDirectory}/{TreeNodeName}");
+        var str = File.ReadAllText($"{AppContext.BaseDirectory}/{TreeNodeName}");
 #endif
         JsonSerializerOptions options = new() { PropertyNameCaseInsensitive = true };
         var node = JsonSerializer.Deserialize<RegionTreeNode>(str, options);

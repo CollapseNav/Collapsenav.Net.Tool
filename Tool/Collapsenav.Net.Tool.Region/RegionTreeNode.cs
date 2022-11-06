@@ -18,10 +18,6 @@ public class RegionTreeNode : RegionNode
     public RegionTreeNode() { }
     public IReadOnlyCollection<RegionTreeNode> Child { get; set; }
     public RegionTreeNode Parent { get; set; }
-    public static Task<RegionTreeNode> GetAllNodeAsync()
-    {
-        return LoadRegionNodeTool.LoadTreeNodeAsync();
-    }
     public RegionNode ToNode()
     {
         return new RegionNode
@@ -39,5 +35,19 @@ public class RegionTreeNode : RegionNode
             Name = Name,
             Child = (Child == null || !Child.Any()) ? null : new ReadOnlyCollection<RegionTreeNode>(Child.Select(item => item.ToTreeNodeWithoutParent()).ToList())
         };
+    }
+    /// <summary>
+    /// 全称
+    /// </summary>
+    public string FullName(string fill = "", int level = 10)
+    {
+        return Parent != null && !string.IsNullOrEmpty(Parent.Name) ? $"{(level > 1 ? Parent.FullName(fill, --level) + fill : "")}{Name}" : Name;
+    }
+    /// <summary>
+    /// 全称
+    /// </summary>
+    public string FullName(int level)
+    {
+        return FullName("", level);
     }
 }
