@@ -11,11 +11,12 @@ public class AutoInjectServiceProvider : IServiceProvider, ISupportRequiredServi
     public object GetService(Type serviceType)
     {
         var obj = _provider.GetService(serviceType);
-        var props = serviceType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+        var type = obj.GetType();
+        var props = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
         .Where(prop => prop.GetCustomAttribute<AutoInjectAttribute>() != null);
         foreach (var prop in props)
             prop.SetValue(obj, GetService(prop.PropertyType));
-        var fields = serviceType.GetFields(BindingFlags.Public | BindingFlags.Instance)
+        var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance)
         .Where(prop => prop.GetCustomAttribute<AutoInjectAttribute>() != null);
         foreach (var field in fields)
             field.SetValue(obj, GetService(field.FieldType));

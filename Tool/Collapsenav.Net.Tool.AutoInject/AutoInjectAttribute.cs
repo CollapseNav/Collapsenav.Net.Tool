@@ -1,7 +1,7 @@
 namespace Collapsenav.Net.Tool.AutoInject;
 
-[System.AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-public sealed class AutoInjectAttribute : System.Attribute
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
+public sealed class AutoInjectAttribute : Attribute
 {
     public AutoInjectAttribute() { }
 }

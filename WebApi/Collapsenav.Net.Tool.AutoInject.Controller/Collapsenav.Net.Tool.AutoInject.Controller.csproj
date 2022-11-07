@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <Import Project="../version.props" />
   <PropertyGroup>
+    <TargetFrameworks>net6.0;netcoreapp3.1;</TargetFrameworks>
     <PackageTags>Tool,DI,AutoInject</PackageTags>
     <Description>
 为 Controller 提供一些自动注入的功能, 比如 属性注入
@@ -11,7 +11,7 @@
     <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool.AutoInject\Collapsenav.Net.Tool.AutoInject.csproj" />
   </ItemGroup>
 </Project>

@@ -25,12 +25,12 @@ public static class ControllerExt
     {
         services
         .AddRepository()
-        .AddTransient(typeof(IModifyController<,>), typeof(ModifyRepController<,>))
-        .AddTransient(typeof(IQueryController<,>), typeof(QueryRepController<,>))
-        .AddTransient(typeof(ICrudController<,,>), typeof(CrudRepController<,,>))
-        .AddTransient(typeof(IModifyController<,,>), typeof(ModifyRepController<,,>))
-        .AddTransient(typeof(IQueryController<,,>), typeof(QueryRepController<,,>))
-        .AddTransient(typeof(ICrudController<,,,>), typeof(CrudRepController<,,,>))
+        .AddScoped(typeof(IModifyController<,>), typeof(ModifyRepController<,>))
+        .AddScoped(typeof(IQueryController<,>), typeof(QueryRepController<,>))
+        .AddScoped(typeof(ICrudController<,,>), typeof(CrudRepController<,,>))
+        .AddScoped(typeof(IModifyController<,,>), typeof(ModifyRepController<,,>))
+        .AddScoped(typeof(IQueryController<,,>), typeof(QueryRepController<,,>))
+        .AddScoped(typeof(ICrudController<,,,>), typeof(CrudRepController<,,,>))
         .AddMap()
         .AddDynamicController()
         ;
@@ -44,12 +44,12 @@ public static class ControllerExt
     {
         services
         .AddApplication()
-        .AddTransient(typeof(IModifyController<,>), typeof(ModifyAppController<,>))
-        .AddTransient(typeof(IQueryController<,>), typeof(QueryAppController<,>))
-        .AddTransient(typeof(ICrudController<,,>), typeof(CrudAppController<,,>))
-        .AddTransient(typeof(IModifyController<,,>), typeof(ModifyAppController<,,>))
-        .AddTransient(typeof(IQueryController<,,>), typeof(QueryAppController<,,>))
-        .AddTransient(typeof(ICrudController<,,,>), typeof(CrudAppController<,,,>))
+        .AddScoped(typeof(IModifyController<,>), typeof(ModifyAppController<,>))
+        .AddScoped(typeof(IQueryController<,>), typeof(QueryAppController<,>))
+        .AddScoped(typeof(ICrudController<,,>), typeof(CrudAppController<,,>))
+        .AddScoped(typeof(IModifyController<,,>), typeof(ModifyAppController<,,>))
+        .AddScoped(typeof(IQueryController<,,>), typeof(QueryAppController<,,>))
+        .AddScoped(typeof(ICrudController<,,,>), typeof(CrudAppController<,,,>))
         .AddMap()
         .AddDynamicController()
         ;
@@ -63,14 +63,14 @@ public static class ControllerExt
     {
         services
         .AddRepository()
-        .AddTransient(typeof(IModifyApplication<,>), typeof(ModifyRepApplication<,>))
-        .AddTransient(typeof(IQueryApplication<,>), typeof(QueryRepApplication<,>))
-        .AddTransient(typeof(ICheckExistApplication<>), typeof(ReadRepApplication<>))
-        .AddTransient(typeof(ICountApplication<>), typeof(ReadRepApplication<>))
-        .AddTransient(typeof(ICrudApplication<,,>), typeof(CrudRepApplication<,,>))
-        .AddTransient(typeof(IModifyApplication<,,>), typeof(ModifyRepApplication<,,>))
-        .AddTransient(typeof(IQueryApplication<,,>), typeof(QueryRepApplication<,,>))
-        .AddTransient(typeof(ICrudApplication<,,,>), typeof(CrudRepApplication<,,,>))
+        .AddScoped(typeof(IModifyApplication<,>), typeof(ModifyRepApplication<,>))
+        .AddScoped(typeof(IQueryApplication<,>), typeof(QueryRepApplication<,>))
+        .AddScoped(typeof(ICheckExistApplication<>), typeof(ReadRepApplication<>))
+        .AddScoped(typeof(ICountApplication<>), typeof(ReadRepApplication<>))
+        .AddScoped(typeof(ICrudApplication<,,>), typeof(CrudRepApplication<,,>))
+        .AddScoped(typeof(IModifyApplication<,,>), typeof(ModifyRepApplication<,,>))
+        .AddScoped(typeof(IQueryApplication<,,>), typeof(QueryRepApplication<,,>))
+        .AddScoped(typeof(ICrudApplication<,,,>), typeof(CrudRepApplication<,,,>))
         .AddMap()
         .AddDynamicController()
         ;
@@ -83,7 +83,7 @@ public static class ControllerExt
     {
         services.AddRepController();
         foreach (var type in types)
-            services.AddTransient(type);
+            services.AddScoped(type);
         return services;
     }
     /// <summary>
@@ -93,7 +93,7 @@ public static class ControllerExt
     {
         var existIMap = services.Where(item => item.ServiceType == typeof(IMap)).ToList();
         if (existIMap.IsEmpty())
-            services.AddTransient<IMap, JsonMap>();
+            services.AddScoped<IMap, JsonMap>();
         return services;
     }
     /// <summary>
@@ -105,7 +105,7 @@ public static class ControllerExt
         var existIMap = services.Where(item => item.ServiceType == typeof(IMap)).ToList();
         existIMap.ForEach(item => services.Remove(item));
 
-        services.AddTransient<IMap, AutoMap>();
+        services.AddScoped<IMap, AutoMap>();
         return services;
     }
     /// <summary>
@@ -117,7 +117,7 @@ public static class ControllerExt
         var existIMap = services.Where(item => item.ServiceType == typeof(IMap)).ToList();
         existIMap.ForEach(item => services.Remove(item));
 
-        services.AddTransient<IMap, AutoMap>();
+        services.AddScoped<IMap, AutoMap>();
         return services;
     }
 }

@@ -41,8 +41,8 @@ public static class DynamicApiExt
     {
         var typeName = $"{route}Controller";
         var type = GenerateType(typeof(QueryRepController<T, GetT>), typeName, front);
-        services.AddTransient(typeof(IQueryRepository<T>), typeof(QueryRepository<T>));
-        services.AddTransient(typeof(IQueryController<T, GetT>), type);
+        services.AddScoped(typeof(IQueryRepository<T>), typeof(QueryRepository<T>));
+        services.AddScoped(typeof(IQueryController<T, GetT>), type);
         services.AddDynamicController();
         return services;
     }
@@ -50,8 +50,8 @@ public static class DynamicApiExt
     {
         var typeName = $"{route}Controller";
         var type = GenerateType(typeof(QueryRepController<TKey, T, GetT>), typeName, front);
-        services.AddTransient(typeof(IQueryRepository<TKey, T>), typeof(QueryRepository<TKey, T>));
-        services.AddTransient(typeof(IQueryController<TKey, T, GetT>), type);
+        services.AddScoped(typeof(IQueryRepository<TKey, T>), typeof(QueryRepository<TKey, T>));
+        services.AddScoped(typeof(IQueryController<TKey, T, GetT>), type);
         services.AddDynamicController();
         return services;
     }
@@ -60,8 +60,8 @@ public static class DynamicApiExt
     {
         var typeName = $"{route}Controller";
         var type = GenerateType(typeof(ModifyRepController<T, CreateT>), typeName, front);
-        services.AddTransient(typeof(IModifyRepository<T>), typeof(ModifyRepository<T>));
-        services.AddTransient(typeof(IModifyController<T, CreateT>), type);
+        services.AddScoped(typeof(IModifyRepository<T>), typeof(ModifyRepository<T>));
+        services.AddScoped(typeof(IModifyController<T, CreateT>), type);
         services.AddDynamicController();
         return services;
     }
@@ -69,8 +69,8 @@ public static class DynamicApiExt
     {
         var typeName = $"{route}Controller";
         var type = GenerateType(typeof(ModifyRepController<TKey, T, CreateT>), typeName, front);
-        services.AddTransient(typeof(IModifyRepository<TKey, T>), typeof(ModifyRepository<TKey, T>));
-        services.AddTransient(typeof(IModifyController<TKey, T, CreateT>), type);
+        services.AddScoped(typeof(IModifyRepository<TKey, T>), typeof(ModifyRepository<TKey, T>));
+        services.AddScoped(typeof(IModifyController<TKey, T, CreateT>), type);
         services.AddDynamicController();
         return services;
     }
@@ -78,8 +78,8 @@ public static class DynamicApiExt
     {
         var typeName = $"{route}Controller";
         var type = GenerateType(typeof(CrudRepController<T, CreateT, GetT>), typeName, front);
-        services.AddTransient(typeof(ICrudRepository<T>), typeof(CrudRepository<T>));
-        services.AddTransient(typeof(ICrudController<T, CreateT, GetT>), type);
+        services.AddScoped(typeof(ICrudRepository<T>), typeof(CrudRepository<T>));
+        services.AddScoped(typeof(ICrudController<T, CreateT, GetT>), type);
         services.AddDynamicController();
         return services;
     }
@@ -87,8 +87,8 @@ public static class DynamicApiExt
     {
         var typeName = $"{route}Controller";
         var type = GenerateType(typeof(CrudRepController<TKey, T, CreateT, GetT>), typeName, front);
-        services.AddTransient(typeof(ICrudRepository<TKey, T>), typeof(CrudRepository<TKey, T>));
-        services.AddTransient(typeof(ICrudController<TKey, T, CreateT, GetT>), type);
+        services.AddScoped(typeof(ICrudRepository<TKey, T>), typeof(CrudRepository<TKey, T>));
+        services.AddScoped(typeof(ICrudController<TKey, T, CreateT, GetT>), type);
         services.AddDynamicController();
         return services;
     }

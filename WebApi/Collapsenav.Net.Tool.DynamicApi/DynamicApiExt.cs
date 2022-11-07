@@ -12,7 +12,7 @@ public static class DynamicApiExt
     /// </summary>
     public static bool IsDynamicApi(this Type type)
     {
-        if (type.HasInterface(typeof(IDynamicApi)))
+        if (type.HasInterface(typeof(IDynamicApi)) && !type.IsInterface && !type.IsAbstract)
             return true;
         return false;
     }

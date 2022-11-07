@@ -47,6 +47,8 @@ public class QueryAppController<TKey, T, GetT> : QueryAppController<T, GetT>, IQ
     /// </summary>
     [HttpGet, Route("{id}")]
     public virtual async Task<T> QueryAsync(TKey id) => await App.QueryAsync(id);
+    [NonAction]
+    public override async Task<T> QueryAsync(string id) => await App.QueryByStringIdAsync(id);
     /// <summary>
     /// 根据Ids查询
     /// </summary>

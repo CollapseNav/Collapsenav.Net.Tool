@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Collapsenav.Net.Tool;
@@ -114,17 +115,6 @@ public static partial class TypeExt
     public static IEnumerable<PropertyInfo> BuildInTypeProps(this Type type)
     {
         return type.GetProperties().Where(item => item.PropertyType.IsBuildInType());
-    }
-
-    /// <summary>
-    /// 获取T中存在E的attribute的属性及attribute值
-    /// </summary>
-    public static Dictionary<PropertyInfo, E> AttrValues<E>(this Type type) where E : Attribute
-    {
-        var props = type.Props().Where(item => item.CustomAttributes.Any(attr => attr.AttributeType == typeof(E)));
-        var propData = props.Select(item => new KeyValuePair<PropertyInfo, E>(item, item.GetCustomAttribute<E>()))
-        .ToDictionary(item => item.Key, item => item.Value);
-        return propData;
     }
 
     /// <summary>

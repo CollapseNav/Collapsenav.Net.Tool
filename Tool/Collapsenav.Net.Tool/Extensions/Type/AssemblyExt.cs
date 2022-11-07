@@ -122,13 +122,39 @@ public static partial class AssemblyExt
     {
         return domain.GetCustomerAssemblies().SelectMany(item => item.GetInterfaces());
     }
-
     public static IEnumerable<Type> GetTypes<T>(this AppDomain domain)
     {
         return domain.GetAllAssemblies().SelectMany(item => item.GetTypes()).Where(item => item.IsType<T>());
     }
     public static IEnumerable<Type> GetCustomerTypes<T>(this AppDomain domain)
     {
-        return domain.GetCustomerAssemblies().SelectMany(item => item.GetTypes()).Where(item => item.IsType<T>());
+        return domain.GetCustomerTypes().Where(item => item.IsType<T>());
+    }
+    /// <summary>
+    /// 根据前缀查找type
+    /// </summary>
+    /// <param name="domain"></param>
+    /// <param name="prefixs"></param>
+    public static IEnumerable<Type> GetCustomerTypesByPrefix(this AppDomain domain, params string[] prefixs)
+    {
+        return domain.GetCustomerTypes().Where(item => item.Name.HasStartsWith(prefixs));
+    }
+    /// <summary>
+    /// 根据后缀查找type
+    /// </summary>
+    /// <param name="domain"></param>
+    /// <param name="suffixs"></param>
+    public static IEnumerable<Type> GetCustomerTypesBySuffix(this AppDomain domain, params string[] suffixs)
+    {
+        return domain.GetCustomerTypes().Where(item => item.Name.HasEndsWith(suffixs));
+    }
+    /// <summary>
+    /// 根据前后缀查找type
+    /// </summary>
+    /// <param name="domain"></param>
+    /// <param name="prefixAndSuffixs"></param>
+    public static IEnumerable<Type> GetCustomerTypesByPrefixAndSuffix(this AppDomain domain, params string[] prefixAndSuffixs)
+    {
+        return domain.GetCustomerTypes().Where(item => item.Name.HasEndsWith(prefixAndSuffixs) || item.Name.HasStartsWith(prefixAndSuffixs));
     }
 }

@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Impl;
@@ -45,6 +44,6 @@ public class QuartzNode
     {
         if (Services == null)
             return null;
-        return Services.FirstOrDefault(item => item.ServiceType.Name == typeName || item.ServiceType.FullName == typeName).ServiceType;
+        return Services.FirstOrDefault(item => item.ServiceType.Name == typeName || item.ServiceType.FullName == typeName)?.ServiceType;
     }
 }

@@ -24,7 +24,7 @@ public static class QuartzServiceExt
     {
         QuartzNode.Builder ??= new();
         QuartzNode.Builder.AddJob<Job>(len);
-        return services.AddTransient<Job>().AddDIJobFactory();
+        return services.AddScoped<Job>().AddDIJobFactory();
     }
     /// <summary>
     /// 添加一个job
@@ -33,7 +33,7 @@ public static class QuartzServiceExt
     {
         QuartzNode.Builder ??= new();
         QuartzNode.Builder.AddJob<Job>(cron);
-        return services.AddTransient<Job>().AddDIJobFactory();
+        return services.AddScoped<Job>().AddDIJobFactory();
     }
     /// <summary>
     /// 添加多个job
@@ -42,7 +42,7 @@ public static class QuartzServiceExt
     {
         QuartzNode.Builder ??= new();
         QuartzNode.Builder.AddJob<Job>(len);
-        return services.AddTransient<Job>().AddDIJobFactory();
+        return services.AddScoped<Job>().AddDIJobFactory();
     }
     /// <summary>
     /// 添加多个job
@@ -51,7 +51,7 @@ public static class QuartzServiceExt
     {
         QuartzNode.Builder ??= new();
         QuartzNode.Builder.AddJob<Job>(crons);
-        return services.AddTransient<Job>().AddDIJobFactory();
+        return services.AddScoped<Job>().AddDIJobFactory();
     }
     /// <summary>
     /// 从xml配置文件中添加job
@@ -127,20 +127,9 @@ public static class QuartzServiceExt
     /// </summary>
     public static IServiceCollection AddAllJob(this IServiceCollection services, bool scanAll = false)
     {
-        var assNames = Assembly.GetEntryAssembly().GetCustomerAssemblies(scanAll)
-        .Where(item => !AppDomain.CurrentDomain.GetAssemblies().Any(aa => aa.FullName == item.FullName));
-
-        foreach (var assName in assNames)
-            Assembly.Load(assName);
-        var domainAsses = AppDomain.CurrentDomain.GetCustomerAssemblies().ToList();
-        foreach (var ass in domainAsses)
-        {
-            var jobs = ass.GetTypes().Where(item => item.HasInterface<IJob>() && !item.IsInterface && !item.IsAbstract);
-            if (jobs.NotEmpty())
-            {
-                jobs.ForEach(job => services.AddTransient(job));
-            }
-        }
+        var jobs = (scanAll ? AppDomain.CurrentDomain.GetTypes<IJob>() : AppDomain.CurrentDomain.GetCustomerTypes<IJob>()).Where(item => !item.IsInterface && !item.IsAbstract);
+        if (jobs.NotEmpty())
+            jobs.ForEach(job => services.AddScoped(job));
         return services;
     }
 }

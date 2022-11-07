@@ -11,7 +11,7 @@
     <OpenApiGenerateDocuments>false</OpenApiGenerateDocuments>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Collapsenav.Net.Tool" Version="1.3.0" />
+    <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj" />
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 </Project>
