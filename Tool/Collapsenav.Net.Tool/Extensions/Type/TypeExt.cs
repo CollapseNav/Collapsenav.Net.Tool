@@ -1,5 +1,3 @@
-using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Collapsenav.Net.Tool;
@@ -189,7 +187,7 @@ public static partial class TypeExt
     {
         var fieldName = field.FirstTo('.');
         var prop = obj.GetType().GetProperty(fieldName);
-        if (fieldName.Length == field.Length)
+        if (fieldName.Length == field.Length && prop != null)
             return prop?.GetValue(obj);
         else if (prop != null)
         {

@@ -439,4 +439,44 @@ public class StringExtTest
         else
             Assert.True(origin.PadWith(value, len).Length == origin.Length + value.Length);
     }
+
+    [Fact]
+    public void ToValueTest()
+    {
+        Assert.Equal(123, "123".ToValue(typeof(int)));
+        Assert.Equal(123.123, "123.123".ToValue(typeof(double)));
+        Assert.Equal("123.123", "123.123".ToValue(typeof(string)));
+    }
+
+    [Fact]
+    public void StringShuffleTest()
+    {
+        string origin = "123456789";
+        Assert.True(origin.Shuffle().Shuffle() != origin);
+    }
+
+    [Fact]
+    public void StringAddTest()
+    {
+        string origin = "1";
+        origin = origin.AddIf(true, "2");
+        Assert.True(origin == "12");
+        origin = origin.AddIf(false, "3");
+        Assert.True(origin == "12");
+
+        origin = origin.Add("3");
+        Assert.True(origin == "123");
+
+        origin = origin.AddIf("", "4");
+        Assert.True(origin == "123");
+        origin = origin.AddIf("not empty", "4");
+        Assert.True(origin == "1234");
+
+        int? i = null;
+        origin = origin.AddIf(i, "5");
+        Assert.True(origin == "1234");
+        i = 10;
+        origin = origin.AddIf(i, "5");
+        Assert.True(origin == "12345");
+    }
 }

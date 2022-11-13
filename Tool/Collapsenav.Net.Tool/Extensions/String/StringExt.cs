@@ -74,7 +74,7 @@ public static partial class StringExt
             var method = type.GetMethods().FirstOrDefault(item => item.Name == "Parse");
             return method?.Invoke(null, new[] { input });
         }
-        return null;
+        return input;
     }
 
     /// <summary>

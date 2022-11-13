@@ -18,20 +18,42 @@ public static partial class AssemblyExt
     /// <param name="ass"></param>
     public static bool IsCustomerAssembly(this Assembly ass)
     {
-        return ass.GetName().IsCustomerAssembly();
+        return ass.GetName().IsCustomerAssembly() && !ass.IsDynamic;
     }
     /// <summary>
     /// 获取所有assemblyName
     /// </summary>
     public static IEnumerable<AssemblyName> GetAllAssemblyNames(this Assembly ass)
     {
+        if (ass.IsDynamic)
+        {
+            return Enumerable.Empty<AssemblyName>();
+        }
         var fileNames = Directory.GetFiles(Path.GetDirectoryName(ass.Location), "*.dll");
         return fileNames.Select(item =>
         {
-            var assName = AssemblyName.GetAssemblyName(item);
-            assName.CodeBase = item;
-            return assName;
-        });
+            if (TryGetAssemblyName(item, out AssemblyName assName))
+            {
+                assName.CodeBase = item;
+                return assName;
+            }
+            return null;
+        }).Where(item => item != null);
+    }
+
+    internal static bool TryGetAssemblyName(string path, out AssemblyName assemblyName)
+    {
+        try
+        {
+            assemblyName = AssemblyName.GetAssemblyName(path);
+            return true;
+        }
+        catch (BadImageFormatException ex)
+        {
+            Console.WriteLine(ex.Message);
+            assemblyName = null;
+            return false;
+        }
     }
     /// <summary>
     /// 获取自定义的程序集Name(通过publickeytoken是否为空判断)
@@ -146,7 +168,10 @@ public static partial class AssemblyExt
     /// <param name="suffixs"></param>
     public static IEnumerable<Type> GetCustomerTypesBySuffix(this AppDomain domain, params string[] suffixs)
     {
-        return domain.GetCustomerTypes().Where(item => item.Name.HasEndsWith(suffixs));
+        return domain.GetCustomerTypes().Where(item =>
+        {
+            return (item.IsGenericType ? item.FullName.Substring(0, item.FullName.IndexOf('`')) : item.FullName).HasEndsWith(suffixs);
+        });
     }
     /// <summary>
     /// 根据前后缀查找type
@@ -155,6 +180,9 @@ public static partial class AssemblyExt
     /// <param name="prefixAndSuffixs"></param>
     public static IEnumerable<Type> GetCustomerTypesByPrefixAndSuffix(this AppDomain domain, params string[] prefixAndSuffixs)
     {
-        return domain.GetCustomerTypes().Where(item => item.Name.HasEndsWith(prefixAndSuffixs) || item.Name.HasStartsWith(prefixAndSuffixs));
+        return domain.GetCustomerTypes().Where(item =>
+        {
+            return item.Name.HasStartsWith(prefixAndSuffixs) || (item.IsGenericType ? item.FullName.Substring(0, item.FullName.IndexOf('`')) : item.Name).HasEndsWith(prefixAndSuffixs);
+        });
     }
 }

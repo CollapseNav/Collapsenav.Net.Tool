@@ -143,6 +143,9 @@ public class JsonTest
         Assert.Equal(0, obj.Date.Hour);
         Assert.Equal(0, obj.Date.Minute);
         Assert.Equal(0, obj.Date.Second);
+        jsonString = @"{""Date"":null}";
+        obj = jsonString.ToObj<DateConverterTestModel>();
+        Assert.Equal(default, obj.Date);
     }
     [Fact]
     public void DateTimeConverterTest()
@@ -159,7 +162,7 @@ public class JsonTest
         Assert.Equal(12, obj.Date.Day);
         Assert.Equal(12, obj.Date.Hour);
         Assert.Equal(12, obj.Date.Minute);
-        Assert.Equal(12, obj.Date.Second);
+        Assert.Equal(expected: 12, obj.Date.Second);
 
         jsonString = @"{""Date"":null}";
         obj = jsonString.ToObj<DateTimeConverterTestModel>();
