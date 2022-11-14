@@ -96,6 +96,19 @@ public static class ControllerExt
             services.AddScoped<IMap, JsonMap>();
         return services;
     }
+    // 使用automapper
+    public static IServiceCollection AddAutoMapper(this IServiceCollection services)
+    {
+        // 使用 automap 作为 imap 的实现
+        var existIMap = services.Where(item => item.ServiceType == typeof(IMap)).ToList();
+        existIMap.ForEach(item => services.Remove(item));
+        services.AddScoped<IMap, AutoMap>();
+
+        // 注册所有自定义的 profile
+        var types = AppDomain.CurrentDomain.GetCustomerTypes<Profile>().Where(item => !item.IsInterface && !item.IsAbstract);
+        types.ForEach(type => services.AddAutoMapper(type));
+        return services;
+    }
     /// <summary>
     /// 添加map(使用automap)
     /// </summary>

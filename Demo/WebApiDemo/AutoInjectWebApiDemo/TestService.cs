@@ -1,8 +1,10 @@
+using System.Threading.Tasks;
+
 namespace AutoInjectWebApiDemo;
 public class DefaultService
 {
-    public string GetString()
+    public async Task<string> GetString()
     {
-        return "DefaultService";
+        return await Task.FromResult("DefaultService");
     }
 }

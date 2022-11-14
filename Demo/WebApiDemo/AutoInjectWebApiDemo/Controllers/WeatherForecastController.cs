@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Collapsenav.Net.Tool.AutoInject;
 using Microsoft.AspNetCore.Mvc;
 
@@ -5,13 +6,13 @@ namespace AutoInjectWebApiDemo.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+public class DefaultController : ControllerBase
 {
     [AutoInject]
     public DefaultService Service { get; set; }
     [HttpGet]
-    public string Get()
+    public async Task<string> Get()
     {
-        return Service.GetString();
+        return await Service.GetString();
     }
 }
