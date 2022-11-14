@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="../version.props" />
   <PropertyGroup>
+    <Version>1.3.1</Version>
     <TargetFrameworks>net6.0;netcoreapp3.1;</TargetFrameworks>
     <PackageTags>Tool,DI,AutoInject</PackageTags>
     <Description>

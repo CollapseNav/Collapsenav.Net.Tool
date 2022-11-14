@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="../version.props" />
   <PropertyGroup>
+    <Version>1.3.1</Version>
     <PackageTags>Tool,DI,AutoInject</PackageTags>
     <Description>
 提供一些自动注入的功能, 比如 属性注入

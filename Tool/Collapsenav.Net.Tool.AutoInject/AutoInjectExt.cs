@@ -5,6 +5,9 @@ using Microsoft.Extensions.Hosting;
 namespace Collapsenav.Net.Tool.AutoInject;
 public static class AutoInjectExt
 {
+    /// <summary>
+    /// 使用自动注入的工厂(提供 属性注入 和对应的 自动注册 功能)
+    /// </summary>
     public static IHostBuilder UseAutoInjectProviderFactory(this IHostBuilder builder)
     {
         return builder.UseServiceProviderFactory(new AutoInjectServiceProviderFactory());
@@ -16,13 +19,13 @@ public static class AutoInjectExt
         var types = AppDomain.CurrentDomain.GetCustomerTypes().Where(item => !item.FullName.StartsWith("Collapsenav.Net.Tool"));
         // 获取 service 中已经注册的 type
         var registedTypes = services.Select(item => item.ServiceType).ToList();
-        // 获取被标记了 AutoInject 的, 但是再次之前没有注册过的, 需要自动进行注册的 type,
+        // 获取被标记了 AutoInject 的 types
         var autoInjectTypes = types.SelectMany(item => item.AttrMemberTypes<AutoInjectAttribute>())
         // 移除已经手动注册过的 type
         .Where(item => !registedTypes.Contains(item)).Unique();
-        // 挑出需要注册的接口
+        // 挑出需要注册的 接口
         var autoInjectInterfaces = autoInjectTypes.Where(item => item.IsInterface).ToList();
-        // 挑出需要注册的非接口
+        // 挑出需要注册的 非接口
         autoInjectTypes = autoInjectTypes.Where(item => !item.IsInterface).ToList();
         // 挑出所有 "实现"
         types = types.Where(item => !item.IsInterface && !item.IsAbstract);
