@@ -10,27 +10,16 @@ public abstract class JobItem
     public TriggerKey TKey { get => tKey ?? new TriggerKey(JobType.Name, JobType.Name); set => tKey = value; }
     private TriggerKey tKey;
     public abstract ITrigger GetTrigger();
-    public virtual IJobDetail GetJobDetail()
-    {
-        return QuartzTool.CreateJob(JobType, JKey);
-    }
+    public virtual IJobDetail GetJobDetail() => QuartzTool.CreateJob(JobType, JKey);
 }
 
 public class CronJob : JobItem
 {
     public string Cron { get; set; }
-
-    public override ITrigger GetTrigger()
-    {
-        return QuartzTool.CreateTrigger(Cron, TKey);
-    }
+    public override ITrigger GetTrigger() => QuartzTool.CreateTrigger(Cron, TKey);
 }
 public class SimpleJob : JobItem
 {
     public int Len { get; set; }
-
-    public override ITrigger GetTrigger()
-    {
-        return QuartzTool.CreateTrigger(Len, TKey);
-    }
+    public override ITrigger GetTrigger() => QuartzTool.CreateTrigger(Len, TKey);
 }

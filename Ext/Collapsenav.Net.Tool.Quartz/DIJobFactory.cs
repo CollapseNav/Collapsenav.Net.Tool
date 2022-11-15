@@ -3,6 +3,9 @@ using Quartz.Spi;
 
 namespace Collapsenav.Net.Tool.Ext;
 
+/// <summary>
+/// 提供依赖注入功能的job工厂
+/// </summary>
 public class DIJobFactory : IJobFactory
 {
     private readonly IServiceProvider _serviceProvider;

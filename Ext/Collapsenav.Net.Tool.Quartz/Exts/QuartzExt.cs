@@ -15,7 +15,6 @@ public static partial class QuartzTool
         foreach (var key in keys)
             await scheduler.DeleteJob(key);
     }
-
     public static async Task DeleteAllJobs(this IScheduler scheduler)
     {
         var triggerKeys = await scheduler.GetTriggerKeys();
@@ -25,7 +24,6 @@ public static partial class QuartzTool
         foreach (var key in jobKeys)
             await scheduler.DeleteJob(key);
     }
-
     public static async Task PauseJobs(this IScheduler scheduler, string group)
     {
         var keys = await scheduler.GetJobKeys(group);
@@ -34,7 +32,6 @@ public static partial class QuartzTool
         foreach (var key in keys)
             await scheduler.PauseJob(key);
     }
-
     public static async Task PauseJobs(this IScheduler scheduler, IEnumerable<JobKey> keys)
     {
         if (keys.IsEmpty())
@@ -42,7 +39,6 @@ public static partial class QuartzTool
         foreach (var key in keys)
             await scheduler.PauseJob(key);
     }
-
     public static async Task PauseTriggers(this IScheduler scheduler, string group)
     {
         var keys = await scheduler.GetTriggerKeys(group);
@@ -51,14 +47,11 @@ public static partial class QuartzTool
         foreach (var key in keys)
             await scheduler.PauseTrigger(key);
     }
-
-
     public static async Task<IReadOnlyCollection<TriggerKey>> GetTriggerKeys(this IScheduler scheduler, string group = null)
     {
         var matches = group.IsEmpty() ? GroupMatcher<TriggerKey>.AnyGroup() : GroupMatcher<TriggerKey>.GroupEquals(group);
         return await scheduler.GetTriggerKeys(matches);
     }
-
     public static async Task<IReadOnlyCollection<JobKey>> GetJobKeys(this IScheduler scheduler, string group = null)
     {
         var matches = group.IsEmpty() ? GroupMatcher<JobKey>.AnyGroup() : GroupMatcher<JobKey>.GroupEquals(group);
@@ -72,7 +65,6 @@ public static partial class QuartzTool
         var processor = new XMLSchedulingDataProcessor(new SimpleTypeLoadHelper());
         await processor.ProcessFileAndScheduleJobs(path, scheduler);
     }
-
     public static async Task<IReadOnlyCollection<IJobDetail>> GetJobDetails(this IScheduler scheduler, string group = null)
     {
         var jobKeys = await scheduler.GetJobKeys(group);
@@ -89,7 +81,6 @@ public static partial class QuartzTool
             triggers.Add(await scheduler.GetTrigger(key));
         return triggers;
     }
-
     public static async Task<IReadOnlyCollection<JobStatus>> GetJobStatus(this IScheduler scheduler)
     {
         var details = await scheduler.GetJobDetails();

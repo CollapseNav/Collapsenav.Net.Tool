@@ -34,49 +34,27 @@ public class QuartzJobBuilder
         if (path.ToLower().EndsWith(".xml"))
             XmlConfig.Add(path);
     }
-    /// <summary>
-    /// 添加CronJob
-    /// </summary>
-    public void AddJob<Job>(string cron) where Job : IJob
+    public void AddJob<Job>(object obj) where Job : IJob
     {
-        CronJobs.Add(new CronJob
-        {
-            JobType = typeof(Job),
-            Cron = cron,
-        });
+        AddJob(typeof(Job), obj);
     }
-    /// <summary>
-    /// 添加SimpleJob
-    /// </summary>
-    public void AddJob<Job>(int len) where Job : IJob
+    public void AddJob(Type type, object obj)
     {
-        SimpleJobs.Add(new SimpleJob
-        {
-            JobType = typeof(Job),
-            Len = len,
-        });
-    }
-    /// <summary>
-    /// 添加CronJob
-    /// </summary>
-    public void AddJob(Type type, string cron)
-    {
-        CronJobs.Add(new CronJob
-        {
-            JobType = type,
-            Cron = cron,
-        });
-    }
-    /// <summary>
-    /// 添加SimpleJob
-    /// </summary>
-    public void AddJob(Type type, int len)
-    {
-        SimpleJobs.Add(new SimpleJob
-        {
-            JobType = type,
-            Len = len,
-        });
+        // 传入的obj必须是 string 或 int
+        if (obj is not (string or int))
+            throw new Exception("input must be string or int");
+        if (obj is string cron)
+            CronJobs.Add(new CronJob
+            {
+                JobType = type,
+                Cron = cron,
+            });
+        else if (obj is int len)
+            SimpleJobs.Add(new SimpleJob
+            {
+                JobType = type,
+                Len = len,
+            });
     }
     /// <summary>
     /// 添加SimpleJob
@@ -132,16 +110,19 @@ public class QuartzJobBuilder
         }
     }
 
+    public void AddQuartzJsonConfig(IQuartzJsonConfig node)
+    {
+        ConfigNodes.Add(node);
+    }
     public void AddQuartzJsonConfig(IEnumerable<IQuartzJsonConfig> nodes)
     {
-        ConfigNodes ??= new();
         ConfigNodes.AddRange(nodes);
     }
     /// <summary>
     /// 构建 scheduler 的job
     /// </summary>
     /// <remarks>默认情况下会构建 QuartzNode.Scheduler</remarks>
-    public async Task Build(IScheduler scheduler)
+    public async Task Build(IScheduler scheduler = null)
     {
         var sch = scheduler ?? QuartzNode.Scheduler;
         if (CronJobs.NotEmpty())

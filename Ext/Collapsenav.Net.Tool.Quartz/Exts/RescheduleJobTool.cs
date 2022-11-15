@@ -1,8 +1,5 @@
 using Quartz;
-using Quartz.Impl.Matchers;
-
 namespace Collapsenav.Net.Tool.Ext;
-
 public static partial class QuartzTool
 {
     /// <summary>

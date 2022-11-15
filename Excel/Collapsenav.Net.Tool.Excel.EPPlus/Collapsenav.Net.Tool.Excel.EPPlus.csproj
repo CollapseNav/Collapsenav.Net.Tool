@@ -13,7 +13,6 @@
         <PackageReference Include="EPPlus.Core" Version="1.5.4"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj" />
         <ProjectReference Include="..\Collapsenav.Net.Tool.Excel.Core\Collapsenav.Net.Tool.Excel.Core.csproj" />
     </ItemGroup>
 </Project>

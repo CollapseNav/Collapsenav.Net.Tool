@@ -22,19 +22,22 @@ public partial class ReadConfig<T>
                     var dataRow = sheet[index].ToList();
                     Monitor.Exit(sheet);
                     // 根据对应传入的设置 为obj赋值
-                    var obj = Activator.CreateInstance<T>();
-                    foreach (var option in FieldOption)
+                    if (dataRow.NotEmpty())
                     {
-                        if (option.ExcelField.NotNull())
+                        var obj = Activator.CreateInstance<T>();
+                        foreach (var option in FieldOption)
                         {
-                            var value = dataRow[header[option.ExcelField]];
-                            option.Prop.SetValue(obj, option.Action == null ? value : option.Action(value));
+                            if (option.ExcelField.NotNull())
+                            {
+                                var value = dataRow[header[option.ExcelField]];
+                                option.Prop.SetValue(obj, option.Action == null ? value : option.Action(value));
+                            }
+                            else
+                                option.Prop.SetValue(obj, option.Action == null ? null : option.Action(string.Empty));
                         }
-                        else
-                            option.Prop.SetValue(obj, option.Action == null ? null : option.Action(string.Empty));
+                        Init?.Invoke(obj);
+                        data.Add(obj);
                     }
-                    Init?.Invoke(obj);
-                    data.Add(obj);
                 });
             });
         }
