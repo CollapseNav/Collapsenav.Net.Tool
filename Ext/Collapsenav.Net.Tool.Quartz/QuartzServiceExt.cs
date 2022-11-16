@@ -97,7 +97,7 @@ public static class QuartzServiceExt
         {
             var dicts = jsonString.ToObj<IDictionary<string, string>>();
             if (dicts.NotEmpty() && dicts.First().Key.NotEmpty() && dicts.First().Value.NotEmpty())
-                configs ??= dicts.Select(item => QuartzConfigNode.ConvertFromKeyValue(item.Key, item.Value));
+                configs ??= QuartzConfigNode.ConvertFromKeyValue(dicts);
         }
         catch { }
 
@@ -120,7 +120,7 @@ public static class QuartzServiceExt
         {
             var dicts = section.Get<IDictionary<string, string>>();
             if (dicts.NotEmpty() && dicts.First().Key.NotEmpty() && dicts.First().Value.NotEmpty())
-                configs ??= dicts.Select(item => QuartzConfigNode.ConvertFromKeyValue(item.Key, item.Value));
+                configs ??= QuartzConfigNode.ConvertFromKeyValue(dicts);
         }
         catch { }
 

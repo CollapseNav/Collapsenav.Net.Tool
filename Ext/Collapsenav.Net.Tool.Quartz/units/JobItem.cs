@@ -13,11 +13,17 @@ public abstract class JobItem
     public virtual IJobDetail GetJobDetail() => QuartzTool.CreateJob(JobType, JKey);
 }
 
+/// <summary>
+/// 使用cron的job
+/// </summary>
 public class CronJob : JobItem
 {
     public string Cron { get; set; }
     public override ITrigger GetTrigger() => QuartzTool.CreateTrigger(Cron, TKey);
 }
+/// <summary>
+/// 使用len的job
+/// </summary>
 public class SimpleJob : JobItem
 {
     public int Len { get; set; }

@@ -132,10 +132,25 @@ public class QuartzJobBuilder
         var configs = ConfigNodes?.Select(item => item.ToJobItem()).ToList();
         if (configs.NotEmpty())
             JobItems.AddRange(configs);
-
+        UniqueJobItem();
         foreach (var item in JobItems)
             await sch?.ScheduleJob(item.GetJobDetail(), item.GetTrigger());
         foreach (var path in XmlConfig)
             await sch?.LoadXmlConfig(path);
+    }
+
+    internal void UniqueJobItem()
+    {
+        JobItems.GroupBy(item => item.JKey).Where(item => item.Count() > 1)
+        .ForEach(item =>
+        {
+            item.SelectWithIndex().ForEach((job) =>
+            {
+                var jkey = job.value.JKey;
+                var tkey = job.value.TKey;
+                job.value.JKey = new JobKey($"{jkey.Name}_{job.index}_{DateTime.Now.Millisecond}", $"{jkey.Group}_{job.index}_{DateTime.Now.Millisecond}");
+                job.value.TKey = new TriggerKey($"{tkey.Name}_{job.index}_{DateTime.Now.Millisecond}", $"{tkey.Group}_{job.index}_{DateTime.Now.Millisecond}");
+            });
+        });
     }
 }

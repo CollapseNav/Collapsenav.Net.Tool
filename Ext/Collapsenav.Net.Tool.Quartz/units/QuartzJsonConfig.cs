@@ -26,6 +26,23 @@ public class QuartzConfigNode : IQuartzJsonConfig
     /// </summary>
     public int? Len { get; set; }
 
+    /// <summary>
+    /// 通过字典生成配置
+    /// </summary>
+    public static IEnumerable<QuartzConfigNode> ConvertFromKeyValue(IDictionary<string, string> dict)
+    {
+        return dict.Select(item => ConvertFromKeyValue(item.Key, item.Value));
+    }
+    /// <summary>
+    /// 通过key,value生成配置
+    /// </summary>
+    public static QuartzConfigNode ConvertFromKeyValue(KeyValuePair<string, string> kv)
+    {
+        return ConvertFromKeyValue(kv.Key, kv.Value);
+    }
+    /// <summary>
+    /// 通过key,value生成配置
+    /// </summary>
     public static QuartzConfigNode ConvertFromKeyValue(string key, string value)
     {
         if (int.TryParse(value, out int len))
@@ -43,6 +60,9 @@ public class QuartzConfigNode : IQuartzJsonConfig
         };
     }
 
+    /// <summary>
+    /// 判断可用
+    /// </summary>
     public bool CanUse()
     {
         if (JobName.IsEmpty())
