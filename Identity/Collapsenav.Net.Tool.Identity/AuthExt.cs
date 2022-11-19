@@ -9,7 +9,12 @@ public static class AuthExt
 {
     public static AuthenticationBuilder AddJwtAuth(this IServiceCollection services, TokenValidationParameters tokenparam, bool requireHttps = false, bool saveToken = true)
     {
-        return services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        return services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
         .AddJwtBearer(options =>
         {
             options.SaveToken = saveToken;
