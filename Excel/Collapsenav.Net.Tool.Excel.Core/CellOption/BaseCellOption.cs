@@ -14,11 +14,13 @@ public class BaseCellOption<T>
     {
         get
         {
-            if (prop == null && propName.NotEmpty())
-                prop = typeof(T).GetProperty(PropName);
             return prop;
         }
-        set => prop = value;
+        set
+        {
+            prop = value;
+            propName = prop.Name;
+        }
     }
     private PropertyInfo prop;
     /// <summary>
@@ -28,11 +30,13 @@ public class BaseCellOption<T>
     {
         get
         {
-            if (propName.IsEmpty() && prop != null)
-                propName = Prop.Name;
             return propName;
         }
-        set => propName = value;
+        set
+        {
+            propName = value;
+            prop = typeof(T).GetProperty(propName);
+        }
     }
-    private string propName { get; set; }
+    private string propName;
 }

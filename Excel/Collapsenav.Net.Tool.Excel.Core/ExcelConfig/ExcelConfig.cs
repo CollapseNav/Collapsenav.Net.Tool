@@ -59,6 +59,6 @@ public class ExcelConfig<T, CellConfig> where CellConfig : BaseCellOption<T>
     }
 }
 
-public class ExcelConfig : ExcelConfig<object, BaseCellOption<object>>
+public class DefaultExcelConfig : ExcelConfig<object, BaseCellOption<object>>
 {
 }

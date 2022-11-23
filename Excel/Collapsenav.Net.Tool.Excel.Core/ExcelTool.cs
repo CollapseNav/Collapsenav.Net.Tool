@@ -65,7 +65,7 @@ public partial class ExcelTool
     /// </summary>
     public static async Task<IEnumerable<T>> ExcelToEntityAsync<T>(Stream stream, ReadConfig<T> config = null)
     {
-        var reader = ExcelTool.GetExcelReader(stream);
+        var reader = GetExcelReader(stream);
         return await ExcelToEntityAsync(reader, config);
     }
     /// <summary>
@@ -75,6 +75,30 @@ public partial class ExcelTool
     {
         config ??= ReadConfig<T>.GenDefaultConfig();
         return await config.ToEntityAsync(reader);
+    }
+    /// <summary>
+    /// 将表格数据转换为T类型的集合(更快)
+    /// </summary>
+    public static IEnumerable<T> ExcelToEntity<T>(string path, ReadConfig<T> config = null)
+    {
+        using var fs = path.OpenReadShareStream();
+        return ExcelToEntity(fs, config);
+    }
+    /// <summary>
+    /// 将表格数据转换为T类型的集合(更快)
+    /// </summary>
+    public static IEnumerable<T> ExcelToEntity<T>(Stream stream, ReadConfig<T> config = null)
+    {
+        var reader = GetExcelReader(stream);
+        return ExcelToEntity(reader, config);
+    }
+    /// <summary>
+    /// 将表格数据转换为T类型的集合(更快)
+    /// </summary>
+    public static IEnumerable<T> ExcelToEntity<T>(IExcelReader reader, ReadConfig<T> config = null)
+    {
+        config ??= ReadConfig<T>.GenDefaultConfig();
+        return config.ToEntity(reader);
     }
 
     /// <summary>
