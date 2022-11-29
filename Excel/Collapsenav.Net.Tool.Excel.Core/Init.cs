@@ -12,13 +12,12 @@ public static class Init
         if (files.IsEmpty())
             return;
         var newAsses = files.Select(item => Assembly.LoadFrom(item)).ToList();
-        newAsses.ForEach(item => AppDomain.CurrentDomain.Load(item.FullName));
-        var types = newAsses.SelectMany(s => s.GetTypes().Where(item => item.IsClass && item.IsPublic && item.HasGenericInterface(typeof(IExcelContainer<>))));
+        var types = newAsses.SelectMany(ass => ass.GetTypes().Where(type => !type.IsInterface && type.Name == "Init"));
         types.ForEach(item =>
         {
             try
             {
-                Activator.CreateInstance(item);
+                item.GetMethod("InitTypeSelector")?.Invoke(null, null);
             }
             catch { }
         });

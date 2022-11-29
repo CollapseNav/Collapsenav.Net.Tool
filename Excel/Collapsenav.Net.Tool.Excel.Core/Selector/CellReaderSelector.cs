@@ -4,26 +4,22 @@ namespace Collapsenav.Net.Tool.Excel;
 
 public class CellReaderSelector
 {
-    private static ConcurrentDictionary<string, Func<Stream, IExcelCellReader>> StreamSelectorDict = null;
-    private static ConcurrentDictionary<string, Func<object, IExcelCellReader>> ObjSelectorDict = null;
+    private static ConcurrentDictionary<string, Func<Stream, IExcelCellReader>> StreamSelectorDict = new();
+    private static ConcurrentDictionary<string, Func<object, IExcelCellReader>> ObjSelectorDict = new();
     public static void Add(string excelType, Func<object, IExcelCellReader> func)
     {
-        ObjSelectorDict ??= new();
         ObjSelectorDict.AddOrUpdate(excelType, func);
     }
     public static void Add(string excelType, Func<Stream, IExcelCellReader> func)
     {
-        StreamSelectorDict ??= new();
         StreamSelectorDict.AddOrUpdate(excelType, func);
     }
     public static void Add(ExcelType excelType, Func<object, IExcelCellReader> func)
     {
-        ObjSelectorDict ??= new();
         ObjSelectorDict.AddOrUpdate(excelType.ToString(), func);
     }
     public static void Add(ExcelType excelType, Func<Stream, IExcelCellReader> func)
     {
-        StreamSelectorDict ??= new();
         StreamSelectorDict.AddOrUpdate(excelType.ToString(), func);
     }
     public static IExcelCellReader GetCellReader(object obj)
