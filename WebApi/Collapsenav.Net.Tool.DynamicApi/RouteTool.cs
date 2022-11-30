@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Collapsenav.Net.Tool.DynamicApi;
 
-public class RouteConfig
+public class RouteTool
 {
-    public static bool HasControllerRoute { get; set; } = false;
+    internal static bool HasControllerRoute { get; set; } = false;
     public static string GlobalPrefix { get; set; }
 
     /// <summary>

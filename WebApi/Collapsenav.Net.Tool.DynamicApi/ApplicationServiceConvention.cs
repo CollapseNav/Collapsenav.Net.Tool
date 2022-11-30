@@ -29,15 +29,15 @@ public class ApplicationServiceConvention : IApplicationModelConvention
         // 移除空selector
         controller.Selectors.RemoveEmptySelector();
         // 构建 controller  route
-        RouteConfig.BuildControllerRoute(controller);
+        RouteTool.BuildControllerRoute(controller);
         // 构建 action route
         foreach (var action in controller.Actions)
         {
             // 移除空 selector
             action.Selectors.RemoveEmptySelector();
             // 创建 action route
-            RouteConfig.BuildRoute(action);
-            RouteConfig.ConfigureParameters(action);
+            RouteTool.BuildRoute(action);
+            RouteTool.ConfigureParameters(action);
         }
 
         // ConfigureParameters(controller);
