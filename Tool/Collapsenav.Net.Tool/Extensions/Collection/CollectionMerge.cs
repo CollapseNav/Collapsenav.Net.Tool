@@ -80,5 +80,4 @@ public static partial class CollectionExt
         querys = querys.Concat(concatQuerys);
         return querys.Merge(unique);
     }
-
 }

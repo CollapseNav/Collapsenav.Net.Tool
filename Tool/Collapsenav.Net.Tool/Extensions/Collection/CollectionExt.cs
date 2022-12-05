@@ -172,12 +172,15 @@ public static partial class CollectionExt
     /// <summary>
     /// 打乱顺序
     /// </summary>
-    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> query)
+    public static IEnumerable<T> Shuffle<T>(this IEnumerable<T> query, int round = 1)
     {
         var random = new Random();
-        var resultList = new List<T>();
-        resultList = query.OrderBy(item => Guid.NewGuid()).ToList();
-        return resultList;
+        if (round > 0)
+        {
+            for (var i = 0; i < round; i++)
+                query = query.OrderBy(item => Guid.NewGuid()).ToList();
+        }
+        return query;
     }
 
 

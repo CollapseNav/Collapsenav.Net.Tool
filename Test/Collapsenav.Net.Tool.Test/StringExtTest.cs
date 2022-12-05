@@ -217,6 +217,7 @@ public class StringExtTest
     public void PadLeftTest(string result, int iValue, int len, char fill = ' ')
     {
         Assert.True(iValue.PadLeft(len, fill) == result);
+        Assert.True(iValue.Pad(-len, fill) == result);
     }
     [Theory]
     [InlineData("233   ", 233, 6)]
@@ -225,6 +226,7 @@ public class StringExtTest
     public void PadRightTest(string result, int iValue, int len, char fill = ' ')
     {
         Assert.True(iValue.PadRight(len, fill) == result);
+        Assert.True(iValue.Pad(len, fill) == result);
     }
 
     [Theory]

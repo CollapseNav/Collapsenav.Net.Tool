@@ -33,7 +33,7 @@ public class AttributeTest
         Assert.NotEmpty(typeof(PropTest1).AttrFields<UnitTestAttribute>());
         Assert.Empty(typeof(PropTest0).AttrFields<UnitTestAttribute>());
 
-        Assert.Equal(1, typeof(PropTest1).AttrFields<UnitTestAttribute>().Count());
+        Assert.Single(typeof(PropTest1).AttrFields<UnitTestAttribute>());
     }
 
     [Fact]

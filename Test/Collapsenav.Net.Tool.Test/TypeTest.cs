@@ -327,7 +327,7 @@ public class TypeTest
         PropTest1 obj1 = new() { Prop1 = "1", Prop2 = "2", Prop3 = "3" };
         PropTest1 obj2 = new() { Prop1 = "1", Prop2 = "2", Prop3 = "33" };
         var difference = obj1.Difference(obj2);
-        Assert.Equal(1, difference.Diffs.Count());
+        Assert.Single(difference.Diffs);
         var item = difference.GetDiff("Prop3");
         Assert.Equal("3", item.Bvalue);
         item = difference.GetDiff(typeof(PropTest1).GetProperty("Prop3"));

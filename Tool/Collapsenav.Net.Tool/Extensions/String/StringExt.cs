@@ -6,6 +6,21 @@ namespace Collapsenav.Net.Tool;
 public static partial class StringExt
 {
     /// <summary>
+    /// 填充
+    /// </summary>
+    /// <param name="obj">源</param>
+    /// <param name="total">总长度, 正数为右填充, 负数为左填充</param>
+    /// <param name="fill">填充字符</param>
+    public static string Pad<T>(this T obj, int total, char? fill = ' ') => total > 0 ? obj.PadRight(Math.Abs(total), fill) : obj.PadLeft(Math.Abs(total), fill);
+    /// <summary>
+    /// 填充
+    /// </summary>
+    /// <param name="obj">源</param>
+    /// <param name="total">总长度, 正数为右填充, 负数为左填充</param>
+    /// <param name="act">一个委托</param>
+    /// <param name="fill">填充字符</param>
+    public static string Pad<T>(this T obj, int total, Func<T, object> act, char? fill = ' ') => total > 0 ? act(obj).PadRight(Math.Abs(total), fill) : act(obj).PadLeft(Math.Abs(total), fill);
+    /// <summary>
     /// 左填充
     /// </summary>
     /// <param name="obj">源</param>

@@ -72,12 +72,10 @@ public static partial class CollectionExt
     {
         return query.HasContain(comparer, filters.ToArray());
     }
-
     public static bool In<T>(this T origin, IEnumerable<T> items, Func<T, T, bool> comparer = null)
     {
         return comparer == null ? items.Contains(origin) : items.Contains(origin, new CollapseNavEqualityComparer<T>(comparer));
     }
-
     public static bool In<T>(this T origin, Func<T, T, bool> comparer, params T[] items)
     {
         return items.Contains(origin, new CollapseNavEqualityComparer<T>(comparer));
@@ -85,5 +83,29 @@ public static partial class CollectionExt
     public static bool In<T>(this T origin, params T[] items)
     {
         return items.Contains(origin);
+    }
+    public static IEnumerable<T> GetItemIn<T>(this IEnumerable<T> origin, IEnumerable<T> target)
+    {
+        return origin.Intersect(target);
+    }
+    public static IEnumerable<T> Intersect<T>(this IEnumerable<T> origin, IEnumerable<T> target, Func<T, T, bool> comparer)
+    {
+        return origin.GetItemIn(target, comparer);
+    }
+    public static IEnumerable<T> GetItemIn<T>(this IEnumerable<T> origin, IEnumerable<T> target, Func<T, T, bool> comparer)
+    {
+        return origin.Intersect(target, new CollapseNavEqualityComparer<T>(comparer));
+    }
+    public static IEnumerable<T> GetItemNotIn<T>(this IEnumerable<T> origin, IEnumerable<T> target)
+    {
+        return origin.Except(target);
+    }
+    public static IEnumerable<T> Except<T>(this IEnumerable<T> origin, IEnumerable<T> target, Func<T, T, bool> comparer)
+    {
+        return origin.GetItemNotIn(target, comparer);
+    }
+    public static IEnumerable<T> GetItemNotIn<T>(this IEnumerable<T> origin, IEnumerable<T> target, Func<T, T, bool> comparer)
+    {
+        return origin.Except(target, new CollapseNavEqualityComparer<T>(comparer));
     }
 }

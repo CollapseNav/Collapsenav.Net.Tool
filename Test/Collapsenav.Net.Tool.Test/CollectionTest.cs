@@ -375,4 +375,50 @@ public class CollectionTest
             new UniqueTestModel { Index = 3 },
             new UniqueTestModel { Index = 4 }));
     }
+
+    [Fact]
+    public void GetItemInTest()
+    {
+        var list1 = new[] { 1, 2, 3, 4 };
+        var list2 = new[] { 3, 4, 5, 6 };
+        Assert.True(list1.GetItemIn(list2).SequenceEqual(new[] { 3, 4 }));
+        var model1 = new UniqueTestModel[] {
+            new(){ Index = 0 },
+            new(){ Index = 1 },
+            new(){ Index = 2 },
+            new(){ Index = 3 },
+        };
+        var model2 = new UniqueTestModel[] {
+            new(){ Index = 3 },
+            new(){ Index = 4 },
+            new(){ Index = 5 },
+            new(){ Index = 6 },
+            new(){ Index = 7 },
+        };
+        Assert.True(model1.GetItemIn(model2, (a, b) => a.Index == b.Index).Select(item => item.Index).SequenceEqual(new[] { 3 }));
+        Assert.True(model1.Intersect(model2, (a, b) => a.Index == b.Index).Select(item => item.Index).SequenceEqual(new[] { 3 }));
+    }
+
+    [Fact]
+    public void GetItemNotInTest()
+    {
+        var list1 = new[] { 1, 2, 3, 4 };
+        var list2 = new[] { 3, 4, 5, 6 };
+        Assert.True(list1.GetItemNotIn(list2).SequenceEqual(new[] { 1, 2 }));
+        var model1 = new UniqueTestModel[] {
+            new(){ Index = 0 },
+            new(){ Index = 1 },
+            new(){ Index = 2 },
+            new(){ Index = 3 },
+        };
+        var model2 = new UniqueTestModel[] {
+            new(){ Index = 3 },
+            new(){ Index = 4 },
+            new(){ Index = 5 },
+            new(){ Index = 6 },
+            new(){ Index = 7 },
+        };
+        Assert.True(model1.GetItemNotIn(model2, (a, b) => a.Index == b.Index).Select(item => item.Index).SequenceEqual(new[] { 0, 1, 2 }));
+        Assert.True(model1.Except(model2, (a, b) => a.Index == b.Index).Select(item => item.Index).SequenceEqual(new[] { 0, 1, 2 }));
+    }
 }
