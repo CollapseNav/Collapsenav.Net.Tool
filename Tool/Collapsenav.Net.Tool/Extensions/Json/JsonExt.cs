@@ -17,8 +17,6 @@ public static partial class JsonExt
     /// <summary>
     /// 对象转为Json字符串
     /// </summary>
-    /// <param name="obj"></param>
-    /// <param name="options"></param>
     public static string ToJson<T>(this T obj, JsonSerializerOptions options = null) => JsonSerializer.Serialize(obj, options ?? DefaultJsonSerializerOption);
 
 

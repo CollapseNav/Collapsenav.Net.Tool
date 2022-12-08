@@ -10,6 +10,9 @@ public static partial class StringExt
     {
         return Convert.ToBase64String(bytes);
     }
+    /// <summary>
+    /// string 转为 base64字符串
+    /// </summary>
     public static string ToBase64(this string origin)
     {
         return Convert.ToBase64String(origin.ToBytes());

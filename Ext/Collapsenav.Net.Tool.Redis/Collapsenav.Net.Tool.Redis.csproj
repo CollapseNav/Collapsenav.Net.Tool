@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../version.props"/>
+  <PropertyGroup>
+    <PackageTags>Tool,Redis</PackageTags>
+    <Description>
+简单的Redis扩展
+        </Description>
+    <Product>Collapsenav.Net.Tool.Redis</Product>
+    <PackageId>Collapsenav.Net.Tool.Redis</PackageId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="7.0.0"/>
+    <ProjectReference Include="..\..\Tool\Collapsenav.Net.Tool\Collapsenav.Net.Tool.csproj" />
+  </ItemGroup>
+</Project>
