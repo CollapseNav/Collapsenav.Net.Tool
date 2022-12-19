@@ -2,7 +2,7 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace Collapsenav.Net.Tool.Ext;
 
-public class DefaultCache : ICache
+public class DefaultCache : ICache, ICacheAsync
 {
     protected readonly IDistributedCache _cache;
 
@@ -62,7 +62,7 @@ public class DefaultCache : ICache
 
     public void SetCache(string key, object value, TimeSpan timeout)
     {
-        _cache.SetString(BuildCacheKey(key), value.ToJson(), new DistributedCacheEntryOptions { AbsoluteExpiration = new DateTimeOffset(DateTime.Now + timeout) });
+        _cache.SetString(BuildCacheKey(key), value.ToJson(), new DistributedCacheEntryOptions { SlidingExpiration = timeout });
     }
 
     public async Task SetCacheAsync(string key, object value)
@@ -72,6 +72,6 @@ public class DefaultCache : ICache
 
     public async Task SetCacheAsync(string key, object value, TimeSpan timeout)
     {
-        await _cache.SetStringAsync(BuildCacheKey(key), value.ToJson(), new DistributedCacheEntryOptions { AbsoluteExpiration = new DateTimeOffset(DateTime.Now + timeout) });
+        await _cache.SetStringAsync(BuildCacheKey(key), value.ToJson(), new DistributedCacheEntryOptions { SlidingExpiration = timeout });
     }
 }
