@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Collapsenav.Net.Tool.AutoInject;
 using Microsoft.AspNetCore.Mvc;
 
