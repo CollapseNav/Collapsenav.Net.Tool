@@ -185,4 +185,41 @@ public static partial class AssemblyExt
             return item.Name.HasStartsWith(prefixAndSuffixs) || (item.IsGenericType ? item.FullName.Substring(0, item.FullName.IndexOf('`')) : item.Name).HasEndsWith(prefixAndSuffixs);
         });
     }
+    public static IEnumerable<Type> GetTypes<T>(this Assembly ass)
+    {
+        return ass.GetAllAssemblies().SelectMany(item => item.GetTypes()).Where(item => item.IsType<T>());
+    }
+    /// <summary>
+    /// 根据前缀查找type
+    /// </summary>
+    /// <param name="ass"></param>
+    /// <param name="prefixs"></param>
+    public static IEnumerable<Type> GetByPrefix(this Assembly ass, params string[] prefixs)
+    {
+        return ass.GetTypes().Where(item => item.Name.HasStartsWith(prefixs));
+    }
+    /// <summary>
+    /// 根据后缀查找type
+    /// </summary>
+    /// <param name="ass"></param>
+    /// <param name="suffixs"></param>
+    public static IEnumerable<Type> GetBySuffix(this Assembly ass, params string[] suffixs)
+    {
+        return ass.GetTypes().Where(item =>
+        {
+            return (item.IsGenericType ? item.FullName.Substring(0, item.FullName.IndexOf('`')) : item.FullName).HasEndsWith(suffixs);
+        });
+    }
+    /// <summary>
+    /// 根据前后缀查找type
+    /// </summary>
+    /// <param name="ass"></param>
+    /// <param name="prefixAndSuffixs"></param>
+    public static IEnumerable<Type> GetByPrefixAndSuffix(this Assembly ass, params string[] prefixAndSuffixs)
+    {
+        return ass.GetTypes().Where(item =>
+        {
+            return item.Name.HasStartsWith(prefixAndSuffixs) || (item.IsGenericType ? item.FullName.Substring(0, item.FullName.IndexOf('`')) : item.Name).HasEndsWith(prefixAndSuffixs);
+        });
+    }
 }

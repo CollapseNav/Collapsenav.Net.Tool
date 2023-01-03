@@ -13,6 +13,9 @@ public class ParamNode
     public string Name { get; set; }
     public string Desc { get; set; }
 }
+/// <summary>
+/// 注释node
+/// </summary>
 public class SummaryNode
 {
     public XmlNodeMemberTypeEnum NodeType { get; set; }

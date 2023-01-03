@@ -30,6 +30,11 @@ public static class XmlExt
         return docs.GetNodeLists(path).SelectMany(item => item.GetNodes());
     }
 
+    public static IEnumerable<SummaryNode> GetSummaryNodes(this IEnumerable<XmlDocument> docs)
+    {
+        return docs.GetNodes("doc/members/member").Select(item => new SummaryNode(item));
+    }
+
     public static IEnumerable<XmlNode> GetNodes(this XmlNodeList nodeList)
     {
         List<XmlNode> nodes = new();

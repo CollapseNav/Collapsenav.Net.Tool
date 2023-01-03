@@ -8,7 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="Collapsenav.Net.Tool.Swagger" Version="1.3.0" />
-    <PackageReference Include="Collapsenav.Net.Tool.DynamicApi" Version="1.3.0" />
+    <!-- <PackageReference Include="Collapsenav.Net.Tool.DynamicApi" Version="1.3.0" /> -->
+    <ProjectReference Include="../../../WebApi/Collapsenav.Net.Tool.DynamicApi/Collapsenav.Net.Tool.DynamicApi.csproj" />
   </ItemGroup>
 
 </Project>
