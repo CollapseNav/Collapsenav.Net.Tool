@@ -1,7 +1,7 @@
+namespace Collapsenav.Net.Tool.DynamicApi;
+
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-sealed class DynamicApiAttribute : Attribute
+public sealed class DynamicApiAttribute : Attribute
 {
-    public DynamicApiAttribute()
-    {
-    }
+    public DynamicApiAttribute() { }
 }
