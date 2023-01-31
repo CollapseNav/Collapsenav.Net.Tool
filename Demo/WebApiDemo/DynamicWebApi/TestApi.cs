@@ -1,11 +1,11 @@
 using Collapsenav.Net.Tool.DynamicApi;
-using Microsoft.AspNetCore.Authorization;
 
 namespace DynamicWebApi;
 
-public class TestApi : IDynamicApi
+[DynamicApi]
+public class TestApi
 {
-    public async Task<string> Get()
+    public async Task<string> PostTestApiAsync()
     {
         return await Task.FromResult("2333");
     }
