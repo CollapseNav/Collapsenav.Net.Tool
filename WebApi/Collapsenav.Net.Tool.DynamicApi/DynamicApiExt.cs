@@ -1,4 +1,3 @@
-using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
@@ -24,18 +23,25 @@ public static class DynamicApiExt
     /// <summary>
     /// 注册动态api
     /// </summary>
-    public static IServiceCollection AddDynamicWebApi(this IServiceCollection services)
+    public static IServiceCollection AddDynamicWebApi(this IServiceCollection services, ApiJsonConfig config)
     {
-        services.AddControllers().AddDynamicWebApi();
+        services.AddControllers().AddDynamicWebApi(config.BuildApiConfig());
         return services;
     }
     /// <summary>
     /// 注册动态api
     /// </summary>
-    public static IMvcBuilder AddDynamicWebApi(this IMvcBuilder builder)
+    public static IServiceCollection AddDynamicWebApi(this IServiceCollection services, DynamicApiConfig config = null)
     {
-        GlobalConfig = new();
-        GlobalConfig.AddDefault();
+        services.AddControllers().AddDynamicWebApi(config ?? new DynamicApiConfig().AddDefault());
+        return services;
+    }
+    /// <summary>
+    /// 注册动态api
+    /// </summary>
+    public static IMvcBuilder AddDynamicWebApi(this IMvcBuilder builder, DynamicApiConfig config = null)
+    {
+        GlobalConfig = config ?? new();
         // 添加自定义的 DynamicApiProvider 用以识别标记的api
         builder.ConfigureApplicationPartManager(part =>
         {
@@ -88,64 +94,17 @@ public static class DynamicApiExt
     /// <remarks>
     /// 如果配置了全局的路由前缀, 则需要将全局前缀拼接到原来的路由之前
     /// </remarks>
-    public static string BuildControllerRoute(this ControllerModel controller)
+    public static void BuildControllerRoute(this ControllerModel controller)
     {
-        // 移除空selector
-        controller.RemoveEmptySelector();
-        // 如果没有定义过 route, 则使用 controllername 定义一个
-        if (!controller.Selectors.HasRouteAttribute())
-        {
-            controller.Selectors.Clear();
-            controller.Selectors.Add(new SelectorModel
-            {
-                AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(controller.ControllerName)),
-            });
-        }
-        // 如果定义了全局前缀, 就需要在原来的route之前加上
-        if (GlobalConfig.GlobalPrefix.NotEmpty())
-        {
-            var newSelectors = controller.Selectors.Select(sel =>
-            {
-                var route = $@"{GlobalConfig.GlobalPrefix}/{sel.AttributeRouteModel.Template}";
-                Console.WriteLine(@$"route= {route}");
-                return new SelectorModel { AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(route)), };
-            }).ToList();
-            controller.Selectors.Clear();
-            controller.Selectors.AddRange(newSelectors);
-        }
-        return "";
+        GlobalConfig.ConfigControllerRoute(controller);
     }
 
     /// <summary>
     /// 构建 action route
     /// </summary>
-    public static string BuildRoute(this ActionModel action)
+    public static void BuildRoute(this ActionModel action)
     {
-        // 移除空 selector
-        action.Selectors.RemoveEmptySelector();
-        var route = new StringBuilder();
-        var actionName = action.ActionName;
-
-        // 如果没有 自定义route 并且 actionname 不为空
-        if (!action.Selectors.HasRouteAttribute() && actionName.NotEmpty())
-        {
-            var selector = action.Selectors.IsEmpty() ? new SelectorModel() : action.Selectors.FirstOrDefault();
-            action.Selectors.Clear();
-            action.Selectors.Add(selector);
-            if (!action.Selectors.HasActionAttribute())
-                selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { GlobalConfig.GetHttpMethod(actionName) }));
-            actionName = GlobalConfig.Remove(actionName);
-            route.Append(GetRoute(route, actionName));
-
-            selector.AttributeRouteModel = new AttributeRouteModel(new RouteAttribute(route.ToString()));
-        }
-
-        return route.ToString();
-
-        static string GetRoute(StringBuilder route, string actionName)
-        {
-            return $"{(route.Length > 0 ? "/" : "")}{actionName}";
-        }
+        GlobalConfig.ConfigActionRoute(action);
     }
 
     public static void ConfigureParameters(this ActionModel action)

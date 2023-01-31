@@ -5,7 +5,7 @@ namespace DynamicWebApi;
 [DynamicApi]
 public class TestApi
 {
-    public async Task<string> PostTestApiAsync()
+    public async Task<string> EditTestApiAsync()
     {
         return await Task.FromResult("2333");
     }
