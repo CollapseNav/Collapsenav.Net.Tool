@@ -344,7 +344,9 @@ public static partial class StringExt
     {
         return CultureInfo.CurrentCulture.TextInfo.ToTitleCase(origin);
     }
-
+    /// <summary>
+    /// 在两个字符串中间填充
+    /// </summary>
     public static string PadWith(this string origin, string value, int len)
     {
         if ((origin.Length + value.Length) >= len)

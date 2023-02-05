@@ -2,6 +2,9 @@ using System.Xml;
 
 namespace Collapsenav.Net.Tool;
 
+/// <summary>
+/// 参数node
+/// </summary>
 public class ParamNode
 {
     public ParamNode(string name, string desc)
@@ -9,8 +12,13 @@ public class ParamNode
         Name = name;
         Desc = desc;
     }
-
+    /// <summary>
+    /// 参数名
+    /// </summary>
     public string Name { get; set; }
+    /// <summary>
+    /// 注释描述
+    /// </summary>
     public string Desc { get; set; }
 }
 /// <summary>
@@ -18,9 +26,21 @@ public class ParamNode
 /// </summary>
 public class SummaryNode
 {
+    /// <summary>
+    /// 注释类型
+    /// </summary>
     public XmlNodeMemberTypeEnum NodeType { get; set; }
+    /// <summary>
+    /// 注释内容
+    /// </summary>
     public string Summary { get; set; }
+    /// <summary>
+    /// 元素完整名称
+    /// </summary>
     public string FullName { get; set; }
+    /// <summary>
+    /// 参数集合
+    /// </summary>
     public IEnumerable<ParamNode> ParamsDesc { get; set; }
     public SummaryNode(XmlNode node)
     {
@@ -39,20 +59,15 @@ public class SummaryNode
         {
             foreach (var child in node.ChildNodes)
             {
-                if (child is XmlNode childNode)
+                if (child is XmlNode childNode && childNode.Name == "summary")
                 {
-                    if (childNode.Name == "summary")
-                    {
-                        Summary = childNode.InnerText.Trim();
-                        break;
-                    }
+                    Summary = childNode.InnerText.Trim();
+                    break;
                 }
             }
             var paramsNodes = node.SelectNodes("param").GetNodes();
             if (paramsNodes.NotEmpty())
-            {
                 ParamsDesc = paramsNodes.Select(item => new ParamNode(item.Attributes!["name"]!.Value, item.InnerText.Trim()));
-            }
         }
     }
 }

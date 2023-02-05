@@ -8,12 +8,21 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="query">源集合</param>
     /// <param name="size">每片大小</param>
-    public static IEnumerable<IEnumerable<T>> SpliteCollection<T>(this IEnumerable<T> query, int size)
+    public static IEnumerable<IEnumerable<T>> SpliteCollection<T>(this IEnumerable<T> query, int size = 1)
     {
         for (int i = 0; i < (query.Count() / size) + (query.Count() % size == 0 ? 0 : 1); i++)
             yield return query.Skip(i * size).Take(size);
     }
 
+    /// <summary>
+    /// 去重
+    /// </summary>
+    /// <param name="query">源集合</param>
+    /// <param name="groupBy">参考属性/字段/...</param>
+    public static IEnumerable<T> Distinct<T, E>(this IEnumerable<T> query, Func<T, E> groupBy)
+    {
+        return query.Unique(groupBy);
+    }
     /// <summary>
     /// 去重
     /// </summary>
@@ -29,6 +38,15 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="query">源集合</param>
     /// <param name="comparer">怎么比</param>
+    public static IEnumerable<T> Distinct<T>(this IEnumerable<T> query, Func<T, T, bool> comparer)
+    {
+        return query.Unique(comparer);
+    }
+    /// <summary>
+    /// 去重
+    /// </summary>
+    /// <param name="query">源集合</param>
+    /// <param name="comparer">怎么比</param>
     public static IEnumerable<T> Unique<T>(this IEnumerable<T> query, Func<T, T, bool> comparer)
     {
         return query.Unique(comparer, null);
@@ -39,11 +57,30 @@ public static partial class CollectionExt
     /// </summary>
     /// <param name="query">源集合</param>
     /// <param name="hashCodeFunc">hash去重</param>
+    public static IEnumerable<T> Distinct<T>(this IEnumerable<T> query, Func<T, int> hashCodeFunc)
+    {
+        return query.Unique(hashCodeFunc);
+    }
+    /// <summary>
+    /// 去重
+    /// </summary>
+    /// <param name="query">源集合</param>
+    /// <param name="hashCodeFunc">hash去重</param>
     public static IEnumerable<T> Unique<T>(this IEnumerable<T> query, Func<T, int> hashCodeFunc)
     {
         return query.Unique(null, hashCodeFunc);
     }
 
+    /// <summary>
+    /// 去重
+    /// </summary>
+    /// <param name="query">源集合</param>
+    /// <param name="comparer">怎么比</param>
+    /// <param name="hashCodeFunc">hash去重</param>
+    public static IEnumerable<T> Distinct<T>(this IEnumerable<T> query, Func<T, T, bool> comparer, Func<T, int> hashCodeFunc)
+    {
+        return query.Unique(comparer, hashCodeFunc);
+    }
     /// <summary>
     /// 去重
     /// </summary>
@@ -193,14 +230,28 @@ public static partial class CollectionExt
             action(item);
         return query;
     }
+    /// <summary>
+    /// 生成包含index的元组集合(value,index)
+    /// </summary>
     public static IEnumerable<(T value, int index)> SelectWithIndex<T>(this IEnumerable<T> origin, int zero = 0)
     {
         return origin.Select((value, index) => (value, index + zero));
     }
+    /// <summary>
+    /// 生成包含index的元组集合(value,index)
+    /// </summary>
+    /// <param name="origin">源集合</param>
+    /// <param name="index">生成index的委托</param>
     public static IEnumerable<(T value, E index)> SelectWithIndex<T, E>(this IEnumerable<T> origin, Func<T, E> index)
     {
         return origin.Select(value => (value, index(value)));
     }
+    /// <summary>
+    /// 生成包含index的元组集合(value,index)
+    /// </summary>
+    /// <param name="origin">源集合</param>
+    /// <param name="value">生成value的委托</param>
+    /// <param name="index">生成index的委托</param>
     public static IEnumerable<(E value, F index)> SelectWithIndex<T, E, F>(this IEnumerable<T> origin, Func<T, E> value, Func<T, F> index)
     {
         return origin.Select(item => (value(item), index(item)));

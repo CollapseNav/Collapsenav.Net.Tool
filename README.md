@@ -12,15 +12,6 @@
 
 [文档](http://doc.collapsenav.cn/)
 
-* [Collapsenav.Net.Tool](./Tool/README.mdx)
-  * [NuGet 地址](https://www.nuget.org/packages/Collapsenav.Net.Tool/)
-  * 一些基础类型的扩展和工具
-* [Collapsenav.Net.Tool.Excel](./Excel/Readme.mdx)
-  * [NuGet 地址](https://www.nuget.org/packages/Collapsenav.Net.Tool.Excel/)
-  * 简单的Excel操作
-
-
-
 ## TODO
 
 详情请看 project

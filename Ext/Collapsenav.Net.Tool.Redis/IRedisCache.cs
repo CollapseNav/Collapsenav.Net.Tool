@@ -15,7 +15,7 @@ public interface IRedisCache : ICache
     string[] GetListAll(string key);
     T[] GetListAll<T>(string key);
 
-    long SetAdd(string key, object value);
+    long SetAdd(string key, params object[] value);
     string[] GetSet(string key);
     T[] GetSet<T>(string key);
 }

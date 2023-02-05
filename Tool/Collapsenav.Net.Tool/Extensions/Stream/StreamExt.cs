@@ -146,7 +146,9 @@ public static partial class StreamExt
     {
         stream.SetLength(0);
     }
-
+    /// <summary>
+    /// 将流读为字符串
+    /// </summary>
     public static string ReadString(this Stream stream, Encoding encoding = null)
     {
         encoding ??= Encoding.UTF8;
