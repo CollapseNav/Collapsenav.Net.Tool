@@ -29,6 +29,7 @@ public interface ICacheAsync
 }
 public interface ICache
 {
+    string BuildCacheKey(string key);
     /// <summary>
     /// 设置缓存
     /// </summary>
