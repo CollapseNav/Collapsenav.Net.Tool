@@ -14,8 +14,7 @@ public class QueryRepository<T> : ReadRepository<T>, IQueryRepository<T> where T
     public virtual async Task<PageData<T>> QueryPageAsync(Expression<Func<T, bool>> exp, PageRequest page = null)
     {
         var query = Query(exp);
-        if (page == null)
-            page = new PageRequest();
+        page ??= new PageRequest();
         return new PageData<T>
         {
             Total = await query.CountAsync(),

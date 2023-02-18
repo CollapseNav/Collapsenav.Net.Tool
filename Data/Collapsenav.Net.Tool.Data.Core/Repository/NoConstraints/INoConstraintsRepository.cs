@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 
 namespace Collapsenav.Net.Tool.Data;
-public interface IRepository<T> where T : IEntity
+public interface INoConstraintsRepository<T>
 {
     /// <summary>
     /// 获取 Query
@@ -23,7 +23,6 @@ public interface IRepository<T> where T : IEntity
     Type KeyType();
     PropertyInfo KeyProp();
 }
-public interface IRepository<TKey, T> : IRepository<T> where T : IEntity<TKey>
+public interface INoConstraintsRepository<TKey, T> : INoConstraintsRepository<T>
 {
 }
-

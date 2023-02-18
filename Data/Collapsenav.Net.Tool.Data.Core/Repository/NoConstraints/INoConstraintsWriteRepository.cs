@@ -1,6 +1,6 @@
 namespace Collapsenav.Net.Tool.Data;
 
-public interface IWriteRepository<T> : IRepository<T> where T : class, IEntity
+public interface INoConstraintsWriteRepository<T> : INoConstraintsRepository<T>
 {
     /// <summary>
     /// 添加
@@ -15,11 +15,10 @@ public interface IWriteRepository<T> : IRepository<T> where T : class, IEntity
     /// </summary>
     Task<int> UpdateAsync(T entity);
 }
-public interface IWriteRepository<TKey, T> : IRepository<TKey, T> where T : class, IEntity<TKey>
+public interface INoConstraintsWriteRepository<TKey, T> : INoConstraintsRepository<TKey, T>
 {
     /// <summary>
     /// 删除
     /// </summary>
     Task<bool> DeleteAsync(TKey id, bool isTrue = false);
 }
-

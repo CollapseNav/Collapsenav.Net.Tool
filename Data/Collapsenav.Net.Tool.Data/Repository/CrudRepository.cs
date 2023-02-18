@@ -24,7 +24,17 @@ public class CrudRepository<T> : Repository<T>, ICrudRepository<T> where T : cla
     public virtual async Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>> exp) => await Read.QueryAsync(exp);
     public virtual async Task<T> GetByIdAsync(object id) => await Read.GetByIdAsync(id);
     public virtual async Task<bool> DeleteAsync(object id, bool isTrue = false) => await Write.DeleteAsync(id, isTrue);
-    public virtual async Task<IEnumerable<T>> QueryDataAsync(IQueryable<T> query) => await Read.QueryDataAsync(query);
+    public virtual async Task<IEnumerable<T>> QueryAsync(IQueryable<T> query) => await Read.QueryAsync(query);
+
+    [Obsolete("统一接口名称, 该方法将被弃用, 使用 QueryAsync 代替")]
+    public virtual async Task<IEnumerable<T>> QueryDataAsync(IQueryable<T> query)
+    {
+        return await Read.QueryDataAsync(query);
+    }
+    public virtual async Task<PageData<T>> QueryPageAsync(IQueryable<T> query, PageRequest page = null)
+    {
+        return await Read.QueryPageAsync(query, page);
+    }
 }
 public class CrudRepository<TKey, T> : CrudRepository<T>, ICrudRepository<TKey, T> where T : class, IEntity<TKey>, new()
 {

@@ -2,7 +2,8 @@ using System.Linq.Expressions;
 
 namespace Collapsenav.Net.Tool.Data;
 
-public interface IModifyRepository<T> : IWriteRepository<T> where T : class, IEntity
+
+public interface INoConstraintsModifyRepository<T> : INoConstraintsWriteRepository<T>
 {
     /// <summary>
     /// 添加
@@ -17,7 +18,7 @@ public interface IModifyRepository<T> : IWriteRepository<T> where T : class, IEn
     /// </summary>
     Task<int> UpdateAsync(Expression<Func<T, bool>> where, Expression<Func<T, T>> entity);
 }
-public interface IModifyRepository<TKey, T> : IModifyRepository<T>, IWriteRepository<TKey, T> where T : class, IEntity<TKey>
+public interface INoConstraintsModifyRepository<TKey, T> : INoConstraintsModifyRepository<T>, INoConstraintsWriteRepository<TKey, T>
 {
     /// <summary>
     /// 删除

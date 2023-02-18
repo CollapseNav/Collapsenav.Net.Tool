@@ -1,6 +1,5 @@
 namespace Collapsenav.Net.Tool.Data;
-
-public interface IReadRepository<T> : IRepository<T>, ICountRepository<T>, ICheckExistRepository<T> where T : class, IEntity
+public interface INoConstraintsReadRepository<T> : INoConstraintsRepository<T>, INoConstraintsCountRepository<T>, INoConstraintsCheckExistRepository<T>
 {
     /// <summary>
     /// 根据Id查询
@@ -11,7 +10,7 @@ public interface IReadRepository<T> : IRepository<T>, ICountRepository<T>, IChec
     Task<IEnumerable<T>> QueryAsync(IQueryable<T> query);
     Task<PageData<T>> QueryPageAsync(IQueryable<T> query, PageRequest page = null);
 }
-public interface IReadRepository<TKey, T> : IReadRepository<T>, IRepository<TKey, T> where T : class, IEntity<TKey>
+public interface INoConstraintsReadRepository<TKey, T> : INoConstraintsReadRepository<T>, INoConstraintsRepository<TKey, T>
 {
     /// <summary>
     /// 根据Id查询
