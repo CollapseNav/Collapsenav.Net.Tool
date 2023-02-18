@@ -3,6 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace Collapsenav.Net.Tool;
 
+/// <summary>
+/// 默认的时间转换
+/// </summary>
+/// <remarks>默认情况下将 DateTime 与 yyyy-MM-dd HH:mm:ss 互相转换</remarks>
 public class DateTimeConverter : JsonConverter<DateTime>
 {
     public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

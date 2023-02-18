@@ -15,8 +15,12 @@ public class CollectionTest
         int[] intList = { 1, 1, 2, 2, 3, 3, 4 };
         var uniqueIntList = intList.Unique(item => item);
         Assert.True(uniqueIntList.SequenceEqual(new[] { 1, 2, 3, 4 }));
+        uniqueIntList = intList.Distinct(item => item);
+        Assert.True(uniqueIntList.SequenceEqual(new[] { 1, 2, 3, 4 }));
 
         uniqueIntList = intList.Unique((x, y) => x == y);
+        Assert.True(uniqueIntList.SequenceEqual(new[] { 1, 2, 3, 4 }));
+        uniqueIntList = intList.Distinct((x, y) => x == y);
         Assert.True(uniqueIntList.SequenceEqual(new[] { 1, 2, 3, 4 }));
 
         uniqueIntList = intList.Unique();

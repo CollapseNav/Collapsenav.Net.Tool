@@ -3,6 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace Collapsenav.Net.Tool;
 
+/// <summary>
+/// 默认的雪花id转换
+/// </summary>
+/// <remarks>将string类型的数字与long互转</remarks>
 public class SnowflakeConverter : JsonConverter<long>
 {
     public override long Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

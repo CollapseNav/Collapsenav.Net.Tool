@@ -18,6 +18,11 @@ public static class JsonOptions
         Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
     };
 
+    /// <summary>
+    /// 彻底的默认配置(非常不推荐使用)
+    /// </summary>
+    public static readonly JsonSerializerOptions DefaultOption = new();
+
     public static void SetToBetterOption(this JsonSerializerOptions options)
     {
         options.PropertyNameCaseInsensitive = BetterUseOption.PropertyNameCaseInsensitive;
@@ -25,9 +30,4 @@ public static class JsonOptions
         options.ReferenceHandler = BetterUseOption.ReferenceHandler;
         options.Encoder = BetterUseOption.Encoder;
     }
-
-    /// <summary>
-    /// 彻底的默认配置(非常不推荐使用)
-    /// </summary>
-    public static readonly JsonSerializerOptions DefaultOption = new();
 }

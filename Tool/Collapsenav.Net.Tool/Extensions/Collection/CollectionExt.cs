@@ -18,25 +18,6 @@ public static partial class CollectionExt
     /// 去重
     /// </summary>
     /// <param name="query">源集合</param>
-    /// <param name="groupBy">参考属性/字段/...</param>
-    public static IEnumerable<T> Distinct<T, E>(this IEnumerable<T> query, Func<T, E> groupBy)
-    {
-        return query.Unique(groupBy);
-    }
-    /// <summary>
-    /// 去重
-    /// </summary>
-    /// <param name="query">源集合</param>
-    /// <param name="groupBy">参考属性/字段/...</param>
-    public static IEnumerable<T> Unique<T, E>(this IEnumerable<T> query, Func<T, E> groupBy)
-    {
-        return query.GroupBy(groupBy).Select(item => item.First());
-    }
-
-    /// <summary>
-    /// 去重
-    /// </summary>
-    /// <param name="query">源集合</param>
     /// <param name="comparer">怎么比</param>
     public static IEnumerable<T> Distinct<T>(this IEnumerable<T> query, Func<T, T, bool> comparer)
     {

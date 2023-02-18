@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Xunit;
@@ -272,6 +273,16 @@ public class JsonTest
         var jarray = jsonString.ToJsonArray();
         Assert.Equal("Namee", jarray.Skip(1).First()["userName"].ToString());
         Assert.Equal("2333", actual: jarray.Skip(1).First()["age"].ToString());
+    }
+
+    [Fact]
+    public void JsonCopyTest()
+    {
+        var info1 = new UserInfo() { Age = 233, UserName = "Name" };
+        var info2 = info1.JsonCopy();
+        Assert.True(info1.Age == info2.Age);
+        Assert.True(info1.UserName == info2.UserName);
+        Assert.False(info1 == info2);
     }
 }
 

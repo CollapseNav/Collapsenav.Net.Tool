@@ -43,6 +43,14 @@ public static partial class JsonExt
     }
 
     /// <summary>
+    /// 简单使用Json的序列化反序列化进行copy
+    /// </summary>
+    public static T JsonCopy<T>(this T origin)
+    {
+        return origin.ToJson().ToObj<T>();
+    }
+
+    /// <summary>
     /// 从文件中读取 JsonElement
     /// </summary>
     public static JsonElement GetJsonElementFromPath(this string path) => path.GetJsonDocumentFromPath().RootElement;
