@@ -17,7 +17,8 @@ public partial class ExportConfig<T>
     /// </summary>
     public static ExportConfig<T> GenDefaultConfigByAttribute(IEnumerable<T> data = null)
     {
-        var config = data.IsEmpty() ? new ExportConfig<T>() : new ExportConfig<T>(data);
+        var config = new ExportConfig<T>(data);
+        // var config = data.IsEmpty() ? new ExportConfig<T>() : new ExportConfig<T>(data);
         var attrData = typeof(T).AttrValues<ExcelExportAttribute>();
         foreach (var prop in attrData)
             config.Add(prop.Value.ExcelField, prop.Key.Name);
@@ -28,9 +29,29 @@ public partial class ExportConfig<T>
     /// </summary>
     public static ExportConfig<T> GenDefaultConfigByProps(IEnumerable<T> data = null)
     {
-        var config = data.IsEmpty() ? new ExportConfig<T>() : new ExportConfig<T>(data);
+        var config = new ExportConfig<T>(data);
+        // var config = data.IsEmpty() ? new ExportConfig<T>() : new ExportConfig<T>(data);
         foreach (var propName in typeof(T).BuildInTypePropNames())
             config.Add(propName, propName);
+        return config;
+    }
+    /// <summary>
+    /// 根据注释生成对应导出配置
+    /// </summary>
+    public static ExportConfig<T> GenConfigBySummary(IEnumerable<T> data = null)
+    {
+        var nodes = XmlExt.GetXmlDocuments().GetSummaryNodes().Where(item => item.FullName.Contains(typeof(T).FullName)).ToArray();
+        // 当属性没有注释时, 使用属性名称作为表头列
+        var kvs = typeof(T).BuildInTypePropNames().Select(propName =>
+        {
+            var node = nodes.FirstOrDefault(item => item.FullName.Split(".").Last() == propName);
+            if (node is null)
+                return new KeyValuePair<string, string>(propName, propName);
+            return new KeyValuePair<string, string>(node.Summary, node.FullName.Split(".").Last());
+        }).ToArray();
+        var config = new ExportConfig<T>(data);
+        foreach (var node in kvs)
+            config.Add(node.Key, node.Value);
         return config;
     }
 }
