@@ -43,13 +43,13 @@ public class EPPlusExcelReader : IExcelReader
                 yield return sheet.Cells[i, HeaderIndex[field] + Zero].Value.ToString();
         }
     }
-    public IEnumerable<string> this[long row] => sheet.Cells[(int)row + Zero, Zero, (int)row + Zero, Zero + Headers.Count()]
+    public IEnumerable<string> this[int row] => sheet.Cells[(int)row + Zero, Zero, (int)row + Zero, Zero + Headers.Count()]
     .Select(item => item.Value.ToString());
-    public string this[long row, long col] => sheet.Cells[(int)row + Zero, (int)col + Zero].Value.ToString();
-    public string this[string field, long row] => sheet.Cells[(int)row + Zero, HeaderIndex[field] + Zero].Value.ToString();
+    public string this[int row, int col] => sheet.Cells[(int)row + Zero, (int)col + Zero].Value.ToString();
+    public string this[string field, int row] => sheet.Cells[(int)row + Zero, HeaderIndex[field] + Zero].Value.ToString();
     public IEnumerable<string> Headers => HeaderList;
     public IDictionary<string, int> HeadersWithIndex => HeaderIndex;
-    public long RowCount => rowCount;
+    public int RowCount => rowCount;
     public void Dispose()
     {
         sheet.Workbook.Dispose();

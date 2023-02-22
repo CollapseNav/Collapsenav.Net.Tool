@@ -8,8 +8,7 @@ public interface IExcelReader : IExcelReader<string> { }
 /// </summary>
 public interface IExcelReader<T> : IExcelContainer<T>
 {
-#if NETSTANDARD2_0
-#else
+#if NET6_0_OR_GREATER && NETCOREAPP
     public static IExcelReader GetExcelReader(object sheet)
     {
         return ExcelReaderSelector.GetExcelReader(sheet);

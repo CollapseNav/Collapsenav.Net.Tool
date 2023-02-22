@@ -5,8 +5,7 @@ public interface IExcelCellReader : IExcelContainer<IReadCell>
     void SaveTo(Stream stream, bool autofit = true);
     void SaveTo(string path, bool autofit = true);
     Stream GetStream();
-#if NETSTANDARD2_0
-#else
+#if NET6_0_OR_GREATER && NETCOREAPP
     public static IExcelCellReader GetCellReader(object sheet)
     {
         return CellReaderSelector.GetCellReader(sheet);

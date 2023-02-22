@@ -44,10 +44,10 @@ public partial class ExportConfig<T>
         // 当属性没有注释时, 使用属性名称作为表头列
         var kvs = typeof(T).BuildInTypePropNames().Select(propName =>
         {
-            var node = nodes.FirstOrDefault(item => item.FullName.Split(".").Last() == propName);
+            var node = nodes.FirstOrDefault(item => item.FullName.Split('.').Last() == propName);
             if (node is null)
                 return new KeyValuePair<string, string>(propName, propName);
-            return new KeyValuePair<string, string>(node.Summary, node.FullName.Split(".").Last());
+            return new KeyValuePair<string, string>(node.Summary, node.FullName.Split('.').Last());
         }).ToArray();
         var config = new ExportConfig<T>(data);
         foreach (var node in kvs)

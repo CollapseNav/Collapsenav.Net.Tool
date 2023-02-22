@@ -5,8 +5,6 @@ namespace Collapsenav.Net.Tool.Excel;
 
 public class Init
 {
-#if NETCOREAPP
-    [ModuleInitializer]
     public static void InitTypeSelector()
     {
         Selector.AddTypeSelector(ExcelType.EPPlus,
@@ -22,5 +20,4 @@ public class Init
             stream => new EPPlusExcelReader(stream)
         );
     }
-#endif
 }

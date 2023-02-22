@@ -61,7 +61,7 @@ public class NPOICellReader : IExcelCellReader
     }
 
 
-    public long RowCount { get => rowCount; }
+    public int RowCount { get => rowCount; }
     public IEnumerable<string> Headers { get => HeaderList; }
     public IDictionary<string, int> HeadersWithIndex { get => HeaderIndex; }
     public IEnumerable<IReadCell> this[string field]
@@ -72,15 +72,15 @@ public class NPOICellReader : IExcelCellReader
                 yield return new NPOICell(GetCell(GetRow(i), HeaderIndex[field] + Zero));
         }
     }
-    public IEnumerable<IReadCell> this[long row] => GetRow(row + Zero).Cells.Select(item => new NPOICell(item));
-    public IReadCell this[long row, long col]
+    public IEnumerable<IReadCell> this[int row] => GetRow(row + Zero).Cells.Select(item => new NPOICell(item));
+    public IReadCell this[int row, int col]
     {
         get
         {
             return new NPOICell(GetCell(GetRow(row), (int)col));
         }
     }
-    public IReadCell this[string field, long row] => new NPOICell(GetCell(GetRow(row), HeaderIndex[field]));
+    public IReadCell this[string field, int row] => new NPOICell(GetCell(GetRow(row), HeaderIndex[field]));
 
     public void Dispose()
     {
@@ -94,7 +94,7 @@ public class NPOICellReader : IExcelCellReader
             foreach (var col in HeadersWithIndex)
                 _sheet.AutoSizeColumn(col.Value);
     }
-    private IRow GetRow(long row)
+    private IRow GetRow(int row)
     {
         var excelRow = _sheet.GetRow((int)row);
         excelRow ??= _sheet.CreateRow((int)row);
@@ -119,6 +119,7 @@ public class NPOICellReader : IExcelCellReader
     /// </summary>
     public void SaveTo(Stream stream, bool autofit = true)
     {
+        Console.WriteLine("save");
         if (autofit)
             AutoSize();
         stream.Clear();
@@ -145,9 +146,9 @@ public class NPOICellReader : IExcelCellReader
     public Stream GetStream()
     {
         AutoSize();
-        var ms = new NPOINotCloseStream();
-        SaveTo(ms);
-        return ms;
+        notCloseStream = new NPOINotCloseStream();
+        SaveTo(notCloseStream);
+        return notCloseStream;
     }
 
     public IEnumerator<IEnumerable<IReadCell>> GetEnumerator()

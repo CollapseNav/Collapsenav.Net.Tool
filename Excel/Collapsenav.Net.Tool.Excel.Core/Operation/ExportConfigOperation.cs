@@ -9,6 +9,7 @@ public partial class ExportConfig<T>
     {
         await Task.Factory.StartNew(() =>
         {
+            _ = excel[(data ?? Data).Count(), Header.Count()];
             foreach (var (value, index) in Header.SelectWithIndex())
                 excel[0, index].Value = value;
             foreach (var (cellData, rowIndex) in (data ?? Data).SelectWithIndex(1))

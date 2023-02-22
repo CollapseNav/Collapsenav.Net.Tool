@@ -59,7 +59,7 @@ public class EPPlusCellReader : IExcelCellReader
         _sheet = _pack.Workbook.Worksheets.Add("sheet1");
         rowCount = 0;
     }
-    public long RowCount { get => rowCount; }
+    public int RowCount { get => rowCount; }
     public IEnumerable<string> Headers { get => HeaderList; }
     public IDictionary<string, int> HeadersWithIndex { get => HeaderIndex; }
     public IEnumerable<IReadCell> this[string field]
@@ -70,9 +70,9 @@ public class EPPlusCellReader : IExcelCellReader
                 yield return new EPPlusCell(_sheet.Cells[i, HeaderIndex[field] + Zero]);
         }
     }
-    public IEnumerable<IReadCell> this[long row] => _sheet.Cells[(int)row + Zero, Zero, (int)row + Zero, Zero + Headers.Count()]?.Select(item => new EPPlusCell(item));
-    public IReadCell this[long row, long col] => new EPPlusCell(_sheet.Cells[(int)row + Zero, (int)col + Zero]);
-    public IReadCell this[string field, long row] => new EPPlusCell(_sheet.Cells[(int)row + Zero, HeaderIndex[field] + Zero]);
+    public IEnumerable<IReadCell> this[int row] => _sheet.Cells[(int)row + Zero, Zero, (int)row + Zero, Zero + Headers.Count()]?.Select(item => new EPPlusCell(item));
+    public IReadCell this[int row, int col] => new EPPlusCell(_sheet.Cells[(int)row + Zero, (int)col + Zero]);
+    public IReadCell this[string field, int row] => new EPPlusCell(_sheet.Cells[(int)row + Zero, HeaderIndex[field] + Zero]);
     public void Dispose()
     {
         _stream?.Dispose();

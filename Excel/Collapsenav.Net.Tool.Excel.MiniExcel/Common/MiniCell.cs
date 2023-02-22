@@ -16,38 +16,37 @@ public class MiniCell : IReadCell<KeyValuePair<string, object>>
         }).ToArray();
     }
     private KeyValuePair<string, object> cell;
-    private IDictionary<string, object> cellRow;
     private readonly int _row;
     private readonly int _col;
     private readonly string _scol;
+    public MiniRow MRow { get; private set; }
 
-    public MiniCell(KeyValuePair<string, object> excelCell, IDictionary<string, object> excelRow, int row, int col)
+    public MiniCell(MiniRow row, KeyValuePair<string, object> excelCell, int rowNum, int colNum)
     {
         cell = excelCell;
-        cellRow = excelRow;
-        _row = row;
-        _col = col;
-        _scol = GetSCol(col);
+        MRow = row;
+        _row = rowNum;
+        _col = colNum;
+        _scol = GetSCol(colNum);
     }
 
     public static string GetSCol(int col)
     {
-        if (col > ScolArray.Length)
-            return string.Empty;
         return ScolArray[col];
     }
     public KeyValuePair<string, object> Cell { get => cell; set => cell = value; }
     public int Row { get => _row - ExcelTool.MiniZero; }
     public int Col { get => _col - ExcelTool.MiniZero; }
-    public string StringValue => cell.Value.ToString().Trim();
+    public string StringValue => cell.Value?.ToString().Trim();
     public Type ValueType => cell.Value?.GetType();
     public object Value
     {
-        get => cell.Value; set => cellRow[_scol] = value;
+        get => cell.Value;
+        set => MRow.ExcelRow[_scol] = value;
     }
     public void CopyCellFrom(IReadCell cell)
     {
-        if (cell is not IReadCell<KeyValuePair<string, object>> tcell)
+        if (cell is not IReadCell<KeyValuePair<string, object>>)
             return;
         Value = cell.Value;
     }

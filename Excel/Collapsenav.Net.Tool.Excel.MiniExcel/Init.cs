@@ -3,8 +3,6 @@ using System.Runtime.CompilerServices;
 namespace Collapsenav.Net.Tool.Excel;
 public static class Init
 {
-#if NETCOREAPP
-    [ModuleInitializer]
     public static void InitTypeSelector()
     {
         Selector.AddTypeSelector(ExcelType.MiniExcel,
@@ -20,5 +18,4 @@ public static class Init
             stream => new MiniExcelReader(stream)
         );
     }
-#endif
 }
