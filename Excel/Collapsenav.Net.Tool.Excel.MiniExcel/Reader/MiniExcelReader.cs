@@ -34,7 +34,7 @@ public class MiniExcelReader : IExcelReader
     }
 
 
-    public long RowCount { get => rowCount; }
+    public int RowCount { get => rowCount; }
     public IEnumerable<string> Headers { get => HeaderList; }
     public IDictionary<string, int> HeadersWithIndex { get => HeaderIndex; }
     public IEnumerable<string> this[string field]
@@ -46,9 +46,9 @@ public class MiniExcelReader : IExcelReader
         }
     }
 
-    public IEnumerable<string> this[long row] => (sheet.ElementAt((int)row) as IEnumerable<KeyValuePair<string, object>>).Select(item => item.Value?.ToString() ?? string.Empty);
-    public string this[long row, long col] => (sheet.ElementAt((int)row) as IEnumerable<KeyValuePair<string, object>>).ElementAt((int)col + Zero).Value?.ToString() ?? string.Empty;
-    public string this[string field, long row] => (sheet.ElementAt((int)row) as IEnumerable<KeyValuePair<string, object>>).ElementAt(HeaderIndex[field] + Zero).Value?.ToString() ?? string.Empty;
+    public IEnumerable<string> this[int row] => (sheet.ElementAt((int)row) as IEnumerable<KeyValuePair<string, object>>).Select(item => item.Value?.ToString() ?? string.Empty);
+    public string this[int row, int col] => (sheet.ElementAt((int)row) as IEnumerable<KeyValuePair<string, object>>).ElementAt((int)col + Zero).Value?.ToString() ?? string.Empty;
+    public string this[string field, int row] => (sheet.ElementAt((int)row) as IEnumerable<KeyValuePair<string, object>>).ElementAt(HeaderIndex[field] + Zero).Value?.ToString() ?? string.Empty;
 
     public void Dispose()
     {

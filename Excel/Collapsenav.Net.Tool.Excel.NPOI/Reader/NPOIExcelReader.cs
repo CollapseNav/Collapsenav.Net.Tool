@@ -9,7 +9,7 @@ public class NPOIExcelReader : IExcelReader
     public IDictionary<string, int> HeaderIndex;
     protected IEnumerable<string> HeaderList;
     protected int rowCount;
-    public long RowCount { get => rowCount; }
+    public int RowCount { get => rowCount; }
     public IEnumerable<string> Headers { get => HeaderList; }
     public IDictionary<string, int> HeadersWithIndex { get => HeaderIndex; }
     public NPOIExcelReader(string path)
@@ -48,9 +48,9 @@ public class NPOIExcelReader : IExcelReader
                 yield return sheet.GetRow(i).GetCell(HeaderIndex[field] + Zero).ToString();
         }
     }
-    public IEnumerable<string> this[long row] => sheet.GetRow((int)row + Zero).Select(item => item.ToString());
-    public string this[long row, long col] => sheet.GetRow((int)row).GetCell((int)col).ToString();
-    public string this[string field, long row] => sheet.GetRow((int)row).GetCell(HeaderIndex[field]).ToString();
+    public IEnumerable<string> this[int row] => sheet.GetRow((int)row + Zero).Select(item => item.ToString());
+    public string this[int row, int col] => sheet.GetRow((int)row).GetCell((int)col).ToString();
+    public string this[string field, int row] => sheet.GetRow((int)row).GetCell(HeaderIndex[field]).ToString();
 
     public void Dispose()
     {
