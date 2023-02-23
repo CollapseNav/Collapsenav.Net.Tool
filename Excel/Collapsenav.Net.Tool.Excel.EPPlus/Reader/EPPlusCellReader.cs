@@ -113,9 +113,8 @@ public class EPPlusCellReader : IExcelCellReader
     /// </summary>
     public Stream GetStream()
     {
-        var ms = new MemoryStream();
-        SaveTo(ms);
-        return ms;
+        SaveTo(_stream);
+        return _stream;
     }
     public IEnumerator<IEnumerable<IReadCell>> GetEnumerator()
     {

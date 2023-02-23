@@ -21,6 +21,8 @@ public class MiniRow
     {
         Cells = new List<MiniCell>();
         ExcelRow = excelRow;
+        foreach (var (cell, index) in excelRow.SelectWithIndex())
+            Cells.Add(new MiniCell(this, cell, rowNum, index));
         RowNum = rowNum;
     }
 

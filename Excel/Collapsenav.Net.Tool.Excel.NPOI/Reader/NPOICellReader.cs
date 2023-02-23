@@ -119,11 +119,11 @@ public class NPOICellReader : IExcelCellReader
     /// </summary>
     public void SaveTo(Stream stream, bool autofit = true)
     {
-        Console.WriteLine("save");
         if (autofit)
             AutoSize();
         stream.Clear();
         using var fs = new NPOINotCloseStream();
+        fs.SeekToOrigin();
         _sheet.Workbook.Write(fs);
         fs.SeekToOrigin();
         fs.CopyTo(stream);
@@ -146,8 +146,12 @@ public class NPOICellReader : IExcelCellReader
     public Stream GetStream()
     {
         AutoSize();
-        notCloseStream = new NPOINotCloseStream();
+        _stream ??= new MemoryStream();
+        notCloseStream ??= new NPOINotCloseStream();
         SaveTo(notCloseStream);
+        notCloseStream.CopyTo(_stream);
+        notCloseStream.SeekToOrigin();
+        _stream.SeekToOrigin();
         return notCloseStream;
     }
 
