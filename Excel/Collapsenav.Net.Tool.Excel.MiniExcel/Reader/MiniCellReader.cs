@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using System.Linq.Expressions;
 using MiniExcelLibs;
 namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
@@ -30,10 +28,13 @@ public class MiniCellReader : IExcelCellReader
     {
         try
         {
-            _ = stream.Query().First();
             _stream = stream;
-            _sheet = _stream.Query() as List<IDictionary<string, object>>;
+            _sheet = (_stream.Query() as IEnumerable<IDictionary<string, object>>).ToList();
             _rows = new List<MiniRow>();
+            foreach (var (data, index) in _sheet.SelectWithIndex())
+            {
+                _rows.Add(new MiniRow(data, index));
+            }
             rowCount = _sheet.Count;
             colCount = _sheet.First().Count;
         }
@@ -76,7 +77,7 @@ public class MiniCellReader : IExcelCellReader
             var data = HeadersWithIndex;
             int index = data[field] + Zero;
             for (var row = Zero; row < rowCount + Zero; row++)
-                yield return _rows[row].Cells[index];
+                yield return GetMiniRow(row)[index];
         }
     }
 
@@ -133,7 +134,6 @@ public class MiniCellReader : IExcelCellReader
     /// </summary>
     public void SaveTo(Stream stream, bool autofit = true)
     {
-        Console.WriteLine("save");
         stream.SeekToOrigin();
         stream.Clear();
         stream.SaveAs(_sheet, printHeader: false);
@@ -153,6 +153,7 @@ public class MiniCellReader : IExcelCellReader
     /// </summary>
     public Stream GetStream()
     {
+        _stream ??= new MemoryStream();
         SaveTo(_stream);
         return _stream;
     }
