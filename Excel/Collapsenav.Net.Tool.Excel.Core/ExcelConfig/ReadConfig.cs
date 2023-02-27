@@ -39,6 +39,11 @@ public partial class ReadConfig<T> : ExcelConfig<T, ReadCellOption<T>>
         ExcelStream = new MemoryStream();
         stream.CopyTo(ExcelStream);
     }
+    public ReadConfig(ExcelConfig<T, BaseCellOption<T>> config)
+    {
+        FieldOption = config.FieldOption.Select(item => new ReadCellOption<T>(item));
+        Data = config.Data;
+    }
     /// <summary>
     /// 添加默认单元格读取设置(其实就是不读取Excel直接给T的某个字段赋值)
     /// </summary>
@@ -138,9 +143,10 @@ public partial class ReadConfig<T> : ExcelConfig<T, ReadCellOption<T>>
     /// </summary>
     /// <param name="field">表头列</param>
     /// <param name="propName">属性名称</param>
-    public virtual ReadConfig<T> Add(string field, string propName)
+    public virtual new ReadConfig<T> Add(string field, string propName)
     {
-        return Add(field, typeof(T).GetProperty(propName));
+        base.Add(field, propName);
+        return this;
     }
     /// <summary>
     /// 添加普通单元格设置
@@ -148,9 +154,10 @@ public partial class ReadConfig<T> : ExcelConfig<T, ReadCellOption<T>>
     /// <param name="check">判断结果</param>
     /// <param name="field">表头列</param>
     /// <param name="propName">属性名称</param>
-    public virtual ReadConfig<T> AddIf(bool check, string field, string propName)
+    public virtual new ReadConfig<T> AddIf(bool check, string field, string propName)
     {
-        return check ? Add(field, propName) : this;
+        base.AddIf(check, field, propName);
+        return this;
     }
     /// <summary>
     /// 添加行数据初始化

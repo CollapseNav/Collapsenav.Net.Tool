@@ -4,6 +4,12 @@
 /// </summary>
 public class ReadCellOption<T> : BaseCellOption<T>
 {
+    public ReadCellOption() { }
+    public ReadCellOption(ICellOption<T> cellOption)
+    {
+        ExcelField = cellOption.ExcelField;
+        PropName = cellOption.PropName;
+    }
     /// <summary>
     /// 转换 表格 数据的方法
     /// </summary>
