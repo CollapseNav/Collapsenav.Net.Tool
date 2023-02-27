@@ -1,12 +1,12 @@
 using System.Reflection;
 
 namespace Collapsenav.Net.Tool.Excel;
-public class BaseCellOption<T>
+public class BaseCellOption<T> : ICellOption<T>
 {
     /// <summary>
     /// 对应excel中的表头字段
     /// </summary>
-    public string ExcelField { get; set; }
+    public virtual string ExcelField { get; set; }
     /// <summary>
     /// 对应字段的属性(实际上包含PropName)
     /// </summary>

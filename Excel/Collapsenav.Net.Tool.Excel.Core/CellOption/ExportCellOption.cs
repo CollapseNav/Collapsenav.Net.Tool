@@ -4,6 +4,12 @@
 /// </summary>
 public class ExportCellOption<T> : BaseCellOption<T>
 {
+    public ExportCellOption() { }
+    public ExportCellOption(BaseCellOption<T> cellOption)
+    {
+        ExcelField = cellOption.ExcelField;
+        PropName = cellOption.PropName;
+    }
     /// <summary>
     /// 转换 表格 数据的方法
     /// </summary>
@@ -22,4 +28,8 @@ public class ExportCellOption<T> : BaseCellOption<T>
 }
 
 public class ExportCellOption : ExportCellOption<object>
-{ }
+{
+    public ExportCellOption(BaseCellOption<object> fieldOptions) : base(fieldOptions)
+    {
+    }
+}

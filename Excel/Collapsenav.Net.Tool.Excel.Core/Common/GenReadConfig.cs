@@ -20,7 +20,7 @@ public partial class ReadConfig<T>
         var config = new ReadConfig<T>();
         var attrData = typeof(T).AttrValues<ExcelReadAttribute>();
         foreach (var prop in attrData)
-            config.Add(config.GenOption(prop.Value.ExcelField, prop.Key));
+            config.Add(prop.Value.ExcelField, prop.Key);
         return config;
     }
     /// <summary>
@@ -31,7 +31,15 @@ public partial class ReadConfig<T>
         var config = new ReadConfig<T>();
         // 直接根据属性名称创建导入配置
         foreach (var prop in typeof(T).BuildInTypeProps())
-            config.Add(config.GenOption(prop.Name, prop));
+            config.Add(prop.Name, prop);
+        return config;
+    }
+    /// <summary>
+    /// 根据注释生成对应导入配置(data参数无效)
+    /// </summary>
+    public static new ReadConfig<T> GenConfigBySummary()
+    {
+        var config = new ReadConfig<T>(ExcelConfig<T, BaseCellOption<T>>.GenConfigBySummary());
         return config;
     }
 }
