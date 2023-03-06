@@ -30,11 +30,9 @@ public class MiniCellReader : IExcelCellReader
         {
             _stream = stream;
             _sheet = (_stream.Query() as IEnumerable<IDictionary<string, object>>).ToList();
-            _rows = new List<MiniRow>();
+            _rows = new List<MiniRow>(2000);
             foreach (var (data, index) in _sheet.SelectWithIndex())
-            {
                 _rows.Add(new MiniRow(data, index));
-            }
             rowCount = _sheet.Count;
             colCount = _sheet.First().Count;
         }
@@ -47,8 +45,8 @@ public class MiniCellReader : IExcelCellReader
     private void Init()
     {
         _stream = new MemoryStream();
-        _sheet = new List<IDictionary<string, object>>(10000);
-        _rows = new List<MiniRow>(10000);
+        _sheet = new List<IDictionary<string, object>>(1000);
+        _rows = new List<MiniRow>(1000);
         rowCount = 0;
     }
 
@@ -109,9 +107,10 @@ public class MiniCellReader : IExcelCellReader
     {
         if (row < rowCount)
             return _rows[row];
+        KeyValuePair<string, object>[] kvs = Enumerable.Range(0, colCount + 1).Select(item => new KeyValuePair<string, object>(MiniCell.GetSCol(item), "")).ToArray();
         for (var rowNum = _rows.Count; rowNum <= row; rowNum++)
         {
-            IDictionary<string, object> newRow = new Dictionary<string, object>();
+            IDictionary<string, object> newRow = new Dictionary<string, object>(kvs);
             _sheet.Add(newRow);
             _rows.Add(new MiniRow(newRow, rowNum));
         }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Collapsenav.Net.Tool.Excel.Test;
@@ -14,8 +13,17 @@ public class ExcelTestDto
         Field3 = field3;
     }
 
+    /// <summary>
+    /// 第一个属性
+    /// </summary>
     public string Field0 { get; set; }
+    /// <summary>
+    /// FirstProp
+    /// </summary>
     public int Field1 { get; set; }
+    /// <summary>
+    /// 随便什么东西
+    /// </summary>
     public bool Field2 { get; set; }
     public double Field3 { get; set; }
 

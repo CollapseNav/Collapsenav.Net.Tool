@@ -8,6 +8,7 @@
         <Product>Collapsenav.Net.Tool.Excel.Core</Product>
         <PackageId>Collapsenav.Net.Tool.Excel.Core</PackageId>
         <ProjectUrl>http://doc.collapsenav.cn/docs/Excel/</ProjectUrl>
+        <NoWarn>CA2255;1591</NoWarn>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="../../Tool/Collapsenav.Net.Tool/Collapsenav.Net.Tool.csproj" />

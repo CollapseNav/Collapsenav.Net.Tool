@@ -3,6 +3,13 @@ using System.Reflection;
 namespace Collapsenav.Net.Tool;
 public static partial class TypeExt
 {
+    private static Type[] BuildInTypes;
+
+    static TypeExt()
+    {
+        BuildInTypes = new List<Type> { typeof(Boolean), typeof(Byte), typeof(SByte), typeof(Char), typeof(Decimal), typeof(Double), typeof(Single), typeof(Int32), typeof(UInt32), typeof(IntPtr), typeof(UIntPtr), typeof(Int64), typeof(UInt64), typeof(Int16), typeof(UInt16), typeof(String), typeof(DateTime), typeof(Guid), typeof(Nullable<Boolean>), typeof(Nullable<Byte>), typeof(Nullable<SByte>), typeof(Nullable<Char>), typeof(Nullable<Decimal>), typeof(Nullable<Double>), typeof(Nullable<Single>), typeof(Nullable<Int32>), typeof(Nullable<UInt32>), typeof(Nullable<IntPtr>), typeof(Nullable<UIntPtr>), typeof(Nullable<Int64>), typeof(Nullable<UInt64>), typeof(Nullable<Int16>), typeof(Nullable<UInt16>), typeof(Nullable<DateTime>), typeof(Nullable<Guid>), }.ToArray();
+    }
+
     /// <summary>
     /// 是否内建类型
     /// </summary>
@@ -29,28 +36,7 @@ public static partial class TypeExt
     /// </summary>
     public static bool IsBaseType(this Type type)
     {
-        return type.Name switch
-        {
-            nameof(Boolean) => true,
-            nameof(Byte) => true,
-            nameof(SByte) => true,
-            nameof(Char) => true,
-            nameof(Decimal) => true,
-            nameof(Double) => true,
-            nameof(Single) => true,
-            nameof(Int32) => true,
-            nameof(UInt32) => true,
-            nameof(IntPtr) => true,
-            nameof(UIntPtr) => true,
-            nameof(Int64) => true,
-            nameof(UInt64) => true,
-            nameof(Int16) => true,
-            nameof(UInt16) => true,
-            nameof(String) => true,
-            nameof(DateTime) => true,
-            nameof(Guid) => true,
-            _ => false,
-        };
+        return type.In(BuildInTypes);
     }
 
 

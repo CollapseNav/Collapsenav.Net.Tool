@@ -7,37 +7,45 @@ public partial class ReadConfig<T>
     public static ReadConfig<T> GenDefaultConfig()
     {
         // 根据 T 中设置的 ExcelExportAttribute 创建导入配置
-        if (typeof(T).AttrValues<ExcelExportAttribute>().NotEmpty())
-            return GenDefaultConfigByAttribute();
+        if (typeof(T).AttrValues<ExcelReadAttribute>().NotEmpty())
+            return GenConfigByAttribute();
         // 直接根据属性名称创建导入配置
-        return GenDefaultConfigByProps();
+        return GenConfigByProps();
     }
     /// <summary>
     /// 根据 T 中设置的 ExcelExportAttribute 创建导入配置
     /// </summary>
+    [Obsolete("请使用GenConfigByAttribute")]
     public static ReadConfig<T> GenDefaultConfigByAttribute()
     {
-        var config = new ReadConfig<T>();
-        var attrData = typeof(T).AttrValues<ExcelReadAttribute>();
-        foreach (var prop in attrData)
-            config.Add(prop.Value.ExcelField, prop.Key);
-        return config;
+        return new ReadConfig<T>(ExcelConfig<T, BaseCellOption<T>>.GenConfigByAttribute<ExcelReadAttribute>());
+    }
+    /// <summary>
+    /// 根据 T 中设置的 ExcelExportAttribute 创建导入配置
+    /// </summary>
+    public static ReadConfig<T> GenConfigByAttribute()
+    {
+        return new ReadConfig<T>(ExcelConfig<T, BaseCellOption<T>>.GenConfigByAttribute<ExcelReadAttribute>());
     }
     /// <summary>
     /// 直接根据属性名称创建导入配置
     /// </summary>
+    [Obsolete("请使用GenConfigByProps")]
     public static ReadConfig<T> GenDefaultConfigByProps()
     {
-        var config = new ReadConfig<T>();
-        // 直接根据属性名称创建导入配置
-        foreach (var prop in typeof(T).BuildInTypeProps())
-            config.Add(prop.Name, prop);
-        return config;
+        return new ReadConfig<T>(ExcelConfig<T, BaseCellOption<T>>.GenConfigByProps());
+    }
+    /// <summary>
+    /// 直接根据属性名称创建导入配置
+    /// </summary>
+    public static new ReadConfig<T> GenConfigByProps()
+    {
+        return new ReadConfig<T>(ExcelConfig<T, BaseCellOption<T>>.GenConfigByProps());
     }
     /// <summary>
     /// 根据注释生成对应导入配置(data参数无效)
     /// </summary>
-    public static new ReadConfig<T> GenConfigBySummary()
+    public static ReadConfig<T> GenConfigBySummary()
     {
         var config = new ReadConfig<T>(ExcelConfig<T, BaseCellOption<T>>.GenConfigBySummary());
         return config;

@@ -5,12 +5,18 @@ namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
 /// 表格配置
 /// </summary>
-public class ExcelConfig<T, CellConfig> where CellConfig : ICellOption<T>, new()
+public class ExcelConfig<T, CellConfig> where CellConfig : ICellOption, new()
 {
     public ExcelConfig()
     {
         FieldOption = new List<CellConfig>();
+        DtoType = typeof(T);
     }
+    public ExcelConfig(IEnumerable<(string, string)> kvs) : this()
+    {
+        InitFieldOption(kvs);
+    }
+    protected Type DtoType;
     /// <summary>
     /// 依据表头的设置
     /// </summary>
@@ -23,6 +29,19 @@ public class ExcelConfig<T, CellConfig> where CellConfig : ICellOption<T>, new()
     /// 获取表头
     /// </summary>
     public virtual IEnumerable<string> Header { get => FieldOption.Select(item => item.ExcelField); }
+    /// <summary>
+    /// 通过元组初始化配置
+    /// </summary>
+    /// <param name="kvs"></param>
+    public virtual void InitFieldOption(IEnumerable<(string Key, string Value)> kvs)
+    {
+        FieldOption = new List<CellConfig>();
+        if (kvs.NotEmpty())
+        {
+            foreach (var (Key, Value) in kvs)
+                Add(Key, Value);
+        }
+    }
     /// <summary>
     /// 根据给出的表头筛选options
     /// </summary>
@@ -54,12 +73,17 @@ public class ExcelConfig<T, CellConfig> where CellConfig : ICellOption<T>, new()
             return Add(option);
         return this;
     }
+    /// <summary>
+    /// 添加普通单元格设置
+    /// </summary>
     public virtual ExcelConfig<T, CellConfig> Add(string field, PropertyInfo prop)
     {
         FieldOption = FieldOption.Append(new CellConfig { ExcelField = field, Prop = prop });
         return this;
     }
-
+    /// <summary>
+    /// 添加普通单元格设置
+    /// </summary>
     public virtual ExcelConfig<T, CellConfig> AddIf(bool check, string field, PropertyInfo prop)
     {
         if (check)
@@ -94,19 +118,48 @@ public class ExcelConfig<T, CellConfig> where CellConfig : ICellOption<T>, new()
         FieldOption = FieldOption.Where(item => item.ExcelField != field);
         return this;
     }
-    public static ExcelConfig<T, CellConfig> GenConfigBySummary()
+
+    /// <summary>
+    /// 直接根据属性名称创建配置
+    /// </summary>
+    public static ExcelConfig<T, CellConfig> GenConfigByProps()
     {
-        var nodes = XmlExt.GetXmlDocuments().GetSummaryNodes().Where(item => item.FullName.Contains(typeof(T).FullName)).ToArray();
-        var kvs = typeof(T).BuildInTypePropNames().Select(propName =>
+        var config = new ExcelConfig<T, CellConfig>();
+        foreach (var prop in typeof(T).BuildInTypeProps())
+            config.Add(prop.Name, prop);
+        return config;
+    }
+
+    /// <summary>
+    /// 根据 T 中设置的 ExcelAttribute 创建配置
+    /// </summary>
+    public static ExcelConfig<T, CellConfig> GenConfigByAttribute<Attr>() where Attr : ExcelAttribute
+    {
+        var config = new ExcelConfig<T, CellConfig>();
+        var attrData = typeof(T).AttrValues<Attr>();
+        foreach (var prop in attrData)
+            config.Add(prop.Value.ExcelField, prop.Key);
+        return config;
+    }
+
+    /// <summary>
+    /// 通过注释生成配置
+    /// </summary>
+    public static ExcelConfig<T, CellConfig> GenConfigBySummary(Type type = null)
+    {
+        type ??= typeof(T);
+        // 获取所有注释node
+        var nodes = XmlExt.GetXmlDocuments().GetSummaryNodes().Where(item => item.FullName.Contains(type.FullName)).ToArray();
+        var kvs = type.BuildInTypePropNames().Select(propName =>
         {
             var node = nodes.FirstOrDefault(item => item.FullName.Split('.').Last() == propName);
             if (node is null)
-                return new KeyValuePair<string, string>(propName, propName);
-            return new KeyValuePair<string, string>(node.Summary, node.FullName.Split('.').Last());
+                return new KeyValuePair<string, PropertyInfo>(propName, null);
+            return new KeyValuePair<string, PropertyInfo>(node.Summary, type.GetProperty(node.FullName.Split('.').Last()));
         }).ToArray();
         var config = new ExcelConfig<T, CellConfig>();
         foreach (var node in kvs)
-            config.Add(new CellConfig { ExcelField = node.Key, PropName = node.Value });
+            config.Add(new CellConfig { ExcelField = node.Key, Prop = node.Value });
         return config;
     }
 }

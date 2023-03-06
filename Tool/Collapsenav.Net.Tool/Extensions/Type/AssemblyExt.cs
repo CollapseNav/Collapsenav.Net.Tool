@@ -170,7 +170,7 @@ public static partial class AssemblyExt
     {
         return domain.GetCustomerTypes().Where(item =>
         {
-            return (item.IsGenericType ? item.FullName.Substring(0, item.FullName.IndexOf('`')) : item.FullName).HasEndsWith(suffixs);
+            return (item.IsGenericType ? item.FullName.Substring(0, item.FullName.IndexOf('`')) : item.Name).HasEndsWith(suffixs);
         });
     }
     /// <summary>

@@ -7,12 +7,12 @@ public partial class ReadConfig<T>
     /// <summary>
     /// 将表格数据转换为T类型的集合(更快)
     /// </summary>
-    public IEnumerable<T> ToEntity(IExcelReader sheet)
+    public virtual IEnumerable<T> ToEntity(IExcelReader sheet)
     {
         var header = sheet.HeadersWithIndex;
         var rowCount = sheet.RowCount;
         List<T> data = new();
-        foreach (var index in Enumerable.Range(1, (int)rowCount - 1))
+        foreach (var index in Enumerable.Range(1, rowCount - 1))
         {
             var dataRow = sheet[index].ToList();
             // 根据对应传入的设置 为obj赋值
@@ -38,7 +38,7 @@ public partial class ReadConfig<T>
     /// <summary>
     /// 将表格数据转换为T类型的集合
     /// </summary>
-    public async Task<IEnumerable<T>> ToEntityAsync(IExcelReader sheet)
+    public virtual async Task<IEnumerable<T>> ToEntityAsync(IExcelReader sheet)
     {
         var header = sheet.HeadersWithIndex;
         var rowCount = sheet.RowCount;
@@ -75,29 +75,33 @@ public partial class ReadConfig<T>
         }
         else
         {
-            List<T> data = new();
-            foreach (var index in Enumerable.Range(1, (int)rowCount - 1))
+            return await Task.Factory.StartNew(() =>
             {
-                var dataRow = sheet[index].ToList();
-                // 根据对应传入的设置 为obj赋值
-                if (dataRow.NotEmpty())
+                List<T> data = new();
+                foreach (var index in Enumerable.Range(1, (int)rowCount - 1))
                 {
-                    var obj = Activator.CreateInstance<T>();
-                    foreach (var option in FieldOption)
+                    var dataRow = sheet[index].ToList();
+                    // 根据对应传入的设置 为obj赋值
+                    if (dataRow.NotEmpty())
                     {
-                        if (option.ExcelField.NotNull())
+                        var obj = Activator.CreateInstance<T>();
+                        foreach (var option in FieldOption)
                         {
-                            var value = dataRow[header[option.ExcelField]];
-                            option.Prop.SetValue(obj, option.Action == null ? value : option.Action(value));
+                            if (option.ExcelField.NotNull())
+                            {
+                                var value = dataRow[header[option.ExcelField]];
+                                option.Prop.SetValue(obj, option.Action == null ? value : option.Action(value));
+                            }
+                            else
+                                option.Prop.SetValue(obj, option.Action == null ? null : option.Action(string.Empty));
                         }
-                        else
-                            option.Prop.SetValue(obj, option.Action == null ? null : option.Action(string.Empty));
+                        Init?.Invoke(obj);
+                        data.Add(obj);
                     }
-                    Init?.Invoke(obj);
-                    data.Add(obj);
                 }
-            }
-            return data;
+                return data;
+            });
+
         }
     }
 

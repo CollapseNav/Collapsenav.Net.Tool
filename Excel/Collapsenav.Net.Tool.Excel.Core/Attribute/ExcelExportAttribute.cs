@@ -1,12 +1,9 @@
 namespace Collapsenav.Net.Tool.Excel;
 [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-public sealed class ExcelExportAttribute : Attribute
+public sealed class ExcelExportAttribute : ExcelAttribute
 {
-    readonly string excelField;
     public ExcelExportAttribute() { }
-    public ExcelExportAttribute(string excelField)
+    public ExcelExportAttribute(string excelField) : base(excelField)
     {
-        this.excelField = excelField;
     }
-    public string ExcelField { get => excelField; }
 }
