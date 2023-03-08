@@ -4,7 +4,7 @@ public class ExcelAttribute : Attribute
 {
     readonly string excelField;
     public ExcelAttribute() { }
-    public ExcelAttribute(string excelField)
+    public ExcelAttribute(string excelField) : this()
     {
         this.excelField = excelField;
     }

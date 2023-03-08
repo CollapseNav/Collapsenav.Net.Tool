@@ -7,32 +7,32 @@ using Xunit;
 namespace Collapsenav.Net.Tool.Excel.Test;
 public class ReadConfigTest
 {
+    private readonly string DefaultExcelPath = "./DefaultExcel.xlsx";
+    private readonly string TestExcelPath = "./TestExcel.xlsx";
     /// <summary>
     /// 测试默认配置
     /// </summary>
     [Fact]
     public async Task DefaultConfigTest()
     {
-        var path = "./DefaultExcel.xlsx";
         var read = ReadConfig<ExcelDefaultDto>.GenDefaultConfig();
         Assert.True(read.FieldOption.Count() == 3);
-        var data = await read.EPPlusToEntityAsync(path);
-        Assert.True(data.Count() == 20);
-        Assert.True(data.Count(item => item.Field0 == "233") == 10);
-        Assert.True(data.Count(item => item.Field1 == 23) == 10);
-        Assert.True(data.Count(item => item.Field3 == 233.33) == 10);
+        var data = await read.EPPlusToEntityAsync(DefaultExcelPath);
+        TestData(data);
 
-        data = await read.NPOIToEntityAsync(path);
-        Assert.True(data.Count() == 20);
-        Assert.True(data.Count(item => item.Field0 == "233") == 10);
-        Assert.True(data.Count(item => item.Field1 == 23) == 10);
-        Assert.True(data.Count(item => item.Field3 == 233.33) == 10);
+        data = await read.NPOIToEntityAsync(DefaultExcelPath);
+        TestData(data);
 
-        data = await read.MiniToEntityAsync(path);
-        Assert.True(data.Count() == 20);
-        Assert.True(data.Count(item => item.Field0 == "233") == 10);
-        Assert.True(data.Count(item => item.Field1 == 23) == 10);
-        Assert.True(data.Count(item => item.Field3 == 233.33) == 10);
+        data = await read.MiniToEntityAsync(DefaultExcelPath);
+        TestData(data);
+
+        static void TestData(System.Collections.Generic.IEnumerable<ExcelDefaultDto> data)
+        {
+            Assert.True(data.Count() == 20);
+            Assert.True(data.Count(item => item.Field0 == "233") == 10);
+            Assert.True(data.Count(item => item.Field1 == 23) == 10);
+            Assert.True(data.Count(item => item.Field3 == 233.33) == 10);
+        }
     }
     /// <summary>
     /// 测试自定义Default配置
@@ -40,14 +40,13 @@ public class ReadConfigTest
     [Fact]
     public async Task DefaultCellOptionTest()
     {
-        var path = "./TestExcel.xlsx";
         var config = new ReadConfig<ExcelTestDto>()
         .Default(item => item.Field0, "233")
         .DefaultIf(true, item => item.Field1, 233)
         .Default(item => item.Field2, true)
         .DefaultIf(true, item => item.Field3, 23.3)
         ;
-        var data = await config.ToEntityAsync(path);
+        var data = await config.ToEntityAsync(TestExcelPath);
         Assert.True(data.Count() == 3000);
         Assert.True(data.All(item => item.Field0 == "233"));
         Assert.True(data.All(item => item.Field1 == 233));
@@ -61,14 +60,13 @@ public class ReadConfigTest
     [Fact]
     public async Task AddCellOptionTest()
     {
-        var path = "./TestExcel.xlsx";
         var config = new ReadConfig<ExcelTestDto>()
         .Add("Field0", item => item.Field0)
         .AddIf(true, "Field1", item => item.Field1)
         .Add("Field2", item => item.Field2, item => item == "Male")
         .AddIf(true, "Field3", item => item.Field3)
         ;
-        var data = await config.ToEntityAsync(path);
+        var data = await config.ToEntityAsync(TestExcelPath);
         Assert.True(data.Count() == 3000);
         Assert.True(data.Count(item => item.Field0 == "233") == 1500);
         Assert.True(data.Count(item => item.Field1 == 23) == 1500);
@@ -117,14 +115,13 @@ public class ReadConfigTest
     [Fact]
     public async Task AddCellOptionWithPropTest()
     {
-        var path = "./TestExcel.xlsx";
         var config = new ReadConfig<ExcelTestDto>()
         .Add("Field0", typeof(ExcelTestDto).GetProperty("Field0"))
         .AddIf(true, "Field1", typeof(ExcelTestDto).GetProperty("Field1"))
         .Add("Field2", typeof(ExcelTestDto).GetProperty("Field2"), item => item == "Male")
         .AddIf(true, "Field3", typeof(ExcelTestDto).GetProperty("Field3"))
         ;
-        var data = await config.ToEntityAsync(path);
+        var data = await config.ToEntityAsync(TestExcelPath);
         Assert.True(data.Count() == 3000);
         Assert.True(data.Count(item => item.Field0 == "233") == 1500);
         Assert.True(data.Count(item => item.Field1 == 23) == 1500);
@@ -159,7 +156,6 @@ public class ReadConfigTest
     [Fact]
     public async Task AddInitOptionTest()
     {
-        var path = "./TestExcel.xlsx";
         var config = new ReadConfig<ExcelTestDto>()
         .Add("Field0", item => item.Field0)
         .Add("Field1", item => item.Field1)
@@ -172,7 +168,7 @@ public class ReadConfigTest
             return item;
         })
         ;
-        var data = await config.ToEntityAsync(path);
+        var data = await config.ToEntityAsync(TestExcelPath);
         Assert.True(data.Count() == 3000);
         Assert.True(data.Count(item => item.Field0 == "233True") == 1500);
         Assert.True(data.Count(item => item.Field1 == 23) == 1500);
@@ -191,7 +187,7 @@ public class ReadConfigTest
             return item;
         })
         ;
-        data = await config.ToEntityAsync(path);
+        data = await config.ToEntityAsync(TestExcelPath);
         Assert.True(data.Count() == 3000);
         Assert.True(data.Count(item => item.Field0 == "233") == 1500);
         Assert.True(data.Count(item => item.Field1 == 23) == 1500);
@@ -221,40 +217,32 @@ public class ReadConfigTest
     [Fact]
     public async Task ReadConfigWithFileTest()
     {
-        var path = "./TestExcel.xlsx";
-        var config = new ReadConfig<ExcelTestDto>(path)
+        var config = new ReadConfig<ExcelTestDto>(TestExcelPath)
         .Add("Field0", item => item.Field0)
         .Add("Field1", item => item.Field1)
         .Add("Field2", item => item.Field2, item => item == "Male")
         .Add("Field3", item => item.Field3)
         ;
         var data = await config.EPPlusToEntityAsync();
-        Assert.True(data.Count() == 3000);
-        Assert.True(data.Count(item => item.Field0 == "233") == 1500);
-        Assert.True(data.Count(item => item.Field1 == 23) == 1500);
-        Assert.True(data.Count(item => item.Field2 == true) == 1500);
-        Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
+        TestData(data);
 
         data = await config.NPOIToEntityAsync();
-        Assert.True(data.Count() == 3000);
-        Assert.True(data.Count(item => item.Field0 == "233") == 1500);
-        Assert.True(data.Count(item => item.Field1 == 23) == 1500);
-        Assert.True(data.Count(item => item.Field2 == true) == 1500);
-        Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
+        TestData(data);
 
         data = await config.MiniToEntityAsync();
-        Assert.True(data.Count() == 3000);
-        Assert.True(data.Count(item => item.Field0 == "233") == 1500);
-        Assert.True(data.Count(item => item.Field1 == 23) == 1500);
-        Assert.True(data.Count(item => item.Field2 == true) == 1500);
-        Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
+        TestData(data);
 
         data = await config.ToEntityAsync();
-        Assert.True(data.Count() == 3000);
-        Assert.True(data.Count(item => item.Field0 == "233") == 1500);
-        Assert.True(data.Count(item => item.Field1 == 23) == 1500);
-        Assert.True(data.Count(item => item.Field2 == true) == 1500);
-        Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
+        TestData(data);
+
+        static void TestData(System.Collections.Generic.IEnumerable<ExcelTestDto> data)
+        {
+            Assert.True(data.Count() == 3000);
+            Assert.True(data.Count(item => item.Field0 == "233") == 1500);
+            Assert.True(data.Count(item => item.Field1 == 23) == 1500);
+            Assert.True(data.Count(item => item.Field2 == true) == 1500);
+            Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
+        }
     }
 
     /// <summary>
@@ -263,8 +251,7 @@ public class ReadConfigTest
     [Fact]
     public async Task ReadConfigWithStreamTest()
     {
-        var path = "./TestExcel.xlsx";
-        using var fs = path.OpenReadShareStream();
+        using var fs = TestExcelPath.OpenReadShareStream();
         var config = new ReadConfig<ExcelTestDto>(fs)
         .Add("Field0", item => item.Field0)
         .Add("Field1", item => item.Field1)
@@ -272,96 +259,26 @@ public class ReadConfigTest
         .Add("Field3", item => item.Field3)
         ;
         var data = await config.EPPlusToEntityAsync();
-        Assert.True(data.Count() == 3000);
-        Assert.True(data.Count(item => item.Field0 == "233") == 1500);
-        Assert.True(data.Count(item => item.Field1 == 23) == 1500);
-        Assert.True(data.Count(item => item.Field2 == true) == 1500);
-        Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
+        TestData(data);
 
         data = await config.NPOIToEntityAsync();
-        Assert.True(data.Count() == 3000);
-        Assert.True(data.Count(item => item.Field0 == "233") == 1500);
-        Assert.True(data.Count(item => item.Field1 == 23) == 1500);
-        Assert.True(data.Count(item => item.Field2 == true) == 1500);
-        Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
+        TestData(data);
 
         data = await config.MiniToEntityAsync();
-        Assert.True(data.Count() == 3000);
-        Assert.True(data.Count(item => item.Field0 == "233") == 1500);
-        Assert.True(data.Count(item => item.Field1 == 23) == 1500);
-        Assert.True(data.Count(item => item.Field2 == true) == 1500);
-        Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
+        TestData(data);
 
         data = await config.ToEntityAsync();
-        Assert.True(data.Count() == 3000);
-        Assert.True(data.Count(item => item.Field0 == "233") == 1500);
-        Assert.True(data.Count(item => item.Field1 == 23) == 1500);
-        Assert.True(data.Count(item => item.Field2 == true) == 1500);
-        Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
+        TestData(data);
+
+        static void TestData(System.Collections.Generic.IEnumerable<ExcelTestDto> data)
+        {
+            Assert.True(data.Count() == 3000);
+            Assert.True(data.Count(item => item.Field0 == "233") == 1500);
+            Assert.True(data.Count(item => item.Field1 == 23) == 1500);
+            Assert.True(data.Count(item => item.Field2 == true) == 1500);
+            Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
+        }
     }
-
-    // /// <summary>
-    // /// 从对应的sheet格式读取
-    // /// </summary>
-    // [Fact]
-    // public async Task ReadConfigWithSheetTest()
-    // {
-    //     var path = "./TestExcel.xlsx";
-    //     var config = new ReadConfig<ExcelTestDto>()
-    //     .Add("Field0", item => item.Field0)
-    //     .Add("Field1", item => item.Field1)
-    //     .Add("Field2", item => item.Field2, item => item == "Male")
-    //     .Add("Field3", item => item.Field3)
-    //     ;
-    //     var epplusSheet = EPPlusTool.EPPlusSheet(path);
-    //     var data = await config.EPPlusToEntityAsync(epplusSheet);
-    //     Assert.True(data.Count() == 3000);
-    //     Assert.True(data.Count(item => item.Field0 == "233") == 1500);
-    //     Assert.True(data.Count(item => item.Field1 == 23) == 1500);
-    //     Assert.True(data.Count(item => item.Field2 == true) == 1500);
-    //     Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
-
-    //     var npoiSheet = NPOITool.NPOISheet(path);
-    //     data = await config.NPOIToEntityAsync(npoiSheet);
-    //     Assert.True(data.Count() == 3000);
-    //     Assert.True(data.Count(item => item.Field0 == "233") == 1500);
-    //     Assert.True(data.Count(item => item.Field1 == 23) == 1500);
-    //     Assert.True(data.Count(item => item.Field2 == true) == 1500);
-    //     Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
-
-    //     var miniSheet = path.OpenReadShareStream();
-    //     data = await config.MiniToEntityAsync(miniSheet);
-    //     Assert.True(data.Count() == 3000);
-    //     Assert.True(data.Count(item => item.Field0 == "233") == 1500);
-    //     Assert.True(data.Count(item => item.Field1 == 23) == 1500);
-    //     Assert.True(data.Count(item => item.Field2 == true) == 1500);
-    //     Assert.True(data.Count(item => item.Field3 == 123.23) == 1500);
-
-    //     try
-    //     {
-    //         data = await config.EPPlusToEntityAsync();
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         Assert.True(ex.GetType() == typeof(NullReferenceException));
-    //     }
-    //     try
-    //     {
-    //         data = await config.NPOIToEntityAsync();
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         Assert.True(ex.GetType() == typeof(NullReferenceException));
-    //     }
-    //     try
-    //     {
-    //         data = await config.MiniToEntityAsync();
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         Assert.True(ex.GetType() == typeof(NullReferenceException));
-    //     }
-    // }
 
     [Fact]
     public async Task StaticReadConfigFuncByPathTest()
@@ -377,8 +294,7 @@ public class ReadConfigTest
             item.Field0 += item.Field2.ToString();
             item.Field3 *= 100;
             return item;
-        })
-        ;
+        });
         var data = await ExcelTool.ExcelToEntityAsync(path, config);
 
         Assert.True(data.Count() == 3000);

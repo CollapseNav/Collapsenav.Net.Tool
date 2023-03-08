@@ -16,6 +16,15 @@ public class ExcelConfig<T, CellConfig> where CellConfig : ICellOption, new()
     {
         InitFieldOption(kvs);
     }
+
+    public ExcelConfig(IEnumerable<StringCellOption> options) : this()
+    {
+        FieldOption = options.Select(item => new CellConfig
+        {
+            ExcelField = item.FieldName,
+            PropName = item.PropName,
+        });
+    }
     protected Type DtoType;
     /// <summary>
     /// 依据表头的设置

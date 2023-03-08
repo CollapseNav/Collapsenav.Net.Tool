@@ -1,4 +1,6 @@
 using Collapsenav.Net.Tool;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
 
 namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
@@ -11,7 +13,50 @@ public class ExportConfig : ExportConfig<object>
     /// 必传data数据确定类型
     /// </summary>
     public ExportConfig(IEnumerable<object> data, IEnumerable<(string, string)> kvs = null) : base(data, kvs) { }
+    public ExportConfig(IEnumerable<object> data, IEnumerable<(string, string, string)> kvs) : base(data)
+    {
+        InitFieldOption(kvs);
+    }
 
+    public ExportConfig(IEnumerable<object> data, IEnumerable<StringCellOption> options) : base(data)
+    {
+        InitFieldOption(options.Select(item => (item.FieldName, item.PropName, item.Func)));
+    }
+    /// <summary>
+    /// 通过字典初始化配置
+    /// </summary>
+    /// <param name="kvs">Key为表头名称, Value为属性名称</param>
+    public void InitFieldOption(IEnumerable<(string Key, string Value, string Func)> kvs)
+    {
+        FieldOption = new List<ExportCellOption<object>>();
+        if (kvs.NotEmpty())
+        {
+            foreach (var (Key, Value, Func) in kvs)
+                Add(Key, Value, Func);
+        }
+    }
+
+    /// <summary>
+    /// 添加普通单元格设置
+    /// </summary>
+    /// <param name="field">表头列</param>
+    /// <param name="propName">属性名称</param>
+    /// <param name="func"></param>
+    public ExportConfig<object> Add(string field, string propName, string func)
+    {
+        if (func.NotEmpty())
+        {
+            var options = ScriptOptions.Default.AddReferences(GetType().Assembly);
+            var sc = CSharpScript.Create<object>(func, options, globalsType: DtoType);
+            var delega = sc.CreateDelegate();
+            Add(field, item => delega(item).Result);
+        }
+        else
+        {
+            Add(field, DtoType.GetProperty(propName));
+        }
+        return this;
+    }
     public static new ExportConfig GenConfigBySummary(IEnumerable<object> data)
     {
         if (data == null)

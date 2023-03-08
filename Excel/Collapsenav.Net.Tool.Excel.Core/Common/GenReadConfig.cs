@@ -18,7 +18,7 @@ public partial class ReadConfig<T>
     [Obsolete("请使用GenConfigByAttribute")]
     public static ReadConfig<T> GenDefaultConfigByAttribute()
     {
-        return new ReadConfig<T>(ExcelConfig<T, BaseCellOption<T>>.GenConfigByAttribute<ExcelReadAttribute>());
+        return GenDefaultConfigByAttribute();
     }
     /// <summary>
     /// 根据 T 中设置的 ExcelExportAttribute 创建导入配置
@@ -33,7 +33,7 @@ public partial class ReadConfig<T>
     [Obsolete("请使用GenConfigByProps")]
     public static ReadConfig<T> GenDefaultConfigByProps()
     {
-        return new ReadConfig<T>(ExcelConfig<T, BaseCellOption<T>>.GenConfigByProps());
+        return GenDefaultConfigByProps();
     }
     /// <summary>
     /// 直接根据属性名称创建导入配置

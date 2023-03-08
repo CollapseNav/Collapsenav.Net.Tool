@@ -18,7 +18,7 @@ public partial class ExportConfig<T>
     [Obsolete("请使用GenConfigByAttribute")]
     public static ExportConfig<T> GenDefaultConfigByAttribute(IEnumerable<T> data = null)
     {
-        return new ExportConfig<T>(ExcelConfig<T, BaseCellOption<T>>.GenConfigByAttribute<ExcelExportAttribute>()) { Data = data };
+        return GenConfigByAttribute(data);
     }
     /// <summary>
     /// 根据 T 中设置的 ExcelExportAttribute 创建导出配置
@@ -33,7 +33,7 @@ public partial class ExportConfig<T>
     [Obsolete("请使用GenConfigByProps")]
     public static ExportConfig<T> GenDefaultConfigByProps(IEnumerable<T> data = null)
     {
-        return new ExportConfig<T>(ExcelConfig<T, BaseCellOption<T>>.GenConfigByProps()) { Data = data };
+        return GenDefaultConfigByProps(data);
     }
     /// <summary>
     /// 直接根据属性名称创建导出配置

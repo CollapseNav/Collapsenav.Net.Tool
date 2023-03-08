@@ -6,80 +6,57 @@ namespace Collapsenav.Net.Tool.Excel.Test;
 
 public class ExcelReadTest
 {
+    private readonly string path = "./ExcelRead.xlsx";
     #region 测试 直接使用下标 精确获取单元格数据
     [Fact]
     public void EPPlusExcelReadIndexTest()
     {
-        var path = "./ExcelRead.xlsx";
-        var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
-
         IExcelReader reader = new EPPlusExcelReader(path);
-        Assert.True(reader.RowCount == 11);
-        Assert.True(reader.Headers.SequenceEqual(realHeader));
-        Assert.True(reader[1, 0] == "233");
-        Assert.True(reader[1, 3] == "233.33");
-        Assert.True(reader[10, 0] == "1122");
-        Assert.True(reader[10, 3] == "123.23");
+        IndexTest1(reader);
         reader.Dispose();
-
         using var fs = path.OpenReadShareStream();
         reader = new EPPlusExcelReader(fs);
-
-        Assert.True(reader["Field0", 1] == "233");
-        Assert.True(reader["Field3", 1] == "233.33");
-        Assert.True(reader["Field0", 10] == "1122");
-        Assert.True(reader["Field3", 10] == "123.23");
+        IndexTest2(reader);
         reader.Dispose();
     }
-
     [Fact]
     public void NPOIExcelReadIndexTest()
     {
-        var path = "./ExcelRead.xlsx";
-        var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
-
         IExcelReader reader = new NPOIExcelReader(path);
-        Assert.True(reader.RowCount == 11);
-        Assert.True(reader.Headers.SequenceEqual(realHeader));
-        Assert.True(reader[1, 0] == "233");
-        Assert.True(reader[1, 3] == "233.33");
-        Assert.True(reader[10, 0] == "1122");
-        Assert.True(reader[10, 3] == "123.23");
+        IndexTest1(reader);
         reader.Dispose();
-
         using var fs = path.OpenReadShareStream();
         reader = new NPOIExcelReader(fs);
-
-        Assert.True(reader["Field0", 1] == "233");
-        Assert.True(reader["Field3", 1] == "233.33");
-        Assert.True(reader["Field0", 10] == "1122");
-        Assert.True(reader["Field3", 10] == "123.23");
+        IndexTest2(reader);
         reader.Dispose();
     }
-
     [Fact]
     public void MiniExcelReadIndexTest()
     {
-        var path = "./ExcelRead.xlsx";
-        var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
-
         IExcelReader reader = new MiniExcelReader(path);
+        IndexTest1(reader);
+        reader.Dispose();
+        using var fs = path.OpenReadShareStream();
+        reader = new MiniExcelReader(fs);
+        IndexTest2(reader);
+        reader.Dispose();
+    }
+    private void IndexTest1(IExcelReader reader)
+    {
+        var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
         Assert.True(reader.RowCount == 11);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
         Assert.True(reader[1, 0] == "233");
         Assert.True(reader[1, 3] == "233.33");
         Assert.True(reader[10, 0] == "1122");
         Assert.True(reader[10, 3] == "123.23");
-        reader.Dispose();
-
-        using var fs = path.OpenReadShareStream();
-        reader = new MiniExcelReader(fs);
-
+    }
+    private void IndexTest2(IExcelReader reader)
+    {
         Assert.True(reader["Field0", 1] == "233");
         Assert.True(reader["Field3", 1] == "233.33");
         Assert.True(reader["Field0", 10] == "1122");
         Assert.True(reader["Field3", 10] == "123.23");
-        reader.Dispose();
     }
     #endregion
 
@@ -88,85 +65,55 @@ public class ExcelReadTest
     [Fact]
     public void EPPlusExcelRowAndFieldTest()
     {
-        var path = "./ExcelRead.xlsx";
-        var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
-        var row1Data = new[] { "233", "23", "Male", "233.33" };
-        var row10Data = new[] { "1122", "12", "Female", "123.23" };
-
         IExcelReader reader = new EPPlusExcelReader(path);
-        Assert.True(reader.RowCount == 11);
-        Assert.True(reader.Headers.SequenceEqual(realHeader));
-
-        Assert.True(reader[0].SequenceEqual(realHeader));
-        Assert.True(reader[1].SequenceEqual(row1Data));
-        Assert.True(reader[10].SequenceEqual(row10Data));
+        RowAndFieldTest1(reader);
         reader.Dispose();
 
         using var fs = path.OpenReadShareStream();
         reader = new EPPlusExcelReader(fs);
-
-        var field0Data = new[] { "Field0", "233", "1122", "233", "1122", "233", "1122", "233", "1122", "233", "1122" };
-        var field3Data = new[] { "Field3", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23" };
-
-        Assert.True(reader["Field0"].SequenceEqual(field0Data));
-        Assert.True(reader["Field3"].SequenceEqual(field3Data));
+        RowAndFieldTest2(reader);
         reader.Dispose();
     }
-
     [Fact]
     public void NPOIExcelRowAndFieldTest()
     {
-        var path = "./ExcelRead.xlsx";
-        var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
-        var row1Data = new[] { "233", "23", "Male", "233.33" };
-        var row10Data = new[] { "1122", "12", "Female", "123.23" };
-
         IExcelReader reader = new NPOIExcelReader(path);
-        Assert.True(reader.RowCount == 11);
-        Assert.True(reader.Headers.SequenceEqual(realHeader));
-
-        Assert.True(reader[0].SequenceEqual(realHeader));
-        Assert.True(reader[1].SequenceEqual(row1Data));
-        Assert.True(reader[10].SequenceEqual(row10Data));
+        RowAndFieldTest1(reader);
         reader.Dispose();
-
         using var fs = path.OpenReadShareStream();
         reader = new NPOIExcelReader(fs);
-
-        var field0Data = new[] { "Field0", "233", "1122", "233", "1122", "233", "1122", "233", "1122", "233", "1122" };
-        var field3Data = new[] { "Field3", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23" };
-
-        Assert.True(reader["Field0"].SequenceEqual(field0Data));
-        Assert.True(reader["Field3"].SequenceEqual(field3Data));
+        RowAndFieldTest2(reader);
         reader.Dispose();
     }
-
     [Fact]
     public void MiniExcelRowAndFieldTest()
     {
-        var path = "./ExcelRead.xlsx";
+        IExcelReader reader = new MiniExcelReader(path);
+        RowAndFieldTest1(reader);
+        reader.Dispose();
+        using var fs = path.OpenReadShareStream();
+        reader = new MiniExcelReader(fs);
+        RowAndFieldTest2(reader);
+        reader.Dispose();
+    }
+    private void RowAndFieldTest1(IExcelReader reader)
+    {
         var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
         var row1Data = new[] { "233", "23", "Male", "233.33" };
         var row10Data = new[] { "1122", "12", "Female", "123.23" };
-
-        IExcelReader reader = new MiniExcelReader(path);
         Assert.True(reader.RowCount == 11);
         Assert.True(reader.Headers.SequenceEqual(realHeader));
 
         Assert.True(reader[0].SequenceEqual(realHeader));
         Assert.True(reader[1].SequenceEqual(row1Data));
         Assert.True(reader[10].SequenceEqual(row10Data));
-        reader.Dispose();
-
-        using var fs = path.OpenReadShareStream();
-        reader = new MiniExcelReader(fs);
-
+    }
+    private void RowAndFieldTest2(IExcelReader reader)
+    {
         var field0Data = new[] { "Field0", "233", "1122", "233", "1122", "233", "1122", "233", "1122", "233", "1122" };
         var field3Data = new[] { "Field3", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23", "233.33", "123.23" };
-
         Assert.True(reader["Field0"].SequenceEqual(field0Data));
         Assert.True(reader["Field3"].SequenceEqual(field3Data));
-        reader.Dispose();
     }
     #endregion
 
@@ -175,12 +122,12 @@ public class ExcelReadTest
     [Fact]
     public void EPPlusExcelEnumerableTest()
     {
-        var path = "./ExcelRead.xlsx";
         var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
         var row1Data = new[] { "233", "23", "Male", "233.33" };
         var row10Data = new[] { "1122", "12", "Female", "123.23" };
 
         IExcelReader reader = new EPPlusExcelReader(path);
+        EnumerableTest1(reader);
         Assert.True(reader.Count() == 11);
         Assert.True(reader.First().SequenceEqual(realHeader));
 
@@ -196,16 +143,15 @@ public class ExcelReadTest
 
         reader.Dispose();
     }
-
     [Fact]
     public void NPOIExcelEnumerableTest()
     {
-        var path = "./ExcelRead.xlsx";
         var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
         var row1Data = new[] { "233", "23", "Male", "233.33" };
         var row10Data = new[] { "1122", "12", "Female", "123.23" };
 
         IExcelReader reader = new NPOIExcelReader(path);
+        EnumerableTest1(reader);
         Assert.True(reader.Count() == 11);
         Assert.True(reader.First().SequenceEqual(realHeader));
 
@@ -221,16 +167,15 @@ public class ExcelReadTest
 
         reader.Dispose();
     }
-
     [Fact]
     public void MiniExcelEnumerableTest()
     {
-        var path = "./ExcelRead.xlsx";
         var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
         var row1Data = new[] { "233", "23", "Male", "233.33" };
         var row10Data = new[] { "1122", "12", "Female", "123.23" };
 
         IExcelReader reader = new MiniExcelReader(path);
+        EnumerableTest1(reader);
         Assert.True(reader.Count() == 11);
         Assert.True(reader.First().SequenceEqual(realHeader));
 
@@ -246,12 +191,22 @@ public class ExcelReadTest
 
         reader.Dispose();
     }
+    private void EnumerableTest1(IExcelReader reader)
+    {
+        var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
+        var row1Data = new[] { "233", "23", "Male", "233.33" };
+        var row10Data = new[] { "1122", "12", "Female", "123.23" };
+        Assert.True(reader.Count() == 11);
+        Assert.True(reader.First().SequenceEqual(realHeader));
+
+        Assert.True(reader.Skip(1).First().SequenceEqual(row1Data));
+        Assert.True(reader.Last().SequenceEqual(row10Data));
+    }
     #endregion
 
     [Fact]
     public void CollapseNavNetToolCollectionExtTest()
     {
-        var path = "./ExcelRead.xlsx";
         var realHeader = new[] { "Field0", "Field1", "Field2", "Field3" };
         var row1Data = new[] { "233", "23", "Male", "233.33" };
         var row10Data = new[] { "1122", "12", "Female", "123.23" };

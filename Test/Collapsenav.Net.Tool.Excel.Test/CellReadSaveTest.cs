@@ -5,31 +5,36 @@ namespace Collapsenav.Net.Tool.Excel.Test;
 
 public class CellReadSaveTest
 {
+    private readonly string path = "./CellRead.xlsx";
+    string PathCellReadPath = "./New-CellRead-Path.xlsx";
+    string StreamCellReadPath = "./New-CellRead-Stream.xlsx";
+    string GetStreamCellReadPath = "./New-CellRead-GetStream.xlsx";
+    string CopyCellReadPath = "./Copy-CellRead.xlsx";
+    string SaveCellReadPath = "./Save-CellRead.xlsx";
+
     [Fact]
     public void CellReadSaveToPathTest()
     {
-        var path = "./CellRead.xlsx";
-        var savePath = "./New-CellRead-Path.xlsx";
 
         IExcelCellReader reader = new EPPlusCellReader(path);
         reader[1, 0].Value = 9999;
-        reader.SaveTo(savePath);
+        reader.SaveTo(PathCellReadPath);
         reader.Dispose();
 
-        reader = new NPOICellReader(savePath);
+        reader = new NPOICellReader(PathCellReadPath);
         Assert.True(reader[1, 0].StringValue == "9999");
         reader[2, 2].Value = 12345;
-        reader.SaveTo(savePath);
+        reader.SaveTo(PathCellReadPath);
         reader.Dispose();
 
-        reader = new MiniCellReader(savePath);
+        reader = new MiniCellReader(PathCellReadPath);
         // MiniExcel 的导出Save暂时还有点问题
         Assert.True(reader[2, 2].StringValue == "12345");
         reader[3, 1].Value = "👍";
-        reader.SaveTo(savePath);
+        reader.SaveTo(PathCellReadPath);
         reader.Dispose();
 
-        reader = new EPPlusCellReader(savePath);
+        reader = new EPPlusCellReader(PathCellReadPath);
         Assert.True(reader[3, 1].StringValue == "👍");
         reader.Dispose();
     }
@@ -37,30 +42,25 @@ public class CellReadSaveTest
     [Fact]
     public void CellReadSaveToStreamTest()
     {
-        var path = "./CellRead.xlsx";
-        var savePath = "./New-CellRead-Stream.xlsx";
-
-        var saveStream = savePath.OpenCreateReadWriteShareStream();
-
-
+        var saveStream = StreamCellReadPath.OpenCreateReadWriteShareStream();
         IExcelCellReader reader = new EPPlusCellReader(path);
         reader[1, 0].Value = 9999;
         reader.SaveTo(saveStream);
         reader.Dispose();
 
-        reader = new NPOICellReader(savePath);
+        reader = new NPOICellReader(StreamCellReadPath);
         Assert.True(reader[1, 0].StringValue == "9999");
         reader[2, 2].Value = 12345;
         reader.SaveTo(saveStream);
 
-        reader = new MiniCellReader(savePath);
+        reader = new MiniCellReader(StreamCellReadPath);
         // MiniExcel 的导出Save暂时还有点问题
         Assert.True(reader[2, 2].StringValue == "12345");
         reader[3, 1].Value = "👍";
         reader.SaveTo(saveStream);
         reader.Dispose();
 
-        reader = new EPPlusCellReader(savePath);
+        reader = new EPPlusCellReader(StreamCellReadPath);
         Assert.True(reader[3, 1].StringValue == "👍");
         reader.Dispose();
     }
@@ -68,11 +68,7 @@ public class CellReadSaveTest
     [Fact]
     public void CellReadGetStreamSaveTest()
     {
-        var path = "./CellRead.xlsx";
-        var savePath = "./New-CellRead-GetStream.xlsx";
-
-        var saveStream = savePath.OpenCreateReadWriteShareStream();
-
+        var saveStream = GetStreamCellReadPath.OpenCreateReadWriteShareStream();
         IExcelCellReader reader = new EPPlusCellReader(path);
         reader[1, 0].Value = 9999;
         var getStream = reader.GetStream();
@@ -80,8 +76,8 @@ public class CellReadSaveTest
         saveStream.Dispose();
         reader.Dispose();
 
-        saveStream = savePath.OpenCreateReadWriteShareStream();
-        reader = new NPOICellReader(savePath);
+        saveStream = GetStreamCellReadPath.OpenCreateReadWriteShareStream();
+        reader = new NPOICellReader(GetStreamCellReadPath);
         Assert.True(reader[1, 0].StringValue == "9999");
         reader[2, 2].Value = 12345;
         getStream = reader.GetStream();
@@ -89,8 +85,8 @@ public class CellReadSaveTest
         saveStream.Dispose();
         reader.Dispose();
 
-        saveStream = savePath.OpenCreateReadWriteShareStream();
-        reader = new MiniCellReader(savePath);
+        saveStream = GetStreamCellReadPath.OpenCreateReadWriteShareStream();
+        reader = new MiniCellReader(GetStreamCellReadPath);
         // MiniExcel 的导出Save暂时还有点问题
         Assert.True(reader[2, 2].StringValue == "12345");
         reader[3, 1].Value = "👍";
@@ -99,7 +95,7 @@ public class CellReadSaveTest
         saveStream.Dispose();
         reader.Dispose();
 
-        reader = new EPPlusCellReader(savePath);
+        reader = new EPPlusCellReader(GetStreamCellReadPath);
         Assert.True(reader[3, 1].StringValue == "👍");
         reader.Dispose();
     }
@@ -107,61 +103,58 @@ public class CellReadSaveTest
     [Fact]
     public void CellReadSaveWithNoParamTest()
     {
-        var path = "./CellRead.xlsx";
-        var copyPath = "./Copy-CellRead.xlsx";
-        File.Copy(path, copyPath);
-        IExcelCellReader reader = new EPPlusCellReader(copyPath);
+        File.Copy(path, CopyCellReadPath);
+        IExcelCellReader reader = new EPPlusCellReader(CopyCellReadPath);
         reader[0, 0].Value = "🗡️";
         reader.Save();
         reader.Dispose();
 
-        reader = new NPOICellReader(copyPath);
+        reader = new NPOICellReader(CopyCellReadPath);
         Assert.True(reader[0, 0].StringValue == "🗡️");
         reader[1, 1].Value = "🗡️";
         reader.Save();
         reader.Dispose();
 
-        reader = new MiniCellReader(copyPath);
+        reader = new MiniCellReader(CopyCellReadPath);
         Assert.True(reader[1, 1].StringValue == "🗡️");
         reader[2, 2].Value = "🗡️";
         reader.Save();
         reader.Dispose();
 
-        reader = new EPPlusCellReader(copyPath);
+        reader = new EPPlusCellReader(CopyCellReadPath);
         Assert.True(reader[2, 2].StringValue == "🗡️");
         reader.Dispose();
-        File.Delete(copyPath);
+        File.Delete(CopyCellReadPath);
     }
 
     [Fact]
     public void NoOriginFileCellReadTest()
     {
-        var savePath = "./Save-CellRead.xlsx";
         IExcelCellReader reader = new EPPlusCellReader();
         reader[0, 0].Value = "2333";
-        reader.SaveTo(savePath);
+        reader.SaveTo(SaveCellReadPath);
         reader.Dispose();
-        reader = new EPPlusCellReader(savePath);
+        reader = new EPPlusCellReader(SaveCellReadPath);
         Assert.True(reader[0, 0].StringValue == "2333");
         reader.Dispose();
-        File.Delete(savePath);
+        File.Delete(SaveCellReadPath);
 
         reader = new NPOICellReader();
         reader[1, 1].Value = "2333";
-        reader.SaveTo(savePath);
+        reader.SaveTo(SaveCellReadPath);
         reader.Dispose();
-        reader = new NPOICellReader(savePath);
+        reader = new NPOICellReader(SaveCellReadPath);
         Assert.True(reader[1, 1].StringValue == "2333");
         reader.Dispose();
-        File.Delete(savePath);
+        File.Delete(SaveCellReadPath);
 
         reader = new MiniCellReader();
         reader[2, 2].Value = "2333";
-        reader.SaveTo(savePath);
+        reader.SaveTo(SaveCellReadPath);
         reader.Dispose();
-        reader = new MiniCellReader(savePath);
+        reader = new MiniCellReader(SaveCellReadPath);
         Assert.True(reader[2, 2].StringValue == "2333");
         reader.Dispose();
-        File.Delete(savePath);
+        File.Delete(SaveCellReadPath);
     }
 }

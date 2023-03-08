@@ -13,5 +13,6 @@
     <ItemGroup>
         <ProjectReference Include="../../Tool/Collapsenav.Net.Tool/Collapsenav.Net.Tool.csproj" />
         <PackageReference Include="AutoMapper" Version="10.1.1" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.5.0" />
     </ItemGroup>
 </Project>

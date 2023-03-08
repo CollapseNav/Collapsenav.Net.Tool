@@ -1,5 +1,7 @@
 using System.Collections.Concurrent;
 using Collapsenav.Net.Tool;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
 
 namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
@@ -8,6 +10,18 @@ namespace Collapsenav.Net.Tool.Excel;
 /// <remarks>可以使用泛型定义，但是必须有类型数据</remarks>
 public class ReadConfig : ReadConfig<object>
 {
+    public ReadConfig(Type type, IEnumerable<(string, string, string)> kvs) : base()
+    {
+        DtoType = type;
+        InitFieldOption(kvs);
+    }
+    public ReadConfig(string typeName, IEnumerable<(string, string, string)> kvs) : base()
+    {
+        var type = GetMatchType(typeName);
+        if (type != null)
+            DtoType = type;
+        InitFieldOption(kvs);
+    }
     public ReadConfig(Type type, IEnumerable<(string, string)> kvs = null) : base()
     {
         DtoType = type;
@@ -15,19 +29,47 @@ public class ReadConfig : ReadConfig<object>
     }
     public ReadConfig(string typeName, IEnumerable<(string, string)> kvs = null) : base()
     {
+        var type = GetMatchType(typeName);
+        if (type != null)
+            DtoType = type;
+        InitFieldOption(kvs);
+    }
+
+    public ReadConfig(string typeName, IEnumerable<StringCellOption> options)
+    {
+        var type = GetMatchType(typeName);
+        if (type != null)
+            DtoType = type;
+        InitFieldOption(options.Select(item => (item.FieldName, item.PropName, item.Func)));
+    }
+    private Type GetMatchType(string typeName)
+    {
         var hasDot = typeName.Contains('.');
         var types = AppDomain.CurrentDomain.GetCustomerTypes();
         var matchTypes = types.Where(item => item.FullName.Contains(typeName)).ToArray();
-
+        Type matchType = null;
         if (matchTypes?.Length == 1)
         {
-            DtoType = matchTypes.First();
+            matchType = matchTypes.First();
         }
         else if (matchTypes.Length > 1)
         {
-            DtoType = matchTypes.FirstOrDefault(item => item.FullName == typeName);
+            matchType = matchTypes.FirstOrDefault(item => item.FullName == typeName);
         }
-        InitFieldOption(kvs);
+        return matchType;
+    }
+    /// <summary>
+    /// 通过字典初始化配置
+    /// </summary>
+    /// <param name="kvs">Key为表头名称, Value为属性名称</param>
+    public void InitFieldOption(IEnumerable<(string Key, string Value, string Func)> kvs)
+    {
+        FieldOption = new List<ReadCellOption<object>>();
+        if (kvs.NotEmpty())
+        {
+            foreach (var (Key, Value, Func) in kvs)
+                Add(Key, Value, Func);
+        }
     }
 
     /// <summary>
@@ -44,6 +86,27 @@ public class ReadConfig : ReadConfig<object>
         }
     }
 
+    /// <summary>
+    /// 添加普通单元格设置
+    /// </summary>
+    /// <param name="field">表头列</param>
+    /// <param name="propName">属性名称</param>
+    /// <param name="func"></param>
+    public ReadConfig<object> Add(string field, string propName, string func)
+    {
+        if (func.NotEmpty())
+        {
+            var exp = CSharpScript.EvaluateAsync<Func<string, object>>(func, ScriptOptions.Default.AddReferences(GetType().Assembly)).Result;
+            if (exp == null)
+                throw new Exception("无法生成表达式, 请检查传入的func字符串");
+            base.Add(field, DtoType.GetProperty(propName), exp);
+        }
+        else
+        {
+            Add(field, DtoType.GetProperty(propName));
+        }
+        return this;
+    }
     /// <summary>
     /// 添加普通单元格设置
     /// </summary>
