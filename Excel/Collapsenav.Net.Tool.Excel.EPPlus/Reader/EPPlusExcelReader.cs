@@ -5,6 +5,7 @@ namespace Collapsenav.Net.Tool.Excel;
 
 public class EPPlusExcelReader : IExcelReader
 {
+    private object[,] sheetData;
     public int Zero => ExcelTool.EPPlusZero;
     protected ExcelWorksheet sheet;
     protected IDictionary<string, int> HeaderIndex;
@@ -34,6 +35,7 @@ public class EPPlusExcelReader : IExcelReader
         rowCount = sheet.Dimension.Rows;
         HeaderIndex = EPPlusTool.HeadersWithIndex(sheet);
         HeaderList = HeaderIndex.Select(item => item.Key).ToList();
+        sheetData = sheet.Cells.Value as object[,];
     }
     public IEnumerable<string> this[string field]
     {
@@ -43,10 +45,18 @@ public class EPPlusExcelReader : IExcelReader
                 yield return sheet.Cells[i, HeaderIndex[field] + Zero].Value.ToString();
         }
     }
-    public IEnumerable<string> this[int row] => sheet.Cells[(int)row + Zero, Zero, (int)row + Zero, Zero + Headers.Count()]
-    .Select(item => item.Value.ToString());
-    public string this[int row, int col] => sheet.Cells[(int)row + Zero, (int)col + Zero].Value.ToString();
-    public string this[string field, int row] => sheet.Cells[(int)row + Zero, HeaderIndex[field] + Zero].Value.ToString();
+    public IEnumerable<string> this[int row]
+    {
+        get
+        {
+            List<string> _data = new(HeaderList.Count());
+            foreach (var h in HeadersWithIndex)
+                _data.Add(sheetData[row, h.Value]?.ToString());
+            return _data;
+        }
+    }
+    public string this[int row, int col] => sheetData[row, col].ToString();
+    public string this[string field, int row] => sheetData[row, HeaderIndex[field]].ToString();
     public IEnumerable<string> Headers => HeaderList;
     public IDictionary<string, int> HeadersWithIndex => HeaderIndex;
     public int RowCount => rowCount;
