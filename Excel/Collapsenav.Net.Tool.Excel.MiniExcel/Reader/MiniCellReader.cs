@@ -110,7 +110,13 @@ public class MiniCellReader : IExcelCellReader
         KeyValuePair<string, object>[] kvs = Enumerable.Range(0, colCount).Select(item => new KeyValuePair<string, object>(MiniCell.GetSCol(item), "")).ToArray();
         for (var rowNum = _rows.Count; rowNum <= row; rowNum++)
         {
+#if NETSTANDARD2_0
+            IDictionary<string, object> newRow = new Dictionary<string, object>();
+            foreach (var kv in kvs)
+                newRow.Add(kv);
+#else
             IDictionary<string, object> newRow = new Dictionary<string, object>(kvs);
+#endif
             _sheet.Add(newRow);
             _rows.Add(new MiniRow(newRow, rowNum));
         }
