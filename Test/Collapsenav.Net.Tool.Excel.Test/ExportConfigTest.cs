@@ -20,33 +20,29 @@ public class ExportConfigTest
         Assert.True(export.FieldOption.Count() == 3);
         var stream = await export.NPOIExportAsync(path, ExcelDefaultDto.ExportData());
         var data = await read.NPOIToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field0.GetHashCode() ^ item.Field1.GetHashCode() ^ item.Field3.GetHashCode()));
-
-        // 现阶段 EPPlus 无法正常读取 NPOI 导出的表格，不知道啥原因
-        // data = await read.EPPlusToEntityAsync(stream);
-        // Assert.True(data.Count() == 10);
-        // Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field0.GetHashCode() ^ item.Field1.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
 
         data = await read.MiniToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field0.GetHashCode() ^ item.Field1.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
         await stream.DisposeAsync();
 
         File.Delete(path);
         stream = await export.EPPlusExportAsync(path, ExcelDefaultDto.ExportData());
         data = await read.EPPlusToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field0.GetHashCode() ^ item.Field1.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
 
         data = await read.NPOIToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field0.GetHashCode() ^ item.Field1.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
 
         data = await read.MiniToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field0.GetHashCode() ^ item.Field1.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
         await stream.DisposeAsync();
+
+        static void TestData(System.Collections.Generic.IEnumerable<ExcelDefaultDto> data)
+        {
+            Assert.True(data.Count() == 10);
+            Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field0.GetHashCode() ^ item.Field1.GetHashCode() ^ item.Field3.GetHashCode()));
+        }
     }
 
     /// <summary>
@@ -65,34 +61,30 @@ public class ExportConfigTest
         ;
         var stream = await export.NPOIExportAsync(path);
         var data = await read.NPOIToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.All(item => item.Field0.AllEndsWith("233")));
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelTestDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field2.GetHashCode() ^ item.Field3.GetHashCode()));
-
-        // 现阶段 EPPlus 无法正常读取 NPOI 导出的表格，不知道啥原因
-        // data = await read.EPPlusToEntityAsync(stream);
-        // Assert.True(data.Count() == 10);
-        // Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelTestDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field2.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
 
         data = await read.MiniToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelTestDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field2.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
         await stream.DisposeAsync();
 
         File.Delete(path);
         stream = await export.EPPlusExportAsync(path, ExcelTestDto.ExportData());
         data = await read.EPPlusToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelTestDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field2.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
 
         data = await read.NPOIToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelTestDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field2.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
 
         data = await read.MiniToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelTestDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field2.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
         await stream.DisposeAsync();
+
+        static void TestData(System.Collections.Generic.IEnumerable<ExcelTestDto> data)
+        {
+            Assert.True(data.Count() == 10);
+            Assert.True(data.All(item => item.Field0.AllEndsWith("233")));
+            Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelTestDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field2.GetHashCode() ^ item.Field3.GetHashCode()));
+        }
     }
 
     /// <summary>
@@ -112,33 +104,29 @@ public class ExportConfigTest
         Assert.True(config.FieldOption.Count() == 3);
         var stream = await config.NPOIExportAsync(path);
         var data = await read.NPOIToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
-
-        // 现阶段 EPPlus 无法正常读取 NPOI 导出的表格，不知道啥原因
-        // data = await read.EPPlusToEntityAsync(stream);
-        // Assert.True(data.Count() == 10);
-        // Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
 
         data = await read.MiniToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
         await stream.DisposeAsync();
 
         File.Delete(path);
         stream = await config.EPPlusExportAsync(path);
         data = await read.NPOIToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
 
         data = await read.EPPlusToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
 
         data = await read.MiniToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
         await stream.DisposeAsync();
+
+        static void TestData(System.Collections.Generic.IEnumerable<ExcelDefaultDto> data)
+        {
+            Assert.True(data.Count() == 10);
+            Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelDefaultDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+        }
     }
 
     /// <summary>
@@ -153,32 +141,29 @@ public class ExportConfigTest
         Assert.True(export.FieldOption.Count() == 3);
         var stream = await export.NPOIExportAsync(path);
         var data = await read.NPOIToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelAttrDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
-
-        // data = await read.NPOIToEntityAsync(stream);
-        // Assert.True(data.Count() == 10);
-        // Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelAttrDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
 
         data = await read.MiniToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelAttrDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
         await stream.DisposeAsync();
 
         File.Delete(path);
         stream = await export.EPPlusExportAsync(path);
         data = await read.NPOIToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelAttrDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
 
         data = await read.NPOIToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelAttrDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
 
         data = await read.MiniToEntityAsync(stream);
-        Assert.True(data.Count() == 10);
-        Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelAttrDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+        TestData(data);
         await stream.DisposeAsync();
+
+        static void TestData(System.Collections.Generic.IEnumerable<ExcelAttrDto> data)
+        {
+            Assert.True(data.Count() == 10);
+            Assert.True(data.OrderBy(item => item.Field1).ToList().SequenceEqual(ExcelAttrDto.ExportData().OrderBy(item => item.Field1).ToList(), item => item.Field1.GetHashCode() ^ item.Field0.GetHashCode() ^ item.Field3.GetHashCode()));
+        }
     }
 
     [Fact]
@@ -307,4 +292,6 @@ public class ExportConfigTest
         Assert.True(reader.Headers.SequenceEqual(realHeader));
         reader.Dispose();
     }
+
+
 }

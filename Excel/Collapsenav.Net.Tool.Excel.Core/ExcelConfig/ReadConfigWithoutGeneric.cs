@@ -15,12 +15,8 @@ public class ReadConfig : ReadConfig<object>
         DtoType = type;
         InitFieldOption(kvs);
     }
-    public ReadConfig(string typeName, IEnumerable<(string, string, string)> kvs) : base()
+    public ReadConfig(string typeName, IEnumerable<(string, string, string)> kvs) : this(GetMatchType(typeName), kvs)
     {
-        var type = GetMatchType(typeName);
-        if (type != null)
-            DtoType = type;
-        InitFieldOption(kvs);
     }
     public ReadConfig(Type type, IEnumerable<(string, string)> kvs = null) : base()
     {
@@ -42,7 +38,7 @@ public class ReadConfig : ReadConfig<object>
             DtoType = type;
         InitFieldOption(options.Select(item => (item.FieldName, item.PropName, item.Func)));
     }
-    private Type GetMatchType(string typeName)
+    private static Type GetMatchType(string typeName)
     {
         var hasDot = typeName.Contains('.');
         var types = AppDomain.CurrentDomain.GetCustomerTypes();

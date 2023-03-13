@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -8,7 +10,16 @@ namespace Collapsenav.Net.Tool.Excel.Test;
 public class ReadConfigTest
 {
     private readonly string DefaultExcelPath = "./DefaultExcel.xlsx";
-    private readonly string TestExcelPath = "./TestExcel.xlsx";
+    private readonly string TestExcelPath = "./TestConfigExcel.xlsx";
+
+    public ReadConfigTest()
+    {
+        if (!File.Exists(TestExcelPath))
+        {
+            File.Copy("./TestExcel.xlsx", TestExcelPath);
+        }
+    }
+
     /// <summary>
     /// 测试默认配置
     /// </summary>
@@ -26,7 +37,7 @@ public class ReadConfigTest
         data = await read.MiniToEntityAsync(DefaultExcelPath);
         TestData(data);
 
-        static void TestData(System.Collections.Generic.IEnumerable<ExcelDefaultDto> data)
+        static void TestData(IEnumerable<ExcelDefaultDto> data)
         {
             Assert.True(data.Count() == 20);
             Assert.True(data.Count(item => item.Field0 == "233") == 10);
@@ -41,14 +52,14 @@ public class ReadConfigTest
     public async Task DefaultCellOptionTest()
     {
         var config = new ReadConfig<ExcelTestDto>()
-        .Default(item => item.Field0, "233")
+        .Default(item => item.Field0, "23333")
         .DefaultIf(true, item => item.Field1, 233)
         .Default(item => item.Field2, true)
         .DefaultIf(true, item => item.Field3, 23.3)
         ;
         var data = await config.ToEntityAsync(TestExcelPath);
         Assert.True(data.Count() == 3000);
-        Assert.True(data.All(item => item.Field0 == "233"));
+        Assert.True(data.All(item => item.Field0 == "23333"));
         Assert.True(data.All(item => item.Field1 == 233));
         Assert.True(data.All(item => item.Field2 == true));
         Assert.True(data.All(item => item.Field3 == 23.3));
@@ -354,5 +365,51 @@ public class ReadConfigTest
         Assert.True(data.Count(item => item.Field1 == 23) == 1500);
         Assert.True(data.Count(item => item.Field2 == true) == 1500);
         Assert.True(data.Count(item => item.Field3 == 12323) == 1500);
+    }
+    [Fact]
+    public void SummaryConfigTest()
+    {
+        var config = ReadConfig<ExcelTestDto>.GenConfigBySummary();
+        Assert.True(config.FieldOption.Count() == 4);
+        Assert.True(config.FieldOption.Select(item => item.ExcelField).AllContain("第一个属性", "FirstProp", "随便什么东西", "Field3"));
+    }
+    [Fact]
+    public void StringCellOptionTestWithOutGeneric()
+    {
+        var config = new ReadConfig("ExcelTestDto", new[] { ("Field0", "Field0", "item=>item+\"23333\"") });
+        var data = config.ToEntity(TestExcelPath);
+        Assert.True(data.NotEmpty());
+        Assert.True(data.All(item => (item as ExcelTestDto).Field0.EndsWith("23333")));
+        Assert.True(data.All(item => !(item as ExcelTestDto).Field1.HasValue));
+        config = new ReadConfig("ExcelTestDto", new[] { ("Field0", "Field0") });
+        data = config.ToEntity(TestExcelPath);
+        Assert.True(data.NotEmpty());
+        Assert.True(data.All(item => (item as ExcelTestDto).Field0.In("233", "1122")));
+        Assert.True(data.All(item => !(item as ExcelTestDto).Field1.HasValue));
+
+        var options = new[]{
+            new StringCellOption("Field0", "Field0", "item=>item+\"23333\""),
+            new StringCellOption("Field1", "Field1", "item=>int.Parse(item)+23333"),
+        };
+        config = new ReadConfig("ExcelTestDto", options);
+        data = config.ToEntity(TestExcelPath);
+        Assert.True(data.NotEmpty());
+        Assert.True(data.All(item => (item as ExcelTestDto).Field0.EndsWith("23333")));
+        Assert.True(data.All(item => ((item as ExcelTestDto).Field1 - 23333 == 23) || ((item as ExcelTestDto).Field1 - 23333 == 12)));
+    }
+
+    [Fact]
+    public void ExcelConfigToReadConfigTest()
+    {
+        var excelConfig = new ExcelConfig<ExcelTestDto, BaseCellOption<ExcelTestDto>>(new[] { ("Field0", "Field0") });
+        excelConfig.Add("Field1", typeof(ExcelTestDto).GetProperty("Field1"));
+        excelConfig.AddIf(false, "Field2", typeof(ExcelTestDto).GetProperty("Field2"));
+        Assert.True(excelConfig.FieldOption.Count() == 2);
+        var readConfig = new ReadConfig<ExcelTestDto>(excelConfig);
+        Assert.True(excelConfig.FieldOption.Count() == 2);
+        var data = readConfig.ToEntity(TestExcelPath);
+        Assert.True(data.NotEmpty());
+        Assert.True(data.All(item => item.Field0.In("233", "1122")));
+        Assert.True(data.All(item => item.Field1.In(23, 12)));
     }
 }

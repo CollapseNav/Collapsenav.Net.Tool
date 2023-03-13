@@ -90,7 +90,7 @@ public class MiniCellReader : IExcelCellReader
     {
         get
         {
-            colCount = colCount <= col ? col : colCount;
+            colCount = colCount <= col ? col + 1 : colCount;
             return GetMiniRow(row)[col];
         }
     }

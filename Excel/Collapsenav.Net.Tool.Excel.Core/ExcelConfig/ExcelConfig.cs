@@ -163,7 +163,7 @@ public class ExcelConfig<T, CellConfig> where CellConfig : ICellOption, new()
         {
             var node = nodes.FirstOrDefault(item => item.FullName.Split('.').Last() == propName);
             if (node is null)
-                return new KeyValuePair<string, PropertyInfo>(propName, null);
+                return new KeyValuePair<string, PropertyInfo>(propName, type.GetProperty(propName));
             return new KeyValuePair<string, PropertyInfo>(node.Summary, type.GetProperty(node.FullName.Split('.').Last()));
         }).ToArray();
         var config = new ExcelConfig<T, CellConfig>();
@@ -171,8 +171,4 @@ public class ExcelConfig<T, CellConfig> where CellConfig : ICellOption, new()
             config.Add(new CellConfig { ExcelField = node.Key, Prop = node.Value });
         return config;
     }
-}
-
-public class DefaultExcelConfig : ExcelConfig<object, BaseCellOption<object>>
-{
 }

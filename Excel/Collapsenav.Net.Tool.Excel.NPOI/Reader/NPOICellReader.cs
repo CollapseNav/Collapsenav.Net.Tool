@@ -77,7 +77,7 @@ public class NPOICellReader : IExcelCellReader
     {
         get
         {
-            return new NPOICell(GetCell(GetRow(row), (int)col));
+            return new NPOICell(GetCell(GetRow(row), col));
         }
     }
     public IReadCell this[string field, int row] => new NPOICell(GetCell(GetRow(row), HeaderIndex[field]));

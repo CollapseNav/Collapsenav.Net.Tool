@@ -20,7 +20,7 @@ public class ExcelTestDto
     /// <summary>
     /// FirstProp
     /// </summary>
-    public int Field1 { get; set; }
+    public int? Field1 { get; set; }
     /// <summary>
     /// 随便什么东西
     /// </summary>
