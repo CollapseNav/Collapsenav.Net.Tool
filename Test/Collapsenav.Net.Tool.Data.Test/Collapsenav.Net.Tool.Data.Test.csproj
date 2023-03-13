@@ -5,6 +5,8 @@
         <CollectCoverage>true</CollectCoverage>
         <CoverletOutputFormat>cobertura</CoverletOutputFormat>
         <LangVersion>preview</LangVersion>
+        <NoWarn>1591</NoWarn>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0"/>

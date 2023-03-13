@@ -5,6 +5,8 @@
         <CollectCoverage>true</CollectCoverage>
         <CoverletOutputFormat>cobertura</CoverletOutputFormat>
         <LangVersion>preview</LangVersion>
+        <NoWarn>1591</NoWarn>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0"/>
@@ -21,11 +23,11 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\Excel\Collapsenav.Net.Tool.Excel\Collapsenav.Net.Tool.Excel.csproj"/>
-        <None Include="CellRead.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>
-        <None Include="TestExcel.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>
+        <None Include="*.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>
+        <!-- <None Include="TestExcel.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>
         <None Include="ExcelRead.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>
         <None Include="RequireExcel.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>
         <None Include="DefaultExcel.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>
-        <None Include="AttributeExcel.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/>
+        <None Include="AttributeExcel.xlsx" CopyToPublishDirectory="Always" CopyToOutputDirectory="Always"/> -->
     </ItemGroup>
 </Project>

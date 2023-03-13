@@ -4,7 +4,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <LangVersion>preview</LangVersion>
-        <NoWarn>$(NoWarn);1591</NoWarn>
+        <NoWarn>1591</NoWarn>
         <Version>1.3.0</Version>
         <Authors>CollapseNav</Authors>
         <Copyright>CollapseNav</Copyright>

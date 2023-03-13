@@ -1,8 +1,31 @@
 using System.Reflection;
 
 namespace Collapsenav.Net.Tool.Excel;
-public class BaseCellOption<T> : ICellOption<T>
+public class BaseCellOption<T> : ICellOption
 {
+    public BaseCellOption()
+    {
+        // 默认情况下使用 泛型T 设置 DtoType
+        DtoType = typeof(T);
+    }
+
+    /// <summary>
+    /// 通过表头和属性名初始化配置
+    /// </summary>
+    public BaseCellOption(string excelField, string propName) : this()
+    {
+        ExcelField = excelField;
+        PropName = propName;
+    }
+
+    /// <summary>
+    /// 通过表头和确定的属性初始化配置
+    /// </summary>
+    public BaseCellOption(string excelField, PropertyInfo prop) : this()
+    {
+        ExcelField = excelField;
+        Prop = prop;
+    }
     /// <summary>
     /// 对应excel中的表头字段
     /// </summary>
@@ -12,31 +35,32 @@ public class BaseCellOption<T> : ICellOption<T>
     /// </summary>
     public virtual PropertyInfo Prop
     {
-        get
-        {
-            return prop;
-        }
+        get => prop;
         set
         {
             prop = value;
             propName = prop.Name;
+            // 当有确切的属性时, 修改DtoType
+            DtoType = prop.DeclaringType;
         }
     }
-    private PropertyInfo prop;
+    protected PropertyInfo prop;
     /// <summary>
     /// 就是一个看起来比较方便的标识
     /// </summary>
     public virtual string PropName
     {
-        get
-        {
-            return propName;
-        }
+        get => propName;
         set
         {
             propName = value;
+            // prop = DtoType?.GetProperty(propName);
             prop = typeof(T).GetProperty(propName);
         }
     }
-    private string propName;
+    protected string propName;
+    /// <summary>
+    /// 有时候使用的泛型只是基类, 所以设置一个 DtoType 尝试记录真实类型
+    /// </summary>
+    protected Type DtoType;
 }

@@ -15,7 +15,7 @@ public partial class ReadConfig<T> : ExcelConfig<T, ReadCellOption<T>>
     /// 读取成功之后调用的针对T的委托
     /// </summary>
     public Func<T, T> Init { get; protected set; }
-    public ReadConfig()
+    public ReadConfig() : base()
     {
         Init = null;
     }
@@ -23,7 +23,9 @@ public partial class ReadConfig<T> : ExcelConfig<T, ReadCellOption<T>>
     /// 根据文件路径的初始化
     /// </summary>
     /// <param name="filepath"> 文件路径 </param>
-    public ReadConfig(string filepath) : this()
+    /// <param name="kvs"></param>
+    /// <remarks>从路径中加载文件, 在后续的操作中可以不传</remarks>
+    public ReadConfig(string filepath, IEnumerable<(string, string)> kvs = null) : this(kvs)
     {
         ExcelStream = new MemoryStream();
         filepath.IsXls();
@@ -34,16 +36,26 @@ public partial class ReadConfig<T> : ExcelConfig<T, ReadCellOption<T>>
     /// 根据文件流的初始化
     /// </summary>
     /// <param name="stream">文件流</param>
-    public ReadConfig(Stream stream) : this()
+    /// <param name="kvs"></param>
+    /// <remarks>从流中加载, 在后续的操作中可以不传文件</remarks>
+    public ReadConfig(Stream stream, IEnumerable<(string, string)> kvs = null) : this(kvs)
     {
         ExcelStream = new MemoryStream();
         stream.CopyTo(ExcelStream);
     }
-    public ReadConfig(ExcelConfig<T, BaseCellOption<T>> config)
+    /// <summary>
+    /// 使用基础的 excelconfig 初始化
+    /// </summary>
+    public ReadConfig(ExcelConfig<T, BaseCellOption<T>> config) : this()
     {
         FieldOption = config.FieldOption.Select(item => new ReadCellOption<T>(item));
         Data = config.Data;
     }
+    public ReadConfig(IEnumerable<(string, string)> kvs) : this()
+    {
+        InitFieldOption(kvs);
+    }
+
     /// <summary>
     /// 添加默认单元格读取设置(其实就是不读取Excel直接给T的某个字段赋值)
     /// </summary>
@@ -194,11 +206,7 @@ public partial class ReadConfig<T> : ExcelConfig<T, ReadCellOption<T>>
     /// <param name="prop"></param>
     public virtual ReadCellOption<T> GenOption(string field, PropertyInfo prop)
     {
-        return new ReadCellOption<T>
-        {
-            ExcelField = field,
-            Prop = prop,
-        };
+        return new ReadCellOption<T>(field, prop);
     }
     /// <summary>
     /// 生成单元格设置
@@ -208,11 +216,6 @@ public partial class ReadConfig<T> : ExcelConfig<T, ReadCellOption<T>>
     /// <param name="action"></param>
     public virtual ReadCellOption<T> GenOption<E>(string field, PropertyInfo prop, Func<string, E> action)
     {
-        return action == null ? GenOption(field, prop) : new ReadCellOption<T>
-        {
-            ExcelField = field,
-            Prop = prop,
-            Action = item => action(item)
-        };
+        return action == null ? GenOption(field, prop) : new ReadCellOption<T>(field, prop, item => action(item));
     }
 }
