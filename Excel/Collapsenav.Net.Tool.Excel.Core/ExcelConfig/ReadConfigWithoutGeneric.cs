@@ -88,7 +88,7 @@ public class ReadConfig : ReadConfig<object>
     /// <param name="field">表头列</param>
     /// <param name="propName">属性名称</param>
     /// <param name="func"></param>
-    public ReadConfig<object> Add(string field, string propName, string func)
+    public ReadConfig Add(string field, string propName, string func)
     {
         if (func.NotEmpty())
         {
@@ -101,6 +101,19 @@ public class ReadConfig : ReadConfig<object>
         {
             Add(field, DtoType.GetProperty(propName));
         }
+        return this;
+    }
+    /// <summary>
+    /// 添加普通单元格设置
+    /// </summary>
+    /// <param name="check"></param>
+    /// <param name="field">表头列</param>
+    /// <param name="propName">属性名称</param>
+    /// <param name="func"></param>
+    public ReadConfig AddIf(bool check, string field, string propName, string func)
+    {
+        if (check)
+            return Add(field, propName, func);
         return this;
     }
     /// <summary>

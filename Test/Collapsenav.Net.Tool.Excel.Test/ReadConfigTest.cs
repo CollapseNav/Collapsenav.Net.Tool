@@ -396,6 +396,16 @@ public class ReadConfigTest
         Assert.True(data.NotEmpty());
         Assert.True(data.All(item => (item as ExcelTestDto).Field0.EndsWith("23333")));
         Assert.True(data.All(item => ((item as ExcelTestDto).Field1 - 23333 == 23) || ((item as ExcelTestDto).Field1 - 23333 == 12)));
+
+        config = new ReadConfig("ExcelTestDto");
+        config.Add("Field0", "Field0", "item=>item+\"23333\"")
+        .AddIf(true, "Field1", "Field1", "item=>int.Parse(item)+23333")
+        .AddIf(false, "Field3", "Field3", "item=>double.Parse(item)");
+
+        Assert.True(config.FieldOption.Count() == 2);
+        data = config.ToEntity(TestExcelPath);
+        Assert.True(data.All(item => (item as ExcelTestDto).Field0.EndsWith("23333")));
+        Assert.True(data.All(item => ((item as ExcelTestDto).Field1 - 23333 == 23) || ((item as ExcelTestDto).Field1 - 23333 == 12)));
     }
 
     [Fact]

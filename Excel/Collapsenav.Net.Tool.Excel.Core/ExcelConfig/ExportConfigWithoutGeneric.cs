@@ -42,7 +42,7 @@ public class ExportConfig : ExportConfig<object>
     /// <param name="field">表头列</param>
     /// <param name="propName">属性名称</param>
     /// <param name="func"></param>
-    public ExportConfig<object> Add(string field, string propName, string func)
+    public ExportConfig Add(string field, string propName, string func)
     {
         if (func.NotEmpty())
         {
@@ -55,6 +55,19 @@ public class ExportConfig : ExportConfig<object>
         {
             Add(field, DtoType.GetProperty(propName));
         }
+        return this;
+    }
+    /// <summary>
+    /// 添加普通单元格设置
+    /// </summary>
+    /// <param name="check"></param>
+    /// <param name="field">表头列</param>
+    /// <param name="propName">属性名称</param>
+    /// <param name="func"></param>
+    public ExportConfig AddIf(bool check, string field, string propName, string func)
+    {
+        if (check)
+            return Add(field, propName, func);
         return this;
     }
     public static new ExportConfig GenConfigBySummary(IEnumerable<object> data)
