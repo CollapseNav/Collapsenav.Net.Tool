@@ -11,7 +11,6 @@ public partial class ReadConfig<T>
     {
         var header = sheet.HeadersWithIndex;
         var rowCount = sheet.RowCount;
-        List<T> data = new();
         foreach (var index in Enumerable.Range(1, rowCount - 1))
         {
             var dataRow = sheet[index].ToList();
@@ -30,7 +29,6 @@ public partial class ReadConfig<T>
                         option.Prop.SetValue(obj, option.Action == null ? null : option.Action(string.Empty));
                 }
                 Init?.Invoke(obj);
-                data.Add(obj);
                 yield return obj;
             }
         }
@@ -40,69 +38,7 @@ public partial class ReadConfig<T>
     /// </summary>
     public virtual async Task<IEnumerable<T>> ToEntityAsync(IExcelReader sheet)
     {
-        var header = sheet.HeadersWithIndex;
-        var rowCount = sheet.RowCount;
-        if (IsShuffle)
-        {
-            ConcurrentBag<T> data = new();
-            await Task.Factory.StartNew(() =>
-            {
-                Parallel.For(1, rowCount, index =>
-                {
-                    Monitor.Enter(sheet);
-                    var dataRow = sheet[index].ToList();
-                    Monitor.Exit(sheet);
-                    // 根据对应传入的设置 为obj赋值
-                    if (dataRow.NotEmpty())
-                    {
-                        var obj = Activator.CreateInstance<T>();
-                        foreach (var option in FieldOption)
-                        {
-                            if (option.ExcelField.NotNull())
-                            {
-                                var value = dataRow[header[option.ExcelField]];
-                                option.Prop.SetValue(obj, option.Action == null ? value : option.Action(value));
-                            }
-                            else
-                                option.Prop.SetValue(obj, option.Action == null ? null : option.Action(string.Empty));
-                        }
-                        Init?.Invoke(obj);
-                        data.Add(obj);
-                    }
-                });
-            });
-            return data;
-        }
-        else
-        {
-            return await Task.Factory.StartNew(() =>
-            {
-                List<T> data = new();
-                foreach (var index in Enumerable.Range(1, (int)rowCount - 1))
-                {
-                    var dataRow = sheet[index].ToList();
-                    // 根据对应传入的设置 为obj赋值
-                    if (dataRow.NotEmpty())
-                    {
-                        var obj = Activator.CreateInstance<T>();
-                        foreach (var option in FieldOption)
-                        {
-                            if (option.ExcelField.NotNull())
-                            {
-                                var value = dataRow[header[option.ExcelField]];
-                                option.Prop.SetValue(obj, option.Action == null ? value : option.Action(value));
-                            }
-                            else
-                                option.Prop.SetValue(obj, option.Action == null ? null : option.Action(string.Empty));
-                        }
-                        Init?.Invoke(obj);
-                        data.Add(obj);
-                    }
-                }
-                return data;
-            });
-
-        }
+        return await Task.Factory.StartNew(() => IsShuffle ? ToEntity(sheet).Shuffle() : ToEntity(sheet));
     }
 
 

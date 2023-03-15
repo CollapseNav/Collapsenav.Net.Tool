@@ -96,15 +96,14 @@ public class NPOICellReader : IExcelCellReader
     }
     private IRow GetRow(int row)
     {
-        var excelRow = _sheet.GetRow((int)row);
-        excelRow ??= _sheet.CreateRow((int)row);
+        var excelRow = _sheet.GetRow(row);
+        excelRow ??= _sheet.CreateRow(row);
         return excelRow;
     }
     private ICell GetCell(IRow row, int col)
     {
         var cell = row.GetCell(col, MissingCellPolicy.RETURN_NULL_AND_BLANK);
-        if (cell == null)
-            cell = row.CreateCell(col);
+        cell ??= row.CreateCell(col);
         return cell;
     }
 

@@ -90,7 +90,7 @@ public class MiniCellReader : IExcelCellReader
     {
         get
         {
-            colCount = colCount <= col ? col + 1 : colCount;
+            colCount = colCount <= col ? col : colCount;
             return GetMiniRow(row)[col];
         }
     }
@@ -107,7 +107,7 @@ public class MiniCellReader : IExcelCellReader
     {
         if (row < rowCount)
             return _rows[row];
-        KeyValuePair<string, object>[] kvs = Enumerable.Range(0, colCount).Select(item => new KeyValuePair<string, object>(MiniCell.GetSCol(item), "")).ToArray();
+        KeyValuePair<string, object>[] kvs = Enumerable.Range(0, colCount + 1).Select(item => new KeyValuePair<string, object>(MiniCell.GetSCol(item), "")).ToArray();
         for (var rowNum = _rows.Count; rowNum <= row; rowNum++)
         {
 #if NETSTANDARD2_0

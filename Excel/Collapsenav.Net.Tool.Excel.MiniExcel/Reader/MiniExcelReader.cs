@@ -46,9 +46,9 @@ public class MiniExcelReader : IExcelReader
         }
     }
 
-    public IEnumerable<string> this[int row] => (sheet.ElementAt((int)row) as IEnumerable<KeyValuePair<string, object>>).Select(item => item.Value?.ToString() ?? string.Empty);
-    public string this[int row, int col] => (sheet.ElementAt((int)row) as IEnumerable<KeyValuePair<string, object>>).ElementAt((int)col + Zero).Value?.ToString() ?? string.Empty;
-    public string this[string field, int row] => (sheet.ElementAt((int)row) as IEnumerable<KeyValuePair<string, object>>).ElementAt(HeaderIndex[field] + Zero).Value?.ToString() ?? string.Empty;
+    public IEnumerable<string> this[int row] => (sheet.ElementAt(row) as IEnumerable<KeyValuePair<string, object>>).Select(item => item.Value?.ToString() ?? string.Empty);
+    public string this[int row, int col] => (sheet.ElementAt(row) as IEnumerable<KeyValuePair<string, object>>).ElementAt(col + Zero).Value?.ToString() ?? string.Empty;
+    public string this[string field, int row] => (sheet.ElementAt(row) as IEnumerable<KeyValuePair<string, object>>).ElementAt(HeaderIndex[field] + Zero).Value?.ToString() ?? string.Empty;
 
     public void Dispose()
     {

@@ -174,65 +174,7 @@ public class ReadConfig : ReadConfig<object>
     /// </summary>
     public override async Task<IEnumerable<object>> ToEntityAsync(IExcelReader sheet)
     {
-        var header = sheet.HeadersWithIndex;
-        var rowCount = sheet.RowCount;
-        if (IsShuffle)
-        {
-            ConcurrentBag<object> data = new();
-            await Task.Factory.StartNew(() =>
-            {
-                Parallel.For(1, rowCount, index =>
-                {
-                    Monitor.Enter(sheet);
-                    var dataRow = sheet[index].ToList();
-                    Monitor.Exit(sheet);
-                    // 根据对应传入的设置 为obj赋值
-                    if (dataRow.NotEmpty())
-                    {
-                        var obj = Activator.CreateInstance(DtoType);
-                        foreach (var option in FieldOption)
-                        {
-                            if (option.ExcelField.NotNull())
-                            {
-                                var value = dataRow[header[option.ExcelField]];
-                                option.Prop.SetValue(obj, option.Action == null ? value : option.Action(value));
-                            }
-                            else
-                                option.Prop.SetValue(obj, option.Action == null ? null : option.Action(string.Empty));
-                        }
-                        Init?.Invoke(obj);
-                        data.Add(obj);
-                    }
-                });
-            });
-            return data;
-        }
-        else
-        {
-            List<object> data = new();
-            foreach (var index in Enumerable.Range(1, rowCount - 1))
-            {
-                var dataRow = sheet[index].ToList();
-                // 根据对应传入的设置 为obj赋值
-                if (dataRow.NotEmpty())
-                {
-                    var obj = Activator.CreateInstance<object>();
-                    foreach (var option in FieldOption)
-                    {
-                        if (option.ExcelField.NotNull())
-                        {
-                            var value = dataRow[header[option.ExcelField]];
-                            option.Prop.SetValue(obj, option.Action == null ? value : option.Action(value));
-                        }
-                        else
-                            option.Prop.SetValue(obj, option.Action == null ? null : option.Action(string.Empty));
-                    }
-                    Init?.Invoke(obj);
-                    data.Add(obj);
-                }
-            }
-            return data;
-        }
+        return await Task.Factory.StartNew(() => IsShuffle ? ToEntity(sheet).Shuffle() : ToEntity(sheet));
     }
 
     public static ReadConfig GenConfigBySummary(string typeName)

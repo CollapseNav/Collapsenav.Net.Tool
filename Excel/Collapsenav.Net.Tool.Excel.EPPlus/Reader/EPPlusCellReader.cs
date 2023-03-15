@@ -70,9 +70,9 @@ public class EPPlusCellReader : IExcelCellReader
                 yield return new EPPlusCell(_sheet.Cells[i, HeaderIndex[field] + Zero]);
         }
     }
-    public IEnumerable<IReadCell> this[int row] => _sheet.Cells[(int)row + Zero, Zero, (int)row + Zero, Zero + Headers.Count()]?.Select(item => new EPPlusCell(item));
-    public IReadCell this[int row, int col] => new EPPlusCell(_sheet.Cells[(int)row + Zero, (int)col + Zero]);
-    public IReadCell this[string field, int row] => new EPPlusCell(_sheet.Cells[(int)row + Zero, HeaderIndex[field] + Zero]);
+    public IEnumerable<IReadCell> this[int row] => _sheet.Cells[row + Zero, Zero, row + Zero, Zero + Headers.Count()]?.Select(item => new EPPlusCell(item));
+    public IReadCell this[int row, int col] => new EPPlusCell(_sheet.Cells[row + Zero, col + Zero]);
+    public IReadCell this[string field, int row] => new EPPlusCell(_sheet.Cells[row + Zero, HeaderIndex[field] + Zero]);
     public void Dispose()
     {
         _stream?.Dispose();

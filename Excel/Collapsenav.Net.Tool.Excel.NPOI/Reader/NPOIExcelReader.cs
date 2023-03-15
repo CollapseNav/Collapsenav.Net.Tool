@@ -48,9 +48,9 @@ public class NPOIExcelReader : IExcelReader
                 yield return sheet.GetRow(i).GetCell(HeaderIndex[field] + Zero).ToString();
         }
     }
-    public IEnumerable<string> this[int row] => sheet.GetRow((int)row + Zero).Select(item => item.ToString());
-    public string this[int row, int col] => sheet.GetRow((int)row).GetCell((int)col).ToString();
-    public string this[string field, int row] => sheet.GetRow((int)row).GetCell(HeaderIndex[field]).ToString();
+    public IEnumerable<string> this[int row] => sheet.GetRow(row + Zero).Select(item => item.ToString());
+    public string this[int row, int col] => sheet.GetRow(row).GetCell(col).ToString();
+    public string this[string field, int row] => sheet.GetRow(row).GetCell(HeaderIndex[field]).ToString();
 
     public void Dispose()
     {
