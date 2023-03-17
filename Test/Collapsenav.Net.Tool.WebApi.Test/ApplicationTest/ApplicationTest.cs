@@ -1,7 +1,5 @@
 using System;
-using System.Configuration;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,7 +20,6 @@ public class ApplicationTest
         return Provider.GetService<T>();
     }
 
-
     public class TestEntityReturnDto
     {
         public string Code { get; set; }
@@ -40,9 +37,9 @@ public class ApplicationTest
 
     public class NewGetInput : BaseGet<TestEntity>
     {
-        public override Expression<Func<TestEntity, bool>> GetExpression(Expression<Func<TestEntity, bool>> exp = null)
+        public override IQueryable<TestEntity> GetQuery(IQueryable<TestEntity> query)
         {
-            return base.GetExpression();
+            return query;
         }
     }
 

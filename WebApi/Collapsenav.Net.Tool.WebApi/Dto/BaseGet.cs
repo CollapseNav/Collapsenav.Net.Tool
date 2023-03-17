@@ -1,19 +1,12 @@
-using System.Linq.Expressions;
-
 namespace Collapsenav.Net.Tool.WebApi;
-public class BaseGet : IBaseGet
+public abstract class BaseGet : IBaseGet
 {
-    public virtual Expression GetExpression(Expression exp)
+    public IQueryable GetQuery(IQueryable query)
     {
-        return exp;
+        return query;
     }
 }
-public class BaseGet<T> : IBaseGet<T>
+public abstract class BaseGet<T> : BaseGet, IBaseGet<T>
 {
-    public virtual Expression<Func<T, bool>> GetExpression(Expression<Func<T, bool>> exp = null)
-    {
-        exp ??= item => true;
-        return exp;
-    }
-
+    public abstract IQueryable<T> GetQuery(IQueryable<T> query);
 }

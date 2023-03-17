@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <Import Project="../version.props" />
     <PropertyGroup>
-        <Version>1.3.2.1</Version>
         <PackageTags>Excel</PackageTags>
         <Description>
 基于EPPlus,NPOI和MiniExcel提供了导出导出功能

@@ -9,14 +9,13 @@ public class TestEntityGet : BaseGet<TestEntity>
     public string Code { get; set; }
     public int? Number { get; set; }
     public bool? IsTest { get; set; }
-
-    public override Expression<Func<TestEntity, bool>> GetExpression(Expression<Func<TestEntity, bool>> exp)
+    public override IQueryable<TestEntity> GetQuery(IQueryable<TestEntity> query)
     {
-        return base.GetExpression(exp)
-        .AndIf(Id.HasValue, item => item.Id == Id)
-        .AndIf(Code, item => item.Code.Contains(Code))
-        .AndIf(Number.HasValue, item => item.Number > Number)
-        .AndIf(IsTest.HasValue, item => item.IsTest == IsTest)
+        return query
+        .WhereIf(Id.HasValue, item => item.Id == Id)
+        .WhereIf(Code, item => item.Code.Contains(Code))
+        .WhereIf(Number.HasValue, item => item.Number > Number)
+        .WhereIf(IsTest.HasValue, item => item.IsTest == IsTest)
         ;
     }
 }
@@ -27,13 +26,13 @@ public class TestQueryEntityGet : BaseGet<TestQueryEntity>
     public int? Number { get; set; }
     public bool? IsTest { get; set; }
 
-    public override Expression<Func<TestQueryEntity, bool>> GetExpression(Expression<Func<TestQueryEntity, bool>> exp)
+    public override IQueryable<TestQueryEntity> GetQuery(IQueryable<TestQueryEntity> query)
     {
-        return base.GetExpression(exp)
-        .AndIf(Id.HasValue, item => item.Id == Id)
-        .AndIf(Code, item => item.Code.Contains(Code))
-        .AndIf(Number.HasValue, item => item.Number > Number)
-        .AndIf(IsTest.HasValue, item => item.IsTest == IsTest)
+        return query
+        .WhereIf(Id.HasValue, item => item.Id == Id)
+        .WhereIf(Code, item => item.Code.Contains(Code))
+        .WhereIf(Number.HasValue, item => item.Number > Number)
+        .WhereIf(IsTest.HasValue, item => item.IsTest == IsTest)
         ;
     }
 }
@@ -45,13 +44,13 @@ public class TestModifyEntityGet : BaseGet<TestModifyEntity>
     public int? Number { get; set; }
     public bool? IsTest { get; set; }
 
-    public override Expression<Func<TestModifyEntity, bool>> GetExpression(Expression<Func<TestModifyEntity, bool>> exp)
+    public override IQueryable<TestModifyEntity> GetQuery(IQueryable<TestModifyEntity> query)
     {
-        return base.GetExpression(exp)
-        .AndIf(Id.HasValue, item => item.Id == Id)
-        .AndIf(Code, item => item.Code.Contains(Code))
-        .AndIf(Number.HasValue, item => item.Number > Number)
-        .AndIf(IsTest.HasValue, item => item.IsTest == IsTest)
+        return query
+        .WhereIf(Id.HasValue, item => item.Id == Id)
+        .WhereIf(Code, item => item.Code.Contains(Code))
+        .WhereIf(Number.HasValue, item => item.Number > Number)
+        .WhereIf(IsTest.HasValue, item => item.IsTest == IsTest)
         ;
     }
 }
@@ -63,14 +62,13 @@ public class TestNotBaseEntityGet : BaseGet<TestNotBaseEntity>
     public string Code { get; set; }
     public int? Number { get; set; }
     public bool? IsTest { get; set; }
-
-    public override Expression<Func<TestNotBaseEntity, bool>> GetExpression(Expression<Func<TestNotBaseEntity, bool>> exp)
+    public override IQueryable<TestNotBaseEntity> GetQuery(IQueryable<TestNotBaseEntity> query)
     {
-        return base.GetExpression(exp)
-        .AndIf(Id.HasValue, item => item.Id == Id)
-        .AndIf(Code, item => item.Code.Contains(Code))
-        .AndIf(Number.HasValue, item => item.Number > Number)
-        .AndIf(IsTest.HasValue, item => item.IsTest == IsTest)
+        return query
+        .WhereIf(Id.HasValue, item => item.Id == Id)
+        .WhereIf(Code, item => item.Code.Contains(Code))
+        .WhereIf(Number.HasValue, item => item.Number > Number)
+        .WhereIf(IsTest.HasValue, item => item.IsTest == IsTest)
         ;
     }
 }
@@ -81,13 +79,13 @@ public class TestNotBaseQueryEntityGet : BaseGet<TestNotBaseQueryEntity>
     public int? Number { get; set; }
     public bool? IsTest { get; set; }
 
-    public override Expression<Func<TestNotBaseQueryEntity, bool>> GetExpression(Expression<Func<TestNotBaseQueryEntity, bool>> exp)
+    public override IQueryable<TestNotBaseQueryEntity> GetQuery(IQueryable<TestNotBaseQueryEntity> query)
     {
-        return base.GetExpression(exp)
-        .AndIf(Id.HasValue, item => item.Id == Id)
-        .AndIf(Code, item => item.Code.Contains(Code))
-        .AndIf(Number.HasValue, item => item.Number > Number)
-        .AndIf(IsTest.HasValue, item => item.IsTest == IsTest)
+        return query
+        .WhereIf(Id.HasValue, item => item.Id == Id)
+        .WhereIf(Code, item => item.Code.Contains(Code))
+        .WhereIf(Number.HasValue, item => item.Number > Number)
+        .WhereIf(IsTest.HasValue, item => item.IsTest == IsTest)
         ;
     }
 }
@@ -98,14 +96,13 @@ public class TestNotBaseModifyEntityGet : BaseGet<TestNotBaseModifyEntity>
     public string Code { get; set; }
     public int? Number { get; set; }
     public bool? IsTest { get; set; }
-
-    public override Expression<Func<TestNotBaseModifyEntity, bool>> GetExpression(Expression<Func<TestNotBaseModifyEntity, bool>> exp)
+    public override IQueryable<TestNotBaseModifyEntity> GetQuery(IQueryable<TestNotBaseModifyEntity> query)
     {
-        return base.GetExpression(exp)
-        .AndIf(Id.HasValue, item => item.Id == Id)
-        .AndIf(Code, item => item.Code.Contains(Code))
-        .AndIf(Number.HasValue, item => item.Number > Number)
-        .AndIf(IsTest.HasValue, item => item.IsTest == IsTest)
+        return query
+        .WhereIf(Id.HasValue, item => item.Id == Id)
+        .WhereIf(Code, item => item.Code.Contains(Code))
+        .WhereIf(Number.HasValue, item => item.Number > Number)
+        .WhereIf(IsTest.HasValue, item => item.IsTest == IsTest)
         ;
     }
 }
