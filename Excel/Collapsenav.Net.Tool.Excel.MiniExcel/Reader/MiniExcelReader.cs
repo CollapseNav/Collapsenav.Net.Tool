@@ -10,6 +10,13 @@ public class MiniExcelReader : IExcelReader
     protected IDictionary<string, int> HeaderIndex;
     protected IEnumerable<string> HeaderList;
     protected int rowCount;
+    protected ISheetReader<IExcelReader> SheetReader;
+    public MiniExcelReader(ISheetReader<IExcelReader> sheetReader, string sheetName)
+    {
+        SheetReader = sheetReader;
+        SheetStream = SheetReader.SheetStream;
+        Init(sheetName);
+    }
     public MiniExcelReader(string path)
     {
         using var fs = path.OpenReadShareStream();
@@ -20,12 +27,20 @@ public class MiniExcelReader : IExcelReader
         Init(stream);
     }
 
+    private void Init(string sheetName)
+    {
+        Init(SheetStream.Query(sheetName: sheetName).ToList());
+    }
     private void Init(Stream stream)
     {
         SheetStream = new MemoryStream();
         stream.SeekAndCopyTo(SheetStream);
+        Init(SheetStream.Query().ToList());
+    }
 
-        sheet = SheetStream.Query().ToList();
+    private void Init(List<dynamic> sheetList)
+    {
+        sheet = sheetList;
 
         rowCount = sheet.Count();
         var sheetFirst = sheet.First() as IEnumerable<KeyValuePair<string, object>>;
