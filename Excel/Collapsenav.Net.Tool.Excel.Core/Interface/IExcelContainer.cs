@@ -1,6 +1,6 @@
 namespace Collapsenav.Net.Tool.Excel;
 
-public interface IExcelContainer<T> : IDisposable, IEnumerable<IEnumerable<T>>
+public interface IExcelContainer<out T> : IDisposable, IEnumerable<IEnumerable<T>>
 {
     IEnumerable<T> this[string field] { get; }
     IEnumerable<T> this[int row] { get; }

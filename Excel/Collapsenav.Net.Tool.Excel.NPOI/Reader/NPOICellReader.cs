@@ -9,13 +9,27 @@ namespace Collapsenav.Net.Tool.Excel;
 public class NPOICellReader : IExcelCellReader
 {
     public int Zero => ExcelTool.NPOIZero;
-    protected ISheet _sheet;
+    public ISheet _sheet;
     protected IWorkbook _workbook;
     protected Stream _stream;
     protected NPOINotCloseStream notCloseStream;
     public IDictionary<string, int> HeaderIndex;
     protected IEnumerable<string> HeaderList;
     protected int rowCount;
+    protected ISheetCellReader SheetReader;
+    public NPOICellReader(ISheetCellReader sheetReader, string sheetName = null)
+    {
+        SheetReader = sheetReader;
+        if (sheetName.NotEmpty())
+        {
+            _stream = SheetReader.SheetStream;
+            Init(sheetName);
+        }
+        else
+        {
+            Init();
+        }
+    }
     public NPOICellReader()
     {
         Init();
@@ -33,6 +47,10 @@ public class NPOICellReader : IExcelCellReader
     public NPOICellReader(ISheet sheet)
     {
         Init(sheet);
+    }
+    private void Init(string sheetName)
+    {
+        Init(NPOITool.NPOISheet(_stream, sheetName));
     }
     private void Init(Stream stream)
     {
@@ -88,7 +106,7 @@ public class NPOICellReader : IExcelCellReader
         notCloseStream?.Dispose();
         _workbook?.Close();
     }
-    private void AutoSize()
+    public void AutoSize()
     {
         if (HeadersWithIndex.NotEmpty())
             foreach (var col in HeadersWithIndex)
@@ -123,7 +141,7 @@ public class NPOICellReader : IExcelCellReader
         stream.Clear();
         using var fs = new NPOINotCloseStream();
         fs.SeekToOrigin();
-        _sheet.Workbook.Write(fs);
+        _sheet.Workbook.Write(fs, true);
         fs.SeekToOrigin();
         fs.CopyTo(stream);
         stream.SeekToOrigin();

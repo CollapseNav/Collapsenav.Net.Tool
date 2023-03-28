@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Dynamic;
 using MiniExcelLibs;
 namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
@@ -6,11 +8,25 @@ namespace Collapsenav.Net.Tool.Excel;
 public class MiniCellReader : IExcelCellReader
 {
     public int Zero => ExcelTool.MiniZero;
-    protected List<IDictionary<string, object>> _sheet;
+    public List<IDictionary<string, object>> _sheet;
     protected List<MiniRow> _rows;
     protected Stream _stream;
     protected int rowCount;
     protected int colCount;
+    protected ISheetCellReader SheetReader;
+    public MiniCellReader(ISheetCellReader sheetReader, string sheetName = null)
+    {
+        SheetReader = sheetReader;
+        if (sheetName.NotEmpty())
+        {
+            _stream = SheetReader.SheetStream;
+            Init(sheetName);
+        }
+        else
+        {
+            Init();
+        }
+    }
     public MiniCellReader()
     {
         Init();
@@ -24,17 +40,25 @@ public class MiniCellReader : IExcelCellReader
     {
         Init(stream);
     }
+    private void Init(string sheetName)
+    {
+        Init(_stream.Query(sheetName: sheetName));
+    }
+    private void Init(IEnumerable<dynamic> sheetList)
+    {
+        _sheet = (sheetList as IEnumerable<IDictionary<string, object>>).ToList();
+        _rows = new List<MiniRow>(2000);
+        foreach (var (data, index) in _sheet.SelectWithIndex())
+            _rows.Add(new MiniRow(data, index));
+        rowCount = _sheet.Count;
+        colCount = _sheet.First().Count;
+    }
     private void Init(Stream stream)
     {
         try
         {
             _stream = stream;
-            _sheet = (_stream.Query() as IEnumerable<IDictionary<string, object>>).ToList();
-            _rows = new List<MiniRow>(2000);
-            foreach (var (data, index) in _sheet.SelectWithIndex())
-                _rows.Add(new MiniRow(data, index));
-            rowCount = _sheet.Count;
-            colCount = _sheet.First().Count;
+            Init(_stream.Query());
         }
         catch
         {

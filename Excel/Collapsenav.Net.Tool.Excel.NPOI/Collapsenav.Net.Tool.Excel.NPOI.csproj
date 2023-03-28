@@ -10,7 +10,7 @@
         <ProjectUrl>http://doc.collapsenav.cn/docs/Excel/</ProjectUrl>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="NPOI" Version="2.5.5"/>
+        <PackageReference Include="NPOI" Version="2.6.0" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Collapsenav.Net.Tool.Excel.Core\Collapsenav.Net.Tool.Excel.Core.csproj" />

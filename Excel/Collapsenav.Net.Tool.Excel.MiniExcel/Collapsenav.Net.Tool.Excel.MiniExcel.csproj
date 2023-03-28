@@ -11,6 +11,7 @@
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="MiniExcel" Version="0.21.*"/>
+        <!-- <PackageReference Include="MiniExcel" Version="1.30.2"/> -->
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Collapsenav.Net.Tool.Excel.Core\Collapsenav.Net.Tool.Excel.Core.csproj" />

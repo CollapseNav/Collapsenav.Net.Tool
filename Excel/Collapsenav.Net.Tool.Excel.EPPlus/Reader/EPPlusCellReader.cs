@@ -7,12 +7,26 @@ namespace Collapsenav.Net.Tool.Excel;
 public class EPPlusCellReader : IExcelCellReader
 {
     public int Zero => ExcelTool.EPPlusZero;
-    protected ExcelWorksheet _sheet;
+    public ExcelWorksheet _sheet;
     protected ExcelPackage _pack;
     protected Stream _stream;
     protected IDictionary<string, int> HeaderIndex;
     protected IEnumerable<string> HeaderList;
     protected int rowCount;
+    protected ISheetCellReader SheetReader;
+    public EPPlusCellReader(ISheetCellReader sheetReader, string sheetName = null)
+    {
+        SheetReader = sheetReader;
+        if (sheetName.NotEmpty())
+        {
+            _stream = SheetReader.SheetStream;
+            Init(sheetName);
+        }
+        else
+        {
+            Init();
+        }
+    }
     public EPPlusCellReader()
     {
         Init();
@@ -29,6 +43,10 @@ public class EPPlusCellReader : IExcelCellReader
     public EPPlusCellReader(ExcelWorksheet sheet)
     {
         Init(sheet);
+    }
+    private void Init(string sheetName)
+    {
+        Init(EPPlusTool.EPPlusSheet(_stream, sheetName));
     }
     private void Init(Stream stream)
     {
