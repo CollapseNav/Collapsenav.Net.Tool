@@ -193,7 +193,7 @@ public class MiniCellReader : IExcelCellReader
             yield return this[row];
     }
 
-    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+    IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
     }

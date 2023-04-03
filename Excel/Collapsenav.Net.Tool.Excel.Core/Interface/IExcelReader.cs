@@ -6,7 +6,7 @@ public interface IExcelReader : IExcelReader<string> { }
 /// <summary>
 /// 尝试使用 IExcelRead 统一 NPOI , EPPlus , MiniExcel 的调用
 /// </summary>
-public interface IExcelReader<T> : IExcelContainer<T>
+public interface IExcelReader<T> : IExcelContainer<T>, IExcelHeader
 {
 #if NET6_0_OR_GREATER && NETCOREAPP
     public static IExcelReader GetExcelReader(object sheet)

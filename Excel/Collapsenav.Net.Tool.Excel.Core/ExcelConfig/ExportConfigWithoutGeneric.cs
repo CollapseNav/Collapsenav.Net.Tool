@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Collapsenav.Net.Tool;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
@@ -9,6 +10,7 @@ namespace Collapsenav.Net.Tool.Excel;
 /// <remarks>可以不使用泛型定义,但是必须在创建时传data数据</remarks>
 public class ExportConfig : ExportConfig<object>
 {
+    protected ExportConfig() { }
     /// <summary>
     /// 必传data数据确定类型
     /// </summary>
@@ -79,5 +81,17 @@ public class ExportConfig : ExportConfig<object>
             FieldOption = ExcelConfig<object, BaseCellOption<object>>.GenConfigBySummary(data.First().GetType()).FieldOption.Select(option => new ExportCellOption<object>(option))
         };
         return config;
+    }
+
+    public static ExportConfig InitByExportConfig<T>(ExportConfig<T> config) where T : class
+    {
+        var exportConfig = new ExportConfig()
+        {
+            FieldOption = config.FieldOption.Select(item => new ExportCellOption<object>(item.ExcelField, item.Prop, (data) => item.Action((T)data))),
+            Data = config.Data,
+        };
+        // var exportOptions = exportConfig.FieldOption;
+        // exportConfig.FieldOption = config.FieldOption.Select(item => new ExportCellOption<object>(item.ExcelField, item.Prop, (data) => item.Action((T)data)));
+        return exportConfig;
     }
 }

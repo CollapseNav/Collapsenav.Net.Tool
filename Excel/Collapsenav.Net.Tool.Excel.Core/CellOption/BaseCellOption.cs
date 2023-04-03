@@ -1,12 +1,23 @@
 using System.Reflection;
 
 namespace Collapsenav.Net.Tool.Excel;
+/// <summary>
+/// 基础单元格设置配置
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public class BaseCellOption<T> : ICellOption
 {
     public BaseCellOption()
     {
-        // 默认情况下使用 泛型T 设置 DtoType
+        // 默认情况下先使用 泛型T 设置 DtoType
         DtoType = typeof(T);
+    }
+
+    public BaseCellOption(ICellOption option) : this()
+    {
+        ExcelField = option.ExcelField;
+        PropName = option.PropName;
+        Prop = option.Prop;
     }
 
     /// <summary>
@@ -54,13 +65,12 @@ public class BaseCellOption<T> : ICellOption
         set
         {
             propName = value;
-            // prop = DtoType?.GetProperty(propName);
-            prop = typeof(T).GetProperty(propName);
+            prop = DtoType.GetProperty(propName);
         }
     }
     protected string propName;
     /// <summary>
     /// 有时候使用的泛型只是基类, 所以设置一个 DtoType 尝试记录真实类型
     /// </summary>
-    protected Type DtoType;
+    public Type DtoType { get; protected set; }
 }

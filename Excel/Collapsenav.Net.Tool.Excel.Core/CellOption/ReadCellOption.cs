@@ -7,23 +7,15 @@ namespace Collapsenav.Net.Tool.Excel;
 public class ReadCellOption<T> : BaseCellOption<T>
 {
     public ReadCellOption() { }
-    public ReadCellOption(ICellOption cellOption)
-    {
-        ExcelField = cellOption.ExcelField;
-        PropName = cellOption.PropName;
-        Prop = cellOption.Prop;
-    }
-
+    public ReadCellOption(ICellOption cellOption) : base(cellOption) { }
     public ReadCellOption(string excelField, string propName, Func<string, object> action = null) : base(excelField, propName)
     {
         Action = action;
     }
-
     public ReadCellOption(string excelField, PropertyInfo prop, Func<string, object> action = null) : base(excelField, prop)
     {
         Action = action;
     }
-
     /// <summary>
     /// 转换 表格 数据的方法
     /// </summary>
@@ -31,9 +23,8 @@ public class ReadCellOption<T> : BaseCellOption<T>
     {
         get
         {
-            if (action != null)
-                return action;
-            action = Prop?.PropertyType.Name switch
+            // 未设置action时使用默认委托, 根据属性生成不同委托
+            action ??= Prop?.PropertyType.Name switch
             {
                 nameof(String) => (item) => item,
                 nameof(Int16) => (item) => short.Parse(item),
@@ -44,6 +35,8 @@ public class ReadCellOption<T> : BaseCellOption<T>
                 nameof(Decimal) => (item) => decimal.Parse(item),
                 nameof(Boolean) => (item) => bool.Parse(item),
                 nameof(DateTime) => (item) => DateTime.Parse(item),
+                nameof(Guid) => (item) => Guid.Parse(item),
+                // 如果是非空类型, 则进行对应非空的转换
                 _ => (item) => Prop.PropertyType.Name.Contains(nameof(Nullable)) ? ParseNullableValueFunc(Prop.PropertyType, item) : item,
             };
             return action;
@@ -52,6 +45,9 @@ public class ReadCellOption<T> : BaseCellOption<T>
     }
     private Func<string, object> action;
 
+    /// <summary>
+    /// 可空类型
+    /// </summary>
     protected object ParseNullableValueFunc(Type type, string input)
     {
         if (type == typeof(Nullable<Int16>))
@@ -70,6 +66,8 @@ public class ReadCellOption<T> : BaseCellOption<T>
             return Boolean.TryParse(input, out Boolean value) ? value : default;
         if (type == typeof(Nullable<DateTime>))
             return DateTime.TryParse(input, out DateTime value) ? value : default;
+        if (type == typeof(Nullable<Guid>))
+            return Guid.TryParse(input, out Guid value) ? value : default;
         return input;
     }
 

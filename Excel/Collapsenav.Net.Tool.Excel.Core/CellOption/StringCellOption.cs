@@ -1,5 +1,8 @@
 namespace Collapsenav.Net.Tool.Excel;
 
+/// <summary>
+/// 纯字符串的单元格配置
+/// </summary>
 public class StringCellOption
 {
     /// <summary>

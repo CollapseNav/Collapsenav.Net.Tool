@@ -46,7 +46,7 @@ public partial class ReadConfig<T> : ExcelConfig<T, ReadCellOption<T>>
     /// <summary>
     /// 使用基础的 excelconfig 初始化
     /// </summary>
-    public ReadConfig(ExcelConfig<T, BaseCellOption<T>> config) : this()
+    public ReadConfig(IExcelConfig<T, BaseCellOption<T>> config) : this()
     {
         FieldOption = config.FieldOption.Select(item => new ReadCellOption<T>(item));
         Data = config.Data;

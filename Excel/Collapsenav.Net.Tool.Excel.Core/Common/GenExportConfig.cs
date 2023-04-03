@@ -6,8 +6,9 @@ public partial class ExportConfig<T>
     /// </summary>
     public static ExportConfig<T> GenDefaultConfig(IEnumerable<T> data = null)
     {
+        var type = data.NotEmpty() ? data.First().GetType() : typeof(T);
         // 根据 T 中设置的 ExcelExportAttribute 创建导入配置
-        if (typeof(T).AttrValues<ExcelExportAttribute>().NotEmpty())
+        if (type.AttrValues<ExcelExportAttribute>().NotEmpty())
             return GenConfigByAttribute(data);
         // 直接根据属性名称创建导入配置
         return GenConfigByProps(data);

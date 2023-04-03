@@ -9,7 +9,7 @@ public partial class ExportConfig<T>
     {
         await Task.Factory.StartNew(() =>
         {
-            foreach (var (value, index) in Header.SelectWithIndex())
+            foreach (var (value, index) in Headers.SelectWithIndex())
                 excel[0, index].Value = value;
             foreach (var (cellData, rowIndex) in (data ?? Data).SelectWithIndex(1))
                 foreach (var (item, index) in FieldOption.Select((item, i) => (item, i)))
@@ -49,7 +49,7 @@ public partial class ExportConfig<T>
     /// </summary>
     public Stream ExportHeader(IExcelCellReader excel)
     {
-        foreach (var (value, index) in Header.SelectWithIndex())
+        foreach (var (value, index) in Headers.SelectWithIndex())
             excel[0, index].Value = value;
         return excel.GetStream();
     }

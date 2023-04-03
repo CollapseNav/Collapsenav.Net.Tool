@@ -40,16 +40,26 @@ public class MiniSheetCellReader : ISheetCellReader
     }
     public MiniSheetCellReader(string path)
     {
-        var fs = path.OpenReadWriteShareStream();
+        var fs = path.OpenCreateReadWriteShareStream();
         Init(fs);
     }
     private void Init(Stream stream)
     {
         SheetStream = stream;
-        var sheetNames = MiniExcel.GetSheetNames(SheetStream);
+        List<string> sheetNames = new();
         Sheets = new Dictionary<string, IExcelCellReader>();
-        sheetNames.ToDictionary(item => item, item => new MiniCellReader(this, item)).ForEach(item => Sheets.Add(item.Key, item.Value));
-        Readers = Sheets.Select(item => item.Value).ToList();
+        try
+        {
+            sheetNames = MiniExcel.GetSheetNames(SheetStream);
+        }
+        catch
+        {
+        }
+        if (sheetNames.NotEmpty())
+        {
+            sheetNames.ToDictionary(item => item, item => new MiniCellReader(this, item)).ForEach(item => Sheets.Add(item.Key, item.Value));
+            Readers = Sheets.Select(item => item.Value).ToList();
+        }
     }
 
     public void Save(bool autofit = true)

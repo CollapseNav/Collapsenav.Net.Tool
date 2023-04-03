@@ -7,12 +7,7 @@ namespace Collapsenav.Net.Tool.Excel;
 public class ExportCellOption<T> : BaseCellOption<T>
 {
     public ExportCellOption() { }
-    public ExportCellOption(ICellOption cellOption)
-    {
-        ExcelField = cellOption.ExcelField;
-        PropName = cellOption.PropName;
-        Prop = cellOption.Prop;
-    }
+    public ExportCellOption(ICellOption cellOption) : base(cellOption) { }
 
     public ExportCellOption(string excelField, string propName, Func<T, object> action = null) : base(excelField, propName)
     {
@@ -30,9 +25,8 @@ public class ExportCellOption<T> : BaseCellOption<T>
     {
         get
         {
-            if (action != null)
-                return action;
-            action = item => item.GetValue(PropName);
+            // 未设置action时使用默认委托
+            action ??= item => item.GetValue(PropName);
             return action;
         }
         set => action = value;

@@ -15,7 +15,7 @@ public partial class ExportConfig<T> : ExcelConfig<T, ExportCellOption<T>>
     /// <summary>
     /// 使用基础的 excelconfig 初始化
     /// </summary>
-    public ExportConfig(ExcelConfig<T, BaseCellOption<T>> config)
+    public ExportConfig(IExcelConfig<T, BaseCellOption<T>> config)
     {
         FieldOption = config.FieldOption.Select(item => new ExportCellOption<T>(item));
         Data = config.Data;
