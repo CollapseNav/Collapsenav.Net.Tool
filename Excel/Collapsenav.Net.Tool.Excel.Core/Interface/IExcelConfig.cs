@@ -28,9 +28,9 @@ public interface IExcelConfig<out T, CellOption> : IExcelConfig where CellOption
     /// 添加普通单元格设置
     /// </summary>
     IExcelConfig<T, CellOption> AddIf(bool check, string field, PropertyInfo prop);
-    /// <smary>
+    /// <summary>
     /// 添加普通单元格设置
-    /// </smary>
+    /// </summary>
     /// <param name="field">表头列</param>
     /// <param name="propName">属性名称</param>
     IExcelConfig<T, CellOption> Add(string field, string propName);

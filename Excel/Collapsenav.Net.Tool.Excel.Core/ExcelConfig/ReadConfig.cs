@@ -63,7 +63,7 @@ public partial class ReadConfig<T> : ExcelConfig<T, ReadCellOption<T>>
     /// <param name="defaultValue">默认值</param>
     public virtual ReadConfig<T> Default<E>(Expression<Func<T, E>> prop, E defaultValue)
     {
-        Add(GenOption(string.Empty, prop, item => defaultValue));
+        Add(string.Empty, prop, item => defaultValue);
         return this;
     }
     /// <summary>

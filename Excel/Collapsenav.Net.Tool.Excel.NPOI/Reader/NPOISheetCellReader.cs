@@ -5,6 +5,7 @@ namespace Collapsenav.Net.Tool.Excel;
 
 public class NPOISheetCellReader : ISheetCellReader
 {
+    private bool IsXlsx;
     public IExcelCellReader this[int index] => Readers.ElementAt(index);
 
     public IExcelCellReader this[string sheetName]
@@ -35,13 +36,16 @@ public class NPOISheetCellReader : ISheetCellReader
     public NPOISheetCellReader(string path)
     {
         var fs = path.OpenCreateReadWriteShareStream();
+        IsXlsx = !path.IsXls();
         Init(fs);
     }
 
     private void Init(Stream stream)
     {
         SheetStream = stream;
-        workbook = NPOITool.NPOIWorkbook(SheetStream);
+        var notCloseStream = new NPOINotCloseStream(SheetStream) { IsXlsx = true };
+        notCloseStream.IsXlsx = IsXlsx;
+        workbook = NPOITool.NPOIWorkbook(notCloseStream);
         List<string> sheetNames = new();
 
         Sheets = new Dictionary<string, IExcelCellReader>();
@@ -60,6 +64,7 @@ public class NPOISheetCellReader : ISheetCellReader
         stream.Clear();
         workbook.Write(stream, true);
         stream.SeekToOrigin();
+        stream.Dispose();
     }
 
     public void SaveTo(string path, bool autofit = false)

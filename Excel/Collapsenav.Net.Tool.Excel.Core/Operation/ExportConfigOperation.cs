@@ -41,7 +41,6 @@ public partial class ExportConfig<T>
         using IExcelCellReader read = ExcelTool.GetCellReader(stream, excelType);
         var exportStream = new MemoryStream();
         (await ExportAsync(read, data)).CopyTo(exportStream);
-        // read.Save();
         return exportStream;
     }
     /// <summary>
@@ -76,9 +75,8 @@ public partial class ExportConfig<T>
     {
         using IExcelCellReader read = ExcelTool.GetCellReader(stream, excelType);
         var exportStream = new MemoryStream();
-        var dd = ExportHeader(read);
-        dd.CopyTo(exportStream);
-        // read.Save();
+        var headerStream = ExportHeader(read);
+        headerStream.CopyTo(exportStream);
         return exportStream;
     }
 

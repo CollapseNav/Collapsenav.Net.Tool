@@ -18,6 +18,8 @@ public class BaseCellOption<T> : ICellOption
         ExcelField = option.ExcelField;
         PropName = option.PropName;
         Prop = option.Prop;
+        if (option is BaseCellOption<T> o && o.DtoType != DtoType)
+            DtoType = o.DtoType;
     }
 
     /// <summary>

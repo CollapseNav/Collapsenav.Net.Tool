@@ -38,7 +38,7 @@ public partial class ReadConfig<T>
     /// <summary>
     /// 直接根据属性名称创建导入配置
     /// </summary>
-    public static new ReadConfig<T> GenConfigByProps()
+    public static ReadConfig<T> GenConfigByProps()
     {
         return new ReadConfig<T>(ExcelConfig<T, BaseCellOption<T>>.GenConfigByProps());
     }

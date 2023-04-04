@@ -131,6 +131,7 @@ public class EPPlusCellReader : IExcelCellReader
     /// </summary>
     public Stream GetStream()
     {
+        _stream ??= new MemoryStream();
         SaveTo(_stream);
         return _stream;
     }

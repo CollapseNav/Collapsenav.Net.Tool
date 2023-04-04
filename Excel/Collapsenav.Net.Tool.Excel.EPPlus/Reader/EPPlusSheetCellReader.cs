@@ -38,11 +38,14 @@ public class EPPlusSheetCellReader : ISheetCellReader
     private void Init(Stream stream)
     {
         SheetStream = stream;
-        var workSheets = EPPlusTool.EPPlusSheets(SheetStream);
-        var sheetNames = workSheets.Select(item => item.Name).ToList();
         Sheets = new Dictionary<string, IExcelCellReader>();
-        sheetNames.ToDictionary(item => item, item => new EPPlusCellReader(workSheets[item])).ForEach(item => Sheets.Add(item.Key, item.Value));
-        Readers = Sheets.Select(item => item.Value).ToList();
+        var workSheets = EPPlusTool.EPPlusSheets(SheetStream);
+        var sheetNames = workSheets?.Select(item => item.Name).ToList();
+        if (sheetNames.NotEmpty())
+        {
+            sheetNames.ToDictionary(item => item, item => new EPPlusCellReader(workSheets[item])).ForEach(item => Sheets.Add(item.Key, item.Value));
+            Readers = Sheets.Select(item => item.Value).ToList();
+        }
     }
 
     public void Save(bool autofit = true)

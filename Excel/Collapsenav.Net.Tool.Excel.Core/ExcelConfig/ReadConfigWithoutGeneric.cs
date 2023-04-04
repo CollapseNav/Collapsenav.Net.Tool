@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using Collapsenav.Net.Tool;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
@@ -7,7 +6,7 @@ namespace Collapsenav.Net.Tool.Excel;
 /// <summary>
 /// 可以不使用泛型的readconfig
 /// </summary>
-/// <remarks>可以使用泛型定义，但是必须有类型数据</remarks>
+/// <remarks>可以不使用泛型定义，但是必须有类型数据</remarks>
 public class ReadConfig : ReadConfig<object>
 {
     public ReadConfig(Type type, IEnumerable<(string, string, string)> kvs) : base()
@@ -15,9 +14,7 @@ public class ReadConfig : ReadConfig<object>
         DtoType = type;
         InitFieldOption(kvs);
     }
-    public ReadConfig(string typeName, IEnumerable<(string, string, string)> kvs) : this(GetMatchType(typeName), kvs)
-    {
-    }
+    public ReadConfig(string typeName, IEnumerable<(string, string, string)> kvs) : this(GetMatchType(typeName), kvs) { }
     public ReadConfig(Type type, IEnumerable<(string, string)> kvs = null) : base()
     {
         DtoType = type;
@@ -38,6 +35,15 @@ public class ReadConfig : ReadConfig<object>
             DtoType = type;
         InitFieldOption(options.Select(item => (item.FieldName, item.PropName, item.Func)));
     }
+    /// <summary>
+    /// 根据type名称尝试获取type
+    /// </summary>
+    /// <param name="typeName"></param>
+    /// <remarks>先尝试使用类型的全称模糊匹配<br/>
+    /// 如果只有一个匹配项, 则直接返回<br/>
+    /// 如果有大于一个匹配项, 则尝试使用全名匹配
+    /// </remarks>
+    /// <returns></returns>
     private static Type GetMatchType(string typeName)
     {
         var hasDot = typeName.Contains('.');
@@ -45,20 +51,16 @@ public class ReadConfig : ReadConfig<object>
         var matchTypes = types.Where(item => item.FullName.Contains(typeName)).ToArray();
         Type matchType = null;
         if (matchTypes?.Length == 1)
-        {
             matchType = matchTypes.First();
-        }
         else if (matchTypes.Length > 1)
-        {
             matchType = matchTypes.FirstOrDefault(item => item.FullName == typeName);
-        }
         return matchType;
     }
     /// <summary>
     /// 通过字典初始化配置
     /// </summary>
     /// <param name="kvs">Key为表头名称, Value为属性名称</param>
-    public void InitFieldOption(IEnumerable<(string Key, string Value, string Func)> kvs)
+    public virtual void InitFieldOption(IEnumerable<(string Key, string Value, string Func)> kvs)
     {
         FieldOption = new List<ReadCellOption<object>>();
         if (kvs.NotEmpty())

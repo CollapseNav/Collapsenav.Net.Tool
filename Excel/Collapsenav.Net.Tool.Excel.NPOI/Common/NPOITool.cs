@@ -18,7 +18,7 @@ public partial class NPOITool
     /// </summary>
     public static IWorkbook NPOIWorkbook(Stream stream)
     {
-        using var notCloseStream = new NPOINotCloseStream(stream);
+        using var notCloseStream = stream is NPOINotCloseStream nstream ? nstream : new NPOINotCloseStream(stream);
         return notCloseStream.GetWorkBook();
     }
     /// <summary>

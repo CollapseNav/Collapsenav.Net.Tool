@@ -47,11 +47,7 @@ public partial class ExportConfig<T> : ExcelConfig<T, ExportCellOption<T>>
     /// </summary>
     public ExportConfig<T> Add(string field, Func<T, object> action)
     {
-        Add(new ExportCellOption<T>
-        {
-            ExcelField = field,
-            Action = action
-        });
+        Add(new ExportCellOption<T>(field, "", action));
         return this;
     }
     /// <summary>
@@ -60,11 +56,7 @@ public partial class ExportConfig<T> : ExcelConfig<T, ExportCellOption<T>>
     public ExportConfig<T> AddIf(bool check, string field, Func<T, object> action)
     {
         if (check)
-            Add(new ExportCellOption<T>
-            {
-                ExcelField = field,
-                Action = action
-            });
+            Add(new ExportCellOption<T>(field, "", action));
         return this;
     }
 }

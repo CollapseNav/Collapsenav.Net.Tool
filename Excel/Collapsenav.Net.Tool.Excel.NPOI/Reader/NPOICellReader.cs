@@ -55,7 +55,7 @@ public class NPOICellReader : IExcelCellReader
     private void Init(Stream stream)
     {
         _stream = stream;
-        notCloseStream = new NPOINotCloseStream(stream);
+        notCloseStream ??= new NPOINotCloseStream(stream);
         var sheet = NPOITool.NPOISheet(_stream);
         if (sheet == null)
             Init();
