@@ -329,9 +329,9 @@ public class TypeTest
         var difference = obj1.Difference(obj2);
         Assert.Single(difference.Diffs);
         var item = difference.GetDiff("Prop3");
-        Assert.Equal("3", item.Bvalue);
+        Assert.Equal("3", item.Beforevalue);
         item = difference.GetDiff(typeof(PropTest1).GetProperty("Prop3"));
-        Assert.Equal("33", item.Evalue);
+        Assert.Equal("33", item.Endvalue);
     }
 
     [Fact]
